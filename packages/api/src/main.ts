@@ -1,5 +1,5 @@
 import { serverConfig } from './config'
-import { prisma } from './router/prisma'
+import { prisma } from './prisma'
 import { createServer } from './server'
 
 const server = await createServer(serverConfig)

@@ -31,16 +31,16 @@
   "main": "index.ts",
   "name": "api",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
+    "dev": "podman start postgres-sub-enroll && tsx watch --clear-screen=false src/main.ts",
     "build": "tsc --noEmit",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --ext .ts . --fix",
     "play": "tsx watch playground.ts",
     "test": "vitest run",
-    "db-generate": "prisma generate",
-    "db-seed": "prisma db seed",
-    "db-reset": "prisma migrate dev reset",
-    "postinstall": "pnpm db-generate"
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma migrate dev reset",
+    "postinstall": "pnpm db:generate"
   },
   "type": "module",
   "version": "0.0.0"
