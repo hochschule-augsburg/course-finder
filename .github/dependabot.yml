@@ -5,6 +5,6 @@ updates:
     schedule:
       # TODO change to weekly when done
       interval: daily
-      time: '7:00'
+      time: '07:00'
       timezone: 'Europe/Berlin'
     versioning-strategy: auto
