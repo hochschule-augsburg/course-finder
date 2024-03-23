@@ -16,12 +16,8 @@ async function start() {
     ],
   })
 
-  let response: any = await trpc.posts.create.mutate({ title: 'Hello' })
-  response = await trpc.posts.list.query()
-
-  console.log('>>> ', response)
-
-  await trpc.posts.reset.mutate()
+  const a = await trpc.posts.list.query()
+  console.log(a)
 }
 
 void start()

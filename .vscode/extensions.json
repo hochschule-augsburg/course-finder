@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "streetsidesoftware.code-spell-checker-british-english",
+    "streetsidesoftware.code-spell-checker",
+    "dbaeumer.vscode-eslint",
+    "streetsidesoftware.code-spell-checker-german",
+    "yoavbls.pretty-ts-errors",
+    "vitest.explorer",
+    "vue.volar",
+    "stylelint.vscode-stylelint"
+  ]
+}
