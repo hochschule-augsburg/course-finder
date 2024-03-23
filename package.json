@@ -19,6 +19,7 @@
   "scripts": {
     "dev": "pnpm --stream --parallel -r --filter=!shared run dev",
     "build": "pnpm --stream --parallel -r run build",
+    "test": "pnpm --stream --parallel -r run test",
     "lint": "pnpm --stream --parallel -r run lint",
     "lint:fix": "pnpm --stream --parallel -r run lint:fix"
   },

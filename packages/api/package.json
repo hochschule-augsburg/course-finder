@@ -36,7 +36,11 @@
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --ext .ts . --fix",
     "play": "tsx watch playground.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db-generate": "prisma generate",
+    "db-seed": "prisma db seed",
+    "db-reset": "prisma migrate dev reset",
+    "postinstall": "pnpm db-generate"
   },
   "type": "module",
   "version": "0.0.0"
