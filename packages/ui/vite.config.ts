@@ -47,7 +47,7 @@ export default defineConfig({
   },
   test: {
     // perhaps changes later to jsdom but happydom is faster
-    environment: 'happydom',
+    environment: 'jsdom',
     globals: true,
   },
 })
