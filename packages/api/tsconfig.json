@@ -1,5 +1,8 @@
 {
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.json",
-  "include": ["src", "tests", "vitest.config.ts"]
+  "include": ["src", "tests", "vitest.config.ts"],
+  "compilerOptions": {
+    "types": ["vitest/globals"]
+  }
 }

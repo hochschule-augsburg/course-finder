@@ -1,0 +1,14 @@
+{
+  "exclude": ["node_modules"],
+  "extends": "../../tsconfig.json",
+  "include": ["src", "tests", "./typed-router.d.ts", "./components.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "compilerOptions": {
+    "types": ["vite/client", "unplugin-vue-router/client", "vitest/globals"],
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}
