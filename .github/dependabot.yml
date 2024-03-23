@@ -1,14 +1,10 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/frontend"
+  - package-ecosystem: npm
+    directory: '/'
     schedule:
-      interval: "weekly"
-  - package-ecosystem: "cargo"
-    directory: "/backend"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "github-actions"
-    directory: "/.github"
-    schedule:
-      interval: "weekly"
+      # TODO change to weekly when done
+      interval: daily
+      time: '7:00'
+      timezone: 'Europe/Berlin'
+    versioning-strategy: auto
