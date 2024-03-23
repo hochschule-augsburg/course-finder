@@ -11,7 +11,7 @@
     "lint:fix": "eslint . --ext .ts,.vue --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@mdi/font": "6.2.95",
+    "@mdi/font": "7.4.47",
     "core-js": "^3.34.0",
     "roboto-fontface": "*",
     "vue": "^3.4.21",
