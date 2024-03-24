@@ -1,8 +1,8 @@
 module.exports = {
   extends: [
     'standard',
-    'plugin:@typescript-eslint/strict-type-checked',
     'plugin:perfectionist/recommended-natural',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -12,11 +12,13 @@ module.exports = {
     'unused-imports',
     'sort-keys-fix',
     'typescript-sort-keys',
-    'prettier',
     'vitest',
+    'prettier',
   ],
+  ignorePatterns: ['**/*.json'],
   root: true,
   rules: {
+    'func-style': ['error', 'declaration'],
     // unused-imports
     ...{
       '@typescript-eslint/no-unused-vars': [

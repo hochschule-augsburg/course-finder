@@ -31,7 +31,7 @@
   "main": "index.ts",
   "name": "api",
   "scripts": {
-    "dev": "podman start postgres-sub-enroll && tsx watch --clear-screen=false src/main.ts",
+    "dev": "docker start postgres-sub-enroll && tsx watch --clear-screen=false src/main.ts",
     "build": "tsc --noEmit",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --ext .ts . --fix",

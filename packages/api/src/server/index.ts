@@ -35,10 +35,10 @@ export async function createServer(opts: ServerOptions) {
     trpcOptions: { createContext, router: appRouter },
   })
 
-  const stop = async () => {
+  async function stop() {
     await server.close()
   }
-  const start = async () => {
+  async function start() {
     try {
       await server.listen({ port })
       console.log('listening on port', port)

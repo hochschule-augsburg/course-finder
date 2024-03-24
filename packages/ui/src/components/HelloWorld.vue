@@ -1,3 +1,7 @@
+<script setup lang="ts">
+  //
+</script>
+
 <template>
   <v-container class="fill-height">
     <v-responsive
@@ -157,7 +161,3 @@
     </v-responsive>
   </v-container>
 </template>
-
-<script setup lang="ts">
-  //
-</script>

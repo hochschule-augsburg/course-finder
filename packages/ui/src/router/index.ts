@@ -1,10 +1,5 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-
-// Composables
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { createRouter, createWebHistory } from 'vue-router/auto'
 
 const router = createRouter({
