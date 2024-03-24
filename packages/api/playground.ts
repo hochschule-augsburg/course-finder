@@ -16,7 +16,7 @@ async function start() {
     ],
   })
 
-  const a = await trpc.posts.list.query()
+  const a = await trpc.auth.login.query({ username: 'nyan', password: 'nyan' })
   console.log(a)
 }
 

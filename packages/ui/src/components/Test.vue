@@ -1,71 +1,69 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <!-- eslint-disable vue/valid-v-slot -->
+<script setup lang="ts">
+import { trpc } from '@/api/trpc'
+import { ref } from 'vue'
+
+const username = ref('')
+const password = ref('')
+
+async function login() {
+  await trpc.auth.login.query({
+    password: password.value,
+    username: username.value,
+  })
+}
+</script>
 <template>
-  <v-card>
-    <v-layout>
-      <v-navigation-drawer
-        expand-on-hover
-        rail
-      >
-        <v-list>
-          <v-list-item
+  <VCard>
+    <VLayout>
+      <VNavigationDrawer expand-on-hover rail>
+        <VList>
+          <VListItem
             prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
             subtitle="sandra_a88@gmailcom"
             title="Sandra Adams"
           />
-        </v-list>
+        </VList>
 
-        <v-divider />
+        <VDivider />
 
-        <v-list
-          density="compact"
-          nav
-        >
-          <v-list-item
+        <VList density="compact" nav>
+          <VListItem
             prepend-icon="mdi-folder"
             title="My Files"
             value="myfiles"
           />
-          <v-list-item
+          <VListItem
             prepend-icon="mdi-account-multiple"
             title="Shared with me"
             value="shared"
           />
-          <v-list-item
-            prepend-icon="mdi-star"
-            title="Starred"
-            value="starred"
-          />
-        </v-list>
-      </v-navigation-drawer>
+          <VListItem prepend-icon="mdi-star" title="Starred" value="starred" />
+        </VList>
+      </VNavigationDrawer>
 
-      <v-main style="height: 100vh">
-        <v-stepper
+      <VMain style="height: 100vh">
+        <VStepper
           :items="['Step 1', 'Step 2', 'Step 3']"
           alt-labels
           hide-actions
         >
-          <template #item.1 />
+          <template #item.1>
+            <VTextField v-model:model-value="username" type="text" />
+            <VTextField v-model:model-value="password" type="password" />
+            <button @click="login">login</button>
+          </template>
 
           <template #item.2>
-            <v-card
-              flat
-              title="Step Two"
-            >
-              ...
-            </v-card>
+            <VCard title="Step Two" flat> ... </VCard>
           </template>
 
           <template #item.3>
-            <v-card
-              flat
-              title="Step Three"
-            >
-              ...
-            </v-card>
+            <VCard title="Step Three" flat> ... </VCard>
           </template>
-        </v-stepper>
-      </v-main>
-    </v-layout>
-  </v-card>
+        </VStepper>
+      </VMain>
+    </VLayout>
+  </VCard>
 </template>

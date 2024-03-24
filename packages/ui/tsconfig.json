@@ -1,7 +1,14 @@
 {
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.json",
-  "include": ["src", "tests", "./typed-router.d.ts", "./components.d.ts"],
+  "include": [
+    "src",
+    //types from api have to be in ui because unbuild monorepo
+    "../api/src",
+    "tests",
+    "./typed-router.d.ts",
+    "./components.d.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "types": ["vite/client", "unplugin-vue-router/client", "vitest/globals"],

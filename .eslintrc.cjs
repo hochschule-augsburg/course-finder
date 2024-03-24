@@ -2,10 +2,14 @@ module.exports = {
   extends: [
     'standard',
     'plugin:perfectionist/recommended-natural',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:@typescript-eslint/recommended',
     'prettier',
   ],
+  ignorePatterns: ['**/*.json'],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+  },
   plugins: [
     '@typescript-eslint',
     'perfectionist',
@@ -15,10 +19,10 @@ module.exports = {
     'vitest',
     'prettier',
   ],
-  ignorePatterns: ['**/*.json'],
   root: true,
   rules: {
     'func-style': ['error', 'declaration'],
+    'prettier/prettier': 'error',
     // unused-imports
     ...{
       '@typescript-eslint/no-unused-vars': [

@@ -1,4 +1,5 @@
 import { fastifyCookie } from '@fastify/cookie'
+import { fastifyCors } from '@fastify/cors'
 import { fastifySession } from '@fastify/session'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
@@ -28,6 +29,18 @@ export async function createServer(opts: ServerOptions) {
   await server.register(fastifyCookie)
   await server.register(fastifySession, {
     secret: 'TODO Secret 32 characters long ssssssssssssssssssssssss',
+  })
+  await server.register(fastifyCors, {
+    origin: (origin, cb) => {
+      // Allow all origins or you can do a specific check here
+      if (origin === undefined || new URL(origin).hostname === 'localhost') {
+        console.log(origin)
+        cb(null, true)
+      } else {
+        // Generate an error on other origins, disabling access
+        cb(new Error('Not allowed'), false)
+      }
+    },
   })
 
   void server.register(fastifyTRPCPlugin, {

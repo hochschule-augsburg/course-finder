@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-import { publicProcedure, router } from '../trpc';
+import { publicProcedure, router } from '../trpc'
 
 export const apiRouter = router({
   hello: publicProcedure
@@ -8,9 +8,9 @@ export const apiRouter = router({
     .query(({ ctx, input }) => {
       return {
         text: `hello ${input?.username ?? ctx.user?.name ?? 'world'}`,
-      };
+      }
     }),
   version: publicProcedure.query(() => {
-    return { version: '0.42.0' };
+    return { version: '0.42.0' }
   }),
-});
+})

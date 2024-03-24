@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['plugin:vue/vue3-recommended', '../../.eslintrc.cjs'],
+  extends: ['../../.eslintrc.cjs', 'plugin:vue/vue3-recommended', 'prettier'],
   parser: 'vue-eslint-parser',
   parserOptions: {
     project: './tsconfig.json',
@@ -27,6 +27,25 @@ module.exports = {
     'vue/define-emits-declaration': ['warn', 'type-based'],
     'vue/define-props-declaration': ['warn', 'type-based'],
     'vue/no-boolean-default': ['warn', 'default-false'],
+    'vue/component-name-in-template-casing': [
+      'error',
+      'PascalCase',
+      { registeredComponentsOnly: false },
+    ],
+    // vuetify uses invalid v-slot
+    'vue/valid-v-slot': 'off',
+    'perfectionist/sort-vue-attributes': [
+      'error',
+      {
+        type: 'natural',
+        order: 'asc',
+        groups: ['v-model', 'multiline', 'unknown', 'shorthand', 'v-on'],
+        'custom-groups': {
+          'v-model': 'v-model*',
+          'v-on': '@*',
+        },
+      },
+    ],
   },
   overrides: [
     {
