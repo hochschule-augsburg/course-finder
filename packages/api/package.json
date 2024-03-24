@@ -5,8 +5,8 @@
     "@prisma/adapter-pg": "^5.11.0",
     "@prisma/client": "5.11.0",
     "@trpc/server": "next",
-    "@types/node": "^20.11.30",
     "cors": "^2.8.5",
+    "esbuild": "^0.20.2",
     "express": "^4.19.1",
     "fastify": "^4.13.0",
     "ldapts": "^7.0.10",
@@ -32,7 +32,7 @@
   "name": "api",
   "scripts": {
     "dev": "docker start postgres-sub-enroll && tsx watch --clear-screen=false src/main.ts",
-    "build": "tsc --noEmit",
+    "build": "tsc --noEmit && esbuild src/main.ts --bundle --packages=external --platform=node --format=esm --outdir=dist --sourcemap",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --ext .ts . --fix",
     "play": "tsx watch playground.ts",

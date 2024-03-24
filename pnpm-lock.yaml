@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@types/node':
+        specifier: ^20.11.25
+        version: 20.11.30
     devDependencies:
       eslint:
         specifier: ^8.57.0
@@ -56,12 +60,12 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-next.320
-      '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
       cors:
         specifier: ^2.8.5
         version: 2.8.5
+      esbuild:
+        specifier: ^0.20.2
+        version: 0.20.2
       express:
         specifier: ^4.19.1
         version: 4.19.1
@@ -119,7 +123,7 @@ importers:
     devDependencies:
       vitepress:
         specifier: ^1.0.1
-        version: 1.0.1(@algolia/client-search@4.22.1)(search-insights@2.13.0)(typescript@5.4.3)
+        version: 1.0.1(@algolia/client-search@4.22.1)(@types/node@20.11.30)(search-insights@2.13.0)(typescript@5.4.3)
 
   packages/ui:
     dependencies:
@@ -139,12 +143,6 @@ importers:
         specifier: ^3.5.8
         version: 3.5.11(typescript@5.4.3)(vite-plugin-vuetify@2.0.3)(vue@3.4.21)
     devDependencies:
-      '@babel/types':
-        specifier: ^7.24.0
-        version: 7.24.0
-      '@types/node':
-        specifier: ^20.11.25
-        version: 20.11.30
       '@vitejs/plugin-vue':
         specifier: ^5.0.4
         version: 5.0.4(vite@5.2.4)(vue@3.4.21)
@@ -5393,7 +5391,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vitepress@1.0.1(@algolia/client-search@4.22.1)(search-insights@2.13.0)(typescript@5.4.3):
+  /vitepress@1.0.1(@algolia/client-search@4.22.1)(@types/node@20.11.30)(search-insights@2.13.0)(typescript@5.4.3):
     resolution: {integrity: sha512-eNr5pOBppYUUjEhv8S0S2t9Tv95LQ6mMeHj6ivaGwfHxpov70Vduuwl/QQMDRznKDSaP0WKV7a82Pb4JVOaqEw==}
     hasBin: true
     peerDependencies:
