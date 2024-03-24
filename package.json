@@ -17,7 +17,7 @@
   "license": "MIT",
   "name": "subject-enroll",
   "scripts": {
-    "dev": "pnpm --stream --parallel -r --filter=!shared run dev",
+    "dev": "pnpm --stream --parallel -r run dev",
     "build": "pnpm --stream --parallel -r run build",
     "test": "pnpm --stream --parallel -r run test",
     "lint": "pnpm --stream --parallel -r run lint",
