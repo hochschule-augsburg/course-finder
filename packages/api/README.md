@@ -5,7 +5,7 @@
 Needs a Postgres database. For first start run
 
 ```ts
-podman run --name postgres-sub-enroll -e POSTGRES_USER=USER -e POSTGRES_PASSWORD=PASSWORD -p 5432:5432 -d postgres
+docker run --name postgres-sub-enroll -e POSTGRES_USER=USER -e POSTGRES_PASSWORD=PASSWORD -p 5432:5432 -v /var/lib/data -d postgres
 ```
 
 Create .env with theses parameters.
