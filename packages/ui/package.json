@@ -23,7 +23,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-vue": "^9.22.0",
+    "eslint-plugin-vue": "^9.24.0",
     "jsdom": "^24.0.0",
     "sass": "^1.71.1",
     "typescript": "^5.4.2",
