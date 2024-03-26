@@ -3,8 +3,7 @@ updates:
   - package-ecosystem: npm
     directory: '/'
     schedule:
-      # TODO change to weekly when done
-      interval: daily
+      interval: weekly
       time: '07:00'
       timezone: 'Europe/Berlin'
     versioning-strategy: auto
