@@ -5,8 +5,7 @@ import type { AppRouter } from '../../../api/src/libExports'
 
 import { serverConfig } from '../../../api/src/libExports'
 
-const { port, prefix } = serverConfig
-const url = `127.0.0.1:${port}${prefix}`
+const { url } = serverConfig
 export const trpc = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
@@ -16,7 +15,7 @@ export const trpc = createTRPCClient<AppRouter>({
         })
       },
       transformer: superjson,
-      url: `http://${url}`,
+      url,
     }),
   ],
 })

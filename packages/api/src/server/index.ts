@@ -8,9 +8,9 @@ import { appRouter } from '../router'
 import { createContext } from '../router/context'
 
 export interface ServerOptions {
-  dev?: boolean
-  port?: number
-  prefix?: string
+  port: number
+  prefix: string
+  url: string
 }
 
 declare module 'fastify' {
@@ -21,10 +21,9 @@ declare module 'fastify' {
 }
 
 export async function createServer(opts: ServerOptions) {
-  const dev = opts.dev ?? true
   const port = opts.port ?? 3000
-  const prefix = opts.prefix ?? '/api'
-  const server = fastify({ logger: dev })
+  const prefix = opts.prefix
+  const server = fastify({ logger: true /* TODO */ })
 
   await server.register(fastifyCookie)
   await server.register(fastifySession, {
@@ -32,9 +31,10 @@ export async function createServer(opts: ServerOptions) {
   })
   await server.register(fastifyCors, {
     origin: (origin, cb) => {
-      // Allow all origins or you can do a specific check here
-      if (origin === undefined || new URL(origin).hostname === 'localhost') {
-        console.log(origin)
+      if (
+        origin === undefined ||
+        new URL(origin).hostname === process.env.FRONTEND_HOSTNAME
+      ) {
         cb(null, true)
       } else {
         // Generate an error on other origins, disabling access
