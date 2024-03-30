@@ -3,23 +3,82 @@ generator client {
   previewFeatures = ["driverAdapters"]
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+  // namespace = "PrismaJson"
+  // clientOutput = "<finds it automatically>"
+  // (./ -> relative to schema, or an importable path to require() it)
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+model Admin {
+  email    String @id
+  username String
+  name     String
+  /// hashed password
+  password String
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Student {
+  email        String  @id // id because people with same name get a number
+  username     String // not unique as one can take the username of an old student
+  name         String
+  fieldOfStudy String
+  semester     Int?
+  regNumber    String?
+  TwoFA        Json?
+}
+
+model Prof {
+  email     String   @id // id because people with same name get a number
+  username  String // not unique as one can take the username of an old student
+  name      String
+  telephone String?
+  office    String?
+  faculty   Faculty  @relation(fields: [facultyId], references: [id])
+  facultyId Int
+  Module    Module[]
+}
+
+model Faculty {
+  id      Int      @id @default(autoincrement())
+  name    String
+  modules Module[]
+  Prof    Prof[]
+}
+
+model Module {
+  moduleCode         String   @id
+  /// title module
+  /// [I18n]
+  title              Json
+  published          Boolean  @default(false)
+  examinationNumbers String[]
+  lecturers          Prof[]
+  /// if lecturer is not in the system
+  lecturerNames      String[]
+  requirements       String[]
+  /// spoken language
+  language           String
+  faculty            Faculty? @relation(fields: [facultyId], references: [id])
+  facultyId          Int?
+  /// SWS
+  semesterHours      Int
+  /// CP
+  creditPoints       Int
+  timeDistribution   String?
+  /// [ExamType]
+  examType           Json
+  /// [I18n]
+  description        Json
+  /// [I18n]
+  learningGoals      Json
+  literature         String[]
+  /// Link to the moodle course
+  moodleCourse       String?
+  website            String?
 }
