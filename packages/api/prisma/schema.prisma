@@ -15,6 +15,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// This model is completely separate from ldap as the admin could be extern
 model Admin {
   email    String @id
   username String
