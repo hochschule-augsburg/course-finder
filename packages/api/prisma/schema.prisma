@@ -25,13 +25,14 @@ model Admin {
 }
 
 model Student {
-  email        String  @id // id because people with same name get a number
-  username     String // not unique as one can take the username of an old student
-  name         String
-  fieldOfStudy String
-  semester     Int?
-  regNumber    String?
-  TwoFA        Json?
+  email         String          @id // id because people with same name get a number
+  username      String // not unique as one can take the username of an old student
+  name          String
+  fieldOfStudy  String
+  semester      Int?
+  regNumber     String?
+  TwoFA         Json?
+  StudentChoice StudentChoice[]
 }
 
 model Prof {
@@ -53,11 +54,11 @@ model Faculty {
 }
 
 model Module {
-  moduleCode         String   @id
+  moduleCode         String           @id
   /// title module
   /// [I18n]
   title              Json
-  published          Boolean  @default(false)
+  published          Boolean          @default(false)
   examinationNumbers String[]
   lecturers          Prof[]
   /// if lecturer is not in the system
@@ -65,7 +66,7 @@ model Module {
   requirements       String[]
   /// spoken language
   language           String
-  faculty            Faculty? @relation(fields: [facultyId], references: [id])
+  faculty            Faculty?         @relation(fields: [facultyId], references: [id])
   facultyId          Int?
   /// SWS
   semesterHours      Int
@@ -82,4 +83,40 @@ model Module {
   /// Link to the moodle course
   moodleCourse       String?
   website            String?
+  offeredCourses     OfferedCourses[]
+}
+
+model Enrollphase {
+  id             Int              @id @default(autoincrement())
+  start          DateTime
+  end            DateTime
+  /// [I18n]
+  title          Json
+  /// [I18n]
+  description    Json
+  offeredCourses OfferedCourses[]
+}
+
+model OfferedCourses {
+  id            Int             @id @default(autoincrement())
+  phase         Enrollphase     @relation(fields: [phaseId], references: [id])
+  phaseId       Int
+  module        Module          @relation(fields: [moduleCode], references: [moduleCode])
+  moduleCode    String
+  StudentChoice StudentChoice[]
+
+  @@unique([phaseId, moduleCode])
+}
+
+model StudentChoice {
+  id              Int            @id @default(autoincrement())
+  student         Student        @relation(fields: [studentId], references: [email])
+  studentId       String
+  offeredCourse   OfferedCourses @relation(fields: [offeredCourseId], references: [id])
+  offeredCourseId Int
+
+  points     Int
+  lastChange DateTime
+
+  @@unique([studentId, offeredCourseId])
 }
