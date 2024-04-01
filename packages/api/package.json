@@ -10,6 +10,7 @@
     "@prisma/client": "5.11.0",
     "@trpc/server": "next",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
     "esbuild": "^0.20.2",
     "express": "^4.19.2",
     "fastify": "^4.13.0",
@@ -47,6 +48,9 @@
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate dev reset",
     "postinstall": "pnpm db:generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "type": "module",
   "version": "0.0.0"

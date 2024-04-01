@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { Faculty, Module } from '@prisma/client'
 
+export type I18nJson = {
+  de?: string
+  en?: string
+}
 declare global {
   namespace PrismaJson {
-    type I18n = {
-      de?: string
-      en?: string
-    }
+    type I18n = I18nJson
     // TODO
     type ExamType = {
       additionalInfo?: string
@@ -39,6 +39,3 @@ declare global {
 }
 
 export {}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function abc(a: Module, b: Faculty) {}

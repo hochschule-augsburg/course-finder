@@ -8,10 +8,12 @@ const username = ref('')
 const password = ref('')
 
 async function login() {
-  await trpc.auth.login.query({
-    password: password.value,
-    username: username.value,
-  })
+  console.log(
+    await trpc.auth.login.query({
+      password: password.value,
+      username: username.value,
+    }),
+  )
 }
 </script>
 <template>

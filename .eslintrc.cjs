@@ -23,6 +23,8 @@ module.exports = {
   rules: {
     'func-style': ['error', 'declaration'],
     'prettier/prettier': 'error',
+    '@typescript-eslint/no-floating-promises': 'error',
+
     // unused-imports
     ...{
       '@typescript-eslint/no-unused-vars': [

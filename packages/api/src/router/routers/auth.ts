@@ -1,6 +1,8 @@
+import { TRPCError } from '@trpc/server'
 import { scg } from 'ioc-service-container'
 import { z } from 'zod'
 
+import { LoginError } from '../../domain/user/UserService'
 import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
@@ -10,11 +12,24 @@ export const authRouter = router({
       if (ctx.user) {
         return { message: 'Already logged in', success: false }
       }
-      const ldapService = scg('LdapService')
+      const userService = scg('UserService')
 
-      return {
-        success: await ldapService.authenticate(input.username, input.password),
+      const result = await userService.authenticate(
+        input.username,
+        input.password,
+      )
+      if (!result.ok) {
+        if (result.error === LoginError.InvalidCredentials) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Invalid credentials',
+          })
+        }
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+        })
       }
+      return result.data
     }),
   version: publicProcedure.query(() => {
     return { version: '0.42.0' }

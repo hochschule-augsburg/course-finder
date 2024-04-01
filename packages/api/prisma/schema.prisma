@@ -15,45 +15,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// This model is completely separate from ldap as the admin could be extern
-model Admin {
-  email    String @id
-  username String
-  name     String
-  /// hashed password
-  password String
-}
-
 model Student {
   email         String          @id // id because people with same name get a number
   username      String // not unique as one can take the username of an old student
   name          String
   fieldOfStudy  String
-  semester      Int?
+  /// would be nice if ldap whould provide this
+  term          Int?
   regNumber     String?
-  TwoFA         Json?
+  birthDate     DateTime?
+  twoFA         Json?
+  faculty       Faculty         @relation(fields: [facultyName], references: [name])
+  facultyName   String
   StudentChoice StudentChoice[]
 }
 
 model Prof {
-  email     String   @id // id because people with same name get a number
-  username  String // not unique as one can take the username of an old student
-  name      String
-  telephone String?
-  office    String?
-  faculty   Faculty  @relation(fields: [facultyId], references: [id])
-  facultyId Int
-  Module    Module[]
+  email       String   @id // id because people with same name get a number
+  username    String // not unique as one can take the username of an old student
+  name        String
+  telephone   String?
+  office      String?
+  twoFA       Json?
+  faculty     Faculty  @relation(fields: [facultyName], references: [name])
+  facultyName String
+  Module      Course[]
 }
 
 model Faculty {
-  id      Int      @id @default(autoincrement())
-  name    String
-  modules Module[]
-  Prof    Prof[]
+  name           String    @id
+  /// [I18n]
+  translatedName Json
+  modules        Course[]
+  Prof           Prof[]
+  Student        Student[]
 }
 
-model Module {
+model Course {
   moduleCode         String           @id
   /// title module
   /// [I18n]
@@ -66,8 +64,8 @@ model Module {
   requirements       String[]
   /// spoken language
   language           String
-  faculty            Faculty?         @relation(fields: [facultyId], references: [id])
-  facultyId          Int?
+  faculty            Faculty?         @relation(fields: [facultyName], references: [name])
+  facultyName        String?
   /// SWS
   semesterHours      Int
   /// CP
@@ -101,9 +99,12 @@ model OfferedCourses {
   id            Int             @id @default(autoincrement())
   phase         Enrollphase     @relation(fields: [phaseId], references: [id])
   phaseId       Int
-  module        Module          @relation(fields: [moduleCode], references: [moduleCode])
+  module        Course          @relation(fields: [moduleCode], references: [moduleCode])
   moduleCode    String
   StudentChoice StudentChoice[]
+
+  extraInfo String?
+  times     Json
 
   @@unique([phaseId, moduleCode])
 }

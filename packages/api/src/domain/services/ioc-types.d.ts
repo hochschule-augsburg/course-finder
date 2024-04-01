@@ -1,7 +1,7 @@
-import type { LdapService } from './domain/ldap/LdapService'
+import { UserService } from '../user/UserService'
 
 type IoCTypes = {
-  LdapService: LdapService
+  UserService: UserService
 }
 
 // Redeclare the scg function to get full Typscript support
