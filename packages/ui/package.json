@@ -14,6 +14,7 @@
     "@mdi/font": "7.4.47",
     "@trpc/client": "next",
     "core-js": "^3.34.0",
+    "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "superjson": "^2.2.1",
     "vue": "^3.4.21",
