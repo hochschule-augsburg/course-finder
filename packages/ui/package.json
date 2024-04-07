@@ -8,7 +8,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint . --ext .ts,.vue --ignore-path .gitignore",
-    "lint:fix": "eslint . --ext .ts,.vue --fix --ignore-path .gitignore"
+    "lint:fix": "eslint . --ext .ts,.vue --fix --ignore-path .gitignore",
+    "stylelint": "stylelint **/*.{vue,scss}",
+    "stylelint:fix": "stylelint **/*.{scss} --fix"
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
@@ -25,7 +27,12 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-vue": "^9.24.0",
     "jsdom": "^24.0.0",
+    "postcss-html": "^1.6.0",
     "sass": "^1.71.1",
+    "stylelint": "^16.3.1",
+    "stylelint-config-recommended-scss": "^14.0.0",
+    "stylelint-config-recommended-vue": "^1.5.0",
+    "stylelint-declaration-strict-value": "^1.10.4",
     "typescript": "^5.4.2",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.26.0",

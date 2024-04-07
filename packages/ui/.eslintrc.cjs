@@ -24,6 +24,7 @@ module.exports = {
         order: ['script', 'template', 'style'],
       },
     ],
+    'vue/enforce-style-attribute': ['error', { allow: ['scoped'] }],
     'vue/define-emits-declaration': ['warn', 'type-based'],
     'vue/define-props-declaration': ['warn', 'type-based'],
     'vue/no-boolean-default': ['warn', 'default-false'],
