@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+import { useFiltersStore } from './filters'
+
 export type Meeting = {
   from: Date
   to: Date
@@ -17,6 +19,7 @@ export type Subject = {
   moduleMan: string
   name: string
   prof: string
+  selected: boolean
   sws: number
   weekly: Meeting | undefined
 }
@@ -24,12 +27,29 @@ export type Subject = {
 export type SubjectProp = keyof Subject
 
 export const useEnrollmentStore = defineStore('enrollment', () => {
-  const count = ref(0)
-  const name = ref('Eduardo')
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
+  const filtersStore = useFiltersStore()
+  const subjects = ref<Subject[]>([])
+  const selectedSubject = ref<number | undefined>(undefined)
+  const selectedSubjects = computed(() =>
+    subjects.value.filter((s) => s.selected),
+  )
+
+  const filteredSubjects = computed(() => {
+    let filtered: Subject[] = []
+    filtered = filtersStore.applyFilters(subjects.value)
+    filtered = filtersStore.searchSubjects(filtered)
+    return filtered
+  })
+
+  function enroll() {
+    // TODO api.enroll(selectedSubjects)? Algorithmus?
   }
 
-  return { count, doubleCount, increment, name }
+  return {
+    enroll,
+    filteredSubjects,
+    selectedSubject,
+    selectedSubjects,
+    subjects,
+  }
 })

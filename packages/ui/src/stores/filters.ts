@@ -90,7 +90,10 @@ export const useFiltersStore = defineStore('filters', () => {
     return filteredSubjects
   }
 
-  function searchSubjects(filteredSubjects: Subject[]) {
+  function searchSubjects(filteredSubjects: Subject[]): Subject[] {
+    if (!search.value.trim()) {
+      return filteredSubjects
+    }
     return filteredSubjects.filter(
       (s) =>
         s.name.includes(search.value) ||
