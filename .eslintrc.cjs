@@ -6,9 +6,11 @@ module.exports = {
     'prettier',
   ],
   ignorePatterns: ['**/*.json'],
-  parser: '@typescript-eslint/parser',
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+    project: './tsconfig.json',
+    extraFileExtensions: ['.vue'],
+    parser: '@typescript-eslint/parser',
   },
   plugins: [
     '@typescript-eslint',
