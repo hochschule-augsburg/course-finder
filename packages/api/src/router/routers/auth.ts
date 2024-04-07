@@ -31,7 +31,4 @@ export const authRouter = router({
       }
       return result.data
     }),
-  version: publicProcedure.query(() => {
-    return { version: '0.42.0' }
-  }),
 })

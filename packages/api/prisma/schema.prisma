@@ -20,7 +20,7 @@ model Student {
   username      String // not unique as one can take the username of an old student
   name          String
   fieldOfStudy  String
-  /// would be nice if ldap whould provide this
+  /// would be nice if ldap would provide this
   term          Int?
   regNumber     String?
   birthDate     DateTime?
