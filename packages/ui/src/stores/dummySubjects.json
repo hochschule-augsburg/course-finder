@@ -1,0 +1,430 @@
+[
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Full-Stack-Web-Entwicklung",
+    "prof": "Kowarschick",
+    "sws": 6,
+    "cp": 8,
+    "minTnm": 0,
+    "maxTnm": 80,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-02T08:00:00",
+      "to": "2024-04-02T13:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "NoSQL",
+    "prof": "Predeschly",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 35,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-02T08:00:00",
+      "to": "2024-04-02T11:20:00"
+    },
+    "info": "weitere Teilnehmer aus Data Science"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Embedded Linux",
+    "prof": "H�gl",
+    "sws": 6,
+    "cp": 7.5,
+    "minTnm": 0,
+    "maxTnm": 80,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-02T09:50:00",
+      "to": "2024-04-02T15:30:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Moderne Containerisierung und Orchestrierung mit Docker und Kubernetes",
+    "prof": "Seitz / Gebele",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 40,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-03T14:00:00",
+      "to": "2024-04-03T17:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Grundlagen DevOps",
+    "prof": "Kolonko",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 40,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-05T09:50:00",
+      "to": "2024-04-05T13:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Industrielle Bildverarbeitung",
+    "prof": "R�sch",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 30,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-05T11:40:00",
+      "to": "2024-04-05T15:30:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "DB-Anwendungen",
+    "prof": "Kolonko",
+    "sws": 3,
+    "cp": 3,
+    "weekly": null,
+    "meetings": null,
+    "minTnm": 0,
+    "maxTnm": 10,
+    "info": "am Ende des Semesters"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "IT-Sicherheit",
+    "prof": "Merli / Schubaur",
+    "sws": 6,
+    "cp": 7.5,
+    "minTnm": 0,
+    "maxTnm": 40,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-01T08:00:00",
+      "to": "2024-04-01T13:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Network Penetration Testing",
+    "prof": "Braun",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 40,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-03T09:50:00",
+      "to": "2024-04-03T13:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Open Source",
+    "prof": "H�gl",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 40,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-03T14:00:00",
+      "to": "2024-04-03T17:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Einf�hrung in die maschinelle Sprachverarbeitung",
+    "prof": "Zarcone",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 60,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-04T15:34:00",
+      "to": "2024-04-04T13:10:00"
+    },
+    "info": "20 Pl�tze f�r die Fakult�t f�r Gestaltung und 60 Pl�tze f�r die Fakult�t f�r Informatik  = gesamt 80 = max. Raumgr��e"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Informatik und Umwelt",
+    "prof": "Scholz",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 38,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-04T09:50:00",
+      "to": "2024-04-04T13:10:00"
+    },
+    "info": "max. 38 Teilnehmer / es ist kein gr��erer Raum verf�gbar zu dieser Zeit"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Neuronale Netze und Deep Learning",
+    "prof": "Kipp",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 60,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-05T08:00:00",
+      "to": "2024-04-05T11:20:00"
+    },
+    "info": "Pflichtname f�r den Studiengang Data Science"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Programmierung von Web-Anwendungen",
+    "prof": "Metzner",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 40,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-05T14:00:00",
+      "to": "2024-04-05T17:10:00"
+    },
+    "info": ""
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Agile Webanwendungen mit Python",
+    "prof": "Seifert",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 50,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-05T15:40:00",
+      "to": "2024-04-05T18:50:00"
+    },
+    "info": "weitere Teilnehmer �ber die Fakult�t f�r Gestaltung"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Objektorientierte Programmierung",
+    "prof": "Kirchmeier",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 0,
+    "meetings": null,
+    "weekly": {
+      "from": "2024-04-03T14:00:00",
+      "to": "2024-04-03T17:10:00"
+    },
+    "info": "Pflichtname f�r den Studiengang Data Science / Anmeldung �ber moodle, da die erste Vorlesung am 20.03.2024 beginnt"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "moduleMan": "tha.de",
+    "name": "Formula Student Driverless",
+    "prof": "Kiefer",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 30,
+    "info": "Laufzeit �ber 2 Semester, Anmeldung direkt �ber Herrn Prof. Dr. Kiefer",
+    "weekly": null,
+    "meetings": []
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "weekly": null,
+    "meetings": [
+      {
+        "from": "2024-03-11",
+        "to": "2024-03-16"
+      }
+    ],
+    "moduleMan": "tha.de",
+    "name": "Advanced Security Testing",
+    "prof": "Fischer / Niedermaier",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 20,
+    "info": "ausgebucht, ganztags"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "weekly": null,
+    "meetings": [
+      {
+        "from": "2024-03-04",
+        "to": "2024-03-08"
+      },
+      {
+        "from": "2024-03-11",
+        "to": "2024-03-12"
+      }
+    ],
+    "moduleMan": "tha.de",
+    "name": "Computer Games",
+    "prof": "McClenaghan",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 25,
+    "info": "ausgebucht"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "weekly": null,
+    "meetings": [
+      {
+        "from": "2024-02-22",
+        "to": "2024-02-23"
+      },
+      {
+        "from": "2024-02-26",
+        "to": "2024-03-01"
+      }
+    ],
+    "moduleMan": "tha.de",
+    "name": "Visual Thinking",
+    "prof": "McClenaghan",
+    "sws": 4,
+    "cp": 5,
+    "minTnm": 0,
+    "maxTnm": 25,
+    "info": "ausgebucht"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "weekly": null,
+    "meetings": [
+      {
+        "from": "2024-03-19",
+        "to": "2024-03-21"
+      }
+    ],
+    "moduleMan": "tha.de",
+    "name": "Linux LPIC",
+    "prof": "Thalmayr",
+    "sws": 2,
+    "cp": 2.5,
+    "minTnm": 0,
+    "maxTnm": 25,
+    "info": "ausgebucht"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "weekly": null,
+    "meetings": [
+      {
+        "from": "2024-02-22",
+        "to": "2024-02-24"
+      }
+    ],
+    "moduleMan": "tha.de",
+    "name": "Linux Advanced",
+    "prof": "Thalmayr",
+    "sws": 2,
+    "cp": 2.5,
+    "minTnm": 0,
+    "maxTnm": 25,
+    "info": "ausgebucht"
+  },
+  {
+    "id": "",
+    "description": "",
+    "selected": false,
+    "weekly": null,
+    "meetings": [
+      {
+        "from": "2024-03-12",
+        "to": "2024-03-14"
+      }
+    ],
+    "moduleMan": "tha.de",
+    "name": "Chancen-& Risikomanagement in Digitalisierten Wertsch�pfungsnetzen",
+    "prof": "H�ckel",
+    "sws": 2,
+    "cp": 2.5,
+    "minTnm": 0,
+    "maxTnm": 100,
+    "info": ""
+  }
+]

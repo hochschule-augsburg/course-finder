@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+import dummySubjects from './dummySubjects.json'
 import { useFiltersStore } from './filters'
 
 export type Meeting = {
-  from: Date
-  to: Date
+  from: string
+  to: string
 }
 
 export type Subject = {
@@ -14,21 +15,21 @@ export type Subject = {
   id: string
   info: string
   maxTnm: number
-  meetings: Meeting[] | undefined
+  meetings: Meeting[] | null
   minTnm: number
   moduleMan: string
   name: string
   prof: string
   selected: boolean
   sws: number
-  weekly: Meeting | undefined
+  weekly: Meeting | null
 }
 
 export type SubjectProp = keyof Subject
 
 export const useEnrollmentStore = defineStore('enrollment', () => {
   const filtersStore = useFiltersStore()
-  const subjects = ref<Subject[]>([])
+  const subjects = ref<Subject[]>(dummySubjects)
   const selectedSubject = ref<number | undefined>(undefined)
   const selectedSubjects = computed(() =>
     subjects.value.filter((s) => s.selected),
