@@ -11,7 +11,12 @@
   ],
   "references": [{ "path": "./tsconfig.node.json" }],
   "compilerOptions": {
-    "types": ["vite/client", "unplugin-vue-router/client", "vitest/globals"],
+    "types": [
+      "vite/client",
+      "unplugin-vue-router/client",
+      "vitest/globals",
+      "@intlify/unplugin-vue-i18n/messages"
+    ],
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {

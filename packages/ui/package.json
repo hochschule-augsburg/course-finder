@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "bundle": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint . --ext .ts,.vue --ignore-path .gitignore",
@@ -20,10 +21,12 @@
     "roboto-fontface": "*",
     "superjson": "^2.2.1",
     "vue": "^3.4.21",
+    "vue-i18n": "9",
     "vue-query": "^1.26.0",
     "vuetify": "^3.5.14"
   },
   "devDependencies": {
+    "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-vue": "^9.24.0",
