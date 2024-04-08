@@ -21,28 +21,28 @@
     "superjson": "^2.2.1",
     "vue": "^3.4.21",
     "vue-query": "^1.26.0",
-    "vuetify": "^3.5.13"
+    "vuetify": "^3.5.14"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-vue": "^9.24.0",
     "jsdom": "^24.0.0",
     "postcss-html": "^1.6.0",
-    "sass": "^1.71.1",
+    "sass": "^1.74.1",
     "stylelint": "^16.3.1",
     "stylelint-config-recommended-scss": "^14.0.0",
     "stylelint-config-recommended-vue": "^1.5.0",
     "stylelint-declaration-strict-value": "^1.10.4",
-    "typescript": "^5.4.2",
+    "typescript": "^5.4.4",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.26.0",
     "unplugin-vue-router": "^0.8.4",
-    "vite": "^5.2.7",
+    "vite": "^5.2.8",
     "vite-plugin-vuetify": "^2.0.3",
     "vitest": "^1.4.0",
     "vitest-mock-extended": "^1.3.1",
     "vue-router": "^4.3.0",
-    "vue-tsc": "^2.0.6"
+    "vue-tsc": "^2.0.11"
   }
 }
