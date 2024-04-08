@@ -35,18 +35,21 @@ module.exports = {
     ],
     // vuetify uses invalid v-slot
     'vue/valid-v-slot': 'off',
+    'vue/attributes-order': 'off',
     'perfectionist/sort-vue-attributes': [
       'error',
       {
         type: 'natural',
         order: 'asc',
-        groups: ['v-model', 'multiline', 'unknown', 'shorthand', 'v-on'],
+        groups: ['v-model', 'v-', 'multiline', 'unknown', 'shorthand', 'v-on'],
         'custom-groups': {
-          'v-model': 'v-model*',
+          'v-modal': 'v-model*',
+          'v-': 'v-*',
           'v-on': '@*',
         },
       },
     ],
+    'vue/html-self-closing': 'error',
   },
   overrides: [
     {
