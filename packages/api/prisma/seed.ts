@@ -1,6 +1,17 @@
 import { PrismaClient } from '@prisma/client'
 
+import crypto from 'crypto'
+
 const prisma = new PrismaClient()
+
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
 
 async function main() {
   // Create faculties
@@ -22,92 +33,111 @@ async function main() {
   })
 
   // Create professors
-  await prisma.prof.createMany({
-    data: [
-      {
-        email: 'prof1@example.com',
-        facultyName: 'Informatik',
-        name: 'Professor 1',
-        office: 'Office A',
-        telephone: '1234567890',
-        username: 'prof1',
+  await prisma.user.create({
+    data: {
+      username: 'scholz',
+      name: 'Jürgen Scholz',
+      auth: { method: 'ldap' },
+      email: 'juergen.scholz@hs-augsburg.de',
+      facultyName: 'Informatik',
+      type: 'Professor',
+      Prof: {
+        create: {
+          office: 'abc',
+          telephone: '0000/0000',
+        },
       },
-      {
-        email: 'prof2@example.com',
-        facultyName: 'Informatik',
-        name: 'Professor 2',
-        username: 'prof2',
+    },
+  })
+  await prisma.user.create({
+    data: {
+      username: 'prof1',
+      name: 'Another Professor',
+      auth: { method: 'local', password: hashPassword('prof1') },
+      email: 'another.professor@example.com',
+      facultyName: 'Informatik',
+      type: 'Professor',
+      Prof: {
+        create: {
+          office: 'xyz',
+          telephone: '1111/1111',
+        },
       },
-      // Add more professors as needed
-    ],
+    },
   })
 
   // Create courses
+  await prisma.course.create({
+    data: {
+      creditPoints: 6,
+      description: {
+        de: 'Beschreibung des Kurses...',
+        en: 'Description of the course...',
+      },
+      examType: { de: 'Schriftlich', en: 'Written' },
+      examinationNumbers: ['CS101-001', 'CS101-002'],
+      facultyName: 'Gestaltung',
+      language: 'English',
+      learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
+      Lecturers: { connect: { username: 'scholz' } },
+      literature: ['Textbook 1', 'Textbook 2'],
+      moduleCode: 'CS101',
+      published: true,
+      requirements: ['Basic understanding of programming'],
+      semesterHours: 4,
+      title: {
+        de: 'Einführung in die Informatik',
+        en: 'Introduction to Computer Science',
+      },
+    },
+  })
+  await prisma.course.create({
+    data: {
+      creditPoints: 4,
+      description: {
+        de: 'Beschreibung des Kurses...',
+        en: 'Description of the course...',
+      },
+      examType: { de: 'Schriftlich', en: 'Written' },
+      examinationNumbers: ['PHIL101-001', 'PHIL101-002'],
+      facultyName: 'Informatik',
+      language: 'English',
+      learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
+      Lecturers: { connect: { username: 'scholz' } },
+      literature: ['Philosophy Book 1', 'Philosophy Book 2'],
+      moduleCode: 'PHIL101',
+      published: true,
+      requirements: ['None'],
+      semesterHours: 3,
+      title: {
+        de: 'Einführung in die Philosophie',
+        en: 'Introduction to Philosophy',
+      },
+    },
+  })
+  await prisma.course.create({
+    data: {
+      creditPoints: 6,
+      description: {
+        de: 'Beschreibung des Kurses...',
+        en: 'Description of the course...',
+      },
+      examType: { de: 'Schriftlich', en: 'Written' },
+      examinationNumbers: ['MATH101-001', 'MATH101-002'],
+      facultyName: 'Informatik',
+      language: 'English',
+      learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
+      Lecturers: { connect: { username: 'prof1' } },
+      literature: ['Calculus Book 1', 'Calculus Book 2'],
+      moduleCode: 'MATH101',
+      published: true,
+      requirements: ['High school mathematics'],
+      semesterHours: 4,
+      title: { de: 'Analysis I', en: 'Calculus I' },
+    },
+  })
   await prisma.course.createMany({
     data: [
-      {
-        creditPoints: 6,
-        description: {
-          de: 'Beschreibung des Kurses...',
-          en: 'Description of the course...',
-        },
-        examType: { de: 'Schriftlich', en: 'Written' },
-        examinationNumbers: ['CS101-001', 'CS101-002'],
-        facultyName: 'Gestaltung',
-        language: 'English',
-        learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        lecturerNames: ['Professor 1'],
-        literature: ['Textbook 1', 'Textbook 2'],
-        moduleCode: 'CS101',
-        published: true,
-        requirements: ['Basic understanding of programming'],
-        semesterHours: 4,
-        title: {
-          de: 'Einführung in die Informatik',
-          en: 'Introduction to Computer Science',
-        },
-      },
-      {
-        creditPoints: 4,
-        description: {
-          de: 'Beschreibung des Kurses...',
-          en: 'Description of the course...',
-        },
-        examType: { de: 'Schriftlich', en: 'Written' },
-        examinationNumbers: ['PHIL101-001', 'PHIL101-002'],
-        facultyName: 'Informatik',
-        language: 'English',
-        learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        lecturerNames: ['Professor 2'],
-        literature: ['Philosophy Book 1', 'Philosophy Book 2'],
-        moduleCode: 'PHIL101',
-        published: true,
-        requirements: ['None'],
-        semesterHours: 3,
-        title: {
-          de: 'Einführung in die Philosophie',
-          en: 'Introduction to Philosophy',
-        },
-      },
-      {
-        creditPoints: 6,
-        description: {
-          de: 'Beschreibung des Kurses...',
-          en: 'Description of the course...',
-        },
-        examType: { de: 'Schriftlich', en: 'Written' },
-        examinationNumbers: ['MATH101-001', 'MATH101-002'],
-        facultyName: 'Informatik',
-        language: 'English',
-        learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        lecturerNames: ['Professor 3'],
-        literature: ['Calculus Book 1', 'Calculus Book 2'],
-        moduleCode: 'MATH101',
-        published: true,
-        requirements: ['High school mathematics'],
-        semesterHours: 4,
-        title: { de: 'Analysis I', en: 'Calculus I' },
-      },
       {
         creditPoints: 5,
         description: {
@@ -224,116 +254,157 @@ async function main() {
       },
     ],
   })
-
-  // Student 2
-  await prisma.student.create({
-    data: {
-      email: 'student2@example.com',
-      facultyName: 'Informatik',
-      fieldOfStudy: 'Computer Science',
-      name: 'Student 2',
-      username: 'student2',
-    },
+  await prisma.user.createMany({
+    data: [
+      {
+        username: 'singhraj',
+        email: 'singhraj@example.com',
+        name: 'Singh Raj',
+        auth: { method: 'local', password: hashPassword('singhraj') },
+        type: 'student',
+        facultyName: 'Informatik', // Replace with actual faculty name
+      },
+      {
+        username: 'mitroska',
+        email: 'mitroska@example.com',
+        name: 'Mitroska',
+        auth: { method: 'local', password: hashPassword('mitroska') },
+        type: 'student',
+        facultyName: 'Informatik', // Replace with actual faculty name
+      },
+      {
+        username: 'seka',
+        email: 'seka@example.com',
+        name: 'Seka',
+        auth: { method: 'local', password: hashPassword('seka') },
+        type: 'student',
+        facultyName: 'Informatik', // Replace with actual faculty name
+      },
+      {
+        username: 'stud1',
+        email: 'stud1@example.com',
+        name: 'Stud1',
+        auth: { method: 'local', password: hashPassword('stud1'), twoFA: true },
+        type: 'student',
+        facultyName: 'Informatik', // Replace with actual faculty name
+      },
+    ],
   })
 
-  // Student 3
-  await prisma.student.create({
-    data: {
-      StudentChoice: {
-        create: [
-          { lastChange: new Date(), offeredCourseId: 1, points: 100 },
-          { lastChange: new Date(), offeredCourseId: 2, points: 200 },
-          { lastChange: new Date(), offeredCourseId: 3, points: 300 },
-          { lastChange: new Date(), offeredCourseId: 4, points: 150 },
-          { lastChange: new Date(), offeredCourseId: 5, points: 250 },
-        ],
-      },
-      birthDate: new Date('1999-05-15'),
-      email: 'student3@example.com',
-      fieldOfStudy: 'Physics',
-      name: 'Student 3',
-      regNumber: 'REG005',
-      facultyName: 'Informatik',
-      term: 3,
-      username: 'student3',
-    },
+  await prisma.student.createMany({
+    data: [
+      { username: 'singhraj', fieldOfStudy: 'Computer Science' },
+      { username: 'mitroska', fieldOfStudy: 'Mathematics' },
+      { username: 'seka', fieldOfStudy: 'Physics' },
+      { username: 'stud1', fieldOfStudy: 'Biology' },
+    ],
   })
-
-  // Student 4
-  await prisma.student.create({
-    data: {
-      StudentChoice: {
-        create: [
-          { lastChange: new Date(), offeredCourseId: 1, points: 150 },
-          { lastChange: new Date(), offeredCourseId: 2, points: 250 },
-          { lastChange: new Date(), offeredCourseId: 3, points: 200 },
-          { lastChange: new Date(), offeredCourseId: 4, points: 100 },
-          { lastChange: new Date(), offeredCourseId: 5, points: 300 },
-        ],
+  await prisma.studentChoice.createMany({
+    data: [
+      // For singhraj
+      {
+        studentId: 'singhraj',
+        offeredCourseId: 1,
+        points: 250,
+        lastChange: new Date(),
       },
-      birthDate: new Date('1999-05-13'),
-      email: 'student4@example.com',
-      facultyName: 'Informatik',
-      fieldOfStudy: 'Mathematics',
-      name: 'Student 4',
-      regNumber: 'REG005',
-      term: 5,
-      username: 'student4',
-    },
-  })
-
-  // Student 5
-  await prisma.student.create({
-    data: {
-      StudentChoice: {
-        create: [
-          { lastChange: new Date(), offeredCourseId: 1, points: 200 },
-          { lastChange: new Date(), offeredCourseId: 2, points: 150 },
-          { lastChange: new Date(), offeredCourseId: 3, points: 250 },
-          { lastChange: new Date(), offeredCourseId: 4, points: 200 },
-          { lastChange: new Date(), offeredCourseId: 5, points: 200 },
-        ],
+      {
+        studentId: 'singhraj',
+        offeredCourseId: 2,
+        points: 200,
+        lastChange: new Date(),
       },
-      birthDate: new Date('1999-03-15'),
-      email: 'student5@example.com',
-      facultyName: 'Informatik',
-      fieldOfStudy: 'Chemistry',
-      name: 'Student 5',
-      regNumber: 'REG004',
-      term: 4,
-      username: 'student5',
-    },
-  })
-
-  // Student 6
-  await prisma.student.create({
-    data: {
-      StudentChoice: {
-        create: [
-          { lastChange: new Date(), offeredCourseId: 1, points: 300 },
-          { lastChange: new Date(), offeredCourseId: 2, points: 200 },
-          { lastChange: new Date(), offeredCourseId: 3, points: 100 },
-          { lastChange: new Date(), offeredCourseId: 4, points: 200 },
-          { lastChange: new Date(), offeredCourseId: 5, points: 200 },
-        ],
+      {
+        studentId: 'singhraj',
+        offeredCourseId: 3,
+        points: 300,
+        lastChange: new Date(),
       },
-      birthDate: new Date('1999-05-15'),
-      email: 'student6@example.com',
-      facultyName: 'Informatik',
-      fieldOfStudy: 'Biology',
-      name: 'Student 6',
-      regNumber: 'REG003',
-      term: 3,
-      username: 'student6',
-    },
+      {
+        studentId: 'singhraj',
+        offeredCourseId: 4,
+        points: 250,
+        lastChange: new Date(),
+      },
+      // For mitroska
+      {
+        studentId: 'mitroska',
+        offeredCourseId: 1,
+        points: 180,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'mitroska',
+        offeredCourseId: 2,
+        points: 220,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'mitroska',
+        offeredCourseId: 3,
+        points: 250,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'mitroska',
+        offeredCourseId: 4,
+        points: 350,
+        lastChange: new Date(),
+      },
+      // For seka
+      {
+        studentId: 'seka',
+        offeredCourseId: 1,
+        points: 150,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'seka',
+        offeredCourseId: 2,
+        points: 200,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'seka',
+        offeredCourseId: 3,
+        points: 350,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'seka',
+        offeredCourseId: 4,
+        points: 300,
+        lastChange: new Date(),
+      },
+      // For stud1
+      {
+        studentId: 'stud1',
+        offeredCourseId: 1,
+        points: 220,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'stud1',
+        offeredCourseId: 2,
+        points: 180,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'stud1',
+        offeredCourseId: 3,
+        points: 200,
+        lastChange: new Date(),
+      },
+      {
+        studentId: 'stud1',
+        offeredCourseId: 4,
+        points: 400,
+        lastChange: new Date(),
+      },
+    ],
   })
 }
 
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+function hashPassword(password: string) {
+  return crypto.createHash('sha256').update(password).digest('hex')
+}

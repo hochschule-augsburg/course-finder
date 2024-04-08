@@ -4,6 +4,7 @@ import { fastifySession } from '@fastify/session'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
+import { UserExtended } from '../prisma/PrismaTypes'
 import { appRouter } from '../router'
 import { createContext } from '../router/context'
 
@@ -15,21 +16,26 @@ export interface ServerOptions {
 
 declare module 'fastify' {
   interface Session {
-    id?: number
-    user_id: string
+    twoFA?: { expires: number; otp: string; username: string }
+    user?: UserExtended
   }
 }
 
 export async function createServer(opts: ServerOptions) {
   const port = opts.port ?? 3000
   const prefix = opts.prefix
-  const server = fastify({ logger: true /* TODO */ })
+  const server = fastify({ logger: true })
 
-  await server.register(fastifyCookie)
+  await server.register(fastifyCookie, {
+    secret: 'TODO Secret 32 characters long ssssssssssssssssssssssss',
+  })
   await server.register(fastifySession, {
     secret: 'TODO Secret 32 characters long ssssssssssssssssssssssss',
   })
   await server.register(fastifyCors, {
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     origin: (origin, cb) => {
       if (
         origin === undefined ||

@@ -1,10 +1,10 @@
-import { apiRouter } from './routers/api'
-import { authRouter } from './routers/auth'
+import { enrollRouter } from '../domain/enroll/EnrollRoutes'
+import { authRouter } from '../domain/user/UserRoutes'
 import { router } from './trpc'
 
 export const appRouter = router({
-  api: apiRouter,
   auth: authRouter,
+  enroll: enrollRouter,
 })
 
 export type AppRouter = typeof appRouter

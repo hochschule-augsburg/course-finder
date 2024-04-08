@@ -1,12 +1,27 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { Faculty, Prof, Student, User } from '@prisma/client'
+
 export type I18nJson = {
   de?: string
   en?: string
 }
+
+export type UserExtended = User & {
+  Faculty: Faculty | null
+  Prof?: Prof | null
+  Student?: Student | null
+}
+
 declare global {
   namespace PrismaJson {
     type I18n = I18nJson
+    type Auth = (
+      | {
+          method: 'ldap'
+        }
+      | { method: 'local'; password: string }
+    ) & { twoFA?: true }
     // TODO
     type ExamType = {
       additionalInfo?: string

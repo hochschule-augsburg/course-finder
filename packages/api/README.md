@@ -24,3 +24,9 @@ LDAP_BASE_DN
 ```
 
 For local development these can be mocked with `MOCK_SERVICES` env.
+
+## Reset Database
+
+```bash
+docker exec -it postgres-sub-enroll psql -U sirchnik -c "DROP DATABASE postgres;"
+```

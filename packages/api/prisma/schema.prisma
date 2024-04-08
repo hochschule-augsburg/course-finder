@@ -15,40 +15,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  // users have to be clean up every semester
+  username    String   @id
+  email       String
+  name        String
+  Student     Student?
+  Prof        Prof?
+  /// [Auth]
+  auth        Json
+  type        String
+  Faculty     Faculty  @relation(fields: [facultyName], references: [name])
+  facultyName String
+}
+
 model Student {
-  email         String          @id // id because people with same name get a number
-  username      String // not unique as one can take the username of an old student
-  name          String
+  username      String          @id
+  User          User            @relation(fields: [username], references: [username])
   fieldOfStudy  String
-  /// would be nice if ldap would provide this
   term          Int?
   regNumber     String?
-  birthDate     DateTime?
-  twoFA         Json?
-  faculty       Faculty         @relation(fields: [facultyName], references: [name])
-  facultyName   String
   StudentChoice StudentChoice[]
 }
 
 model Prof {
-  email       String   @id // id because people with same name get a number
-  username    String // not unique as one can take the username of an old student
-  name        String
-  telephone   String?
-  office      String?
-  twoFA       Json?
-  faculty     Faculty  @relation(fields: [facultyName], references: [name])
-  facultyName String
-  Module      Course[]
+  username  String   @id
+  User      User     @relation(fields: [username], references: [username])
+  telephone String?
+  office    String?
+  Module    Course[]
 }
 
 model Faculty {
-  name           String    @id
+  name           String   @id
   /// [I18n]
   translatedName Json
-  modules        Course[]
-  Prof           Prof[]
-  Student        Student[]
+  Courses        Course[]
+  Users          User[]
 }
 
 model Course {
@@ -58,13 +61,13 @@ model Course {
   title              Json
   published          Boolean          @default(false)
   examinationNumbers String[]
-  lecturers          Prof[]
+  Lecturers          Prof[]
   /// if lecturer is not in the system
   lecturerNames      String[]
   requirements       String[]
   /// spoken language
   language           String
-  faculty            Faculty?         @relation(fields: [facultyName], references: [name])
+  Faculty            Faculty?         @relation(fields: [facultyName], references: [name])
   facultyName        String?
   /// SWS
   semesterHours      Int
@@ -97,9 +100,9 @@ model Enrollphase {
 
 model OfferedCourses {
   id            Int             @id @default(autoincrement())
-  phase         Enrollphase     @relation(fields: [phaseId], references: [id])
+  Phase         Enrollphase     @relation(fields: [phaseId], references: [id])
   phaseId       Int
-  module        Course          @relation(fields: [moduleCode], references: [moduleCode])
+  Course        Course          @relation(fields: [moduleCode], references: [moduleCode])
   moduleCode    String
   StudentChoice StudentChoice[]
 
@@ -111,9 +114,9 @@ model OfferedCourses {
 
 model StudentChoice {
   id              Int            @id @default(autoincrement())
-  student         Student        @relation(fields: [studentId], references: [email])
+  Student         Student        @relation(fields: [studentId], references: [username])
   studentId       String
-  offeredCourse   OfferedCourses @relation(fields: [offeredCourseId], references: [id])
+  OfferedCourse   OfferedCourses @relation(fields: [offeredCourseId], references: [id])
   offeredCourseId Int
 
   points     Int

@@ -5,9 +5,8 @@ export interface User {
 }
 
 export function createContext({ req, res }: CreateFastifyContextOptions) {
-  if (req.session.user_id) {
-    const user: User = { name: req.session.user_id }
-    return { req, res, user }
+  if (req.session.user) {
+    return { req, res, user: req.session.user }
   }
   return { req, res }
 }

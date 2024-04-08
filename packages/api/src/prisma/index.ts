@@ -9,6 +9,6 @@ const connectionString: string = process.env.DATABASE_URL
 
 const pool = new pg.Pool({ connectionString })
 // check connection
-void (async () => (await pool.connect()).release())()
+setTimeout(async () => (await pool.connect()).release(), 10)
 const adapter = new PrismaPg(pool)
 export const prisma = new PrismaClient({ adapter })
