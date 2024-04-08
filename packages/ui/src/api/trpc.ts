@@ -12,6 +12,7 @@ export const trpc = createTRPCClient<AppRouter>({
       fetch(url, options) {
         return fetch(url, {
           ...options,
+          credentials: 'include',
         })
       },
       transformer: superjson,

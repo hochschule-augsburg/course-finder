@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import Vue from '@vitejs/plugin-vue'
 import { dirname, resolve } from 'node:path'
 import { URL, fileURLToPath } from 'node:url'
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import ViteFonts from 'unplugin-fonts/vite'
 // Plugins
 import Components from 'unplugin-vue-components/vite'
