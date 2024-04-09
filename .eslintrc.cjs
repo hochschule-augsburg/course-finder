@@ -45,4 +45,12 @@ module.exports = {
       'no-void': 'off',
     },
   },
+  overrides: [
+    {
+      files: ['tests/**/*.ts'],
+      rules: {
+        '@typescript-eslint/ban-ts-comment': 'off',
+      },
+    },
+  ],
 }
