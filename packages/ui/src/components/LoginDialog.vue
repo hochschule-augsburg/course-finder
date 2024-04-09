@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUser } from '@/stores/user'
+import { useUserStore } from '@/stores/UserStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn, VForm, VProgressCircular, VTextField } from 'vuetify/components'
@@ -10,7 +10,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const { actions } = useUser()
+const { login: storeLogin } = useUserStore()
 
 const username = ref('')
 const password = ref('')
@@ -23,12 +23,13 @@ const error = ref<string>()
 
 async function twoFALogin() {
   pending.value = true
-  let result: 'unknown-error' | Awaited<ReturnType<typeof actions.login>>
+  let result: 'unknown-error' | Awaited<ReturnType<typeof storeLogin>>
   try {
-    result = await actions.login(username.value, password.value, otp.value)
+    result = await storeLogin(username.value, password.value, otp.value)
   } catch (e) {
     console.error(e)
-    result = 'unknown-error'
+    error.value = 'unknown-error'
+    return
   } finally {
     pending.value = false
   }
@@ -41,12 +42,13 @@ async function twoFALogin() {
 
 async function login() {
   pending.value = true
-  let result: 'unknown-error' | Awaited<ReturnType<typeof actions.login>>
+  let result: 'unknown-error' | Awaited<ReturnType<typeof storeLogin>>
   try {
-    result = await actions.login(username.value, password.value)
+    result = await storeLogin(username.value, password.value)
   } catch (e) {
     console.error(e)
-    result = 'unknown-error'
+    error.value = 'unknown-error'
+    return
   } finally {
     pending.value = false
   }
@@ -114,11 +116,11 @@ en:
   login: Login
   username: Username
   password: Password
+  two-fa-code: Two-factor code
   error:
     service-not-available: Service not available
     two-fa-required: Two-factor authentication required
     invalid-credentials: Invalid credentials
-    unknown-error: Unknown error
     already-logged-in: Already logged in
     tow-fa:
       code-invalid: Invalid code
@@ -127,11 +129,11 @@ de:
   login: Einloggen
   username: Benutzername
   password: Passwort
+  two-fa-code: Zwei-Faktor-Code
   error:
     service-not-available: Dienst nicht verfügbar
     two-fa-required: Zwei-Faktor-Authentifizierung erforderlich
     invalid-credentials: Ungültige Anmeldeinformationen
-    unknown-error: Unbekannter Fehler
     already-logged-in: Bereits angemeldet
     tow-fa:
       code-invalid: Ungültiger Code

@@ -4,10 +4,10 @@ import { ref } from 'vue'
 
 import { UserExtended } from '../../../api/src/libExports'
 
-export const useUser = defineStore('user', () => {
+export const useUserStore = defineStore('user', () => {
   const user = ref<UserExtended>()
   void init()
-  return { actions: { login, logout }, state: user }
+  return { login, logout, user }
   async function login(username: string, password: string, otp?: string) {
     if (otp) {
       return twoFA(username, otp)

@@ -56,6 +56,15 @@ export default defineConfig({
   test: {
     // perhaps changes later to jsdom but happydom is faster
     environment: 'jsdom',
+    globalSetup: ['tests/test-setup/globalSetup.ts'],
     globals: true,
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
+    },
+    setupFiles: ['trpcMock.ts', 'ResizeObserverPolyfill.ts'].map(
+      (file) => `tests/test-setup/${file}`,
+    ),
   },
 })
