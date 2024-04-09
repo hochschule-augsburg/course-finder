@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { trpc } from '@/api/trpc'
+import { useUser } from '@/stores/user'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn, VForm, VProgressCircular, VTextField } from 'vuetify/components'
@@ -10,35 +10,40 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
+const { actions } = useUser()
+
 const username = ref('')
 const password = ref('')
-const pending = ref(false)
-
-const isValid = computed(() => !!(username.value && password.value))
-const error = ref<string>()
-const twoFANeeded = ref(false)
 const otp = ref('')
 
+const isValid = computed(() => !!(username.value && password.value))
+const twoFANeeded = ref(false)
+const pending = ref(false)
+const error = ref<string>()
+
 async function twoFALogin() {
-  const result = await trpc.auth.twoFA.mutate({
-    otp: otp.value,
-    username: username.value,
-  })
-  if (result) {
-    error.value = `error.two-fa.${result}`
+  pending.value = true
+  let result: 'unknown-error' | Awaited<ReturnType<typeof actions.login>>
+  try {
+    result = await actions.login(username.value, password.value, otp.value)
+  } catch (e) {
+    console.error(e)
+    result = 'unknown-error'
+  } finally {
+    pending.value = false
+  }
+  if (typeof result === 'object') {
+    emit('success')
     return
   }
-  emit('success')
+  error.value = `error.two-fa.${result}`
 }
 
 async function login() {
   pending.value = true
-  let result
+  let result: 'unknown-error' | Awaited<ReturnType<typeof actions.login>>
   try {
-    result = await trpc.auth.login.mutate({
-      password: password.value,
-      username: username.value,
-    })
+    result = await actions.login(username.value, password.value)
   } catch (e) {
     console.error(e)
     result = 'unknown-error'
@@ -47,6 +52,7 @@ async function login() {
   }
   if (typeof result === 'object') {
     error.value = undefined
+    emit('success')
     return
   }
   if (result === 'two-fa-required') {
