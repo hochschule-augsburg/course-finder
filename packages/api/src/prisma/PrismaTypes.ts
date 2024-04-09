@@ -20,7 +20,7 @@ declare global {
       | {
           method: 'ldap'
         }
-      | { method: 'local'; password: string }
+      | { method: 'local'; password: string; salt: string }
     ) & { twoFA?: true }
     // TODO
     type ExamType = {

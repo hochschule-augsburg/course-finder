@@ -4,6 +4,7 @@ import sendmail from 'sendmail'
 import { TOTP } from 'totp-generator'
 import { z } from 'zod'
 
+import { UserExtended } from '../../libExports'
 import { prisma } from '../../prisma'
 import { publicProcedure, router } from '../../router/trpc'
 import { authenticate } from './UserService'
@@ -14,26 +15,42 @@ export const authRouter = router({
   }),
   login: publicProcedure
     .input(z.object({ password: z.string(), username: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      if (ctx.user) {
-        return 'already-logged-in'
-      }
+    .mutation(
+      async ({
+        ctx,
+        input,
+      }): Promise<
+        | 'already-logged-in'
+        | 'invalid-credentials'
+        | 'service-not-available'
+        | 'two-fa-required'
+        | UserExtended
+      > => {
+        if (ctx.user) {
+          return 'already-logged-in'
+        }
 
-      const user = await authenticate(input.username, input.password)
-      if (user === 'two-fa-required') {
-        const { expires, otp } = TOTP.generate(generateBase32Key(), {
-          period: 240,
-        })
-        ctx.req.session.twoFA = { expires, otp, username: input.username }
+        const result = await authenticate(input.username, input.password)
+        if (!result.success) {
+          return result.cause
+        }
+
+        if (result.twoFA) {
+          const { expires, otp } = TOTP.generate(generateBase32Key(), {
+            period: 240,
+          })
+          ctx.req.session.twoFA = { expires, otp, username: input.username }
+          await Promise.all([
+            ctx.req.session.save(),
+            sendEmail(result.user.email, otp),
+          ])
+          return 'two-fa-required'
+        }
+        ctx.req.session.user = result.user
         await ctx.req.session.save()
-        await sendEmail('niklas.sirch@hs-augsburg.de', otp)
-      }
-      if (typeof user === 'object') {
-        ctx.req.session.user = user
-        await ctx.req.session.save()
-      }
-      return user ?? 'invalid-credentials'
-    }),
+        return result.user
+      },
+    ),
   logout: publicProcedure.mutation(async ({ ctx }) => {
     await ctx.req.session.destroy()
   }),
@@ -52,11 +69,13 @@ export const authRouter = router({
       if (input.otp !== ctx.req.session.twoFA.otp) {
         return 'code-invalid'
       }
-      const user = await prisma.user.findUnique({
-        include: { Faculty: true, Prof: true, Student: true },
-        where: { username: input.username },
-      })
-      ctx.req.session.user = user ?? undefined
+      const user: UserExtended | undefined =
+        (await prisma.user.findUnique({
+          include: { Faculty: true, Prof: true, Student: true },
+          where: { username: input.username },
+        })) ?? undefined
+      ctx.req.session.twoFA = undefined
+      ctx.req.session.user = user
       await ctx.req.session.save()
       return user
     }),
@@ -77,7 +96,7 @@ function sendEmail(to: string, text: string) {
       smtpPort: 25,
     })(
       {
-        from: 'niklas.sirch@hs-augsburg.de',
+        from: 'subject-enroll@hs-augsburg.de',
         subject: 'Your two-factor authentication code',
         text,
         to,

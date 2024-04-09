@@ -53,7 +53,11 @@ async function main() {
     data: {
       username: 'prof1',
       name: 'Another Professor',
-      auth: { method: 'local', password: hashPassword('prof1') },
+      auth: {
+        method: 'local',
+        password: hashPassword('prof1', 'salt'),
+        salt: 'salt',
+      },
       email: 'another.professor@example.com',
       facultyName: 'Informatik',
       type: 'Professor',
@@ -74,7 +78,7 @@ async function main() {
         de: 'Beschreibung des Kurses...',
         en: 'Description of the course...',
       },
-      examType: { de: 'Schriftlich', en: 'Written' },
+      examType: { content: [], for: 'all' },
       examinationNumbers: ['CS101-001', 'CS101-002'],
       facultyName: 'Gestaltung',
       language: 'English',
@@ -98,7 +102,7 @@ async function main() {
         de: 'Beschreibung des Kurses...',
         en: 'Description of the course...',
       },
-      examType: { de: 'Schriftlich', en: 'Written' },
+      examType: { content: [], for: 'all' },
       examinationNumbers: ['PHIL101-001', 'PHIL101-002'],
       facultyName: 'Informatik',
       language: 'English',
@@ -122,7 +126,7 @@ async function main() {
         de: 'Beschreibung des Kurses...',
         en: 'Description of the course...',
       },
-      examType: { de: 'Schriftlich', en: 'Written' },
+      examType: { content: [], for: 'all' },
       examinationNumbers: ['MATH101-001', 'MATH101-002'],
       facultyName: 'Informatik',
       language: 'English',
@@ -144,7 +148,7 @@ async function main() {
           de: 'Beschreibung des Kurses...',
           en: 'Description of the course...',
         },
-        examType: { de: 'Schriftlich', en: 'Written' },
+        examType: { content: [], for: 'all' },
         examinationNumbers: ['CHEM101-001', 'CHEM101-002'],
         facultyName: 'Informatik',
         language: 'English',
@@ -166,7 +170,7 @@ async function main() {
           de: 'Beschreibung des Kurses...',
           en: 'Description of the course...',
         },
-        examType: { de: 'Schriftlich', en: 'Written' },
+        examType: { content: [], for: 'all' },
         examinationNumbers: ['HIST101-001', 'HIST101-002'],
         facultyName: 'Informatik',
         language: 'English',
@@ -185,7 +189,7 @@ async function main() {
           de: 'Beschreibung des Kurses...',
           en: 'Description of the course...',
         },
-        examType: { de: 'Schriftlich', en: 'Written' },
+        examType: { content: [], for: 'all' },
         examinationNumbers: ['PHYS101-001', 'PHYS101-002'],
         facultyName: 'Informatik',
         language: 'English',
@@ -260,7 +264,11 @@ async function main() {
         username: 'singhraj',
         email: 'singhraj@example.com',
         name: 'Singh Raj',
-        auth: { method: 'local', password: hashPassword('singhraj') },
+        auth: {
+          method: 'local',
+          password: hashPassword('singhraj', 'salt'),
+          salt: 'salt',
+        },
         type: 'student',
         facultyName: 'Informatik', // Replace with actual faculty name
       },
@@ -268,7 +276,11 @@ async function main() {
         username: 'mitroska',
         email: 'mitroska@example.com',
         name: 'Mitroska',
-        auth: { method: 'local', password: hashPassword('mitroska') },
+        auth: {
+          method: 'local',
+          password: hashPassword('mitroska', 'salt'),
+          salt: 'salt',
+        },
         type: 'student',
         facultyName: 'Informatik', // Replace with actual faculty name
       },
@@ -276,7 +288,11 @@ async function main() {
         username: 'seka',
         email: 'seka@example.com',
         name: 'Seka',
-        auth: { method: 'local', password: hashPassword('seka') },
+        auth: {
+          method: 'local',
+          password: hashPassword('seka', 'salt'),
+          salt: 'salt',
+        },
         type: 'student',
         facultyName: 'Informatik', // Replace with actual faculty name
       },
@@ -284,7 +300,12 @@ async function main() {
         username: 'stud1',
         email: 'stud1@example.com',
         name: 'Stud1',
-        auth: { method: 'local', password: hashPassword('stud1'), twoFA: true },
+        auth: {
+          method: 'local',
+          password: hashPassword('stud1', 'salt'),
+          salt: 'salt',
+          twoFA: true,
+        },
         type: 'student',
         facultyName: 'Informatik', // Replace with actual faculty name
       },
@@ -405,6 +426,9 @@ async function main() {
   })
 }
 
-function hashPassword(password: string) {
-  return crypto.createHash('sha256').update(password).digest('hex')
+function hashPassword(password: string, salt: string) {
+  return crypto
+    .createHash('sha256')
+    .update(password + salt)
+    .digest('hex')
 }
