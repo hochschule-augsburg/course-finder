@@ -99,15 +99,17 @@ model Enrollphase {
 }
 
 model OfferedCourses {
-  id            Int             @id @default(autoincrement())
-  Phase         Enrollphase     @relation(fields: [phaseId], references: [id])
-  phaseId       Int
-  Course        Course          @relation(fields: [moduleCode], references: [moduleCode])
-  moduleCode    String
-  StudentChoice StudentChoice[]
+  id               Int             @id @default(autoincrement())
+  Phase            Enrollphase     @relation(fields: [phaseId], references: [id])
+  phaseId          Int
+  Course           Course          @relation(fields: [moduleCode], references: [moduleCode])
+  moduleCode       String
+  StudentChoice    StudentChoice[]
+  minParticipants  Int?
+  maxParticipants  Int?
 
-  extraInfo String?
-  times     Json
+  extraInfo        String?
+  times            Json
 
   @@unique([phaseId, moduleCode])
 }

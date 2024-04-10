@@ -228,33 +228,119 @@ async function main() {
     data: [
       {
         extraInfo: 'Room A, Building 1',
+        minParticipants: 10,
+        maxParticipants: 40,
         moduleCode: 'PHIL101',
         phaseId: 1,
-        times: { endTime: '11:00 AM', startTime: '9:00 AM' },
+        times: {
+          type: dateType.WEEKLY,
+          dates: [
+            {
+              startTime: new Date('02 October 2024 14:00').toISOString(),
+              endTime: new Date('02 October 2024 15:30').toISOString()
+            },
+            {
+              startTime: new Date('03 October 2024 08:00').toISOString(),
+              endTime: new Date('03 October 2024 09:30').toISOString()
+            }
+          ]
+        },
       },
       {
         extraInfo: 'Room B, Building 2',
+        minParticipants: 5,
+        maxParticipants: 35,
         moduleCode: 'MATH101',
         phaseId: 1,
-        times: { endTime: '12:00 PM', startTime: '10:00 AM' },
+        times: {
+          type: dateType.BLOCK,
+          dates: [
+            {
+              startTime: new Date('02 October 2024 08:00').toISOString(),
+              endTime: new Date('02 October 2024 09:30').toISOString()
+            },
+            {
+              startTime: new Date('03 October 2024 08:00').toISOString(),
+              endTime: new Date('03 October 2024 09:30').toISOString()
+            },
+            {
+              startTime: new Date('04 October 2024 08:00').toISOString(),
+              endTime: new Date('04 October 2024 09:30').toISOString()
+            },
+            {
+              startTime: new Date('05 October 2024 08:00').toISOString(),
+              endTime: new Date('05 October 2024 09:30').toISOString()
+            }
+          ]
+        },
       },
       {
         extraInfo: 'Room C, Building 3',
+        minParticipants: 2,
+        maxParticipants: 5,
         moduleCode: 'CHEM101',
         phaseId: 1,
-        times: { endTime: '1:00 PM', startTime: '11:00 AM' },
+        times: {
+          type: dateType.IRREGULAR,
+          dates: [
+            {
+              startTime: new Date('02 October 2024 08:00').toISOString(),
+              endTime: new Date('02 October 2024 09:30').toISOString()
+            },
+            {
+              startTime: new Date('11 October 2024 09:50').toISOString(),
+              endTime: new Date('11 October 2024 11:20').toISOString()
+            },
+            {
+              startTime: new Date('14 October 2024 08:00').toISOString(),
+              endTime: new Date('14 October 2024 09:30').toISOString()
+            },
+            {
+              startTime: new Date('22 October 2024 14:00').toISOString(),
+              endTime: new Date('22 October 2024 15:30').toISOString()
+            }
+          ]
+        },
       },
       {
         extraInfo: 'Room D, Building 4',
+        minParticipants: 5,
+        maxParticipants: 50,
         moduleCode: 'HIST101',
         phaseId: 1,
-        times: { endTime: '3:00 PM', startTime: '1:00 PM' },
+        times: {
+          type: dateType.WEEKLY,
+          dates: [
+            {
+              startTime: new Date('02 October 2024 14:00').toISOString(),
+              endTime: new Date('02 October 2024 15:30').toISOString()
+            },
+            {
+              startTime: new Date('03 October 2024 08:00').toISOString(),
+              endTime: new Date('03 October 2024 09:30').toISOString()
+            }
+          ]
+        },
       },
       {
         extraInfo: 'Room E, Building 5',
+        minParticipants: 10,
+        maxParticipants: 40,
         moduleCode: 'PHYS101',
         phaseId: 1,
-        times: { endTime: '4:00 PM', startTime: '2:00 PM' },
+        times: {
+          type: dateType.WEEKLY,
+          dates: [
+            {
+              startTime: new Date('02 October 2024 14:00').toISOString(),
+              endTime: new Date('02 October 2024 15:30').toISOString()
+            },
+            {
+              startTime: new Date('03 October 2024 08:00').toISOString(),
+              endTime: new Date('03 October 2024 09:30').toISOString()
+            }
+          ]
+        },
       },
     ],
   })
@@ -431,4 +517,16 @@ function hashPassword(password: string, salt: string) {
     .createHash('sha256')
     .update(password + salt)
     .digest('hex')
+}
+
+enum dateType {
+  /**
+   * dateType refers to the recurrence of the dates.
+   * Weekly: listed dates recur every week in the same times.
+   * Block: listed dates are near each other.
+   * Irregular: listed dates are irregular.
+   */
+  WEEKLY = "weekly",
+  BLOCK = "block",
+  IRREGULAR = "irregular"
 }

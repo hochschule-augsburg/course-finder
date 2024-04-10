@@ -29,4 +29,5 @@ For local development these can be mocked with `MOCK_SERVICES` env.
 
 ```bash
 docker exec -it postgres-sub-enroll psql -U sirchnik -c "DROP DATABASE postgres;"
+pnpm db:reset
 ```
