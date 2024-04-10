@@ -24,7 +24,12 @@ module.exports = {
   root: true,
   rules: {
     'func-style': ['error', 'declaration'],
-    'prettier/prettier': 'error',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
 
