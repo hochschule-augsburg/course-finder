@@ -50,6 +50,8 @@ module.exports = {
       },
     ],
     'vue/html-self-closing': 'error',
+    '@typescript-eslint/no-floating-promises': 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
   overrides: [
     {

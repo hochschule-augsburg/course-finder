@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 
 /* eslint-disable perfectionist/sort-objects */
 export const UserRoles = {

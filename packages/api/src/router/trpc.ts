@@ -1,4 +1,5 @@
-import { Student, User } from '@prisma/client'
+import type { Student, User } from '@prisma/client'
+
 import { TRPCError, initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 

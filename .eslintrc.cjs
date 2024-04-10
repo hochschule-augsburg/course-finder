@@ -26,6 +26,7 @@ module.exports = {
     'func-style': ['error', 'declaration'],
     'prettier/prettier': 'error',
     '@typescript-eslint/no-floating-promises': 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
 
     // unused-imports
     ...{

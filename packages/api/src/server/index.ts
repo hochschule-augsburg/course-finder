@@ -4,15 +4,11 @@ import { fastifySession } from '@fastify/session'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
-import { UserExtended } from '../prisma/PrismaTypes'
+import type { ServerOptions } from '../../../config'
+import type { UserExtended } from '../prisma/PrismaTypes'
+
 import { appRouter } from '../router'
 import { createContext } from '../router/context'
-
-export interface ServerOptions {
-  port: number
-  prefix: string
-  url: string
-}
 
 declare module 'fastify' {
   interface Session {

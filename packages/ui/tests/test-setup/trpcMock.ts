@@ -1,8 +1,11 @@
-import { DeepMockProxy, mockDeep, mockReset } from 'vitest-mock-extended'
+import type { trpc as trpcType } from '@/api/trpc'
+import type { DeepMockProxy } from 'vitest-mock-extended'
+
+import { mockDeep, mockReset } from 'vitest-mock-extended'
 
 vi.doMock('@/api/trpc', () => ({
   __esModule: true,
-  trpc: mockDeep<typeof import('@/api/trpc')>(),
+  trpc: mockDeep<typeof trpcType>(),
 }))
 
 // otherwise ReferenceError: Cannot access '__vi_import_1__' before initialization

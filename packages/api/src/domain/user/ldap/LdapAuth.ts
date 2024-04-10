@@ -2,8 +2,9 @@ import { Client, InvalidCredentialsError } from 'ldapts'
 import { once, pick } from 'lodash-es'
 import { ZodError } from 'zod'
 
+import type { AuthResult } from '../UserService'
+
 import { prisma } from '../../../prisma'
-import { AuthResult } from '../UserService'
 import {
   type ResultType as UserDataType,
   resultSpec as userDataSpec,

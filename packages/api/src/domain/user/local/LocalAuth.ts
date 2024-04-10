@@ -1,7 +1,8 @@
 import crypto from 'crypto'
 
+import type { AuthResult } from '../UserService'
+
 import { prisma } from '../../../prisma'
-import { AuthResult } from '../UserService'
 
 export async function pwdAuth(
   username: string,

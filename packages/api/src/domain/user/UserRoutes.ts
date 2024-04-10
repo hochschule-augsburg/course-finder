@@ -4,7 +4,8 @@ import sendmail from 'sendmail'
 import { TOTP } from 'totp-generator'
 import { z } from 'zod'
 
-import { UserExtended } from '../../libExports'
+import type { UserExtended } from '../../prisma/PrismaTypes'
+
 import { prisma } from '../../prisma'
 import { publicProcedure, router } from '../../router/trpc'
 import { authenticate } from './UserService'

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import { Faculty, Prof, Student, User } from '@prisma/client'
+import type { Faculty, Prof, Student, User } from '@prisma/client'
 
 export type I18nJson = {
   de?: string

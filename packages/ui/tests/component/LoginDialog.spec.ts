@@ -1,3 +1,5 @@
+import type { UserExtended } from '@api/prisma/PrismaTypes'
+
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useUserStore } from '@/stores/UserStore'
 import { createTestingPinia } from '@pinia/testing'
@@ -5,7 +7,6 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import { VBtn, VTextField } from 'vuetify/components'
 
-import { UserExtended } from '../../../api/src/libExports'
 import { i18nForTests } from '../test-utils/i18nForTests'
 import { mockedStore } from '../test-utils/piniaMock'
 
@@ -34,7 +35,6 @@ describe('LoginDialog.vue', () => {
     wrapper.findComponent(VBtn).vm.$emit('click')
     await flushPromises()
 
-    console.log(wrapper.html())
     expect(
       wrapper
         .findAllComponents(VTextField)

@@ -1,6 +1,6 @@
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
-import { serverConfig } from './src/config'
+import { serverConfig } from '../config'
 import type { AppRouter } from './src/router'
 
 async function start() {

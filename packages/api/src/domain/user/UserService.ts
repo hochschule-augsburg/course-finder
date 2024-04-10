@@ -1,6 +1,7 @@
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 
-import { UserExtended } from '../../libExports'
+import type { UserExtended } from '../../prisma/PrismaTypes'
+
 import { pwdAuth as ldapPwdAuth } from './ldap/LdapAuth'
 import { pwdAuth as localPwdAuth } from './local/LocalAuth'
 

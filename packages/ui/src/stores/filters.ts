@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { Subject } from './enrollment'
+import type { Subject } from './enrollment'
 
 export type Filter = {
   active: boolean
