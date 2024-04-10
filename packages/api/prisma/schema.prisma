@@ -107,6 +107,7 @@ model OfferedCourses {
   StudentChoice    StudentChoice[]
   minParticipants  Int?
   maxParticipants  Int?
+  semester         String
 
   extraInfo        String?
   times            Json

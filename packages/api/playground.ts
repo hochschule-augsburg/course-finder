@@ -16,8 +16,8 @@ async function start() {
     ],
   })
 
-  const a = await trpc.auth.login.query({ username: 'nyan', password: 'nyan' })
-  console.log(a)
+  // console.log(await trpc.auth.login.query({ username: 'nyan', password: 'nyan' }))
+  console.log(JSON.stringify(await trpc.course.getCourses.query({semester: "ss25"}), null, 4))
 }
 
 void start()

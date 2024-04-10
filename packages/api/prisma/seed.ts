@@ -4,6 +4,18 @@ import crypto from 'crypto'
 
 const prisma = new PrismaClient()
 
+enum dateType {
+  /**
+   * dateType refers to the recurrence of the dates.
+   * Weekly: listed dates recur every week in the same times.
+   * Block: listed dates are near each other.
+   * Irregular: listed dates are irregular.
+   */
+  BLOCK = 'block',
+  IRREGULAR = 'irregular',
+  WEEKLY = 'weekly',
+}
+
 main()
   .catch((e) => {
     console.error(e)
@@ -228,118 +240,123 @@ async function main() {
     data: [
       {
         extraInfo: 'Room A, Building 1',
-        minParticipants: 10,
         maxParticipants: 40,
+        minParticipants: 10,
         moduleCode: 'PHIL101',
         phaseId: 1,
+        semester: 'WS24',
         times: {
-          type: dateType.WEEKLY,
           dates: [
             {
+              endTime: new Date('02 October 2024 15:30').toISOString(),
               startTime: new Date('02 October 2024 14:00').toISOString(),
-              endTime: new Date('02 October 2024 15:30').toISOString()
             },
             {
+              endTime: new Date('03 October 2024 09:30').toISOString(),
               startTime: new Date('03 October 2024 08:00').toISOString(),
-              endTime: new Date('03 October 2024 09:30').toISOString()
-            }
-          ]
+            },
+          ],
+          type: dateType.WEEKLY,
         },
       },
       {
         extraInfo: 'Room B, Building 2',
-        minParticipants: 5,
         maxParticipants: 35,
+        minParticipants: 5,
         moduleCode: 'MATH101',
         phaseId: 1,
+        semester: 'WS24',
         times: {
-          type: dateType.BLOCK,
           dates: [
             {
+              endTime: new Date('02 October 2024 09:30').toISOString(),
               startTime: new Date('02 October 2024 08:00').toISOString(),
-              endTime: new Date('02 October 2024 09:30').toISOString()
             },
             {
+              endTime: new Date('03 October 2024 09:30').toISOString(),
               startTime: new Date('03 October 2024 08:00').toISOString(),
-              endTime: new Date('03 October 2024 09:30').toISOString()
             },
             {
+              endTime: new Date('04 October 2024 09:30').toISOString(),
               startTime: new Date('04 October 2024 08:00').toISOString(),
-              endTime: new Date('04 October 2024 09:30').toISOString()
             },
             {
+              endTime: new Date('05 October 2024 09:30').toISOString(),
               startTime: new Date('05 October 2024 08:00').toISOString(),
-              endTime: new Date('05 October 2024 09:30').toISOString()
-            }
-          ]
+            },
+          ],
+          type: dateType.BLOCK,
         },
       },
       {
         extraInfo: 'Room C, Building 3',
-        minParticipants: 2,
         maxParticipants: 5,
+        minParticipants: 2,
         moduleCode: 'CHEM101',
         phaseId: 1,
+        semester: 'WS24',
         times: {
-          type: dateType.IRREGULAR,
           dates: [
             {
+              endTime: new Date('02 October 2024 09:30').toISOString(),
               startTime: new Date('02 October 2024 08:00').toISOString(),
-              endTime: new Date('02 October 2024 09:30').toISOString()
             },
             {
+              endTime: new Date('11 October 2024 11:20').toISOString(),
               startTime: new Date('11 October 2024 09:50').toISOString(),
-              endTime: new Date('11 October 2024 11:20').toISOString()
             },
             {
+              endTime: new Date('14 October 2024 09:30').toISOString(),
               startTime: new Date('14 October 2024 08:00').toISOString(),
-              endTime: new Date('14 October 2024 09:30').toISOString()
             },
             {
+              endTime: new Date('22 October 2024 15:30').toISOString(),
               startTime: new Date('22 October 2024 14:00').toISOString(),
-              endTime: new Date('22 October 2024 15:30').toISOString()
-            }
-          ]
+            },
+          ],
+          type: dateType.IRREGULAR,
         },
       },
       {
         extraInfo: 'Room D, Building 4',
-        minParticipants: 5,
         maxParticipants: 50,
+        minParticipants: 5,
         moduleCode: 'HIST101',
         phaseId: 1,
+        semester: 'WS24',
         times: {
-          type: dateType.WEEKLY,
           dates: [
             {
+              endTime: new Date('02 October 2024 15:30').toISOString(),
               startTime: new Date('02 October 2024 14:00').toISOString(),
-              endTime: new Date('02 October 2024 15:30').toISOString()
             },
             {
+              endTime: new Date('03 October 2024 09:30').toISOString(),
               startTime: new Date('03 October 2024 08:00').toISOString(),
-              endTime: new Date('03 October 2024 09:30').toISOString()
-            }
-          ]
+            },
+          ],
+          type: dateType.WEEKLY,
         },
       },
       {
         extraInfo: 'Room E, Building 5',
-        minParticipants: 10,
         maxParticipants: 40,
+        minParticipants: 10,
         moduleCode: 'PHYS101',
         phaseId: 1,
+        semester: 'SS25',
         times: {
-          type: dateType.WEEKLY,
           dates: [
             {
+              endTime: new Date('02 October 2024 15:30').toISOString(),
               startTime: new Date('02 October 2024 14:00').toISOString(),
-              endTime: new Date('02 October 2024 15:30').toISOString()
             },
             {
+              endTime: new Date('03 October 2024 09:30').toISOString(),
               startTime: new Date('03 October 2024 08:00').toISOString(),
-              endTime: new Date('03 October 2024 09:30').toISOString()
-            }
-          ]
+            },
+          ],
+          type: dateType.WEEKLY,
         },
       },
     ],
@@ -406,6 +423,7 @@ async function main() {
       { fieldOfStudy: 'Biology', username: 'stud1' },
     ],
   })
+
   await prisma.studentChoice.createMany({
     data: [
       // For singhraj
@@ -517,16 +535,4 @@ function hashPassword(password: string, salt: string) {
     .createHash('sha256')
     .update(password + salt)
     .digest('hex')
-}
-
-enum dateType {
-  /**
-   * dateType refers to the recurrence of the dates.
-   * Weekly: listed dates recur every week in the same times.
-   * Block: listed dates are near each other.
-   * Irregular: listed dates are irregular.
-   */
-  WEEKLY = "weekly",
-  BLOCK = "block",
-  IRREGULAR = "irregular"
 }
