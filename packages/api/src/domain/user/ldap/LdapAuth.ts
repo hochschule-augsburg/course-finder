@@ -41,6 +41,7 @@ export async function pwdAuth(
   }
 
   const userInput = {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     ...(pick(result, Object.keys(prisma.user.fields)) as typeof result),
     Faculty: {
       connectOrCreate: {
@@ -67,6 +68,7 @@ export async function pwdAuth(
   }
   if (result.type === 'Student') {
     const studentInput = {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       ...(pick(result, Object.keys(prisma.student.fields)) as typeof result),
       User: { connect: { username } },
       username: undefined,
@@ -80,6 +82,7 @@ export async function pwdAuth(
   }
   if (result.type === 'Professor') {
     const profInput = {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       ...(pick(result, Object.keys(prisma.prof.fields)) as typeof result),
       User: { connect: { username } },
       username: undefined,

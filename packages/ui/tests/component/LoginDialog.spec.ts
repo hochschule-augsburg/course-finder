@@ -11,7 +11,7 @@ import { i18nForTests } from '../test-utils/i18nForTests'
 import { mockedStore } from '../test-utils/piniaMock'
 
 describe('LoginDialog.vue', () => {
-  it('match snapshot', async () => {
+  it('match snapshot', () => {
     const wrapper = mountComponent()
     expect(wrapper.html()).toMatchSnapshot()
   })

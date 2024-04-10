@@ -64,6 +64,7 @@ async function login() {
   error.value = `error.${result}`
 }
 </script>
+
 <template>
   <VCard>
     <VCardTitle>Login</VCardTitle>

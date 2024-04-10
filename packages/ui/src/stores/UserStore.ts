@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
   const user = ref<UserExtended>()
   void init()
   return { login, logout, user }
+
   async function login(username: string, password: string, otp?: string) {
     if (otp) {
       return twoFA(username, otp)
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('user', () => {
     }
     return result
   }
+
   async function twoFA(username: string, otp: string) {
     const result = await trpc.auth.twoFA.mutate({
       otp,
@@ -31,10 +33,12 @@ export const useUserStore = defineStore('user', () => {
     }
     return result
   }
+
   async function logout() {
     await trpc.auth.logout.mutate()
     user.value = undefined
   }
+
   async function init() {
     user.value = await trpc.auth.getUser.query()
   }

@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-
 import crypto from 'crypto'
 
 const prisma = new PrismaClient()
@@ -35,24 +34,28 @@ async function main() {
   // Create professors
   await prisma.user.create({
     data: {
-      username: 'scholz',
-      name: 'Jürgen Scholz',
-      auth: { method: 'ldap' },
-      email: 'juergen.scholz@hs-augsburg.de',
-      facultyName: 'Informatik',
-      type: 'Professor',
       Prof: {
         create: {
           office: 'abc',
           telephone: '0000/0000',
         },
       },
+      auth: { method: 'ldap' },
+      email: 'juergen.scholz@hs-augsburg.de',
+      facultyName: 'Informatik',
+      name: 'Jürgen Scholz',
+      type: 'Professor',
+      username: 'scholz',
     },
   })
   await prisma.user.create({
     data: {
-      username: 'prof1',
-      name: 'Another Professor',
+      Prof: {
+        create: {
+          office: 'xyz',
+          telephone: '1111/1111',
+        },
+      },
       auth: {
         method: 'local',
         password: hashPassword('prof1', 'salt'),
@@ -60,19 +63,16 @@ async function main() {
       },
       email: 'another.professor@example.com',
       facultyName: 'Informatik',
+      name: 'Another Professor',
       type: 'Professor',
-      Prof: {
-        create: {
-          office: 'xyz',
-          telephone: '1111/1111',
-        },
-      },
+      username: 'prof1',
     },
   })
 
   // Create courses
   await prisma.course.create({
     data: {
+      Lecturers: { connect: { username: 'scholz' } },
       creditPoints: 6,
       description: {
         de: 'Beschreibung des Kurses...',
@@ -83,7 +83,6 @@ async function main() {
       facultyName: 'Gestaltung',
       language: 'English',
       learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-      Lecturers: { connect: { username: 'scholz' } },
       literature: ['Textbook 1', 'Textbook 2'],
       moduleCode: 'CS101',
       published: true,
@@ -97,6 +96,7 @@ async function main() {
   })
   await prisma.course.create({
     data: {
+      Lecturers: { connect: { username: 'scholz' } },
       creditPoints: 4,
       description: {
         de: 'Beschreibung des Kurses...',
@@ -107,7 +107,6 @@ async function main() {
       facultyName: 'Informatik',
       language: 'English',
       learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-      Lecturers: { connect: { username: 'scholz' } },
       literature: ['Philosophy Book 1', 'Philosophy Book 2'],
       moduleCode: 'PHIL101',
       published: true,
@@ -121,6 +120,7 @@ async function main() {
   })
   await prisma.course.create({
     data: {
+      Lecturers: { connect: { username: 'prof1' } },
       creditPoints: 6,
       description: {
         de: 'Beschreibung des Kurses...',
@@ -131,7 +131,6 @@ async function main() {
       facultyName: 'Informatik',
       language: 'English',
       learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-      Lecturers: { connect: { username: 'prof1' } },
       literature: ['Calculus Book 1', 'Calculus Book 2'],
       moduleCode: 'MATH101',
       published: true,
@@ -261,166 +260,166 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        username: 'singhraj',
-        email: 'singhraj@example.com',
-        name: 'Singh Raj',
         auth: {
           method: 'local',
           password: hashPassword('singhraj', 'salt'),
           salt: 'salt',
         },
-        type: 'student',
+        email: 'singhraj@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
+        name: 'Singh Raj',
+        type: 'student',
+        username: 'singhraj',
       },
       {
-        username: 'mitroska',
-        email: 'mitroska@example.com',
-        name: 'Mitroska',
         auth: {
           method: 'local',
           password: hashPassword('mitroska', 'salt'),
           salt: 'salt',
         },
-        type: 'student',
+        email: 'mitroska@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
+        name: 'Mitroska',
+        type: 'student',
+        username: 'mitroska',
       },
       {
-        username: 'seka',
-        email: 'seka@example.com',
-        name: 'Seka',
         auth: {
           method: 'local',
           password: hashPassword('seka', 'salt'),
           salt: 'salt',
         },
-        type: 'student',
+        email: 'seka@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
+        name: 'Seka',
+        type: 'student',
+        username: 'seka',
       },
       {
-        username: 'stud1',
-        email: 'stud1@example.com',
-        name: 'Stud1',
         auth: {
           method: 'local',
           password: hashPassword('stud1', 'salt'),
           salt: 'salt',
           twoFA: true,
         },
-        type: 'student',
+        email: 'stud1@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
+        name: 'Stud1',
+        type: 'student',
+        username: 'stud1',
       },
     ],
   })
 
   await prisma.student.createMany({
     data: [
-      { username: 'singhraj', fieldOfStudy: 'Computer Science' },
-      { username: 'mitroska', fieldOfStudy: 'Mathematics' },
-      { username: 'seka', fieldOfStudy: 'Physics' },
-      { username: 'stud1', fieldOfStudy: 'Biology' },
+      { fieldOfStudy: 'Computer Science', username: 'singhraj' },
+      { fieldOfStudy: 'Mathematics', username: 'mitroska' },
+      { fieldOfStudy: 'Physics', username: 'seka' },
+      { fieldOfStudy: 'Biology', username: 'stud1' },
     ],
   })
   await prisma.studentChoice.createMany({
     data: [
       // For singhraj
       {
-        studentId: 'singhraj',
+        lastChange: new Date(),
         offeredCourseId: 1,
         points: 250,
-        lastChange: new Date(),
+        studentId: 'singhraj',
       },
       {
-        studentId: 'singhraj',
+        lastChange: new Date(),
         offeredCourseId: 2,
         points: 200,
-        lastChange: new Date(),
+        studentId: 'singhraj',
       },
       {
-        studentId: 'singhraj',
+        lastChange: new Date(),
         offeredCourseId: 3,
         points: 300,
-        lastChange: new Date(),
+        studentId: 'singhraj',
       },
       {
-        studentId: 'singhraj',
+        lastChange: new Date(),
         offeredCourseId: 4,
         points: 250,
-        lastChange: new Date(),
+        studentId: 'singhraj',
       },
       // For mitroska
       {
-        studentId: 'mitroska',
+        lastChange: new Date(),
         offeredCourseId: 1,
         points: 180,
-        lastChange: new Date(),
+        studentId: 'mitroska',
       },
       {
-        studentId: 'mitroska',
+        lastChange: new Date(),
         offeredCourseId: 2,
         points: 220,
-        lastChange: new Date(),
+        studentId: 'mitroska',
       },
       {
-        studentId: 'mitroska',
+        lastChange: new Date(),
         offeredCourseId: 3,
         points: 250,
-        lastChange: new Date(),
+        studentId: 'mitroska',
       },
       {
-        studentId: 'mitroska',
+        lastChange: new Date(),
         offeredCourseId: 4,
         points: 350,
-        lastChange: new Date(),
+        studentId: 'mitroska',
       },
       // For seka
       {
-        studentId: 'seka',
+        lastChange: new Date(),
         offeredCourseId: 1,
         points: 150,
-        lastChange: new Date(),
+        studentId: 'seka',
       },
       {
-        studentId: 'seka',
+        lastChange: new Date(),
         offeredCourseId: 2,
         points: 200,
-        lastChange: new Date(),
+        studentId: 'seka',
       },
       {
-        studentId: 'seka',
+        lastChange: new Date(),
         offeredCourseId: 3,
         points: 350,
-        lastChange: new Date(),
+        studentId: 'seka',
       },
       {
-        studentId: 'seka',
+        lastChange: new Date(),
         offeredCourseId: 4,
         points: 300,
-        lastChange: new Date(),
+        studentId: 'seka',
       },
       // For stud1
       {
-        studentId: 'stud1',
+        lastChange: new Date(),
         offeredCourseId: 1,
         points: 220,
-        lastChange: new Date(),
+        studentId: 'stud1',
       },
       {
-        studentId: 'stud1',
+        lastChange: new Date(),
         offeredCourseId: 2,
         points: 180,
-        lastChange: new Date(),
+        studentId: 'stud1',
       },
       {
-        studentId: 'stud1',
+        lastChange: new Date(),
         offeredCourseId: 3,
         points: 200,
-        lastChange: new Date(),
+        studentId: 'stud1',
       },
       {
-        studentId: 'stud1',
+        lastChange: new Date(),
         offeredCourseId: 4,
         points: 400,
-        lastChange: new Date(),
+        studentId: 'stud1',
       },
     ],
   })

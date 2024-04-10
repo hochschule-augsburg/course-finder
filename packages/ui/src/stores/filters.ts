@@ -60,7 +60,9 @@ export const useFiltersStore = defineStore('filters', () => {
       active: false,
       filterFn: (subjects, high, low) =>
         subjects.filter((s) => {
-          const weekDay: number | undefined = new Date(s.weekly!.from).getDay() // TODO weekday 0-6 or 1-7 ?
+          const weekDay: number | undefined = new Date(
+            s.weekly?.from ?? 0,
+          ).getDay() // TODO weekday 0-6 or 1-7 ?
           if (weekDay) {
             return weekDay >= low && weekDay <= high
           }
