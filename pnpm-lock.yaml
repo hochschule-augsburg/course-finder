@@ -37,10 +37,13 @@ importers:
         version: 3.1.0(eslint@8.57.0)
       eslint-plugin-vitest:
         specifier: ^0.4.1
-        version: 0.4.1(eslint@8.57.0)(typescript@5.4.4)
+        version: 0.4.1(eslint@8.57.0)(typescript@5.4.4)(vitest@1.4.0)
       typescript-eslint:
         specifier: ^7.5.0
         version: 7.5.0(eslint@8.57.0)(typescript@5.4.4)
+      vitest:
+        specifier: ^1.4.0
+        version: 1.4.0(@types/node@20.12.5)(jsdom@24.0.0)(sass@1.74.1)
 
   packages/api:
     dependencies:
@@ -3484,7 +3487,7 @@ packages:
       eslint-rule-composer: 0.3.0
     dev: true
 
-  /eslint-plugin-vitest@0.4.1(eslint@8.57.0)(typescript@5.4.4):
+  /eslint-plugin-vitest@0.4.1(eslint@8.57.0)(typescript@5.4.4)(vitest@1.4.0):
     resolution: {integrity: sha512-+PnZ2u/BS+f5FiuHXz4zKsHPcMKHie+K+1Uvu/x91ovkCMEOJqEI8E9Tw1Wzx2QRz4MHOBHYf1ypO8N1K0aNAA==}
     engines: {node: ^18.0.0 || >= 20.0.0}
     peerDependencies:
@@ -3499,6 +3502,7 @@ packages:
     dependencies:
       '@typescript-eslint/utils': 7.4.0(eslint@8.57.0)(typescript@5.4.4)
       eslint: 8.57.0
+      vitest: 1.4.0(@types/node@20.12.5)(jsdom@24.0.0)(sass@1.74.1)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -6570,43 +6574,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /vite@5.2.6(@types/node@20.12.5)(sass@1.74.1):
-    resolution: {integrity: sha512-FPtnxFlSIKYjZ2eosBQamz4CbyrTizbZ3hnGJlh/wMtCrlp1Hah6AzBLjGI5I2urTfNnpovpHdrL6YRuBOPnCA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 20.12.5
-      esbuild: 0.20.2
-      postcss: 8.4.38
-      rollup: 4.13.0
-      sass: 1.74.1
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: true
-
   /vite@5.2.7(@types/node@20.12.5):
     resolution: {integrity: sha512-k14PWOKLI6pMaSzAuGtT+Cf0YmIx12z9YGon39onaJNy8DLBfBJrzg9FQEmkAM5lpHBZs9wksWAsyF/HkpEwJA==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -6789,7 +6756,7 @@ packages:
       strip-literal: 2.0.0
       tinybench: 2.6.0
       tinypool: 0.8.2
-      vite: 5.2.6(@types/node@20.12.5)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.5)(sass@1.74.1)
       vite-node: 1.4.0(@types/node@20.12.5)(sass@1.74.1)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
