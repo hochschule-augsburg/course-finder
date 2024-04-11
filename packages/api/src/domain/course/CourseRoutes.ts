@@ -7,19 +7,38 @@ export const courseRouter = router({
   getCourses: studentProcedure
     .input(
       z.object({
-        semester: z.string(),
+        phaseId: z.number(),
       }),
     )
-    .query(async (opts) => {
+    .query(async ({ input }) => {
       return await prisma.course.findMany({
         include: {
           Faculty: true,
           offeredCourses: {
             where: {
-              semester: { equals: opts.input.semester, mode: 'insensitive' },
+              phaseId: { equals: input.phaseId },
+            },
+          },
+        },
+        where: {
+          offeredCourses: {
+            some: {
+              phaseId: { equals: input.phaseId },
             },
           },
         },
       })
     }),
+  getCurrentPhase: studentProcedure.query(() => {
+    return prisma.enrollphase.findFirst({
+      where: {
+        end: {
+          gte: new Date(),
+        },
+        start: {
+          lte: new Date(),
+        },
+      },
+    })
+  }),
 })

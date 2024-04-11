@@ -4,18 +4,6 @@ import crypto from 'crypto'
 
 const prisma = new PrismaClient()
 
-enum dateType {
-  /**
-   * dateType refers to the recurrence of the dates.
-   * Weekly: listed dates recur every week in the same times.
-   * Block: listed dates are near each other.
-   * Irregular: listed dates are irregular.
-   */
-  BLOCK = 'block',
-  IRREGULAR = 'irregular',
-  WEEKLY = 'weekly',
-}
-
 main()
   .catch((e) => {
     console.error(e)
@@ -244,7 +232,6 @@ async function main() {
         minParticipants: 10,
         moduleCode: 'PHIL101',
         phaseId: 1,
-        semester: 'WS24',
         times: {
           dates: [
             {
@@ -265,7 +252,6 @@ async function main() {
         minParticipants: 5,
         moduleCode: 'MATH101',
         phaseId: 1,
-        semester: 'WS24',
         times: {
           dates: [
             {
@@ -294,7 +280,6 @@ async function main() {
         minParticipants: 2,
         moduleCode: 'CHEM101',
         phaseId: 1,
-        semester: 'WS24',
         times: {
           dates: [
             {
@@ -323,7 +308,6 @@ async function main() {
         minParticipants: 5,
         moduleCode: 'HIST101',
         phaseId: 1,
-        semester: 'WS24',
         times: {
           dates: [
             {
@@ -344,7 +328,6 @@ async function main() {
         minParticipants: 10,
         moduleCode: 'PHYS101',
         phaseId: 1,
-        semester: 'SS25',
         times: {
           dates: [
             {
@@ -423,7 +406,6 @@ async function main() {
       { fieldOfStudy: 'Biology', username: 'stud1' },
     ],
   })
-
   await prisma.studentChoice.createMany({
     data: [
       // For singhraj
@@ -535,4 +517,16 @@ function hashPassword(password: string, salt: string) {
     .createHash('sha256')
     .update(password + salt)
     .digest('hex')
+}
+
+/**
+ * dateType refers to the recurrence of the dates.
+ * Weekly: listed dates recur every week in the same times.
+ * Block: listed dates are near each other.
+ * Irregular: listed dates are irregular.
+ */
+const dateType = {
+  BLOCK: 'block',
+  IRREGULAR: 'irregular',
+  WEEKLY: 'weekly',
 }
