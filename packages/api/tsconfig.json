@@ -1,8 +1,23 @@
 {
   "exclude": ["node_modules"],
-  "extends": "../../tsconfig.json",
   "include": ["src", "tests", "vitest.config.ts", "prisma/seed.ts"],
   "compilerOptions": {
-    "types": ["vitest/globals"]
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": true,
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "vitest/globals"]
   }
 }

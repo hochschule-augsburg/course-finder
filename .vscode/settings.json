@@ -4,5 +4,6 @@
   "less.validate": false, // Disable built-in lint
   "scss.validate": false, // Disable built-in lint
   "stylelint.enable": true, // Enable stylelint
-  "stylelint.validate": ["css", "less", "postcss", "vue"] // Add vue files
+  "stylelint.validate": ["css", "less", "postcss", "vue"],
+  "eslint.workingDirectories": ["./packages/api", "./packages/ui"]
 }

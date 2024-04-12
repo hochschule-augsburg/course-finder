@@ -1,6 +1,5 @@
 {
   "exclude": ["node_modules"],
-  "extends": "../../tsconfig.json",
   "include": [
     "src",
     //types from api have to be in ui because unbuild monorepo
@@ -17,6 +16,21 @@
       "vitest/globals",
       "@intlify/unplugin-vue-i18n/messages"
     ],
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": true,
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
