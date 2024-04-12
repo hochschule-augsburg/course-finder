@@ -3,114 +3,182 @@ import { computed, ref } from 'vue'
 
 import type { Subject } from './enrollment'
 
-export type Filter = {
-  active: boolean
-  filterFn: (subjects: Subject[], high: number, low: number) => Subject[]
-  high: number
-  low: number
+export type Options = {
+  option: string
+  selected: boolean
+}
+
+export type OptionsFilter = {
+  filterFn: (subjects: Subject[], options: Options[]) => Subject[]
   name: string
+  options: Options[]
+}
+export type RangeFilter = {
+  filterFn: (
+    subjects: Subject[],
+    range: [min: number, max: number],
+  ) => Subject[]
+  max: number
+  min: number
+  name: string
+  range: [min: number, max: number]
 }
 
 export const useFiltersStore = defineStore('filters', () => {
   const search = ref<string>('')
-  const filters = ref<Filter[]>([
+  const optionsFilters = ref<OptionsFilter[]>([
     {
-      active: false,
-      filterFn: (subjects, high, low) =>
-        subjects.filter((s) => s.sws >= low && s.sws <= high),
-      high: 20,
-      low: 0,
-      name: 'SWS',
-    },
-    {
-      active: false,
-      filterFn: (subjects, high, low) =>
-        subjects.filter((s) => s.cp >= low && s.cp <= high),
-      high: 20,
-      low: 0,
-      name: 'CP',
-    },
-    {
-      active: false,
-      filterFn: (subjects, high, low) =>
-        subjects.filter((s) => s.maxTnm >= low && s.maxTnm <= high),
-      high: 20,
-      low: 0,
-      name: 'maxTnm',
-    },
-    {
-      active: false,
-      filterFn: (subjects, high, low) =>
-        subjects.filter((s) => s.minTnm >= low && s.minTnm <= high),
-      high: 20,
-      low: 0,
-      name: 'minTnm',
-    },
-    {
-      active: false,
-      filterFn: (subjects, _, __) =>
-        subjects.filter(
-          (s) => !s.weekly && s.meetings && s.meetings.length > 0,
-        ),
-      high: 0,
-      low: 20,
-      name: 'Blockveranstaltungen',
-    },
-    {
-      active: false,
-      filterFn: (subjects, high, low) =>
+      filterFn: (subjects, options) =>
         subjects.filter((s) => {
-          const weekDay: number | undefined = new Date(
-            s.weekly?.from ?? 0,
-          ).getDay() // TODO weekday 0-6 or 1-7 ?
-          if (weekDay) {
-            return weekDay >= low && weekDay <= high
-          }
-          if (s.meetings) {
-            // TODO default behaviour: .some() or .every()?
-            return s.meetings.some(
-              (m) =>
-                // TODO weekday 0-6 or 1-7 ?
-                new Date(m.from).getDay() >= low &&
-                new Date(m.from).getDay() <= high,
-            )
+          if (
+            !!(s.weekly && options[0].selected) ||
+            (s.meetings && options[1].selected)
+          ) {
+            return true
           }
           return false
         }),
-      high: 0,
-      low: 6,
+      name: 'Veranstaltungsart',
+      options: [
+        { option: 'wöchentlich', selected: false },
+        { option: 'Blockveranstaltung', selected: false },
+      ],
+    },
+    {
+      filterFn: (subjects, options) =>
+        subjects.filter((s) => {
+          if (s.weekly) {
+            const weekDay: number | undefined =
+              new Date(s.weekly.from).getDay() - 1
+            return weekDay && options[weekDay].selected
+          }
+          if (s.meetings) {
+            return s.meetings.some((m) => {
+              // getDay() => 0 = Sunday
+              const start = new Date(m.from).getDay() - 1
+              const end = new Date(m.to).getDay() - 1
+              for (let i = start; i <= end; i++) {
+                if (options[i].selected) {
+                  return true
+                }
+              }
+              return false
+            })
+          }
+          return false
+        }),
       name: 'Wochentag',
+      // TODO: use i18n (index instead of names)
+      options: [
+        { option: 'Montag', selected: false },
+        { option: 'Dienstag', selected: false },
+        { option: 'Mittwoch', selected: false },
+        { option: 'Donnerstag', selected: false },
+        { option: 'Freitag', selected: false },
+        { option: 'Samstag', selected: false },
+        { option: 'Sonntag', selected: false },
+      ],
     },
   ])
 
-  const activeFilters = computed(() => filters.value.filter((f) => f.active))
+  const rangeFilters = ref<RangeFilter[]>([
+    {
+      filterFn: (subjects, range) =>
+        subjects.filter((s) => s.sws >= range[0] && s.sws <= range[1]),
+      max: 20,
+      min: 0,
+      name: 'SWS',
+      range: [0, 20],
+    },
+    {
+      filterFn: (subjects, range) =>
+        subjects.filter((s) => s.cp >= range[0] && s.cp <= range[1]),
+      max: 20,
+      min: 0,
+      name: 'CP',
+      range: [0, 20],
+    },
+    {
+      filterFn: (subjects, range) =>
+        subjects.filter((s) => s.maxTnm >= range[0] && s.maxTnm <= range[1]),
+      max: 100,
+      min: 0,
+      name: 'Teilnehmer',
+      range: [0, 100],
+    },
+  ])
+
+  const activeRangeFilters = computed(() =>
+    rangeFilters.value.filter(
+      (f) => f.min !== f.range[0] || f.max !== f.range[1],
+    ),
+  )
+
+  const activeOptionsFilters = computed(() =>
+    optionsFilters.value.filter((f) => f.options.some((o) => o.selected)),
+  )
+
+  const activeOptions = computed(() => {
+    const activeOptions: Options[] = []
+    activeOptionsFilters.value.forEach((oF) => {
+      activeOptions.push(...oF.options.filter((o) => o.selected))
+    })
+    return activeOptions
+  })
 
   function applyFilters(subjects: Subject[]): Subject[] {
-    const filteredSubjects: Subject[] = []
-    activeFilters.value.forEach((filter) => {
-      filteredSubjects.push(
-        ...filter.filterFn(subjects, filter.high, filter.low),
-      )
+    activeRangeFilters.value.forEach((filter) => {
+      subjects = filter.filterFn(subjects, filter.range)
     })
-    return filteredSubjects
+    activeOptionsFilters.value.forEach((filter) => {
+      subjects = filter.filterFn(subjects, filter.options)
+    })
+
+    return subjects
   }
 
-  function searchSubjects(filteredSubjects: Subject[]): Subject[] {
+  function searchSubjects(subjects: Subject[]): Subject[] {
+    const searchString = search.value.trim().toLowerCase()
     if (!search.value.trim()) {
-      return filteredSubjects
+      return subjects
     }
-    return filteredSubjects.filter(
+    return subjects.filter(
       (s) =>
-        s.name.includes(search.value) ||
-        s.prof.includes(search.value) ||
-        s.description.includes(search.value),
+        s.name.toLowerCase().includes(searchString) ||
+        s.prof.toLowerCase().includes(searchString) ||
+        s.description.toLowerCase().includes(searchString),
     )
   }
 
+  function resetRange(f: RangeFilter) {
+    if (f.min !== null && f.max !== null) {
+      f.range[0] = f.min
+      f.range[1] = f.max
+    }
+    return f
+  }
+
   function resetFilters() {
-    filters.value = filters.value.map((f) => {
-      f.active = false
-      return f
+    rangeFilters.value.forEach((f) => resetRange(f))
+    optionsFilters.value.forEach((f) => {
+      f.options.forEach((o) => {
+        o.selected = false
+      })
+    })
+  }
+
+  function resetFilter(name: string) {
+    rangeFilters.value.forEach((f) => {
+      if (f.name === name) {
+        f = resetRange(f)
+      }
+    })
+    optionsFilters.value.forEach((f) => {
+      f.options.forEach((o) => {
+        if (o.option === name) {
+          o.selected = false
+        }
+      })
     })
   }
 
@@ -119,9 +187,13 @@ export const useFiltersStore = defineStore('filters', () => {
   }
 
   return {
-    activeFilters,
+    activeOptions,
+    activeOptionsFilters,
+    activeRangeFilters,
     applyFilters,
-    filters,
+    optionsFilters,
+    rangeFilters,
+    resetFilter,
     resetFilters,
     resetSearch,
     search,

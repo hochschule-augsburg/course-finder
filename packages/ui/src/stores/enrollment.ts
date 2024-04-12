@@ -9,6 +9,7 @@ export type Meeting = {
   to: string
 }
 
+// TODO: `?` instead of `null`
 export type Subject = {
   cp: number
   description: string
@@ -36,14 +37,14 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   )
 
   const filteredSubjects = computed(() => {
-    let filtered: Subject[] = []
-    filtered = filtersStore.applyFilters(subjects.value)
+    let filtered: Subject[] = [...subjects.value]
+    filtered = filtersStore.applyFilters(filtered)
     filtered = filtersStore.searchSubjects(filtered)
     return filtered
   })
 
   function enroll() {
-    // TODO api.enroll(selectedSubjects)? Algorithmus?
+    // TODO: api.enroll(selectedSubjects)? Algorithmus?
   }
 
   return {

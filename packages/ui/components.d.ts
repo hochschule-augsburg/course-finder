@@ -8,7 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     EnrollmentOverview: typeof import('./src/components/EnrollmentOverview.vue')['default']
+    FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
+    FilterSectionV2: typeof import('./src/components/FilterSectionV2.vue')['default']
     InfoDialog: typeof import('./src/components/InfoDialog.vue')['default']
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

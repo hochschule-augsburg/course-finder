@@ -117,7 +117,7 @@
     "sws": 3,
     "cp": 3,
     "weekly": null,
-    "meetings": null,
+    "meetings": [],
     "minTnm": 0,
     "maxTnm": 10,
     "info": "am Ende des Semesters"
