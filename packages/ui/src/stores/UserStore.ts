@@ -40,6 +40,14 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function init() {
-    user.value = await trpc.auth.getUser.query()
+    // dev auto login
+    if (import.meta.env.DEV) {
+      await login(
+        import.meta.env.VITE_INITIAL_USER,
+        import.meta.env.VITE_INITIAL_PWD,
+      )
+    } else {
+      user.value = await trpc.auth.getUser.query()
+    }
   }
 })

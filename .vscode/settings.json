@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["prisma", "TOTP", "trpc", "TRPC", "vuetify"],
+  "cSpell.words": ["prisma", "TOTP", "trpc", "TRPC", "VITE", "vuetify"],
   "css.validate": false, // Disable built-in lint
   "less.validate": false, // Disable built-in lint
   "scss.validate": false, // Disable built-in lint
