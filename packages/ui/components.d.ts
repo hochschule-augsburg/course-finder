@@ -10,13 +10,12 @@ declare module 'vue' {
     EnrollmentOverview: typeof import('./src/components/EnrollmentOverview.vue')['default']
     FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
-    FilterSectionV2: typeof import('./src/components/FilterSectionV2.vue')['default']
     InfoDialog: typeof import('./src/components/InfoDialog.vue')['default']
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubjectDialog: typeof import('./src/components/SubjectDialog.vue')['default']
     SubjectTable: typeof import('./src/components/SubjectTable.vue')['default']
-    SubjectTile: typeof import('./src/components/SubjectTile.vue')['default']
+    SubjectTiles: typeof import('./src/components/SubjectTiles.vue')['default']
   }
 }
