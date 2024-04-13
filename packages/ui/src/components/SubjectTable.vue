@@ -120,8 +120,7 @@ const enrollmentStore = useEnrollmentStore()
 <style scoped lang="scss">
 .checkbox {
   position: absolute;
-  top: -13px;
-  left: -5px;
+  translate: -1.8rem -2rem;
 }
 
 .titleEllipsis {
