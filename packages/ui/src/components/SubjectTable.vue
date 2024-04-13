@@ -20,7 +20,7 @@ const enrollmentStore = useEnrollmentStore()
           />
           <VContainer class="ma-0">
             <VRow no-gutters>
-              <VCol :class="expanded ? '' : 'titleEllipsis'" cols="5">
+              <VCol :class="{ 'title-ellipsis': !expanded }" cols="5">
                 <strong> {{ subject.name }}</strong>
               </VCol>
               <VCol cols="3"> {{ subject.sws }} SWS </VCol>
@@ -123,7 +123,7 @@ const enrollmentStore = useEnrollmentStore()
   translate: -1.8rem -2rem;
 }
 
-.titleEllipsis {
+.title-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
