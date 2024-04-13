@@ -31,7 +31,7 @@ function openSubjectDialog(name: string) {
             <VCheckbox v-model="subject.selected" @click.stop />
           </template>
           <VCardText>
-            <VRow align="end" justify="end" style="height: 110px">
+            <VRow align="end" justify="end" style="height: 7rem">
               <VCol cols="auto" style="text-align: end">
                 <p>
                   <strong>{{ subject.cp }} CP</strong>
