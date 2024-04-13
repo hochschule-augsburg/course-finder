@@ -31,7 +31,6 @@ export type SubjectProp = keyof Subject
 export const useEnrollmentStore = defineStore('enrollment', () => {
   const filtersStore = useFiltersStore()
   const subjects = ref<Subject[]>(dummySubjects)
-  const selectedSubject = ref<number | undefined>(undefined)
   const selectedSubjects = computed(() =>
     subjects.value.filter((s) => s.selected),
   )
@@ -50,7 +49,6 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   return {
     enroll,
     filteredSubjects,
-    selectedSubject,
     selectedSubjects,
     subjects,
   }
