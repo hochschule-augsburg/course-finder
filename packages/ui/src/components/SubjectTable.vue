@@ -14,20 +14,13 @@ const enrollmentStore = useEnrollmentStore()
         <template #default="{ expanded }">
           <VCheckbox
             v-model="subject.selected"
-            style="position: absolute; top: -13px; left: -5px"
+            class="checkbox"
             hide-details
             @click.stop
           />
           <VContainer class="ma-0">
             <VRow no-gutters>
-              <VCol
-                :style="
-                  expanded
-                    ? ''
-                    : 'overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'
-                "
-                cols="5"
-              >
+              <VCol :class="expanded ? '' : 'titleEllipsis'" cols="5">
                 <strong> {{ subject.name }}</strong>
               </VCol>
               <VCol cols="3"> {{ subject.sws }} SWS </VCol>
@@ -106,6 +99,7 @@ const enrollmentStore = useEnrollmentStore()
             }}
           </VRow>
           <VRow class="my-3">
+            <!-- TODO: scrollable container or show less/more if too long -->
             <VIcon>mdi-text-box</VIcon>{{ subject.description }}
           </VRow>
           <VRow v-if="subject.info" class="my-3">
@@ -122,3 +116,17 @@ const enrollmentStore = useEnrollmentStore()
     </VExpansionPanel>
   </VExpansionPanels>
 </template>
+
+<style scoped lang="scss">
+.checkbox {
+  position: absolute;
+  top: -13px;
+  left: -5px;
+}
+
+.titleEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
