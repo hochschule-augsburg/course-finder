@@ -7,13 +7,18 @@ const enrollmentStore = useEnrollmentStore()
 <template>
   <div class="ma-1">
     <!-- <h1>This is the Subject Table</h1> -->
-    <VExpansionPanels variant="popout" multiple>
+    <VExpansionPanels variant="popout">
       <VExpansionPanel
         v-for="subject in enrollmentStore.filteredSubjects"
         :key="subject.name"
       >
         <VExpansionPanelTitle>
-          <VContainer style="padding: 0px">
+          <VCheckbox
+            v-model="subject.selected"
+            style="position: absolute; top: -13px; left: -5px"
+            @click.stop
+          />
+          <VContainer class="ma-0">
             <VRow no-gutters>
               <VCol cols="5" style="overflow-wrap: break-word; hyphens: auto">
                 <strong>{{ subject.name }}</strong>
@@ -51,12 +56,12 @@ const enrollmentStore = useEnrollmentStore()
           </VContainer>
         </VExpansionPanelTitle>
         <VExpansionPanelText>
-          <VContainer>
-            <VRow
-              ><VIcon>mdi-account-multiple</VIcon
-              >{{ subject.minTnm + '-' + subject.maxTnm }}</VRow
-            >
-            <VRow v-if="subject.weekly">
+          <VContainer class="mx-2">
+            <VRow class="my-3">
+              <VIcon>mdi-account-multiple</VIcon
+              >{{ subject.minTnm + '-' + subject.maxTnm }}
+            </VRow>
+            <VRow v-if="subject.weekly" class="my-3">
               <VIcon>mdi-calendar</VIcon>
               {{
                 new Date(subject.weekly.from).toLocaleDateString([], {
@@ -75,6 +80,7 @@ const enrollmentStore = useEnrollmentStore()
               v-else-if="subject.meetings"
               v-for="(meeting, i) in subject.meetings"
               :key="subject.name + i"
+              class="my-3"
             >
               <VIcon>mdi-calendar</VIcon>
               {{
@@ -91,9 +97,18 @@ const enrollmentStore = useEnrollmentStore()
                 })
               }}
             </VRow>
-            <VRow><VIcon>mdi-text-box</VIcon>{{ subject.description }}</VRow>
-            <VRow><VIcon>mdi-alert-circle</VIcon>{{ subject.info }}</VRow>
-            <VRow><VIcon>mdi-book</VIcon>{{ subject.moduleMan }}</VRow>
+            <VRow class="my-3">
+              <VIcon>mdi-text-box</VIcon>{{ subject.description }}
+            </VRow>
+            <VRow v-if="subject.info" class="my-3">
+              <VIcon>mdi-alert-circle</VIcon>{{ subject.info }}
+            </VRow>
+            <VRow class="my-3">
+              <VIcon>mdi-book</VIcon>
+              <a :href="subject.moduleMan" target="_blank">
+                Modulhandbuch, S. x
+              </a>
+            </VRow>
           </VContainer>
         </VExpansionPanelText>
       </VExpansionPanel>

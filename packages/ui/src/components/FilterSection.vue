@@ -23,9 +23,7 @@ function getRangeChipLabel(filter: RangeFilter) {
 </script>
 
 <template>
-  <div>
-    <!-- <h1>This is the Filter Section</h1> -->
-
+  <div class="my-4">
     <VTextField
       v-model:model-value="search"
       :on-click:clear="filtersStore.resetSearch"
@@ -34,6 +32,7 @@ function getRangeChipLabel(filter: RangeFilter) {
       prepend-inner-icon="mdi-magnify"
       type="text"
       clearable
+      hide-details
       single-line
     />
 
