@@ -84,7 +84,7 @@ model Course {
   /// Link to the moodle course
   moodleCourse       String?
   website            String?
-  offeredCourses     OfferedCourses[]
+  offeredCourse     OfferedCourse?
 }
 
 model Enrollphase {
@@ -95,21 +95,22 @@ model Enrollphase {
   title          Json
   /// [I18n]
   description    Json
-  offeredCourses OfferedCourses[]
+  offeredCourses OfferedCourse[]
 }
 
-model OfferedCourses {
+model OfferedCourse {
   id              Int             @id @default(autoincrement())
   Phase           Enrollphase     @relation(fields: [phaseId], references: [id])
   phaseId         Int
   Course          Course          @relation(fields: [moduleCode], references: [moduleCode])
-  moduleCode      String
-  StudentChoice   StudentChoice[]
+  moduleCode      String          @unique
+  StudentChoices   StudentChoice[]
   minParticipants Int?
   maxParticipants Int?
 
   extraInfo String?
-  times     Json
+  /// [courseAppointment]
+  appointments    Json
 
   @@unique([phaseId, moduleCode])
 }
@@ -118,7 +119,7 @@ model StudentChoice {
   id              Int            @id @default(autoincrement())
   Student         Student        @relation(fields: [studentId], references: [username])
   studentId       String
-  OfferedCourse   OfferedCourses @relation(fields: [offeredCourseId], references: [id])
+  OfferedCourse   OfferedCourse @relation(fields: [offeredCourseId], references: [id])
   offeredCourseId Int
 
   points     Int

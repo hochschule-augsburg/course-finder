@@ -224,15 +224,10 @@ async function main() {
   })
 
   // Create offered courses
-  await prisma.offeredCourses.createMany({
+  await prisma.offeredCourse.createMany({
     data: [
       {
-        extraInfo: 'Room A, Building 1',
-        maxParticipants: 40,
-        minParticipants: 10,
-        moduleCode: 'PHIL101',
-        phaseId: 1,
-        times: {
+        appointments: {
           dates: [
             {
               endTime: new Date('02 October 2024 15:30').toISOString(),
@@ -245,14 +240,14 @@ async function main() {
           ],
           type: dateType.WEEKLY,
         },
+        extraInfo: 'Room A, Building 1',
+        maxParticipants: 40,
+        minParticipants: 10,
+        moduleCode: 'PHIL101',
+        phaseId: 1,
       },
       {
-        extraInfo: 'Room B, Building 2',
-        maxParticipants: 35,
-        minParticipants: 5,
-        moduleCode: 'MATH101',
-        phaseId: 1,
-        times: {
+        appointments: {
           dates: [
             {
               endTime: new Date('02 October 2024 09:30').toISOString(),
@@ -273,14 +268,14 @@ async function main() {
           ],
           type: dateType.BLOCK,
         },
+        extraInfo: 'Room B, Building 2',
+        maxParticipants: 35,
+        minParticipants: 5,
+        moduleCode: 'MATH101',
+        phaseId: 1,
       },
       {
-        extraInfo: 'Room C, Building 3',
-        maxParticipants: 5,
-        minParticipants: 2,
-        moduleCode: 'CHEM101',
-        phaseId: 1,
-        times: {
+        appointments: {
           dates: [
             {
               endTime: new Date('02 October 2024 09:30').toISOString(),
@@ -301,14 +296,34 @@ async function main() {
           ],
           type: dateType.IRREGULAR,
         },
+        extraInfo: 'Room C, Building 3',
+        maxParticipants: 5,
+        minParticipants: 2,
+        moduleCode: 'CHEM101',
+        phaseId: 1,
       },
       {
+        appointments: {
+          dates: [
+            {
+              endTime: new Date('02 October 2024 15:30').toISOString(),
+              startTime: new Date('02 October 2024 14:00').toISOString(),
+            },
+            {
+              endTime: new Date('03 October 2024 09:30').toISOString(),
+              startTime: new Date('03 October 2024 08:00').toISOString(),
+            },
+          ],
+          type: dateType.WEEKLY,
+        },
         extraInfo: 'Room D, Building 4',
         maxParticipants: 50,
         minParticipants: 5,
         moduleCode: 'HIST101',
         phaseId: 1,
-        times: {
+      },
+      {
+        appointments: {
           dates: [
             {
               endTime: new Date('02 October 2024 15:30').toISOString(),
@@ -321,26 +336,11 @@ async function main() {
           ],
           type: dateType.WEEKLY,
         },
-      },
-      {
         extraInfo: 'Room E, Building 5',
         maxParticipants: 40,
         minParticipants: 10,
         moduleCode: 'PHYS101',
         phaseId: 1,
-        times: {
-          dates: [
-            {
-              endTime: new Date('02 October 2024 15:30').toISOString(),
-              startTime: new Date('02 October 2024 14:00').toISOString(),
-            },
-            {
-              endTime: new Date('03 October 2024 09:30').toISOString(),
-              startTime: new Date('03 October 2024 08:00').toISOString(),
-            },
-          ],
-          type: dateType.WEEKLY,
-        },
       },
     ],
   })
