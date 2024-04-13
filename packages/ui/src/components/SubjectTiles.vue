@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import type { Subject } from '@/stores/enrollment'
+
 import { useEnrollmentStore } from '@/stores/enrollment'
 import { ref } from 'vue'
 
 const enrollmentStore = useEnrollmentStore()
 const showSubjectDialog = ref<boolean>(false)
-const selectedSubject = ref<number | undefined>(undefined)
+const selectedSubject = ref<Subject | undefined>(undefined)
 
 function openSubjectDialog(name: string) {
-  selectedSubject.value = enrollmentStore.subjects.findIndex(
-    (s) => s.name === name,
-  )
+  selectedSubject.value = enrollmentStore.subjects.find((s) => s.name === name)
   showSubjectDialog.value = true
 }
 </script>
@@ -17,10 +17,7 @@ function openSubjectDialog(name: string) {
 <template>
   <!-- TODO: replace use subject.id as key instead of name -->
   <div>
-    <SubjectDialog
-      v-model="showSubjectDialog"
-      :selected-subject="selectedSubject"
-    />
+    <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
     <VContainer>
       <VRow justify="center">
         <VCol

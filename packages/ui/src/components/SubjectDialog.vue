@@ -1,20 +1,45 @@
 <script setup lang="ts">
-import { useEnrollmentStore } from '@/stores/enrollment'
+import type { Subject } from '@/stores/enrollment'
 
-const { selectedSubject } = defineProps<{
-  selectedSubject?: number
+const { subject } = defineProps<{
+  subject?: Subject
 }>()
 const showSubjectDialog = defineModel<boolean>()
-const enrollmentStore = useEnrollmentStore()
 </script>
 
 <template>
-  <VDialog v-model:model-value="showSubjectDialog" max-width="500">
-    <VCard v-if="selectedSubject !== undefined && selectedSubject >= 0">
+  <VDialog v-model:model-value="showSubjectDialog" max-width="750">
+    <VCard v-if="subject">
       <VCardTitle>
-        {{ enrollmentStore.subjects[selectedSubject].name }}
+        <strong>{{ subject.name }}</strong>
+        -
+        {{ subject.prof }}
       </VCardTitle>
-      <VCardText> test </VCardText>
+      <VCardText>
+        <VContainer class="pa-0 pb-3 px-3">
+          <VRow align="center">
+            <VCol class="pl-1" cols="2.5"
+              ><strong>{{ subject.sws }} SWS</strong>
+            </VCol>
+            <VCol class="pl-1" cols="2.5">
+              <strong>{{ subject.cp }} CP</strong>
+            </VCol>
+            <VCol align="end" cols="7">
+              <VBtn :href="subject.moduleMan"> Modulhandbuch </VBtn>
+            </VCol>
+          </VRow>
+          <SubjectDetails :subject="subject" />
+        </VContainer>
+      </VCardText>
+      <VCardActions class="mx-4">
+        <VSpacer />
+        <VBtn
+          color="primary"
+          text="Close"
+          variant="tonal"
+          @click="showSubjectDialog = false"
+        />
+      </VCardActions>
     </VCard>
   </VDialog>
 </template>

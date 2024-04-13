@@ -14,6 +14,7 @@ declare module 'vue' {
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SubjectDetails: typeof import('./src/components/SubjectDetails.vue')['default']
     SubjectDialog: typeof import('./src/components/SubjectDialog.vue')['default']
     SubjectTable: typeof import('./src/components/SubjectTable.vue')['default']
     SubjectTiles: typeof import('./src/components/SubjectTiles.vue')['default']
