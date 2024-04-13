@@ -2,9 +2,16 @@
 import { useEnrollmentStore } from '@/stores/enrollment'
 
 const enrollmentStore = useEnrollmentStore()
+
+function openSubjectDialog(name: string) {
+  enrollmentStore.selectedSubject = enrollmentStore.subjects.findIndex(
+    (s) => s.name === name,
+  )
+}
 </script>
 
 <template>
+  <!-- TODO: replace use subject.id as key instead of name -->
   <VContainer>
     <VRow justify="center">
       <VCol
@@ -17,8 +24,12 @@ const enrollmentStore = useEnrollmentStore()
           :title="subject.name"
           height="200"
           width="300"
+          hover
+          @click="openSubjectDialog(subject.name)"
         >
-          <template #append><VCheckbox v-model="subject.selected" /></template>
+          <template #append>
+            <VCheckbox v-model="subject.selected" @click.stop />
+          </template>
           <VCardText>
             <VRow align="end" justify="end" style="height: 110px">
               <VCol cols="auto" style="text-align: end">
