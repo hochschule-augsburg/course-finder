@@ -3,19 +3,24 @@ import { useEnrollmentStore } from '@/stores/enrollment'
 import { ref } from 'vue'
 
 const enrollmentStore = useEnrollmentStore()
+const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<number | undefined>(undefined)
 
 function openSubjectDialog(name: string) {
   selectedSubject.value = enrollmentStore.subjects.findIndex(
     (s) => s.name === name,
   )
+  showSubjectDialog.value = true
 }
 </script>
 
 <template>
   <!-- TODO: replace use subject.id as key instead of name -->
   <div>
-    <SubjectDialog :selected-subject="selectedSubject" />
+    <SubjectDialog
+      v-model="showSubjectDialog"
+      :selected-subject="selectedSubject"
+    />
     <VContainer>
       <VRow justify="center">
         <VCol

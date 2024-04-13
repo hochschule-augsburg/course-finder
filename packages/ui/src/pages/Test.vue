@@ -4,7 +4,7 @@
   <div>
     <h1>This page is only for testing purposes</h1>
     <FilterSection />
-    <!-- <SubjectTiles /> -->
-    <SubjectTable />
+    <SubjectTiles />
+    <!-- <SubjectTable /> -->
   </div>
 </template>
