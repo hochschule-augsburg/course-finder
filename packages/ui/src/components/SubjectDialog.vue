@@ -18,8 +18,8 @@ const showSubjectDialog = defineModel<boolean>()
       <VCardText>
         <VContainer class="pa-0 pb-3 px-3">
           <VRow align="center">
-            <VCol class="pl-1" cols="2.5"
-              ><strong>{{ subject.sws }} SWS</strong>
+            <VCol class="pl-1" cols="2.5">
+              <strong>{{ subject.sws }} SWS</strong>
             </VCol>
             <VCol class="pl-1" cols="2.5">
               <strong>{{ subject.cp }} CP</strong>
