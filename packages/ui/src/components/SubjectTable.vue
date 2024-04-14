@@ -5,7 +5,7 @@ const enrollmentStore = useEnrollmentStore()
 </script>
 
 <template>
-  <VExpansionPanels class="ma-1" variant="popout">
+  <VExpansionPanels class="mx-1 my-4" variant="popout">
     <VExpansionPanel
       v-for="subject in enrollmentStore.filteredSubjects"
       :key="subject.name"
