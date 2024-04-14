@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/enrollment'
 
-const { subject } = defineProps<{
+defineProps<{
   subject?: Subject
 }>()
 const showSubjectDialog = defineModel<boolean>()
@@ -9,7 +9,7 @@ const showSubjectDialog = defineModel<boolean>()
 
 <template>
   <VDialog v-model:model-value="showSubjectDialog" max-width="750">
-    <VCard v-if="subject">
+    <VCard v-if="subject" class="pa-2">
       <VCardTitle>
         <strong>{{ subject.name }}</strong>
         -
