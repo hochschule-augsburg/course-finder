@@ -44,7 +44,7 @@
   "main": "src/libExports.ts",
   "name": "api",
   "scripts": {
-    "dev": "docker start postgres-sub-enroll && tsx watch --clear-screen=false src/main.ts",
+    "dev": "docker start postgres-sub-enroll & tsx watch --clear-screen=false src/main.ts",
     "dev:debug": "tsx --inspect-brk src/main.ts",
     "build": "tsc --noEmit && esbuild src/main.ts --bundle --packages=external --platform=node --format=esm --outdir=dist --sourcemap",
     "lint": "eslint --ext .ts .",

@@ -206,21 +206,19 @@ async function main() {
   })
 
   // Create enroll phases
-  await prisma.enrollphase.createMany({
-    data: [
-      {
-        description: {
-          de: 'Beschreibung der Anmeldephase...',
-          en: 'Description of enrollment phase...',
-        },
-        end: new Date('2024-03-15'),
-        start: new Date('2024-02-28'),
-        title: {
-          de: 'Anmeldung zum Sommersemester 2024',
-          en: 'Spring Semester 2024 Enrollment',
-        },
+  const phase = await prisma.enrollphase.create({
+    data: {
+      description: {
+        de: 'Beschreibung der Anmeldephase...',
+        en: 'Description of enrollment phase...',
       },
-    ],
+      end: new Date('2024-03-15'),
+      start: new Date('2024-02-28'),
+      title: {
+        de: 'Anmeldung zum Sommersemester 2024',
+        en: 'Spring Semester 2024 Enrollment',
+      },
+    },
   })
 
   // Create offered courses
@@ -406,107 +404,133 @@ async function main() {
       { fieldOfStudy: 'Biology', username: 'stud1' },
     ],
   })
+
+  await prisma.studentPhase.createMany({
+    data: [
+      { phaseId: phase.id, username: 'singhraj' },
+      { phaseId: phase.id, username: 'mitroska' },
+      { phaseId: phase.id, username: 'seka' },
+      { phaseId: phase.id, username: 'stud1' },
+    ],
+  })
+
   await prisma.studentChoice.createMany({
     data: [
       // For singhraj
       {
         lastChange: new Date(),
-        offeredCourseId: 1,
+        moduleCode: 'PHIL101',
+        phaseId: phase.id,
         points: 250,
-        studentId: 'singhraj',
+        username: 'singhraj',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 2,
+        moduleCode: 'MATH101',
+        phaseId: phase.id,
         points: 200,
-        studentId: 'singhraj',
+        username: 'singhraj',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 3,
+        moduleCode: 'CHEM101',
+        phaseId: phase.id,
         points: 300,
-        studentId: 'singhraj',
+        username: 'singhraj',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 4,
+        moduleCode: 'HIST101',
+        phaseId: phase.id,
         points: 250,
-        studentId: 'singhraj',
+        username: 'singhraj',
       },
       // For mitroska
       {
         lastChange: new Date(),
-        offeredCourseId: 1,
+        moduleCode: 'PHIL101',
+        phaseId: phase.id,
         points: 180,
-        studentId: 'mitroska',
+        username: 'mitroska',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 2,
+        moduleCode: 'MATH101',
+        phaseId: phase.id,
         points: 220,
-        studentId: 'mitroska',
+        username: 'mitroska',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 3,
+        moduleCode: 'CHEM101',
+        phaseId: phase.id,
         points: 250,
-        studentId: 'mitroska',
+        username: 'mitroska',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 4,
+        moduleCode: 'HIST101',
+        phaseId: phase.id,
         points: 350,
-        studentId: 'mitroska',
+        username: 'mitroska',
       },
       // For seka
       {
         lastChange: new Date(),
-        offeredCourseId: 1,
+        moduleCode: 'PHIL101',
+        phaseId: phase.id,
         points: 150,
-        studentId: 'seka',
+        username: 'seka',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 2,
+        moduleCode: 'MATH101',
+        phaseId: phase.id,
         points: 200,
-        studentId: 'seka',
+        username: 'seka',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 3,
+        moduleCode: 'CHEM101',
+        phaseId: phase.id,
         points: 350,
-        studentId: 'seka',
+        username: 'seka',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 4,
+        moduleCode: 'HIST101',
+        phaseId: phase.id,
         points: 300,
-        studentId: 'seka',
+        username: 'seka',
       },
       // For stud1
       {
         lastChange: new Date(),
-        offeredCourseId: 1,
+        moduleCode: 'PHIL101',
+        phaseId: phase.id,
         points: 220,
-        studentId: 'stud1',
+        username: 'stud1',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 2,
+        moduleCode: 'MATH101',
+        phaseId: phase.id,
         points: 180,
-        studentId: 'stud1',
+        username: 'stud1',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 3,
+        moduleCode: 'CHEM101',
+        phaseId: phase.id,
         points: 200,
-        studentId: 'stud1',
+        username: 'stud1',
       },
       {
         lastChange: new Date(),
-        offeredCourseId: 4,
+        moduleCode: 'HIST101',
+        phaseId: phase.id,
         points: 400,
-        studentId: 'stud1',
+        username: 'stud1',
       },
     ],
   })

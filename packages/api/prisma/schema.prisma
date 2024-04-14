@@ -35,6 +35,7 @@ model Student {
   fieldOfStudy  String
   term          Int?
   regNumber     String?
+  StudentPhase  StudentPhase[]
   StudentChoice StudentChoice[]
 }
 
@@ -55,11 +56,11 @@ model Faculty {
 }
 
 model Course {
-  moduleCode         String           @id
+  moduleCode         String          @id
   /// title module
   /// [I18n]
   title              Json
-  published          Boolean          @default(false)
+  published          Boolean         @default(false)
   examinationNumbers String[]
   Lecturers          Prof[]
   /// if lecturer is not in the system
@@ -67,7 +68,7 @@ model Course {
   requirements       String[]
   /// spoken language
   language           String
-  Faculty            Faculty?         @relation(fields: [facultyName], references: [name])
+  Faculty            Faculty?        @relation(fields: [facultyName], references: [name])
   facultyName        String?
   /// SWS
   semesterHours      Int
@@ -84,11 +85,11 @@ model Course {
   /// Link to the moodle course
   moodleCourse       String?
   website            String?
-  offeredCourse     OfferedCourse?
+  offeredCourse      OfferedCourse[]
 }
 
 model Enrollphase {
-  id             Int              @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   start          DateTime
   end            DateTime
   /// [I18n]
@@ -96,34 +97,46 @@ model Enrollphase {
   /// [I18n]
   description    Json
   offeredCourses OfferedCourse[]
+  studentPhases  StudentPhase[]
 }
 
 model OfferedCourse {
-  id              Int             @id @default(autoincrement())
   Phase           Enrollphase     @relation(fields: [phaseId], references: [id])
   phaseId         Int
   Course          Course          @relation(fields: [moduleCode], references: [moduleCode])
-  moduleCode      String          @unique
-  StudentChoices   StudentChoice[]
+  moduleCode      String
   minParticipants Int?
   maxParticipants Int?
+  StudentChoice   StudentChoice[]
 
-  extraInfo String?
+  extraInfo    String?
   /// [CourseAppointments]
-  appointments    Json
+  appointments Json
 
-  @@unique([phaseId, moduleCode])
+  @@id([phaseId, moduleCode])
+}
+
+model StudentPhase {
+  Student       Student         @relation(fields: [username], references: [username])
+  username      String
+  Phase         Enrollphase     @relation(fields: [phaseId], references: [id])
+  phaseId       Int
+  StudentChoice StudentChoice[]
+
+  @@id([username, phaseId])
 }
 
 model StudentChoice {
-  id              Int            @id @default(autoincrement())
-  Student         Student        @relation(fields: [studentId], references: [username])
-  studentId       String
-  OfferedCourse   OfferedCourse @relation(fields: [offeredCourseId], references: [id])
-  offeredCourseId Int
+  Student       Student       @relation(fields: [studentId], references: [username])
+  studentId     String
+  OfferedCourse OfferedCourse @relation(fields: [moduleCode, phaseId], references: [moduleCode, phaseId])
+  moduleCode    String
+  phaseId       Int
+  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
+  username      String
 
   points     Int
   lastChange DateTime
 
-  @@unique([studentId, offeredCourseId])
+  @@id([moduleCode, username, phaseId])
 }
