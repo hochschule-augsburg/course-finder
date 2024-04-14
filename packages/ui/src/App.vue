@@ -6,8 +6,10 @@ useUserStore()
 
 <template>
   <VApp>
-    <VMain>
-      <RouterView />
-    </VMain>
+    <Navbar/>
+      <VMain >
+        <RouterView/>
+      </VMain>
+    <Footer/>
   </VApp>
 </template>
