@@ -46,8 +46,7 @@ export const useUserStore = defineStore('user', () => {
         import.meta.env.VITE_INITIAL_USER,
         import.meta.env.VITE_INITIAL_PWD,
       )
-    } else {
-      user.value = await trpc.auth.getUser.query()
     }
+    user.value = await trpc.auth.getUser.query()
   }
 })
