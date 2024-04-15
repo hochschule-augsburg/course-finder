@@ -7,21 +7,21 @@ export type I18nJson = {
   en?: string
 }
 
-export type UserExtended = User & {
+export type UserExtended = {
   Faculty: Faculty | null
   Prof?: Prof | null
   Student?: Student | null
-}
+} & User
 
 declare global {
   namespace PrismaJson {
     type I18n = I18nJson
-    type Auth = (
+    type Auth = { twoFA?: true } & (
       | {
           method: 'ldap'
         }
       | { method: 'local'; password: string; salt: string }
-    ) & { twoFA?: true }
+    )
     // TODO
     type ExamType = {
       additionalInfo?: string

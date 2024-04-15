@@ -24,7 +24,7 @@ export const studentOnlyProcedure = t.procedure.use(
       return opts.next({
         ctx: {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          user: ctx.user as User & { Student: Student },
+          user: ctx.user as { Student: Student } & User,
         },
       })
     }
