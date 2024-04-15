@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
-import { defineComponent } from 'vue'
 import { VToolbarTitle } from 'vuetify/components'
 
-export default defineComponent({
-  methods: {
-    async handleLogout() {
-      await useUserStore().logout() // Funktioniert noch nicht !!!!
-    },
-  },
-})
+async function handleLogout() {
+  await useUserStore().logout()
+}
 </script>
 
 <template>
-  <VAppBar app>
+  <VAppBar>
     <VToolbarTitle>
       <span>FWP Anmeldung - Fakultät Informatik</span>
     </VToolbarTitle>
