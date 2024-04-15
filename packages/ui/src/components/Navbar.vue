@@ -1,48 +1,38 @@
-<template>
-  
-<v-app-bar app >
-      <v-toolbar-title>
-        <span>FWP Anmeldung - Fakultät Informatik</span>
-      </v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon size="28">mdi-account-circle</v-icon>
-        <v-tooltip activator="parent" location="bottom">
-          Administrator
-        </v-tooltip>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon size="28">mdi-help-circle-outline</v-icon>
-        <v-tooltip activator="parent" location="bottom">
-          Hilfe
-        </v-tooltip>
-      </v-btn>
-
-      <v-btn icon @click="handleLogout"> 
-        <v-icon size="28">mdi-logout-variant</v-icon>
-        <v-tooltip activator="parent" location="bottom">
-          Logout
-        </v-tooltip>
-      </v-btn>
-
-</v-app-bar>
-  
-</template>
-
-
-<script>
-import { defineComponent } from 'vue';
-import { useUserStore } from '@/stores/UserStore';
+<script setup lang="ts">
+import { useUserStore } from '@/stores/UserStore'
+import { defineComponent } from 'vue'
+import { VToolbarTitle } from 'vuetify/components'
 
 export default defineComponent({
   methods: {
     async handleLogout() {
-      await useUserStore().logout(); // Funktioniert noch nicht !!!!
-    }
-  }
-});
+      await useUserStore().logout() // Funktioniert noch nicht !!!!
+    },
+  },
+})
 </script>
 
+<template>
+  <VAppBar app>
+    <VToolbarTitle>
+      <span>FWP Anmeldung - Fakultät Informatik</span>
+    </VToolbarTitle>
+
+    <VSpacer />
+
+    <VBtn icon>
+      <VIcon size="28">mdi-account-circle</VIcon>
+      <VTooltip activator="parent" location="bottom"> Administrator </VTooltip>
+    </VBtn>
+
+    <VBtn icon>
+      <VIcon size="28">mdi-help-circle-outline</VIcon>
+      <VTooltip activator="parent" location="bottom"> Hilfe </VTooltip>
+    </VBtn>
+
+    <VBtn icon @click="handleLogout">
+      <VIcon size="28">mdi-logout-variant</VIcon>
+      <VTooltip activator="parent" location="bottom"> Logout </VTooltip>
+    </VBtn>
+  </VAppBar>
+</template>
