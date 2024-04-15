@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
-import { VToolbarTitle } from 'vuetify/components'
+import { VBtn, VMenu, VToolbarTitle } from 'vuetify/components'
 
-async function handleLogout() {
-  await useUserStore().logout()
+const userStore = useUserStore()
+
+function handleLogout() {
+  void userStore.logout()
 }
 </script>
 
@@ -16,18 +18,30 @@ async function handleLogout() {
     <VSpacer />
 
     <VBtn icon>
-      <VIcon size="28">mdi-account-circle</VIcon>
-      <VTooltip activator="parent" location="bottom"> Administrator </VTooltip>
-    </VBtn>
-
-    <VBtn icon>
       <VIcon size="28">mdi-help-circle-outline</VIcon>
       <VTooltip activator="parent" location="bottom"> Hilfe </VTooltip>
     </VBtn>
 
-    <VBtn icon @click="handleLogout">
-      <VIcon size="28">mdi-logout-variant</VIcon>
-      <VTooltip activator="parent" location="bottom"> Logout </VTooltip>
+    <template v-if="userStore.user">
+      <VBtn>
+        {{ userStore.user?.name }}
+        <VIcon size="28">mdi-account-circle</VIcon>
+      </VBtn>
+
+      <VBtn @click="handleLogout">
+        <VIcon size="28">mdi-logout-variant</VIcon>
+        <VTooltip activator="parent" location="bottom"> Logout </VTooltip>
+      </VBtn>
+    </template>
+    <VBtn v-else>
+      <VIcon size="28">mdi-login-variant</VIcon>
+      <VTooltip activator="parent" location="bottom"> Login </VTooltip>
+
+      <VMenu :close-on-content-click="false" activator="parent">
+        <template #default="{ isActive }">
+          <LoginDialog v-if="isActive" />
+        </template>
+      </VMenu>
     </VBtn>
   </VAppBar>
 </template>

@@ -66,7 +66,7 @@ async function login() {
 </script>
 
 <template>
-  <VCard>
+  <VCard class="login-dialog-host">
     <VCardTitle>Login</VCardTitle>
     <VCardText>
       <VForm v-if="!twoFANeeded" @submit="login">
@@ -74,6 +74,7 @@ async function login() {
           v-model="username"
           :error="!!error"
           :label="t('username')"
+          autofocus
           required
           @update:model-value="error = undefined"
         />
@@ -111,6 +112,12 @@ async function login() {
     </VCardActions>
   </VCard>
 </template>
+
+<style scoped lang="scss">
+.login-dialog-host {
+  min-width: 20rem;
+}
+</style>
 
 <i18n lang="yaml">
 en:
