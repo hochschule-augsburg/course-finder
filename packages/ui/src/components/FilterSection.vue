@@ -27,7 +27,9 @@ function getRangeChipLabel(filter: RangeFilter) {
     <VTextField
       v-model:model-value="search"
       :on-click:clear="filtersStore.resetSearch"
+      bg-color="#f9f9f9"
       class="mx-3"
+      color="#ff266d"
       label="Search"
       prepend-inner-icon="mdi-magnify"
       type="text"

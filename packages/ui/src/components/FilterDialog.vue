@@ -26,6 +26,7 @@ function resetFilters() {
             :max="rangeFilter.max"
             :min="rangeFilter.min"
             class="mt-2 mx-3"
+            color="#F06292"
             step="1"
             strict
             thumb-label

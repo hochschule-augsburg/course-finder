@@ -23,7 +23,7 @@ const { locale } = useI18n()
           <VContainer class="ma-0">
             <VRow no-gutters>
               <VCol :class="{ 'title-ellipsis': !expanded }" cols="5">
-                <strong>
+                <strong class="v-card-title">
                   {{ locale === 'de' ? subject.title.de : subject.title.en }}
                 </strong>
               </VCol>
@@ -54,7 +54,7 @@ const { locale } = useI18n()
               <VCol v-else> Irregulär </VCol>
             </VRow>
             <VRow no-gutters>
-              <VCol cols="5">
+              <VCol class="v-card-subtitle" cols="5">
                 {{ subject.allLecturers.join(', ') }}
               </VCol>
               <VCol cols="3"> {{ subject.creditPoints }} CP </VCol>
