@@ -6,7 +6,7 @@ on:
     paths:
       - packages/docs/**
 
-  workflow_dispatch: true
+  workflow_dispatch:
 
 permissions:
   contents: read
