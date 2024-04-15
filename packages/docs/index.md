@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: "Subject Enrollment"
-  text: "No description for now"
+  name: 'Subject Enrollment'
+  text: 'No description for now'
   tagline: My great project tagline
   actions:
     - theme: brand
@@ -19,7 +19,4 @@ features:
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
   - title: Feature B
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-
