@@ -24,22 +24,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
-        working-directory: ./packages/docs
         with:
           version: 8
           run_install: |
-            - args: [--frozen-lockfile, --strict-peer-dependencies]
+            - cwd: ./packages/docs
+              args: [--frozen-lockfile, --strict-peer-dependencies]
       - name: Setup Pages
-        working-directory: ./packages/docs
         uses: actions/configure-pages@v4
       - name: Build with VitePress
-        working-directory: ./packages/docs
-        run: pnpm run docs:build
+        run: pnpm run -C ./packages/docs docs:build
       - name: Upload artifact
-        working-directory: ./packages/docs
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: ./packages/docs/.vitepress/dist
 
   deploy:
     environment:
