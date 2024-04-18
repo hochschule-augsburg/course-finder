@@ -11,20 +11,26 @@ const showSubjectDialog = defineModel<boolean>()
   <VDialog v-model:model-value="showSubjectDialog" max-width="750">
     <VCard v-if="subject" class="pa-2">
       <VCardTitle>
-        <strong>{{ subject.name }}</strong>
+        <strong>{{ subject.title.de }}</strong>
         -
-        {{ subject.prof }}
+        {{
+          subject.Lecturers.map((e) => e.name).join(', ') +
+          (subject.externLecturers.length
+            ? ' Extern: ' + subject.externLecturers.join(', ')
+            : '')
+        }}
       </VCardTitle>
       <VCardText>
         <VContainer class="pa-0 pb-3 px-3">
           <VRow align="center">
             <VCol class="pl-1" cols="2.5">
-              <strong>{{ subject.sws }} SWS</strong>
+              <strong>{{ subject.semesterHours }} SWS</strong>
             </VCol>
             <VCol class="pl-1" cols="2.5">
-              <strong>{{ subject.cp }} CP</strong>
+              <strong>{{ subject.creditPoints }} CP</strong>
             </VCol>
             <VCol align="end" cols="7">
+              <!-- @vue-ignore todo for later -->
               <VBtn :href="subject.moduleMan"> Modulhandbuch </VBtn>
             </VCol>
           </VRow>

@@ -11,9 +11,9 @@ const enrollmentStore = useEnrollmentStore()
       <p>Sollten wir woanders platzieren</p>
       <p
         v-for="subject in enrollmentStore.selectedSubjects"
-        :key="subject.name"
+        :key="subject.moduleCode"
       >
-        {{ subject.name }}
+        {{ subject.title.de }}
       </p>
     </VCardText>
   </VCard>

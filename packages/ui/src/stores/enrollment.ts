@@ -1,7 +1,10 @@
+import type { EnrollPhase } from '@api/prisma/PrismaTypes'
+import type { CourseExtended } from '@api/routes/course/CourseRoutes'
+
+import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import dummySubjects from './dummySubjects.json'
 import { useFiltersStore } from './filters'
 
 export type Meeting = {
@@ -11,26 +14,15 @@ export type Meeting = {
 
 // TODO: `?` instead of `null`
 export type Subject = {
-  cp: number
-  description: string
-  id: string
-  info: string
-  maxTnm: number
-  meetings: Meeting[] | null
-  minTnm: number
-  moduleMan: string
-  name: string
-  prof: string
-  selected: boolean
-  sws: number
-  weekly: Meeting | null
-}
+  selected?: boolean
+} & CourseExtended
 
 export type SubjectProp = keyof Subject
 
 export const useEnrollmentStore = defineStore('enrollment', () => {
   const filtersStore = useFiltersStore()
-  const subjects = ref<Subject[]>(dummySubjects)
+  const currentPhase = ref<EnrollPhase>()
+  const subjects = ref<Subject[]>([])
   const selectedSubjects = computed(() =>
     subjects.value.filter((s) => s.selected),
   )
@@ -46,10 +38,20 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     // TODO: api.enroll(selectedSubjects)? Algorithmus?
   }
 
+  void init()
   return {
     enroll,
     filteredSubjects,
     selectedSubjects,
     subjects,
+  }
+
+  async function init() {
+    currentPhase.value = await trpc.course.getCurrentPhase.query()
+    if (currentPhase.value) {
+      subjects.value = await trpc.course.getOfferedCourses.query({
+        phaseId: currentPhase.value.id,
+      })
+    }
   }
 })

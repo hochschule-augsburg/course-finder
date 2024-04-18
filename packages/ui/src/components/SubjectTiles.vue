@@ -8,30 +8,34 @@ const enrollmentStore = useEnrollmentStore()
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 
-function openSubjectDialog(name: string) {
-  selectedSubject.value = enrollmentStore.subjects.find((s) => s.name === name)
+function openSubjectDialog(moduleCode: string) {
+  selectedSubject.value = enrollmentStore.subjects.find(
+    (s) => s.moduleCode === moduleCode,
+  )
   showSubjectDialog.value = true
 }
 </script>
 
 <template>
-  <!-- TODO: replace use subject.id as key instead of name -->
   <div>
     <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
     <VContainer>
       <VRow justify="center">
         <VCol
           v-for="subject in enrollmentStore.filteredSubjects"
-          :key="subject.name"
+          :key="subject.moduleCode"
           cols="auto"
         >
           <VCard
-            :subtitle="subject.prof"
-            :title="subject.name"
+            :subtitle="
+              subject.Lecturers.map((e) => e.name).join(', ') +
+              subject.externLecturers.join(', ')
+            "
+            :title="subject.title.de /*todo i18n */"
             height="200"
             width="300"
             hover
-            @click="openSubjectDialog(subject.name)"
+            @click="openSubjectDialog(subject.moduleCode)"
           >
             <template #append>
               <VCheckbox v-model="subject.selected" @click.stop />
@@ -40,26 +44,40 @@ function openSubjectDialog(name: string) {
               <VRow align="end" justify="end" style="height: 7rem">
                 <VCol cols="auto" style="text-align: end">
                   <p>
-                    <strong>{{ subject.cp }} CP</strong>
+                    <strong>{{ subject.creditPoints }} CP</strong>
                   </p>
                   <p>
-                    <strong>{{ subject.sws }} SWS</strong>
+                    <strong>{{ subject.semesterHours }} SWS</strong>
                   </p>
-                  <p v-if="subject.weekly">
-                    {{
-                      new Date(subject.weekly.from).toLocaleDateString([], {
-                        weekday: 'long',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      }) +
-                      ' - ' +
-                      new Date(subject.weekly.to).toLocaleTimeString([], {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })
-                    }}
+                  <p
+                    v-if="subject.offeredCourse.appointments.type === 'weekly'"
+                  >
+                    <template
+                      v-for="(date, i) in subject.offeredCourse.appointments
+                        .dates"
+                      :key="i"
+                    >
+                      {{
+                        date.from.toLocaleDateString([], {
+                          weekday: 'long',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        }) +
+                        ' - ' +
+                        date.to.toLocaleTimeString([], {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })
+                      }}<br />
+                    </template>
                   </p>
-                  <p v-else-if="subject.meetings">Blockveranstaltung</p>
+                  <p
+                    v-else-if="
+                      subject.offeredCourse.appointments.type === 'block'
+                    "
+                  >
+                    Blockveranstaltung
+                  </p>
                   <p v-else>na</p>
                 </VCol>
               </VRow>

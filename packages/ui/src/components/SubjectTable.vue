@@ -8,7 +8,7 @@ const enrollmentStore = useEnrollmentStore()
   <VExpansionPanels class="mx-1 my-4" variant="popout">
     <VExpansionPanel
       v-for="subject in enrollmentStore.filteredSubjects"
-      :key="subject.name"
+      :key="subject.moduleCode"
     >
       <VExpansionPanelTitle>
         <template #default="{ expanded }">
@@ -21,36 +21,67 @@ const enrollmentStore = useEnrollmentStore()
           <VContainer class="ma-0">
             <VRow no-gutters>
               <VCol :class="{ 'title-ellipsis': !expanded }" cols="5">
-                <strong> {{ subject.name }}</strong>
+                <strong> {{ subject.title.de }}</strong>
               </VCol>
-              <VCol cols="3"> {{ subject.sws }} SWS </VCol>
-              <VCol v-if="subject.weekly" cols="4">
-                {{
-                  new Date(subject.weekly.from).toLocaleDateString([], {
-                    weekday: 'long',
-                  })
-                }}
+              <VCol cols="3"> {{ subject.semesterHours }} SWS </VCol>
+              <VCol
+                v-if="subject.offeredCourse.appointments.type === 'weekly'"
+                cols="4"
+              >
+                <template
+                  v-for="(date, i) in subject.offeredCourse.appointments.dates"
+                  :key="i"
+                >
+                  <span class="pa8">
+                    {{
+                      date.from.toLocaleDateString([], {
+                        weekday: 'long',
+                      })
+                    }}
+                    <br />
+                  </span>
+                </template>
               </VCol>
-              <VCol v-else-if="subject.meetings"> Blockv. </VCol>
+              <VCol
+                v-else-if="subject.offeredCourse.appointments.type === 'block'"
+              >
+                Blockv.
+              </VCol>
               <VCol v-else> na </VCol>
             </VRow>
             <VRow no-gutters>
               <VCol cols="5">
-                {{ subject.prof }}
-              </VCol>
-              <VCol cols="3"> {{ subject.cp }} CP </VCol>
-              <VCol v-if="subject.weekly" cols="4">
                 {{
-                  new Date(subject.weekly.from).toLocaleTimeString([], {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  }) +
-                  ' - ' +
-                  new Date(subject.weekly.to).toLocaleTimeString([], {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })
+                  subject.Lecturers.map((e) => e.name).join(', ') +
+                  (subject.externLecturers.length
+                    ? ' Extern: ' + subject.externLecturers.join(', ')
+                    : '')
                 }}
+              </VCol>
+              <VCol cols="3"> {{ subject.creditPoints }} CP </VCol>
+              <VCol
+                v-if="subject.offeredCourse.appointments.type === 'weekly'"
+                cols="5"
+              >
+                <template
+                  v-for="(date, i) in subject.offeredCourse.appointments.dates"
+                  :key="i"
+                >
+                  <span>
+                    {{
+                      date.from.toLocaleTimeString([], {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                      }) +
+                      ' - ' +
+                      date.from.toLocaleTimeString([], {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                      })
+                    }}
+                    <br />
+                  </span>
+                </template>
               </VCol>
             </VRow>
           </VContainer>
@@ -61,6 +92,7 @@ const enrollmentStore = useEnrollmentStore()
           <SubjectDetails :subject="subject" />
           <VRow class="my-3">
             <VIcon>mdi-book</VIcon>
+            <!-- @vue-ignore todo -->
             <a :href="subject.moduleMan" target="_blank">
               Modulhandbuch, S. x
             </a>

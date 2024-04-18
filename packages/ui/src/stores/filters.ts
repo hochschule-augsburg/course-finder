@@ -31,8 +31,12 @@ export const useFiltersStore = defineStore('filters', () => {
       filterFn: (subjects, options) =>
         subjects.filter((s) => {
           if (
-            !!(s.weekly && options[0].selected) ||
-            (s.meetings && options[1].selected)
+            !!(
+              s.offeredCourse.appointments.type === 'weekly' &&
+              options[0].selected
+            ) ||
+            (s.offeredCourse.appointments.type === 'block' &&
+              options[1].selected)
           ) {
             return true
           }
@@ -47,16 +51,18 @@ export const useFiltersStore = defineStore('filters', () => {
     {
       filterFn: (subjects, options) =>
         subjects.filter((s) => {
-          if (s.weekly) {
-            const weekDay: number | undefined =
-              new Date(s.weekly.from).getDay() - 1
-            return weekDay && options[weekDay].selected
+          if (s.offeredCourse.appointments.type === 'weekly') {
+            return s.offeredCourse.appointments.dates.some(
+              (d) => options[d.from.getDay()].selected,
+            )
           }
-          if (s.meetings) {
-            return s.meetings.some((m) => {
+          if (
+            ['block', 'irregular'].includes(s.offeredCourse.appointments.type)
+          ) {
+            return s.offeredCourse.appointments.dates.some((m) => {
               // getDay() => 0 = Sunday
-              const start = new Date(m.from).getDay() - 1
-              const end = new Date(m.to).getDay() - 1
+              const start = m.from.getDay() - 1
+              const end = m.to.getDay() - 1
               for (let i = start; i <= end; i++) {
                 if (options[i].selected) {
                   return true
@@ -84,7 +90,9 @@ export const useFiltersStore = defineStore('filters', () => {
   const rangeFilters = ref<RangeFilter[]>([
     {
       filterFn: (subjects, range) =>
-        subjects.filter((s) => s.sws >= range[0] && s.sws <= range[1]),
+        subjects.filter(
+          (s) => s.semesterHours >= range[0] && s.semesterHours <= range[1],
+        ),
       max: 20,
       min: 0,
       name: 'SWS',
@@ -92,7 +100,9 @@ export const useFiltersStore = defineStore('filters', () => {
     },
     {
       filterFn: (subjects, range) =>
-        subjects.filter((s) => s.cp >= range[0] && s.cp <= range[1]),
+        subjects.filter(
+          (s) => s.creditPoints >= range[0] && s.creditPoints <= range[1],
+        ),
       max: 20,
       min: 0,
       name: 'CP',
@@ -100,7 +110,11 @@ export const useFiltersStore = defineStore('filters', () => {
     },
     {
       filterFn: (subjects, range) =>
-        subjects.filter((s) => s.maxTnm >= range[0] && s.maxTnm <= range[1]),
+        subjects.filter(
+          (s) =>
+            (s.offeredCourse.minParticipants ?? 0) >= range[0] &&
+            (s.offeredCourse.maxParticipants ?? 100) <= range[1],
+        ),
       max: 100,
       min: 0,
       name: 'Teilnehmer',
@@ -144,9 +158,13 @@ export const useFiltersStore = defineStore('filters', () => {
     }
     return subjects.filter(
       (s) =>
-        s.name.toLowerCase().includes(searchString) ||
-        s.prof.toLowerCase().includes(searchString) ||
-        s.description.toLowerCase().includes(searchString),
+        //todo current locale or fallback
+        !!s.title.de?.toLowerCase().includes(searchString) ||
+        s.Lecturers.some((e) =>
+          e.username.toLowerCase().includes(searchString),
+        ) ||
+        s.externLecturers.some((e) => e.toLowerCase().includes(searchString)) ||
+        !!s.description.de?.toLowerCase().includes(searchString),
     )
   }
 
