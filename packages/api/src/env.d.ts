@@ -9,8 +9,8 @@ declare global {
 
       FRONTEND_HOSTNAME?: string
 
-      // For development. Ldap and other services are mocked
-      MOCK_SERVICES?: boolean
+      // 32 characters long
+      SESSION_SECRET?: string
     }
   }
 }

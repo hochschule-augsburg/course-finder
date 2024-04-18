@@ -80,9 +80,6 @@ importers:
       fastify:
         specifier: ^4.13.0
         version: 4.26.2
-      ioc-service-container:
-        specifier: ^1.6.1
-        version: 1.6.1
       ldapts:
         specifier: ^7.0.11
         version: 7.0.11
@@ -4382,10 +4379,6 @@ packages:
       hasown: 2.0.2
       side-channel: 1.0.6
     dev: true
-
-  /ioc-service-container@1.6.1:
-    resolution: {integrity: sha512-eXWKOjYubIyi7j+O3ZeJB401h9VO9TgTqkL8vXHscQfdY+VT9ng6N/bxKRjKbk9wJVIjhUOaFLPUQZZpEdW+XA==}
-    dev: false
 
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}

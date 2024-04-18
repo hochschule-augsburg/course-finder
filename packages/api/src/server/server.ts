@@ -7,8 +7,8 @@ import fastify from 'fastify'
 import type { ServerOptions } from '../../../config'
 import type { UserExtended } from '../prisma/PrismaTypes'
 
-import { appRouter } from '../router'
-import { createContext } from '../router/context'
+import { appRouter } from '../routes/router'
+import { createContext } from './context'
 
 declare module 'fastify' {
   interface Session {
@@ -22,11 +22,12 @@ export async function createServer(opts: ServerOptions) {
   const prefix = opts.prefix
   const server = fastify({ logger: true })
 
-  await server.register(fastifyCookie, {
-    secret: 'TODO Secret 32 characters long ssssssssssssssssssssssss',
-  })
+  await server.register(fastifyCookie)
+  if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 32) {
+    throw new Error('env SESSION_SECRET is required and needs 32 characters')
+  }
   await server.register(fastifySession, {
-    secret: 'TODO Secret 32 characters long ssssssssssssssssssssssss',
+    secret: process.env.SESSION_SECRET,
   })
   await server.register(fastifyCors, {
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers

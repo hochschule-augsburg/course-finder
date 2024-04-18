@@ -1,7 +1,7 @@
-import { courseRouter } from '../domain/course/CourseRoutes'
-import { enrollRouter } from '../domain/enroll/EnrollRoutes'
-import { authRouter } from '../domain/user/UserRoutes'
+import { courseRouter } from './course/CourseRoutes'
+import { enrollRouter } from './enroll/EnrollRoutes'
 import { router } from './trpc'
+import { authRouter } from './user/UserRoutes'
 
 export const appRouter = router({
   auth: authRouter,

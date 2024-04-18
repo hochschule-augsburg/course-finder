@@ -30,13 +30,12 @@ model User {
 }
 
 model Student {
-  username      String          @id
-  User          User            @relation(fields: [username], references: [username])
-  fieldOfStudy  String
-  term          Int?
-  regNumber     String?
-  StudentPhase  StudentPhase[]
-  StudentChoice StudentChoice[]
+  username     String         @id
+  User         User           @relation(fields: [username], references: [username])
+  fieldOfStudy String
+  term         Int?
+  regNumber    String?
+  StudentPhase StudentPhase[]
 }
 
 model Prof {
@@ -64,7 +63,7 @@ model Course {
   examinationNumbers String[]
   Lecturers          Prof[]
   /// if lecturer is not in the system
-  lecturerNames      String[]
+  externLecturers    String[]
   requirements       String[]
   /// spoken language
   language           String
@@ -127,8 +126,6 @@ model StudentPhase {
 }
 
 model StudentChoice {
-  Student       Student       @relation(fields: [studentId], references: [username])
-  studentId     String
   OfferedCourse OfferedCourse @relation(fields: [moduleCode, phaseId], references: [moduleCode, phaseId])
   moduleCode    String
   phaseId       Int

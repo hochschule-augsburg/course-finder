@@ -150,10 +150,10 @@ async function main() {
         },
         examType: { content: [], for: 'all' },
         examinationNumbers: ['CHEM101-001', 'CHEM101-002'],
+        externLecturers: ['Professor 4'],
         facultyName: 'Informatik',
         language: 'English',
         learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        lecturerNames: ['Professor 4'],
         literature: ['Chemistry Book 1', 'Chemistry Book 2'],
         moduleCode: 'CHEM101',
         published: true,
@@ -172,10 +172,10 @@ async function main() {
         },
         examType: { content: [], for: 'all' },
         examinationNumbers: ['HIST101-001', 'HIST101-002'],
+        externLecturers: ['Professor 5'],
         facultyName: 'Informatik',
         language: 'English',
         learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        lecturerNames: ['Professor 5'],
         literature: ['History Book 1', 'History Book 2'],
         moduleCode: 'HIST101',
         published: true,
@@ -191,10 +191,10 @@ async function main() {
         },
         examType: { content: [], for: 'all' },
         examinationNumbers: ['PHYS101-001', 'PHYS101-002'],
+        externLecturers: ['Professor 6'],
         facultyName: 'Informatik',
         language: 'English',
         learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        lecturerNames: ['Professor 6'],
         literature: ['Physics Book 1', 'Physics Book 2'],
         moduleCode: 'PHYS101',
         published: true,
@@ -236,7 +236,7 @@ async function main() {
               to: new Date('03 October 2024 09:30').toISOString(),
             },
           ],
-          type: dateType.WEEKLY,
+          type: 'irregular',
         },
         extraInfo: 'Room A, Building 1',
         maxParticipants: 40,
@@ -264,7 +264,7 @@ async function main() {
               to: new Date('05 October 2024 09:30').toISOString(),
             },
           ],
-          type: dateType.BLOCK,
+          type: 'block',
         },
         extraInfo: 'Room B, Building 2',
         maxParticipants: 35,
@@ -292,7 +292,7 @@ async function main() {
               to: new Date('22 October 2024 15:30').toISOString(),
             },
           ],
-          type: dateType.IRREGULAR,
+          type: 'irregular',
         },
         extraInfo: 'Room C, Building 3',
         maxParticipants: 5,
@@ -312,7 +312,7 @@ async function main() {
               to: new Date('03 October 2024 09:30').toISOString(),
             },
           ],
-          type: dateType.WEEKLY,
+          type: 'weekly',
         },
         extraInfo: 'Room D, Building 4',
         maxParticipants: 50,
@@ -332,7 +332,7 @@ async function main() {
               to: new Date('03 October 2024 09:30').toISOString(),
             },
           ],
-          type: dateType.WEEKLY,
+          type: 'weekly',
         },
         extraInfo: 'Room E, Building 5',
         maxParticipants: 40,
@@ -541,16 +541,4 @@ function hashPassword(password: string, salt: string) {
     .createHash('sha256')
     .update(password + salt)
     .digest('hex')
-}
-
-/**
- * dateType refers to the recurrence of the dates.
- * Weekly: listed dates recur every week in the same times.
- * Block: listed dates are near each other.
- * Irregular: listed dates are irregular.
- */
-const dateType = {
-  BLOCK: 'block',
-  IRREGULAR: 'irregular',
-  WEEKLY: 'weekly',
 }

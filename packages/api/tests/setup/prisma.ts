@@ -3,9 +3,9 @@ import type { DeepMockProxy } from 'vitest-mock-extended'
 
 import { mockDeep, mockReset } from 'vitest-mock-extended'
 
-import { prisma } from '../../src/prisma'
+import { prisma } from '../../src/prisma/prisma'
 
-vi.mock('../../src/prisma', () => ({
+vi.mock('../../src/prisma/prisma', () => ({
   __esModule: true,
   prisma: mockDeep<PrismaClient>(),
 }))

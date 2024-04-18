@@ -6,9 +6,9 @@ import { z } from 'zod'
 
 import type { UserExtended } from '../../prisma/PrismaTypes'
 
-import { prisma } from '../../prisma'
-import { publicProcedure, router } from '../../router/trpc'
-import { authenticate } from './UserService'
+import { authenticate } from '../../domain/user/UserService'
+import { prisma } from '../../prisma/prisma'
+import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {

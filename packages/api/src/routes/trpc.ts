@@ -3,7 +3,7 @@ import type { Student, User } from '@prisma/client'
 import { TRPCError, initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 
-import type { Context } from './context'
+import type { Context } from '../server/context'
 
 import { userHasPermission } from '../domain/user/UserRoles'
 

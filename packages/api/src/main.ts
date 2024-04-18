@@ -1,9 +1,7 @@
 import { serverConfig } from '../../config'
-import { setupServices } from './domain/services'
-import { prisma } from './prisma'
-import { createServer } from './server'
+import { prisma } from './prisma/prisma'
+import { createServer } from './server/server'
 
-setupServices()
 const server = await createServer(serverConfig)
 await prisma.$connect()
 

@@ -3,8 +3,8 @@ import type { Enrollphase } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-import { prisma } from '../../prisma'
-import { router, studentOnlyProcedure } from '../../router/trpc'
+import { prisma } from '../../prisma/prisma'
+import { router, studentOnlyProcedure } from '../trpc'
 
 const enrollProcedure = studentOnlyProcedure
   .input(z.object({ phaseId: z.number() }))
