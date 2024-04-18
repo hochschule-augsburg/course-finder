@@ -230,12 +230,12 @@ async function main() {
         appointments: {
           dates: [
             {
-              endTime: new Date('02 October 2024 15:30').toISOString(),
-              startTime: new Date('02 October 2024 14:00').toISOString(),
+              from: new Date('02 October 2024 14:00').toISOString(),
+              to: new Date('02 October 2024 15:30').toISOString(),
             },
             {
-              endTime: new Date('03 October 2024 09:30').toISOString(),
-              startTime: new Date('03 October 2024 08:00').toISOString(),
+              from: new Date('03 October 2024 08:00').toISOString(),
+              to: new Date('03 October 2024 09:30').toISOString(),
             },
           ],
           type: dateType.WEEKLY,
@@ -250,20 +250,20 @@ async function main() {
         appointments: {
           dates: [
             {
-              endTime: new Date('02 October 2024 09:30').toISOString(),
-              startTime: new Date('02 October 2024 08:00').toISOString(),
+              from: new Date('02 October 2024 08:00').toISOString(),
+              to: new Date('02 October 2024 09:30').toISOString(),
             },
             {
-              endTime: new Date('03 October 2024 09:30').toISOString(),
-              startTime: new Date('03 October 2024 08:00').toISOString(),
+              from: new Date('03 October 2024 08:00').toISOString(),
+              to: new Date('03 October 2024 09:30').toISOString(),
             },
             {
-              endTime: new Date('04 October 2024 09:30').toISOString(),
-              startTime: new Date('04 October 2024 08:00').toISOString(),
+              from: new Date('04 October 2024 08:00').toISOString(),
+              to: new Date('04 October 2024 09:30').toISOString(),
             },
             {
-              endTime: new Date('05 October 2024 09:30').toISOString(),
-              startTime: new Date('05 October 2024 08:00').toISOString(),
+              from: new Date('05 October 2024 08:00').toISOString(),
+              to: new Date('05 October 2024 09:30').toISOString(),
             },
           ],
           type: dateType.BLOCK,
@@ -278,20 +278,20 @@ async function main() {
         appointments: {
           dates: [
             {
-              endTime: new Date('02 October 2024 09:30').toISOString(),
-              startTime: new Date('02 October 2024 08:00').toISOString(),
+              from: new Date('02 October 2024 08:00').toISOString(),
+              to: new Date('02 October 2024 09:30').toISOString(),
             },
             {
-              endTime: new Date('11 October 2024 11:20').toISOString(),
-              startTime: new Date('11 October 2024 09:50').toISOString(),
+              from: new Date('11 October 2024 09:50').toISOString(),
+              to: new Date('11 October 2024 11:20').toISOString(),
             },
             {
-              endTime: new Date('14 October 2024 09:30').toISOString(),
-              startTime: new Date('14 October 2024 08:00').toISOString(),
+              from: new Date('14 October 2024 08:00').toISOString(),
+              to: new Date('14 October 2024 09:30').toISOString(),
             },
             {
-              endTime: new Date('22 October 2024 15:30').toISOString(),
-              startTime: new Date('22 October 2024 14:00').toISOString(),
+              from: new Date('22 October 2024 14:00').toISOString(),
+              to: new Date('22 October 2024 15:30').toISOString(),
             },
           ],
           type: dateType.IRREGULAR,
@@ -306,12 +306,12 @@ async function main() {
         appointments: {
           dates: [
             {
-              endTime: new Date('02 October 2024 15:30').toISOString(),
-              startTime: new Date('02 October 2024 14:00').toISOString(),
+              from: new Date('02 October 2024 14:00').toISOString(),
+              to: new Date('02 October 2024 15:30').toISOString(),
             },
             {
-              endTime: new Date('03 October 2024 09:30').toISOString(),
-              startTime: new Date('03 October 2024 08:00').toISOString(),
+              from: new Date('03 October 2024 08:00').toISOString(),
+              to: new Date('03 October 2024 09:30').toISOString(),
             },
           ],
           type: dateType.WEEKLY,
@@ -326,12 +326,12 @@ async function main() {
         appointments: {
           dates: [
             {
-              endTime: new Date('02 October 2024 15:30').toISOString(),
-              startTime: new Date('02 October 2024 14:00').toISOString(),
+              from: new Date('02 October 2024 14:00').toISOString(),
+              to: new Date('02 October 2024 15:30').toISOString(),
             },
             {
-              endTime: new Date('03 October 2024 09:30').toISOString(),
-              startTime: new Date('03 October 2024 08:00').toISOString(),
+              from: new Date('03 October 2024 08:00').toISOString(),
+              to: new Date('03 October 2024 09:30').toISOString(),
             },
           ],
           type: dateType.WEEKLY,

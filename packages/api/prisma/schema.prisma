@@ -109,7 +109,7 @@ model OfferedCourse {
   maxParticipants Int?
 
   extraInfo String?
-  /// [courseAppointment]
+  /// [CourseAppointments]
   appointments    Json
 
   @@unique([phaseId, moduleCode])
