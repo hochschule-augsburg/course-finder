@@ -13,7 +13,7 @@ export type UserExtended = {
   Student?: Student | null
 } & User
 
-export type courseAppointmentsJson = {
+export type CourseAppointmentsJson = {
   dates: [from: string, to: string]
   type: string
 }
@@ -21,7 +21,7 @@ export type courseAppointmentsJson = {
 declare global {
   namespace PrismaJson {
     type I18n = I18nJson
-    type courseAppointments = courseAppointmentsJson
+    type courseAppointments = CourseAppointmentsJson
     type Auth = (
       | {
           method: 'ldap'
