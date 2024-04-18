@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import type { Faculty, Prof, Student, User } from '@prisma/client'
+import type {
+  Faculty,
+  Enrollphase as Phase,
+  Prof,
+  Student,
+  User,
+} from '@prisma/client'
 
 export type I18nJson = {
   de?: string
   en?: string
 }
+
+export type EnrollPhase = Phase
 
 export type UserExtended = {
   Faculty: Faculty | null
