@@ -58,7 +58,7 @@ function getRangeChipLabel(filter: RangeFilter) {
         {{ option.option }}
       </VChip>
       <VChip @click="showFilterDialog = true">
-        <VIcon class="text-primary" icon="mdi-filter" />
+        <VIcon icon="mdi-filter" />
       </VChip>
     </VChipGroup>
 

@@ -12,7 +12,7 @@ const { locale } = useI18n()
       v-for="subject in enrollmentStore.filteredSubjects"
       :key="subject.moduleCode"
     >
-      <VExpansionPanelTitle color="#f9f9f9">
+      <VExpansionPanelTitle class="hoverable-panel" color="#f9f9f9">
         <template #default="{ expanded }">
           <VCheckbox
             v-model="subject.selected"

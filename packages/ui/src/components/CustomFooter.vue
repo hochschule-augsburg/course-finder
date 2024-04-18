@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <VFooter class="bg-grey-lighten-1 custom-footer" color="grey">
+  <VFooter class="bg-grey-lighten-1 custom-footer" color="#d3d3d3">
     <VRow justify="center" no-gutters>
       <VBtn
         class="mx-2"

@@ -10,18 +10,21 @@
 // Import Vuetify settings
 @use 'vuetify/settings' with (
   $color-pack: false,
-);
+); 
 
 // custom styles
-.v-card-title {
-    color: #ff266d;
-} 
-.title-ellipsis {
+.text-primary {
+    color: black !important;
+}
+.hoverable-card:hover .v-card-title {
     color: #ff266d;
 }
-.v-icon {
+.hoverable-panel:hover .title-ellipsis {
     color: #ff266d;
 }
-.v-card-title {
-    padding: 0;
+.v-icon:hover {
+    color: #ff266d;
+}
+.v-btn:hover {
+    color: #ff266d;
 }

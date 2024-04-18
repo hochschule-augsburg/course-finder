@@ -32,6 +32,7 @@ function openSubjectDialog(moduleCode: string) {
           <VCard
             :subtitle="subject.allLecturers.join(', ')"
             :title="locale === 'de' ? subject.title.de : subject.title.en"
+            class="hoverable-card"
             color="#f9f9f9"
             height="200"
             width="300"
