@@ -5,6 +5,7 @@ import { dirname, resolve } from 'node:path'
 import { URL, fileURLToPath } from 'node:url'
 import ViteFonts from 'unplugin-fonts/vite'
 // Plugins
+import VueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import VueRouter from 'unplugin-vue-router/vite'
 // Utilities
@@ -43,6 +44,8 @@ export default defineConfig({
         ],
       },
     }),
+
+    VueDevTools(),
   ],
   resolve: {
     alias: {
