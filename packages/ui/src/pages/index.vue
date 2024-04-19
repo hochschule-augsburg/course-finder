@@ -9,8 +9,8 @@ const view = ref('grid')
     <EnrollmentOverview />
     <FilterSection />
     <VBtnToggle v-model="view" class="px-3 d-flex justify-end" mandatory>
-      <VBtn icon="mdi-format-list-bulleted" value="list" />
-      <VBtn icon="mdi-dots-grid" value="grid" />
+      <VBtn icon="mdi-format-list-bulleted" text="list" value="list" />
+      <VBtn icon="mdi-dots-grid" text="grid" value="grid" />
     </VBtnToggle>
     <SubjectTiles v-if="view === 'grid'" />
     <SubjectTable v-if="view === 'list'" />

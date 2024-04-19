@@ -17,23 +17,23 @@ function handleLogout() {
 
     <VSpacer />
 
-    <VBtn icon>
+    <VBtn text="help" icon>
       <VIcon size="28">mdi-help-circle-outline</VIcon>
       <VTooltip activator="parent" location="bottom"> Hilfe </VTooltip>
     </VBtn>
 
     <template v-if="userStore.user">
-      <VBtn>
+      <VBtn text="user">
         {{ userStore.user?.name }}
         <VIcon size="28">mdi-account-circle</VIcon>
       </VBtn>
 
-      <VBtn @click="handleLogout">
+      <VBtn text="logout" @click="handleLogout">
         <VIcon size="28">mdi-logout-variant</VIcon>
         <VTooltip activator="parent" location="bottom"> Logout </VTooltip>
       </VBtn>
     </template>
-    <VBtn v-else>
+    <VBtn v-else text="login">
       <VIcon size="28">mdi-login-variant</VIcon>
       <VTooltip activator="parent" location="bottom"> Login </VTooltip>
 
