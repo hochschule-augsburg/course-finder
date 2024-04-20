@@ -51,12 +51,7 @@ const enrollmentStore = useEnrollmentStore()
             </VRow>
             <VRow no-gutters>
               <VCol cols="5">
-                {{
-                  subject.Lecturers.map((e) => e.name).join(', ') +
-                  (subject.externLecturers.length
-                    ? ' Extern: ' + subject.externLecturers.join(', ')
-                    : '')
-                }}
+                {{ subject.allLecturers.join(', ') }}
               </VCol>
               <VCol cols="3"> {{ subject.creditPoints }} CP </VCol>
               <VCol

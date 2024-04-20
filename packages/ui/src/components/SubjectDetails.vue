@@ -2,15 +2,10 @@
 import type { Subject } from '@/stores/enrollment'
 
 import VuePdfEmbed from 'vue-pdf-embed'
-// optional styles
 import 'vue-pdf-embed/dist/style/annotationLayer.css'
-// essential styles
 import 'vue-pdf-embed/dist/style/index.css'
 import 'vue-pdf-embed/dist/style/textLayer.css'
-import { VCarouselItem } from 'vuetify/components'
 
-// either URL, Base64, binary, or document proxy
-const pdfSource = '/WPFs/WPF_32_2.30_Fullstack-Webentwicklung.pdf'
 const { subject } = defineProps<{
   subject: Subject
 }>()
@@ -139,7 +134,7 @@ const { subject } = defineProps<{
 
       <VCarouselItem>
         <VuePdfEmbed
-          :source="pdfSource"
+          :source="`/WPFs/${subject.moduleCode}.pdf`"
           style="height: 25rem; overflow-y: scroll"
           annotation-layer
           text-layer
@@ -148,11 +143,3 @@ const { subject } = defineProps<{
     </VCarousel>
   </div>
 </template>
-
-<style scoped lang="scss">
-pre {
-  font-family: inherit;
-  white-space: pre-wrap;
-  text-wrap: wrap;
-}
-</style>
