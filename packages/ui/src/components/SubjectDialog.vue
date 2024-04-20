@@ -20,24 +20,14 @@ const showSubjectDialog = defineModel<boolean>()
             : '')
         }}
       </VCardTitle>
-      <VCardText>
-        <VContainer class="pa-0 pb-3 px-3">
-          <VRow align="center">
-            <VCol class="pl-1" cols="2.5">
-              <strong>{{ subject.semesterHours }} SWS</strong>
-            </VCol>
-            <VCol class="pl-1" cols="2.5">
-              <strong>{{ subject.creditPoints }} CP</strong>
-            </VCol>
-            <VCol align="end" cols="7">
-              <!-- @vue-ignore todo for later -->
-              <VBtn :href="subject.moduleMan"> Modulhandbuch </VBtn>
-            </VCol>
-          </VRow>
-          <SubjectDetails :subject="subject" />
-        </VContainer>
+      <VCardText class="pa-0 pb-3 px-3">
+        <SubjectDetails :subject="subject" />
       </VCardText>
       <VCardActions class="mx-4">
+        <VBtn
+          href="https://cloud.hs-augsburg.de/s/e6bYJTCP4JQ5RXj"
+          text="Modulhandbuch"
+        />
         <VSpacer />
         <VBtn
           color="primary"
