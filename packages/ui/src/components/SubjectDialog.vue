@@ -13,12 +13,7 @@ const showSubjectDialog = defineModel<boolean>()
       <VCardTitle>
         <strong>{{ subject.title.de }}</strong>
         -
-        {{
-          subject.Lecturers.map((e) => e.name).join(', ') +
-          (subject.externLecturers.length
-            ? ' Extern: ' + subject.externLecturers.join(', ')
-            : '')
-        }}
+        {{ subject.allLecturers.join(', ') }}
       </VCardTitle>
       <VCardText class="pa-0 pb-3 px-3">
         <SubjectDetails :subject="subject" />

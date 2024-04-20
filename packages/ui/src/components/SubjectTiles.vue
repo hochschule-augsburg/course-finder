@@ -27,10 +27,7 @@ function openSubjectDialog(moduleCode: string) {
           cols="auto"
         >
           <VCard
-            :subtitle="
-              subject.Lecturers.map((e) => e.name).join(', ') +
-              subject.externLecturers.join(', ')
-            "
+            :subtitle="subject.allLecturers.join(', ')"
             :title="subject.title.de /*todo i18n */"
             height="200"
             width="300"

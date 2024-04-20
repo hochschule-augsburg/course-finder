@@ -14,10 +14,9 @@ export type Meeting = {
 
 // TODO: `?` instead of `null`
 export type Subject = {
+  allLecturers: string[]
   selected?: boolean
 } & CourseExtended
-
-export type SubjectProp = keyof Subject
 
 export const useEnrollmentStore = defineStore('enrollment', () => {
   const filtersStore = useFiltersStore()
@@ -49,8 +48,18 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   async function init() {
     currentPhase.value = await trpc.course.getCurrentPhase.query()
     if (currentPhase.value) {
-      subjects.value = await trpc.course.getOfferedCourses.query({
-        phaseId: currentPhase.value.id,
+      const courses: CourseExtended[] =
+        await trpc.course.getOfferedCourses.query({
+          phaseId: currentPhase.value.id,
+        })
+      subjects.value = courses.map((c) => {
+        return {
+          ...c,
+          allLecturers: [
+            ...c.externLecturers,
+            ...c.Lecturers.map((l) => l.name),
+          ],
+        }
       })
     }
   }
