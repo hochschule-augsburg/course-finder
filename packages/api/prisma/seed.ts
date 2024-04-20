@@ -2,6 +2,9 @@
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
 
+import dummyCourses from './dummyCourses.json'
+import dummyOfferedCourses from './dummyOfferedCourses.json'
+
 const prisma = new PrismaClient()
 
 main()
@@ -534,6 +537,9 @@ async function main() {
       },
     ],
   })
+
+  await prisma.course.createMany({ data: dummyCourses })
+  await prisma.offeredCourse.createMany({ data: dummyOfferedCourses })
 }
 
 function hashPassword(password: string, salt: string) {
