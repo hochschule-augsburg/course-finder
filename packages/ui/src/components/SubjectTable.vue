@@ -45,9 +45,9 @@ const enrollmentStore = useEnrollmentStore()
               <VCol
                 v-else-if="subject.offeredCourse.appointments.type === 'block'"
               >
-                Blockv.
+                Blockveranstaltung
               </VCol>
-              <VCol v-else> na </VCol>
+              <VCol v-else> Irregulär </VCol>
             </VRow>
             <VRow no-gutters>
               <VCol cols="5">
@@ -87,17 +87,8 @@ const enrollmentStore = useEnrollmentStore()
           </VContainer>
         </template>
       </VExpansionPanelTitle>
-      <VExpansionPanelText>
-        <VContainer class="mx-2">
-          <SubjectDetails :subject="subject" />
-          <VRow class="my-3">
-            <VIcon>mdi-book</VIcon>
-            <!-- @vue-ignore todo -->
-            <a :href="subject.moduleMan" target="_blank">
-              Modulhandbuch, S. x
-            </a>
-          </VRow>
-        </VContainer>
+      <VExpansionPanelText class="pa-0 pb-3 px-3">
+        <SubjectDetails :subject="subject" />
       </VExpansionPanelText>
     </VExpansionPanel>
   </VExpansionPanels>

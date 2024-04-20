@@ -78,7 +78,7 @@ function openSubjectDialog(moduleCode: string) {
                   >
                     Blockveranstaltung
                   </p>
-                  <p v-else>na</p>
+                  <p v-else>Irregulär</p>
                 </VCol>
               </VRow>
             </VCardText>

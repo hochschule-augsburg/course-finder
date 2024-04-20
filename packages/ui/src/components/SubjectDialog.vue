@@ -24,10 +24,6 @@ const showSubjectDialog = defineModel<boolean>()
         <SubjectDetails :subject="subject" />
       </VCardText>
       <VCardActions class="mx-4">
-        <VBtn
-          href="https://cloud.hs-augsburg.de/s/e6bYJTCP4JQ5RXj"
-          text="Modulhandbuch"
-        />
         <VSpacer />
         <VBtn
           color="primary"

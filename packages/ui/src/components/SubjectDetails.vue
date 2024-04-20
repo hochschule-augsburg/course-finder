@@ -86,14 +86,15 @@ const { subject } = defineProps<{
             >
               {{
                 date.from.toLocaleDateString([], {
-                  weekday: 'long',
-                  hour: 'numeric',
-                  minute: '2-digit',
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: '2-digit',
                 }) +
                 ' - ' +
-                date.to.toLocaleTimeString([], {
-                  hour: 'numeric',
-                  minute: '2-digit',
+                date.to.toLocaleDateString([], {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: '2-digit',
                 })
               }}
             </p>
@@ -109,14 +110,15 @@ const { subject } = defineProps<{
             >
               {{
                 date.from.toLocaleDateString([], {
-                  weekday: 'long',
-                  hour: 'numeric',
-                  minute: '2-digit',
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: '2-digit',
                 }) +
                 ' - ' +
-                date.to.toLocaleTimeString([], {
-                  hour: 'numeric',
-                  minute: '2-digit',
+                date.to.toLocaleDateString([], {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: '2-digit',
                 })
               }}
             </p>
