@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/enrollment'
 
+import { useI18n } from 'vue-i18n'
+
 defineProps<{
   subject?: Subject
 }>()
 const showSubjectDialog = defineModel<boolean>()
+const { locale } = useI18n()
 </script>
 
 <template>
   <VDialog v-model:model-value="showSubjectDialog" max-width="750">
     <VCard v-if="subject" class="pa-2">
       <VCardTitle>
-        <strong>{{ subject.title.de }}</strong>
+        <strong>
+          {{ locale === 'de' ? subject.title.de : subject.title.en }}
+        </strong>
         -
         {{ subject.allLecturers.join(', ') }}
       </VCardTitle>

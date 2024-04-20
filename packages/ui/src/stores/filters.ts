@@ -158,10 +158,11 @@ export const useFiltersStore = defineStore('filters', () => {
     }
     return subjects.filter(
       (s) =>
-        //todo current locale or fallback
         !!s.title.de?.toLowerCase().includes(searchString) ||
+        !!s.title.en?.toLowerCase().includes(searchString) ||
         s.allLecturers.some((e) => e.toLowerCase().includes(searchString)) ||
-        !!s.description.de?.toLowerCase().includes(searchString),
+        !!s.description.de?.toLowerCase().includes(searchString) ||
+        !!s.description.en?.toLowerCase().includes(searchString),
     )
   }
 

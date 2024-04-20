@@ -3,6 +3,9 @@ import type { Subject } from '@/stores/enrollment'
 
 import { useEnrollmentStore } from '@/stores/enrollment'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
 const showSubjectDialog = ref<boolean>(false)
@@ -28,7 +31,7 @@ function openSubjectDialog(moduleCode: string) {
         >
           <VCard
             :subtitle="subject.allLecturers.join(', ')"
-            :title="subject.title.de /*todo i18n */"
+            :title="locale === 'de' ? subject.title.de : subject.title.en"
             height="200"
             width="300"
             hover

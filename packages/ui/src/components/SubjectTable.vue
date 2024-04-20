@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/enrollment'
+import { useI18n } from 'vue-i18n'
 
 const enrollmentStore = useEnrollmentStore()
+const { locale } = useI18n()
 </script>
 
 <template>
-  <VExpansionPanels class="mx-1 my-4" variant="popout">
+  <VExpansionPanels class="px-1 py-4" variant="popout">
     <VExpansionPanel
       v-for="subject in enrollmentStore.filteredSubjects"
       :key="subject.moduleCode"
@@ -21,7 +23,9 @@ const enrollmentStore = useEnrollmentStore()
           <VContainer class="ma-0">
             <VRow no-gutters>
               <VCol :class="{ 'title-ellipsis': !expanded }" cols="5">
-                <strong> {{ subject.title.de }}</strong>
+                <strong>
+                  {{ locale === 'de' ? subject.title.de : subject.title.en }}
+                </strong>
               </VCol>
               <VCol cols="3"> {{ subject.semesterHours }} SWS </VCol>
               <VCol
@@ -32,7 +36,7 @@ const enrollmentStore = useEnrollmentStore()
                   v-for="(date, i) in subject.offeredCourse.appointments.dates"
                   :key="i"
                 >
-                  <span class="pa8">
+                  <span>
                     {{
                       date.from.toLocaleDateString([], {
                         weekday: 'long',
@@ -56,7 +60,7 @@ const enrollmentStore = useEnrollmentStore()
               <VCol cols="3"> {{ subject.creditPoints }} CP </VCol>
               <VCol
                 v-if="subject.offeredCourse.appointments.type === 'weekly'"
-                cols="5"
+                cols="4"
               >
                 <template
                   v-for="(date, i) in subject.offeredCourse.appointments.dates"

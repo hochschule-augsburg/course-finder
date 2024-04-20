@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/enrollment'
+import { useI18n } from 'vue-i18n'
 import { VCardText } from 'vuetify/components'
 
 const enrollmentStore = useEnrollmentStore()
+const { locale } = useI18n()
 </script>
 
 <template>
@@ -13,7 +15,7 @@ const enrollmentStore = useEnrollmentStore()
         v-for="subject in enrollmentStore.selectedSubjects"
         :key="subject.moduleCode"
       >
-        {{ subject.title.de }}
+        {{ locale === 'de' ? subject.title.de : subject.title.en }}
       </p>
     </VCardText>
   </VCard>

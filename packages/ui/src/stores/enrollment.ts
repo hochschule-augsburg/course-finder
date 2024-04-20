@@ -12,7 +12,6 @@ export type Meeting = {
   to: string
 }
 
-// TODO: `?` instead of `null`
 export type Subject = {
   allLecturers: string[]
   selected?: boolean
@@ -59,6 +58,14 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
             ...c.externLecturers,
             ...c.Lecturers.map((l) => l.name),
           ],
+        }
+      })
+      subjects.value.forEach((s) => {
+        if (!s.title.de) {
+          s.title.de = s.title.en
+        }
+        if (!s.title.en) {
+          s.title.en = s.title.de
         }
       })
     }
