@@ -109,6 +109,8 @@ model StudentPhase {
   phaseId       Int
   StudentChoice StudentChoice[]
 
+  creditsNeeded Int
+
   @@id([username, phaseId])
 }
 

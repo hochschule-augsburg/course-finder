@@ -6,6 +6,9 @@ import { z } from 'zod'
 import { prisma } from '../../prisma/prisma'
 import { router, studentOnlyProcedure } from '../trpc'
 
+const pointsZodType = z.number().int().gte(0).lte(1000)
+const creditsZodType = z.number().int().gte(0).lte(1000)
+
 const enrollProcedure = studentOnlyProcedure
   .input(z.object({ phaseId: z.number() }))
   .use(async (opts) => {
@@ -25,8 +28,12 @@ export const enrollRouter = router({
   bulk: enrollProcedure
     .input(
       z.object({
+        creditsNeeded: creditsZodType,
         data: z.array(
-          z.object({ moduleCode: z.string(), points: z.number().int().safe() }),
+          z.object({
+            moduleCode: z.string(),
+            points: pointsZodType,
+          }),
         ),
       }),
     )
@@ -51,6 +58,7 @@ export const enrollRouter = router({
               })),
             },
           },
+          creditsNeeded: input.creditsNeeded,
           phaseId: ctx.phase.id,
           username: ctx.user.username,
         },
@@ -80,6 +88,7 @@ export const enrollRouter = router({
   upsert: enrollProcedure
     .input(
       z.object({
+        creditsNeeded: creditsZodType,
         moduleCode: z.string(),
         points: z.number().int().safe(),
       }),
@@ -88,6 +97,14 @@ export const enrollRouter = router({
       checkIfPhaseIsOpen(ctx.phase)
       await prisma.studentPhase.upsert({
         create: {
+          StudentChoice: {
+            create: {
+              lastChange: new Date(),
+              moduleCode: input.moduleCode,
+              points: input.points,
+            },
+          },
+          creditsNeeded: input.creditsNeeded,
           phaseId: input.phaseId,
           username: ctx.user.Student.username,
         },
@@ -110,6 +127,7 @@ export const enrollRouter = router({
               },
             },
           },
+          creditsNeeded: input.creditsNeeded,
         },
         where: {
           username_phaseId: {

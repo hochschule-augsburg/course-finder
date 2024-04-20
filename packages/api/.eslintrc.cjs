@@ -5,7 +5,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
   ],
-  ignorePatterns: ['playground.ts', '**/*.json', "prisma/tools/"],
+  ignorePatterns: ['playground.ts', '**/*.json', 'prisma/tools/'],
   parserOptions: {
     project: './tsconfig.json',
   },
@@ -57,6 +57,7 @@ module.exports = {
     // overrides for standard
     ...{
       'no-void': 'off',
+      'no-useless-constructor': 'off',
     },
   },
   overrides: [
@@ -64,6 +65,7 @@ module.exports = {
       files: ['tests/**/*.ts'],
       rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/consistent-type-assertions': 'off',
       },
     },
   ],

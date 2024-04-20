@@ -344,10 +344,10 @@ async function main() {
 
   await prisma.studentPhase.createMany({
     data: [
-      { phaseId: phase.id, username: 'singhraj' },
-      { phaseId: phase.id, username: 'mitroska' },
-      { phaseId: phase.id, username: 'seka' },
-      { phaseId: phase.id, username: 'stud1' },
+      { creditsNeeded: 10, phaseId: phase.id, username: 'singhraj' },
+      { creditsNeeded: 10, phaseId: phase.id, username: 'mitroska' },
+      { creditsNeeded: 10, phaseId: phase.id, username: 'seka' },
+      { creditsNeeded: 10, phaseId: phase.id, username: 'stud1' },
     ],
   })
 
