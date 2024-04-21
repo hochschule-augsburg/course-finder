@@ -5,7 +5,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
   ],
-  ignorePatterns: ['playground.ts', '**/*.json'],
+  ignorePatterns: ['playground.ts', '**/*.json', "prisma/tools/"],
   parserOptions: {
     project: './tsconfig.json',
   },
