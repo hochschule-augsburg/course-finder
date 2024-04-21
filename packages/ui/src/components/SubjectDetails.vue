@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/enrollment'
 
-import VuePdfEmbed from 'vue-pdf-embed'
+import VuePdfEmbed, { useVuePdfEmbed } from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/style/annotationLayer.css'
 import 'vue-pdf-embed/dist/style/index.css'
 import 'vue-pdf-embed/dist/style/textLayer.css'
@@ -9,13 +9,16 @@ import 'vue-pdf-embed/dist/style/textLayer.css'
 const { subject } = defineProps<{
   subject: Subject
 }>()
+
+const { doc } = useVuePdfEmbed({
+  source: `/WPFs/${subject.moduleCode}.pdf`,
+})
 </script>
 
 <template>
   <div>
     <VCarousel
       :show-arrows="false"
-      class="pa-2"
       color="black"
       height="400"
       hide-delimiter-background
@@ -134,7 +137,7 @@ const { subject } = defineProps<{
 
       <VCarouselItem>
         <VuePdfEmbed
-          :source="`/WPFs/${subject.moduleCode}.pdf`"
+          :source="doc"
           style="height: 25rem; overflow-y: scroll"
           annotation-layer
           text-layer
