@@ -539,6 +539,7 @@ async function main() {
   })
 
   await prisma.course.createMany({ data: dummyCourses })
+  // @ts-expect-error ingore for now
   await prisma.offeredCourse.createMany({ data: dummyOfferedCourses })
 }
 
