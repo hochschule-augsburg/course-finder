@@ -12,7 +12,7 @@ const { locale } = useI18n()
 
 <template>
   <VDialog v-model:model-value="showSubjectDialog" max-width="750">
-    <VCard v-if="subject" class="pa-2" color="#f9f9f9">
+    <VCard v-if="subject" class="pa-2" color="rgb(var(--v-theme-secondary))">
       <VCardTitle>
         <strong>
           {{ locale === 'de' ? subject.title.de : subject.title.en }}

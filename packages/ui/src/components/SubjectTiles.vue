@@ -33,7 +33,7 @@ function openSubjectDialog(moduleCode: string) {
             :subtitle="subject.allLecturers.join(', ')"
             :title="locale === 'de' ? subject.title.de : subject.title.en"
             class="hoverable-card"
-            color="#f9f9f9"
+            color="rgb(var(--v-theme-secondary))"
             height="200"
             width="300"
             hover

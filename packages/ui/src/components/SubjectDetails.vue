@@ -19,7 +19,7 @@ const { doc } = useVuePdfEmbed({
   <div>
     <VCarousel
       :show-arrows="false"
-      color="black"
+      color="#000000"
       height="400"
       hide-delimiter-background
     >
