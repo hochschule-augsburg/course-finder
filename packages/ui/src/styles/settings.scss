@@ -13,18 +13,17 @@
 ); 
 
 // custom styles
-.text-primary {
-    color: black !important;
-}
+$primary-color: #ff266d;
+
 .hoverable-card:hover .v-card-title {
-    color: #ff266d;
+    color: $primary-color;
 }
 .hoverable-panel:hover .title-ellipsis {
-    color: #ff266d;
+    color: $primary-color;
 }
 .v-icon:hover {
-    color: #ff266d;
+    color: $primary-color;
 }
 .v-btn:hover {
-    color: #ff266d;
+    color: $primary-color;
 }
