@@ -50,11 +50,11 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   void init()
   return {
     enroll,
+    enrolledCourses,
     filteredSubjects,
     maxPoints,
     selectedSubjects,
     subjects,
-    enrolledCourses
   }
 
   async function init() {

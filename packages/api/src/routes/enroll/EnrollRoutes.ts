@@ -32,7 +32,7 @@ export const enrollRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
-      prisma.studentPhase.delete({
+      await prisma.studentPhase.delete({
         where: {
           username_phaseId: {
             phaseId: ctx.phase.id,
@@ -41,7 +41,7 @@ export const enrollRouter = router({
         },
       })
 
-      prisma.studentPhase.create({
+      await prisma.studentPhase.create({
         data: {
           StudentChoice: {
             createMany: {

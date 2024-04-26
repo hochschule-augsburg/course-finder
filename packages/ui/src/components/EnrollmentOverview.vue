@@ -47,12 +47,7 @@ const pointInputRules = [
   (i: string) => /^[1-9]\d*$/.test(i) || 'Input must be an integer', // check is input is valid int > 0
 ]
 
-import { useTheme } from 'vuetify'
-
-const theme = useTheme()
-
 async function validate() {
-  theme.global.name = theme.global.current.dark ? 'light' : 'dark'
   const t = await form.value?.validate()
 
   if (!t?.valid) {
