@@ -129,7 +129,7 @@ model StudentChoice {
   OfferedCourse OfferedCourse @relation(fields: [moduleCode, phaseId], references: [moduleCode, phaseId])
   moduleCode    String
   phaseId       Int
-  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
+  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId], onDelete: Cascade)
   username      String
 
   points     Int
