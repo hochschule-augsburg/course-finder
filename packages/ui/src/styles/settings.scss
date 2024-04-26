@@ -10,7 +10,12 @@
 // Import Vuetify settings
 @use 'vuetify/settings' with (
   $color-pack: false,
-); 
+);
+
+:root {
+    --dialog-width: 400px;
+    --floating-margin: 1.5rem;
+};
 
 // custom styles
 .hoverable-card:hover .v-card-title {

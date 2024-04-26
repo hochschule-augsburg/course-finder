@@ -14,6 +14,7 @@ export type Meeting = {
 
 export type Subject = {
   allLecturers: string[]
+  points: number
   selected?: boolean
 } & CourseExtended
 
@@ -34,6 +35,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
 
   function enroll() {
     // TODO: api.enroll(selectedSubjects)? Algorithmus?
+    trpc.enroll.upsert
   }
 
   void init()
@@ -58,6 +60,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
             ...c.externLecturers,
             ...c.Lecturers.map((l) => l.name),
           ],
+          points: 0,
         }
       })
       subjects.value.forEach((s) => {
