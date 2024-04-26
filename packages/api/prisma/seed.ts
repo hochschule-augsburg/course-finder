@@ -215,7 +215,8 @@ async function main() {
         de: 'Beschreibung der Anmeldephase...',
         en: 'Description of enrollment phase...',
       },
-      end: new Date('2024-03-15'),
+      end: new Date('2024-05-15'),
+      id: 1,
       start: new Date('2024-02-28'),
       title: {
         de: 'Anmeldung zum Sommersemester 2024',
@@ -356,7 +357,7 @@ async function main() {
         email: 'singhraj@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Singh Raj',
-        type: 'student',
+        type: 'Student',
         username: 'singhraj',
       },
       {
@@ -368,7 +369,7 @@ async function main() {
         email: 'mitroska@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Mitroska',
-        type: 'student',
+        type: 'Student',
         username: 'mitroska',
       },
       {
@@ -380,7 +381,7 @@ async function main() {
         email: 'seka@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Seka',
-        type: 'student',
+        type: 'Student',
         username: 'seka',
       },
       {
@@ -393,7 +394,7 @@ async function main() {
         email: 'stud1@example.com',
         facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Stud1',
-        type: 'student',
+        type: 'Student',
         username: 'stud1',
       },
     ],

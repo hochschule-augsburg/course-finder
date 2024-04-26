@@ -33,7 +33,7 @@ export const studentOnlyProcedure = t.procedure.use(
 )
 export const studentProcedure = t.procedure.use(async function isAuthed(opts) {
   const { ctx } = opts
-  if (userHasPermission(ctx.user, 'Student')) {
+  if (!userHasPermission(ctx.user, 'Student')) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
   return opts.next({
