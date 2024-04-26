@@ -101,13 +101,11 @@ async function login() {
       <VSpacer />
       <VBtn
         :disabled="!isValid"
+        :loading="pending"
         color="primary"
         @click="!twoFANeeded ? login() : twoFALogin()"
       >
         {{ t('login') }}
-        <template v-if="pending" #prepend>
-          <VProgressCircular indeterminate />
-        </template>
       </VBtn>
     </VCardActions>
   </VCard>

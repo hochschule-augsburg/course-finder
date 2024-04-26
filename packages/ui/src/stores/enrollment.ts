@@ -21,10 +21,13 @@ export type Subject = {
 export const useEnrollmentStore = defineStore('enrollment', () => {
   const filtersStore = useFiltersStore()
   const currentPhase = ref<EnrollPhase>()
+  const maxPoints = ref(1000)
   const subjects = ref<Subject[]>([])
   const selectedSubjects = computed(() =>
     subjects.value.filter((s) => s.selected),
   )
+  // TODO: type?
+  const enrolledCourses = ref([])
 
   const filteredSubjects = computed(() => {
     let filtered: Subject[] = [...subjects.value]
@@ -34,16 +37,24 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   })
 
   function enroll() {
-    // TODO: api.enroll(selectedSubjects)? Algorithmus?
-    trpc.enroll.upsert
+    if (currentPhase.value) {
+      return trpc.enroll.bulk.mutate({
+        data: selectedSubjects.value.map((s) => {
+          return { moduleCode: s.moduleCode, points: s.points }
+        }),
+        phaseId: currentPhase.value.id,
+      })
+    }
   }
 
   void init()
   return {
     enroll,
     filteredSubjects,
+    maxPoints,
     selectedSubjects,
     subjects,
+    enrolledCourses
   }
 
   async function init() {
@@ -70,6 +81,9 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
         if (!s.title.en) {
           s.title.en = s.title.de
         }
+      })
+      enrolledCourses.value = await trpc.enroll.list.query({
+        phaseId: currentPhase.value.id,
       })
     }
   }

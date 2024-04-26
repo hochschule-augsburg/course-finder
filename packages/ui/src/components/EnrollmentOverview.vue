@@ -11,6 +11,7 @@ import '../styles/settings.scss'
 const enrollmentStore = useEnrollmentStore()
 
 const form = ref<VForm | undefined>(undefined)
+const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 const enrollView = defineModel<boolean>()
@@ -46,12 +47,31 @@ const pointInputRules = [
   (i: string) => /^[1-9]\d*$/.test(i) || 'Input must be an integer', // check is input is valid int > 0
 ]
 
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
 async function validate() {
+  theme.global.name = theme.global.current.dark ? 'light' : 'dark'
   const t = await form.value?.validate()
 
-  if (t?.valid) {
-    alert('Form is valid')
+  if (!t?.valid) {
+    return
   }
+
+  if (
+    enrollmentStore.selectedSubjects.reduce((a, c) => a + c.points, 0) !==
+    enrollmentStore.maxPoints
+  ) {
+    form.value?.items.forEach((i) => i.errorMessages.push('maxPoints = 1000'))
+    return
+  }
+
+  loading.value = true
+  await enrollmentStore.enroll()
+  loading.value = false
+  // TODO check status code
+  enrollView.value = false
 }
 
 function reset() {
@@ -83,7 +103,7 @@ function reset() {
       <VForm ref="form">
         <VTextField
           v-for="subject in enrollmentStore.selectedSubjects"
-          v-model="subject.points"
+          v-model.number="subject.points"
           :key="subject.moduleCode"
           :label="subject.title.de"
           :rules="pointInputRules"
@@ -97,7 +117,7 @@ function reset() {
         <VRow align="center" class="mt-2 px-3">
           <VBtn icon="mdi-restore" size="small" @click="reset" />
           <VSpacer />
-          <VBtn text="Anmelden" @click="validate" />
+          <VBtn :loading="loading" text="Anmelden" @click="validate" />
         </VRow>
       </VForm>
     </VSheet>
