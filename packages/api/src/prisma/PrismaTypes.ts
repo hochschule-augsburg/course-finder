@@ -5,6 +5,7 @@ import type {
   Enrollphase as Phase,
   Prof,
   Student,
+  StudentChoice,
   User,
 } from '@prisma/client'
 
@@ -14,6 +15,8 @@ export type I18nJson = {
 }
 
 export type EnrollPhase = Phase
+
+export type EnrolledCourse = StudentChoice
 
 export type UserExtended = {
   Faculty: Faculty | null

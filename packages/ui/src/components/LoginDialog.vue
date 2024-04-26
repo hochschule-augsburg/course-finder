@@ -2,7 +2,7 @@
 import { useUserStore } from '@/stores/UserStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VForm, VProgressCircular, VTextField } from 'vuetify/components'
+import { VBtn, VForm, VTextField } from 'vuetify/components'
 
 const emit = defineEmits<{
   success: []

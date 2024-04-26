@@ -1,4 +1,7 @@
-import type { EnrollPhase } from '@api/prisma/PrismaTypes'
+import type {
+  EnrolledCourse as _EnrolledCourse,
+  EnrollPhase,
+} from '@api/prisma/PrismaTypes'
 import type { CourseExtended } from '@api/routes/course/CourseRoutes'
 
 import { trpc } from '@/api/trpc'
@@ -18,6 +21,13 @@ export type Subject = {
   selected?: boolean
 } & CourseExtended
 
+export type EnrolledCourse = _EnrolledCourse & {
+  title?: {
+    de?: string
+    en?: string
+  }
+}
+
 export const useEnrollmentStore = defineStore('enrollment', () => {
   const filtersStore = useFiltersStore()
   const currentPhase = ref<EnrollPhase>()
@@ -26,8 +36,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   const selectedSubjects = computed(() =>
     subjects.value.filter((s) => s.selected),
   )
-  // TODO: type?
-  const enrolledCourses = ref([])
+  const enrolledCourses = ref<EnrolledCourse[]>([])
 
   const filteredSubjects = computed(() => {
     let filtered: Subject[] = [...subjects.value]
@@ -49,9 +58,11 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
 
   void init()
   return {
+    currentPhase,
     enroll,
     enrolledCourses,
     filteredSubjects,
+    init,
     maxPoints,
     selectedSubjects,
     subjects,
@@ -60,10 +71,24 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   async function init() {
     currentPhase.value = await trpc.course.getCurrentPhase.query()
     if (currentPhase.value) {
+      const enrolledCourses_tmp: _EnrolledCourse[] =
+        await trpc.enroll.list.query({
+          phaseId: currentPhase.value.id,
+        })
+
       const courses: CourseExtended[] =
         await trpc.course.getOfferedCourses.query({
           phaseId: currentPhase.value.id,
         })
+
+      enrolledCourses.value = enrolledCourses_tmp.map((c) => {
+        return {
+          ...c,
+          title: subjects.value.find((s) => s.moduleCode === c.moduleCode)
+            ?.title,
+        }
+      })
+
       subjects.value = courses.map((c) => {
         return {
           ...c,
@@ -72,6 +97,9 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
             ...c.Lecturers.map((l) => l.name),
           ],
           points: 0,
+          selected: enrolledCourses.value.some(
+            (ec) => ec.moduleCode === c.moduleCode,
+          ),
         }
       })
       subjects.value.forEach((s) => {
@@ -81,9 +109,6 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
         if (!s.title.en) {
           s.title.en = s.title.de
         }
-      })
-      enrolledCourses.value = await trpc.enroll.list.query({
-        phaseId: currentPhase.value.id,
       })
     }
   }

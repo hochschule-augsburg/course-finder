@@ -9,16 +9,9 @@ const enrollView = ref(false)
 
 <template>
   <div style="height: 100%">
-    <!-- TODO: use titles -->
-    <div>
-      <p v-for="s in enrollmentStore.enrolledCourses">
-        {{ `${s.moduleCode} (${s.points})` }}
-      </p>
-    </div>
-    <div v-if="enrollView" style="height: 100%">
-      <EnrollmentOverview v-model="enrollView" />
-    </div>
-    <div v-else>
+    <EnrollmentOverview :enroll-view="enrollView" />
+    <EnrollmentForm v-model="enrollView" />
+    <div v-if="!enrollView">
       <FilterSection />
       <VBtnToggle
         v-model="subjectView"
