@@ -13,11 +13,12 @@ const { locale } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
 
+const enrollView = defineModel<boolean>()
+
 const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
-const enrollView = defineModel<boolean>()
 
 function openSubjectDialog(moduleCode: string) {
   selectedSubject.value = enrollmentStore.subjects.find(
@@ -47,9 +48,9 @@ const pointInputRules = [
 ]
 
 async function validate() {
-  const t = await form.value?.validate()
+  const formValidation = await form.value?.validate()
 
-  if (!t?.valid) {
+  if (!formValidation?.valid) {
     return
   }
 
@@ -63,10 +64,15 @@ async function validate() {
   }
 
   loading.value = true
-  await enrollmentStore.enroll()
-  await enrollmentStore.init()
+
+  try {
+    await enrollmentStore.enroll()
+    await enrollmentStore.init()
+  } catch (error) {
+    console.log(error)
+  }
+
   loading.value = false
-  // TODO check status code
   enrollView.value = false
 }
 
@@ -78,13 +84,10 @@ function reset() {
 <template>
   <div
     v-if="enrollView"
-    class="d-flex flex-column align-center justify-center"
-    style="height: 100%"
+    class="d-flex flex-column align-center justify-center container"
   >
-    <div
-      class="d-flex align-start"
-      style="width: var(--dialog-width); max-width: var(--dialog-max-width)"
-    >
+    <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
+    <div class="d-flex align-start formHead">
       <VBtn
         prepend-icon="mdi-arrow-left"
         text="zurück"
@@ -92,7 +95,6 @@ function reset() {
         @click="back"
       />
     </div>
-    <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
     <VSheet
       class="pa-5"
       color="rgb(var(--v-theme-secondary))"
@@ -124,3 +126,13 @@ function reset() {
     </VSheet>
   </div>
 </template>
+
+<style scoped lang="scss">
+.container {
+  height: 100%;
+}
+.formHead {
+  width: var(--dialog-width);
+  max-width: var(--dialog-max-width);
+}
+</style>

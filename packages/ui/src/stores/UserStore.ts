@@ -4,11 +4,8 @@ import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import { useEnrollmentStore } from './enrollment'
-
 export const useUserStore = defineStore('user', () => {
   const user = ref<UserExtended>()
-  const enrollmentStore = useEnrollmentStore()
   void init()
   return { login, logout, user }
 
@@ -23,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
     if (typeof result === 'object') {
       user.value = result
     }
-    await enrollmentStore.init()
+
     return result
   }
 
@@ -35,7 +32,7 @@ export const useUserStore = defineStore('user', () => {
     if (typeof result === 'object') {
       user.value = result
     }
-    await enrollmentStore.init()
+
     return result
   }
 

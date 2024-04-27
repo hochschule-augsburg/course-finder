@@ -3,12 +3,12 @@ import { useEnrollmentStore } from '@/stores/enrollment'
 import { ref } from 'vue'
 
 const enrollmentStore = useEnrollmentStore()
-const subjectView = ref('grid')
+const subjectView = ref<'grid' | 'list'>('grid')
 const enrollView = ref(false)
 </script>
 
 <template>
-  <div style="height: 100%">
+  <div class="container">
     <EnrollmentOverview :enroll-view="enrollView" />
     <EnrollmentForm v-model="enrollView" />
     <div v-if="!enrollView">
@@ -34,6 +34,9 @@ const enrollView = ref(false)
 </template>
 
 <style scoped lang="scss">
+.container {
+  height: 100%;
+}
 .floating {
   position: fixed;
   z-index: 1;

@@ -6,8 +6,9 @@ import type { CourseExtended } from '@api/routes/course/CourseRoutes'
 
 import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
+import { useUserStore } from './UserStore'
 import { useFiltersStore } from './filters'
 
 export type Meeting = {
@@ -29,6 +30,7 @@ export type EnrolledCourse = _EnrolledCourse & {
 }
 
 export const useEnrollmentStore = defineStore('enrollment', () => {
+  const userStore = useUserStore()
   const filtersStore = useFiltersStore()
   const currentPhase = ref<EnrollPhase>()
   const maxPoints = ref(1000)
@@ -43,6 +45,10 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     filtered = filtersStore.applyFilters(filtered)
     filtered = filtersStore.searchSubjects(filtered)
     return filtered
+  })
+
+  watch(userStore, async () => {
+    await init()
   })
 
   function enroll() {

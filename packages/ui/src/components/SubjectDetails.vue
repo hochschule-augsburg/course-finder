@@ -140,18 +140,13 @@ const fullscreen = ref(false)
 
       <VCarouselItem>
         <VBtn
-          style="
-            position: absolute;
-            top: var(--floating-margin);
-            right: var(--floating-margin);
-            z-index: 3;
-          "
+          class="floating"
           icon="mdi-fullscreen"
           @click="fullscreen = true"
         />
         <VuePdfEmbed
           :source="doc"
-          style="height: 100%; overflow-y: scroll"
+          class="pdfView"
           annotation-layer
           text-layer
         />
@@ -159,22 +154,38 @@ const fullscreen = ref(false)
     </VCarousel>
     <VDialog v-model:model-value="fullscreen" fullscreen>
       <VBtn
-        style="
-          position: absolute;
-          top: var(--floating-margin);
-          right: var(--floating-margin);
-          z-index: 3;
-        "
+        class="floating"
         icon="mdi-fullscreen-exit"
         @click="fullscreen = false"
       />
       <!-- TODO: try reusing doc (doesn`t load pdf second time) -->
       <VuePdfEmbed
         :source="`/WPFs/${subject.moduleCode}.pdf`"
-        style="height: 100%; overflow-y: scroll"
+        class="pdfView"
         annotation-layer
         text-layer
       />
     </VDialog>
   </div>
 </template>
+
+<style scoped lang="scss">
+.floating {
+  position: absolute;
+  top: var(--floating-margin);
+  right: var(--floating-margin);
+  z-index: 3;
+}
+.pdfView {
+  height: 100%;
+  overflow-y: scroll;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2500;
+  height: 100vh;
+  width: 100vw;
+}
+</style>
