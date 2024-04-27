@@ -44,21 +44,12 @@ const onDrop = (event: DragEvent) => {
                 @drop="onDrop($event)"
                 @dragenter.prevent
                 @dragover.prevent >
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Course</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="subject in tableOne" :key="subject.moduleCode" class="drag-el"
-                            draggable="true"
-                            @dragstart="startDrag($event, subject)">
-                                <td>{{ subject.title.en }}</td>
-                            </tr>   
-                        </tbody>
-                         
-                    </table>
+                <div>Course</div> 
+                    <div v-for="subject in tableOne" :key="subject.moduleCode" class="drag-el"
+                    draggable="true"
+                    @dragstart="startDrag($event, subject)" >
+                        {{ subject.title.en }}   
+                    </div>
                 </div>
             </VCol>
             <VCol>
@@ -67,7 +58,8 @@ const onDrop = (event: DragEvent) => {
                 @dragenter.prevent
                 @dragover.prevent >
                     <div v-for="subject in tableTwo" :key="subject.moduleCode" class="drag-el"
-                    draggable="true">
+                    draggable="true"
+                    @dragstart="startDrag($event, subject)" >
                         {{ subject.title.en }}
                     </div>   
                 </div>
