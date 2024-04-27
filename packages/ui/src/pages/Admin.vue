@@ -7,7 +7,7 @@ import { VBtn } from 'vuetify/components'
     <EnrollmentPhase />
     <FilterSection />
     <br />
-    <VBtn text="Create enrollment phase" />
+    <VBtn text="Create enrollment phase" to="/createEnrollment"/>
     <AdminSubjectList />
   </div>
 </template>
