@@ -96,7 +96,9 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
             ...c.externLecturers,
             ...c.Lecturers.map((l) => l.name),
           ],
-          points: 0,
+          points:
+            enrolledCourses.value.find((ec) => ec.moduleCode === c.moduleCode)
+              ?.points ?? 0,
           selected: enrolledCourses.value.some(
             (ec) => ec.moduleCode === c.moduleCode,
           ),

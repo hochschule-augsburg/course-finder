@@ -44,7 +44,7 @@ export const studentProcedure = t.procedure.use(async function isAuthed(opts) {
 })
 export const profProcedure = t.procedure.use(async function isAuthed(opts) {
   const { ctx } = opts
-  if (userHasPermission(ctx.user, 'Professor')) {
+  if (!userHasPermission(ctx.user, 'Professor')) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
   return opts.next({
@@ -55,7 +55,7 @@ export const profProcedure = t.procedure.use(async function isAuthed(opts) {
 })
 export const adminProcedure = t.procedure.use(async function isAuthed(opts) {
   const { ctx } = opts
-  if (userHasPermission(ctx.user, 'Admin')) {
+  if (!userHasPermission(ctx.user, 'Admin')) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
   return opts.next({

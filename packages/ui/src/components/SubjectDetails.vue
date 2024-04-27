@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/enrollment'
 
+import { ref } from 'vue'
 import VuePdfEmbed, { useVuePdfEmbed } from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/style/annotationLayer.css'
 import 'vue-pdf-embed/dist/style/index.css'
@@ -13,6 +14,8 @@ const { subject } = defineProps<{
 const { doc } = useVuePdfEmbed({
   source: `/WPFs/${subject.moduleCode}.pdf`,
 })
+
+const fullscreen = ref(false)
 </script>
 
 <template>
@@ -20,14 +23,14 @@ const { doc } = useVuePdfEmbed({
     <VCarousel
       :show-arrows="false"
       color="#000000"
-      height="400"
+      height="60vh"
       hide-delimiter-background
     >
       <VCarouselItem>
         <VSheet
           class="px-4 py-6 overflow-y-auto"
           color="grey-lighten-4"
-          height="400"
+          height="100%"
           rounded="lg"
         >
           <div class="mb-1 d-flex align-end">
@@ -136,13 +139,42 @@ const { doc } = useVuePdfEmbed({
       </VCarouselItem>
 
       <VCarouselItem>
+        <VBtn
+          style="
+            position: absolute;
+            top: var(--floating-margin);
+            right: var(--floating-margin);
+            z-index: 3;
+          "
+          icon="mdi-fullscreen"
+          @click="fullscreen = true"
+        />
         <VuePdfEmbed
           :source="doc"
-          style="height: 25rem; overflow-y: scroll"
+          style="height: 100%; overflow-y: scroll"
           annotation-layer
           text-layer
         />
       </VCarouselItem>
     </VCarousel>
+    <VDialog v-model:model-value="fullscreen" fullscreen>
+      <VBtn
+        style="
+          position: absolute;
+          top: var(--floating-margin);
+          right: var(--floating-margin);
+          z-index: 3;
+        "
+        icon="mdi-fullscreen-exit"
+        @click="fullscreen = false"
+      />
+      <!-- TODO: try reusing doc (doesn`t load pdf second time) -->
+      <VuePdfEmbed
+        :source="`/WPFs/${subject.moduleCode}.pdf`"
+        style="height: 100%; overflow-y: scroll"
+        annotation-layer
+        text-layer
+      />
+    </VDialog>
   </div>
 </template>

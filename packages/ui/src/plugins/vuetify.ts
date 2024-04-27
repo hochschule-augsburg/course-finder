@@ -19,10 +19,19 @@ const customLightTheme = {
   dark: false,
 }
 
+const customDarkTheme = {
+  colors: {
+    primary: '#ff266d',
+    secondary: '#1E1E1E',
+  },
+  dark: true,
+}
+
 export default createVuetify({
   theme: {
-    defaultTheme: 'customLightTheme',
+    defaultTheme: 'customDarkTheme',
     themes: {
+      customDarkTheme,
       customLightTheme,
     },
   },
