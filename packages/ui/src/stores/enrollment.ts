@@ -42,6 +42,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     filteredSubjects,
     selectedSubjects,
     subjects,
+    currentPhase
   }
 
   async function init() {
