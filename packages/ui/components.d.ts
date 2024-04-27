@@ -10,6 +10,7 @@ declare module 'vue' {
     AdminSubjectList: typeof import('./src/components/AdminSubjectList.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/CustomNavbar.vue')['default']
+    EnrollmentForm: typeof import('./src/components/EnrollmentForm.vue')['default']
     EnrollmentOverview: typeof import('./src/components/EnrollmentOverview.vue')['default']
     EnrollmentPhase: typeof import('./src/components/EnrollmentPhase.vue')['default']
     FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
