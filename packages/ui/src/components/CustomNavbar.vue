@@ -17,6 +17,11 @@ function handleLogout() {
 
     <VSpacer />
 
+    <VBtn text="Admin" icon to="/admin">
+      <VIcon size="28">mdi-cog-outline</VIcon>
+      <VTooltip activator="parent" location="bottom"> Admin </VTooltip>
+    </VBtn>
+
     <VBtn text="help" icon>
       <VIcon size="28">mdi-help-circle-outline</VIcon>
       <VTooltip activator="parent" location="bottom"> Hilfe </VTooltip>
