@@ -8,6 +8,12 @@ const newEnrollmentData = reactive({
     description: '',
     offeredCourses: [],
 })
+
+function createEnrollment() {
+    //TODO: Create new object in backend
+    console.log(newEnrollmentData)
+    console.log("saved")
+}
 </script>
 
 <template>
@@ -48,7 +54,12 @@ const newEnrollmentData = reactive({
                     label="Description"
                     required>
                     </VTextarea>
-                    <VBtn justify="center" text="Create enrollment"></VBtn>
+                    <VBtn @click="createEnrollment" justify="center" text="Create enrollment"></VBtn>
+                </VCol>
+            </VRow>
+            <VRow justify="center">
+                <VCol cols=10>
+                    <OfferedCourses />
                 </VCol>
             </VRow>
         </VContainer>
