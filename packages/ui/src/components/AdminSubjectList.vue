@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/enrollment'
-import { VBtn, VTable } from 'vuetify/components'
 
 const enrollmentStore = useEnrollmentStore();
 const subjects = enrollmentStore.filteredSubjects;
