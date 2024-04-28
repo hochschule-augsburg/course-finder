@@ -3,7 +3,7 @@ import { VCol, VContainer, VRow } from 'vuetify/components'
 </script>
 
 <template>
-  <VContainer>
+  <VContainer fluid>
     <VRow justify="center">
       <VCol cols="10">
         <EnrollmentPhase />
