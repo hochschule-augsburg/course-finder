@@ -22,8 +22,6 @@ function saveSelectedSubjects() {
 
 <template>
   <div>
-    <br />
-    <h2>Available subjects</h2>
     <VTable>
       <thead>
         <tr>

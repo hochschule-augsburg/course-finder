@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
-import { VBtn, VMenu, VToolbarTitle } from 'vuetify/components'
 
 const userStore = useUserStore()
 
@@ -12,12 +11,14 @@ function handleLogout() {
 <template>
   <VAppBar>
     <VToolbarTitle>
-      <span>FWP Anmeldung - Fakultät Informatik</span>
+      <RouterLink class="toolbar-link" to="/">
+        <span>FWP Anmeldung - Fakultät Informatik</span>
+      </RouterLink>
     </VToolbarTitle>
 
     <VSpacer />
 
-    <VBtn text="Admin" icon to="/admin">
+    <VBtn text="Admin" to="/admin" icon>
       <VIcon size="28">mdi-cog-outline</VIcon>
       <VTooltip activator="parent" location="bottom"> Admin </VTooltip>
     </VBtn>
