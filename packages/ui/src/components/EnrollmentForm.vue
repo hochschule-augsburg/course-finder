@@ -70,9 +70,10 @@ async function validate() {
     await enrollmentStore.init()
   } catch (error) {
     console.log(error)
+  } finally {
+    loading.value = false
   }
 
-  loading.value = false
   enrollView.value = false
 }
 
