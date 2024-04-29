@@ -17,7 +17,7 @@ export type Subject = {
   selected?: boolean
 } & CourseExtended
 
-export const useEnrollmentStore = defineStore('enrollment', () => {
+export const useAdminStore = defineStore('AdminStore', () => {
   const filtersStore = useFiltersStore()
   const currentPhase = ref<EnrollPhase>()
   const subjects = ref<Subject[]>([])

@@ -14,7 +14,6 @@ import 'vuetify/styles'
 const customLightTheme = {
   colors: {
     primary: '#ff266d',
-    secondary: '#f9f9f9',
   },
   dark: false,
 }
