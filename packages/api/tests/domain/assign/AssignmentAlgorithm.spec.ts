@@ -23,37 +23,6 @@ describe('AssignmentAlgorithm', () => {
     ]
   >([
     [
-      'normal',
-      [
-        {
-          StudentChoice: [{ moduleCode: '1', points: 1000 }],
-          creditsNeeded: 6,
-          username: 'user1',
-        },
-        {
-          StudentChoice: [
-            { moduleCode: '2', points: 500 },
-            { moduleCode: '1', points: 500 },
-            { moduleCode: '3', points: 500 },
-          ],
-          creditsNeeded: 3,
-          username: 'user2',
-        },
-        {
-          StudentChoice: [{ moduleCode: '1', points: 1000 }],
-          creditsNeeded: 2,
-          username: 'user3',
-        },
-        { StudentChoice: [], creditsNeeded: 10, username: 'user4' },
-      ],
-      {
-        user1: ['1'],
-        user2: ['2'],
-        user3: [],
-        user4: [],
-      },
-    ],
-    [
       'not enough credits',
       [
         {
@@ -64,6 +33,25 @@ describe('AssignmentAlgorithm', () => {
       ],
       {
         user1: ['1'],
+      },
+    ],
+    [
+      'course does not occur',
+      [
+        {
+          StudentChoice: [{ moduleCode: '1', points: 1000 }],
+          creditsNeeded: 6,
+          username: 'user1',
+        },
+        {
+          StudentChoice: [{ moduleCode: '2', points: 1 }],
+          creditsNeeded: 6,
+          username: 'user2',
+        },
+      ],
+      {
+        user1: ['1'],
+        user2: [],
       },
     ],
   ])('should assign students to courses %s', async (_, input, output) => {

@@ -1,6 +1,12 @@
+import type { OfferedCourse } from '@prisma/client'
+
 import { prisma } from '../../prisma/prisma'
 import { AssignmentStudentController } from './AssignmentControllers'
 import { normalizeChoices, shuffleFirsts } from './AssignmentUtils'
+
+type AssignCourse = {
+  studentCount: number
+} & OfferedCourse
 
 /**
  * @returns Record<username, moduleCode[]>
@@ -13,17 +19,17 @@ export async function assign(phaseId: number) {
     throw new Error()
   }
 
-  const offeredCourses = (
-    await prisma.offeredCourse.findMany({
-      select: {
-        Course: { select: { creditPoints: true, title: true } },
-        maxParticipants: true,
-        minParticipants: true,
-        moduleCode: true,
-      },
-      where: { phaseId },
-    })
-  ).map((e) => ({ ...e, studentCount: 0 }))
+  const offeredCourses = await prisma.offeredCourse.findMany({
+    include: {
+      Course: { select: { creditPoints: true, title: true } },
+    },
+    where: { phaseId },
+  })
+  const assignCourses: AssignCourse[] = offeredCourses.map((e) => ({
+    ...e,
+    studentCount: 0,
+  }))
+
   const normalized = normalizeChoices(
     await prisma.studentPhase.findMany({
       include: { StudentChoice: true },
@@ -34,7 +40,33 @@ export async function assign(phaseId: number) {
     (e) => new AssignmentStudentController(e, offeredCourses),
   )
 
+  while (true) {
+    assignStudents(allStudents, assignCourses)
+    const canceled = assignCourses.findIndex(
+      (e) => e.studentCount < e.minParticipants,
+    )
+    if (canceled === -1) {
+      break
+    }
+    allStudents.forEach((e) =>
+      e.courseCanceled(assignCourses[canceled].moduleCode),
+    )
+    assignCourses.splice(canceled, 1)
+  }
+
+  return Object.fromEntries(
+    allStudents.map(
+      (e) => [e.username, e.gained.map((e) => e.moduleCode)] as const,
+    ),
+  )
+}
+
+function assignStudents(
+  allStudents: AssignmentStudentController[],
+  assignCourses: AssignCourse[],
+) {
   let students = allStudents
+  students = students.filter((e) => !e.isFinished())
   while (students.length) {
     students = shuffleFirsts(
       students.sort(
@@ -45,13 +77,9 @@ export async function assign(phaseId: number) {
     const student = students[0]
     const choice = student.choices[0]
     student.gainCourse(choice.moduleCode)
-    const course = offeredCourses.find(
-      (e) => e.moduleCode === choice.moduleCode,
-    )
+    const course = assignCourses.find((e) => e.moduleCode === choice.moduleCode)
     if (!course) {
-      throw new Error(
-        `Course ${choice.moduleCode} not found in phase ${phaseId}`,
-      )
+      throw new Error(`Course ${choice.moduleCode} not found in phase`)
     }
     course.studentCount++
     if (
@@ -61,9 +89,4 @@ export async function assign(phaseId: number) {
     }
     students = students.filter((e) => !e.isFinished())
   }
-  return Object.fromEntries(
-    allStudents.map(
-      (e) => [e.username, e.gained.map((e) => e.moduleCode)] as const,
-    ),
-  )
 }
