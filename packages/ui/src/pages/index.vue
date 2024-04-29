@@ -4,14 +4,14 @@ import { ref } from 'vue'
 
 const enrollmentStore = useEnrollmentStore()
 const subjectView = ref<'grid' | 'list'>('grid')
-const enrollView = ref(false)
+const visible = ref(false)
 </script>
 
 <template>
   <div class="container">
-    <EnrollmentOverview :enroll-view="enrollView" />
-    <EnrollmentForm v-model="enrollView" />
-    <div v-if="!enrollView">
+    <EnrollmentOverview :visible="visible" />
+    <EnrollmentForm v-model="visible" />
+    <div v-if="!visible">
       <FilterSection />
       <VBtnToggle
         v-model="subjectView"
@@ -27,7 +27,7 @@ const enrollView = ref(false)
         v-if="enrollmentStore.selectedSubjects.length > 0"
         class="px-3 floating"
         icon="mdi-arrow-right"
-        @click="enrollView = true"
+        @click="visible = true"
       />
     </div>
   </div>

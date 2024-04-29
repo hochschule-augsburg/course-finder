@@ -3,14 +3,14 @@ import { useEnrollmentStore } from '@/stores/enrollment'
 import { useI18n } from 'vue-i18n'
 
 defineProps<{
-  enrollView: boolean
+  visible: boolean
 }>()
 const enrollmentStore = useEnrollmentStore()
 const { locale } = useI18n()
 </script>
 
 <template>
-  <div v-if="enrollmentStore.currentPhase && !enrollView" class="mx-2">
+  <div v-if="enrollmentStore.currentPhase && !visible" class="mx-2">
     <h2>
       {{
         locale === 'de'

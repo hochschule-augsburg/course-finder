@@ -13,7 +13,7 @@ const { locale } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
 
-const enrollView = defineModel<boolean>()
+const visible = defineModel<boolean>()
 
 const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
@@ -38,7 +38,7 @@ function removeSubject(moduleCode: string) {
 }
 
 function back() {
-  enrollView.value = false
+  visible.value = false
 }
 
 // TODO better error msgs + i18n
@@ -74,7 +74,7 @@ async function validate() {
     loading.value = false
   }
 
-  enrollView.value = false
+  visible.value = false
 }
 
 function reset() {
@@ -84,7 +84,7 @@ function reset() {
 
 <template>
   <div
-    v-if="enrollView"
+    v-if="visible"
     class="d-flex flex-column align-center justify-center container"
   >
     <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
