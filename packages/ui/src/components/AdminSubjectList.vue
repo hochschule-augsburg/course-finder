@@ -1,26 +1,54 @@
 <script setup lang="ts">
+import type { Subject } from '@/stores/AdminStore'
+
 import { useAdminStore } from '@/stores/AdminStore'
 import { ref } from 'vue'
 
 const adminStore = useAdminStore()
 
 const showModalForm = ref(false)
+const selectedSubject = ref<Subject>(adminStore.subjects[0])
 
-let selectedSubjects: string[] = []
+const formData = ref({
+  creditPoints: 0,
+  description: '',
+  examType: '',
+  examinationNumbers: [] as string[],
+  externLecturers: [] as string[],
+  lecturers: {},
+  semesterHours: 0,
+  title: '',
+})
 
-function saveSelectedSubjects() {
-  selectedSubjects = []
-  const checkboxes = document.querySelectorAll<HTMLInputElement>(
-    'input[type="checkbox"]',
-  )
-  checkboxes.forEach((checkbox) => {
-    if (checkbox.checked) {
-      const moduleCode = checkbox.value
-      selectedSubjects.push(moduleCode)
-    }
-  })
-  //TODO: Send data to backend or save in frontend?
-  console.log(selectedSubjects)
+function selectSubject(s: Subject) {
+  selectedSubject.value = s
+  // Prefill form data with selected subject's data
+  formData.value.title = s.title.en ?? ''
+  formData.value.lecturers = s.Lecturers
+  formData.value.externLecturers = s.externLecturers
+  formData.value.creditPoints = s.creditPoints
+  formData.value.description = JSON.stringify(s.description)
+  formData.value.examType = JSON.stringify(s.examType)
+  formData.value.examinationNumbers = s.examinationNumbers
+  formData.value.semesterHours = s.semesterHours
+  showModalForm.value = true
+}
+
+function saveSubject() {
+  selectedSubject.value.title.en = formData.value.title
+  //TODO: ????
+  selectedSubject.value.Lecturers = formData.value.lecturers
+  selectedSubject.value.externLecturers = formData.value.externLecturers
+  showModalForm.value = false
+}
+
+interface Lecturer {
+  name: string
+  username: string
+}
+
+function getLecturers(lecturers: Lecturer[]) {
+  return lecturers ? lecturers.map((lecturer) => lecturer.name).join(', ') : ''
 }
 </script>
 
@@ -39,39 +67,109 @@ function saveSelectedSubjects() {
           <td>{{ subject.title.en }}</td>
           <td>{{ subject.allLecturers.toString() }}</td>
           <td>
-            <VBtn @click="showModalForm = true"> Open Dialog </VBtn>
-
-            <VDialog
-              v-model="showModalForm"
-              content-class="transparent-modal"
-              transition="false"
-              width="auto"
-            >
-              <VCard
-                max-width="400"
-                prepend-icon="mdi-update"
-                text="Your application will relaunch automatically after the update is complete."
-                title="Update in progress"
-              >
-                <template #actions>
-                  <VBtn
-                    class="ms-auto"
-                    text="Ok"
-                    @click="showModalForm = false"
-                  />
-                </template>
-              </VCard>
-            </VDialog>
+            <VBtn @click="selectSubject(subject)"> Open Dialog </VBtn>
           </td>
         </tr>
       </tbody>
-      <VBtn @click="saveSelectedSubjects">Save</VBtn>
+      <VBtn>Save</VBtn>
     </VTable>
+    <VDialog
+      v-model="showModalForm"
+      min-width="800"
+      transition="false"
+      width="auto"
+    >
+      <VCard
+        :title="`Edit - ${selectedSubject.title.en}`"
+        prepend-icon="mdi-pencil"
+      >
+        <VCardText>
+          <VRow dense>
+            <VCol cols="12" md="4" sm="6">
+              <VTextField v-model="formData.title" label="Title" required />
+            </VCol>
+
+            <VCol cols="12" md="4" sm="6">
+              <VTextField
+                :model-value="getLecturers(selectedSubject.Lecturers)"
+                hint="separate multiple lecturers with comma"
+                label="Lecturers"
+                required
+              />
+            </VCol>
+
+            <VCol cols="12" md="4" sm="6">
+              <VTextField
+                :model-value="selectedSubject.externLecturers"
+                hint="separate multiple lecturers with comma"
+                label="Extern lecturers"
+                required
+              />
+            </VCol>
+
+            <VCol cols="12" md="4" sm="6">
+              <VTextField
+                :model-value="selectedSubject.creditPoints"
+                label="Credit points (CP)"
+                type="number"
+                required
+              />
+            </VCol>
+
+            <VCol cols="12" md="4" sm="6">
+              <VTextField
+                :model-value="selectedSubject.semesterHours"
+                label="Semester Hours (SWS)"
+                type="number"
+                required
+              />
+            </VCol>
+
+            <VCol cols="12" md="4" sm="6">
+              <VTextField
+                :model-value="selectedSubject.examinationNumbers"
+                label="Examination numbers"
+                required
+              />
+            </VCol>
+
+            <VCol cols="12" sm="6">
+              <VTextField
+                :model-value="selectedSubject.examType.for"
+                label="Exam type"
+                required
+              />
+            </VCol>
+
+            <VCol cols="12" sm="6">
+              <VSelect
+                :items="['German', 'English']"
+                :model-value="selectedSubject.language"
+                label="Language"
+                required
+              />
+            </VCol>
+
+            <VCol>
+              <VTextarea
+                :model-value="selectedSubject.description.en"
+                label="Description"
+                type="text"
+                required
+              />
+            </VCol>
+          </VRow>
+
+          <small class="text-caption text-medium-emphasis"
+            >*separate multiple elements with ,</small
+          >
+        </VCardText>
+
+        <VDivider />
+        <template #actions>
+          <VBtn class="ms-auto" text="Save" @click="showModalForm = false" />
+        </template>
+      </VCard>
+    </VDialog>
   </div>
 </template>
-
-<style scoped lang="scss">
-.transparent-modal .v-dialog__content {
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
-}
-</style>
