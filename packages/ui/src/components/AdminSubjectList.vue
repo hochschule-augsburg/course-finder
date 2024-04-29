@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { useAdminStore } from '@/stores/AdminStore'
+import { ref } from 'vue'
 
-const enrollmentStore = useEnrollmentStore()
+const adminStore = useAdminStore()
+
+const showModalForm = ref(false)
+
 let selectedSubjects: string[] = []
 
 function saveSelectedSubjects() {
@@ -31,14 +35,33 @@ function saveSelectedSubjects() {
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="subject in enrollmentStore.filteredSubjects"
-          :key="subject.moduleCode"
-        >
+        <tr v-for="subject in adminStore.subjects" :key="subject.moduleCode">
           <td>{{ subject.title.en }}</td>
           <td>{{ subject.allLecturers.toString() }}</td>
           <td>
-            <input :value="subject.moduleCode" type="checkbox" />
+            <VBtn @click="showModalForm = true"> Open Dialog </VBtn>
+
+            <VDialog
+              v-model="showModalForm"
+              content-class="transparent-modal"
+              transition="false"
+              width="auto"
+            >
+              <VCard
+                max-width="400"
+                prepend-icon="mdi-update"
+                text="Your application will relaunch automatically after the update is complete."
+                title="Update in progress"
+              >
+                <template #actions>
+                  <VBtn
+                    class="ms-auto"
+                    text="Ok"
+                    @click="showModalForm = false"
+                  />
+                </template>
+              </VCard>
+            </VDialog>
           </td>
         </tr>
       </tbody>
@@ -46,3 +69,9 @@ function saveSelectedSubjects() {
     </VTable>
   </div>
 </template>
+
+<style scoped lang="scss">
+.transparent-modal .v-dialog__content {
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+}
+</style>

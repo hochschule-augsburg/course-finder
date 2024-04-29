@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/enrollment'
+import type { Subject } from '@/stores/AdminStore'
 
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { useAdminStore } from '@/stores/AdminStore'
 import { reactive } from 'vue'
 
-const enrollmentStore = useEnrollmentStore()
+const enrollmentStore = useAdminStore()
 
 const tableOne: Subject[] = reactive(enrollmentStore.subjects)
 //TODO: Always offered courses should be automatically in tableTwo

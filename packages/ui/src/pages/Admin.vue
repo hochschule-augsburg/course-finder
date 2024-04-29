@@ -17,7 +17,6 @@ import { VCol, VContainer, VRow } from 'vuetify/components'
     <VRow justify="center">
       <VCol cols="10">
         <h2>Available subjects</h2>
-        <FilterSection />
         <AdminSubjectList />
       </VCol>
     </VRow>
