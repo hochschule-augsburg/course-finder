@@ -11,31 +11,32 @@ const selectedSubject = ref<Subject>(adminStore.subjects[0])
 
 const formData = ref({
   creditPoints: 0,
-  description: '',
-  examType: '',
+  description: {},
+  examType: {},
   examinationNumbers: [] as string[],
   externLecturers: [] as string[],
-  lecturers: {},
+  language: '',
+  lecturers: [] as any[],
   semesterHours: 0,
-  title: '',
+  title: {},
 })
 
 function selectSubject(s: Subject) {
   selectedSubject.value = s
   // Prefill form data with selected subject's data
-  formData.value.title = s.title.en ?? ''
+  formData.value.title = s.title
   formData.value.lecturers = s.Lecturers
   formData.value.externLecturers = s.externLecturers
   formData.value.creditPoints = s.creditPoints
-  formData.value.description = JSON.stringify(s.description)
-  formData.value.examType = JSON.stringify(s.examType)
+  formData.value.description = s.description
+  formData.value.examType = s.examType
   formData.value.examinationNumbers = s.examinationNumbers
   formData.value.semesterHours = s.semesterHours
   showModalForm.value = true
 }
 
 function saveSubject() {
-  selectedSubject.value.title.en = formData.value.title
+  selectedSubject.value.title = formData.value.title
   //TODO: ????
   selectedSubject.value.Lecturers = formData.value.lecturers
   selectedSubject.value.externLecturers = formData.value.externLecturers
@@ -59,7 +60,7 @@ function getLecturers(lecturers: Lecturer[]) {
         <tr>
           <th class="text-left">Name</th>
           <th class="text-left">Professor</th>
-          <th class="text-left">Always offered</th>
+          <th class="text-left">Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -67,7 +68,9 @@ function getLecturers(lecturers: Lecturer[]) {
           <td>{{ subject.title.en }}</td>
           <td>{{ subject.allLecturers.toString() }}</td>
           <td>
-            <VBtn @click="selectSubject(subject)"> Open Dialog </VBtn>
+            <VBtn @click="selectSubject(subject)">
+              <VIcon size="25">mdi-pencil</VIcon>
+            </VBtn>
           </td>
         </tr>
       </tbody>
@@ -88,25 +91,22 @@ function getLecturers(lecturers: Lecturer[]) {
             <VCol cols="12" md="4" sm="6">
               <VTextField v-model="formData.title" label="Title" required />
             </VCol>
-
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 :model-value="getLecturers(selectedSubject.Lecturers)"
-                hint="separate multiple lecturers with comma"
-                label="Lecturers"
+                hint="separate with comma"
+                label="Lecturers*"
                 required
               />
             </VCol>
-
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 :model-value="selectedSubject.externLecturers"
-                hint="separate multiple lecturers with comma"
-                label="Extern lecturers"
+                hint="separate with comma"
+                label="Extern lecturers*"
                 required
               />
             </VCol>
-
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 :model-value="selectedSubject.creditPoints"
@@ -115,7 +115,6 @@ function getLecturers(lecturers: Lecturer[]) {
                 required
               />
             </VCol>
-
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 :model-value="selectedSubject.semesterHours"
@@ -124,15 +123,13 @@ function getLecturers(lecturers: Lecturer[]) {
                 required
               />
             </VCol>
-
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 :model-value="selectedSubject.examinationNumbers"
-                label="Examination numbers"
+                label="Examination numbers*"
                 required
               />
             </VCol>
-
             <VCol cols="12" sm="6">
               <VTextField
                 :model-value="selectedSubject.examType.for"
@@ -140,7 +137,6 @@ function getLecturers(lecturers: Lecturer[]) {
                 required
               />
             </VCol>
-
             <VCol cols="12" sm="6">
               <VSelect
                 :items="['German', 'English']"
@@ -149,7 +145,6 @@ function getLecturers(lecturers: Lecturer[]) {
                 required
               />
             </VCol>
-
             <VCol>
               <VTextarea
                 :model-value="selectedSubject.description.en"
@@ -159,14 +154,13 @@ function getLecturers(lecturers: Lecturer[]) {
               />
             </VCol>
           </VRow>
-
           <small class="text-caption text-medium-emphasis"
             >*separate multiple elements with ,</small
           >
         </VCardText>
-
         <VDivider />
         <template #actions>
+          <VBtn text="Cancel" @click="showModalForm = false" />
           <VBtn class="ms-auto" text="Save" @click="showModalForm = false" />
         </template>
       </VCard>
