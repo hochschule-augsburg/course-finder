@@ -17,6 +17,7 @@ export async function pwdAuth(
   if (!user || user.auth.method !== 'local') {
     return { cause: 'invalid-credentials', success: false }
   }
+  const clientUser = { ...user, auth: { twoFA: user.auth.twoFA } }
 
   const hashedPassword = crypto
     .createHash('sha256')
@@ -25,9 +26,9 @@ export async function pwdAuth(
 
   if (hashedPassword === user.auth.password) {
     if (user.auth.twoFA) {
-      return { success: true, twoFA: true, user }
+      return { success: true, twoFA: true, user: clientUser }
     }
-    return { success: true, twoFA: false, user }
+    return { success: true, twoFA: false, user: clientUser }
   }
 
   return { cause: 'invalid-credentials', success: false }

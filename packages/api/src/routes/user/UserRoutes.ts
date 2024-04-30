@@ -4,7 +4,7 @@ import sendmail from 'sendmail'
 import { TOTP } from 'totp-generator'
 import { z } from 'zod'
 
-import type { UserExtended } from '../../prisma/PrismaTypes'
+import type { ClientUserExtended } from '../../prisma/PrismaTypes'
 
 import { authenticate } from '../../domain/user/UserService'
 import { prisma } from '../../prisma/prisma'
@@ -25,7 +25,7 @@ export const authRouter = router({
         | 'invalid-credentials'
         | 'service-not-available'
         | 'two-fa-required'
-        | UserExtended
+        | ClientUserExtended
       > => {
         if (ctx.user) {
           return 'already-logged-in'
@@ -57,29 +57,38 @@ export const authRouter = router({
   }),
   twoFA: publicProcedure
     .input(z.object({ otp: z.string(), username: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      if (ctx.req.session.twoFA?.username !== input.username) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'No twoFA session',
-        })
-      }
-      if (new Date().getTime() > ctx.req.session.twoFA.expires) {
-        return 'code-expired'
-      }
-      if (input.otp !== ctx.req.session.twoFA.otp) {
-        return 'code-invalid'
-      }
-      const user: UserExtended | undefined =
-        (await prisma.user.findUnique({
+    .mutation(
+      async ({
+        ctx,
+        input,
+      }): Promise<
+        'code-expired' | 'code-invalid' | ClientUserExtended | undefined
+      > => {
+        if (ctx.req.session.twoFA?.username !== input.username) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'No twoFA session',
+          })
+        }
+        if (new Date().getTime() > ctx.req.session.twoFA.expires) {
+          return 'code-expired'
+        }
+        if (input.otp !== ctx.req.session.twoFA.otp) {
+          return 'code-invalid'
+        }
+        const user = await prisma.user.findUnique({
           include: { Faculty: true, Prof: true, Student: true },
           where: { username: input.username },
-        })) ?? undefined
-      ctx.req.session.twoFA = undefined
-      ctx.req.session.user = user
-      await ctx.req.session.save()
-      return user
-    }),
+        })
+        ctx.req.session.twoFA = undefined
+        const clientUser = user
+          ? { ...user, auth: { twoFA: user.auth.twoFA } }
+          : undefined
+        ctx.req.session.user = clientUser
+        await ctx.req.session.save()
+        return clientUser
+      },
+    ),
 })
 
 function generateBase32Key() {

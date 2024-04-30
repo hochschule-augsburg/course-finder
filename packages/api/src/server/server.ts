@@ -5,7 +5,7 @@ import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
 import type { ServerOptions } from '../../../config'
-import type { UserExtended } from '../prisma/PrismaTypes'
+import type { ClientUserExtended } from '../prisma/PrismaTypes'
 
 import { appRouter } from '../routes/router'
 import { createContext } from './context'
@@ -13,7 +13,7 @@ import { createContext } from './context'
 declare module 'fastify' {
   interface Session {
     twoFA?: { expires: number; otp: string; username: string }
-    user?: UserExtended
+    user?: ClientUserExtended
   }
 }
 

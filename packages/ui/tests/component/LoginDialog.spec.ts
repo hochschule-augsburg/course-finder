@@ -1,4 +1,4 @@
-import type { UserExtended } from '@api/prisma/PrismaTypes'
+import type { ClientUserExtended } from '@api/prisma/PrismaTypes'
 
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useUserStore } from '@/stores/UserStore'
@@ -14,7 +14,7 @@ describe('LoginDialog.vue', () => {
   it('emits success event on successful login', async () => {
     const wrapper = mountComponent()
     const userStore = mockedStore(useUserStore)
-    userStore.login.mockResolvedValueOnce({} as UserExtended)
+    userStore.login.mockResolvedValueOnce({} as ClientUserExtended)
 
     wrapper.findComponent(VBtn).vm.$emit('click')
     await flushPromises()
@@ -62,7 +62,7 @@ describe('LoginDialog.vue', () => {
 
     expect(userStore.login).toHaveBeenCalledWith(username, password)
 
-    userStore.login.mockResolvedValueOnce({} as UserExtended)
+    userStore.login.mockResolvedValueOnce({} as ClientUserExtended)
 
     wrapper
       .findAllComponents(VTextField)

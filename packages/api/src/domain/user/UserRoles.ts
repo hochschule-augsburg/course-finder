@@ -1,5 +1,3 @@
-import type { User } from '@prisma/client'
-
 /* eslint-disable perfectionist/sort-objects */
 export const UserRoles = {
   Logout: 0,
@@ -9,7 +7,7 @@ export const UserRoles = {
 }
 
 export function userHasPermission(
-  user: User | undefined,
+  user: { type: string } | undefined,
   role: keyof typeof UserRoles,
 ) {
   return (

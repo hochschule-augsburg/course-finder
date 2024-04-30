@@ -63,8 +63,9 @@ export async function pwdAuth(
     update: userInput,
     where: { username: result.username },
   })
+  const clientUser = { ...user, auth: { twoFA: user.auth.twoFA } }
   if (user.auth.twoFA) {
-    return { success: true, twoFA: true, user }
+    return { success: true, twoFA: true, user: clientUser }
   }
   if (result.type === 'Student') {
     const studentInput = {
@@ -78,7 +79,11 @@ export async function pwdAuth(
       update: studentInput,
       where: { username },
     })
-    return { success: true, twoFA: false, user: { Student: student, ...user } }
+    return {
+      success: true,
+      twoFA: false,
+      user: { Student: student, ...clientUser },
+    }
   }
   if (result.type === 'Professor') {
     const profInput = {
@@ -92,7 +97,7 @@ export async function pwdAuth(
       update: profInput,
       where: { username },
     })
-    return { success: true, twoFA: false, user: { Prof: prof, ...user } }
+    return { success: true, twoFA: false, user: { Prof: prof, ...clientUser } }
   }
   return { cause: 'invalid-credentials', success: false }
 }

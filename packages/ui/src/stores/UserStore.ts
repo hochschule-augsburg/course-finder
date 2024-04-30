@@ -1,11 +1,11 @@
-import type { UserExtended } from '@api/prisma/PrismaTypes'
+import type { ClientUserExtended } from '@api/prisma/PrismaTypes'
 
 import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref<UserExtended>()
+  const user = ref<ClientUserExtended>()
   void init()
   return { login, logout, user }
 

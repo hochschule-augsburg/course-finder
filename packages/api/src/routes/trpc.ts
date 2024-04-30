@@ -1,8 +1,9 @@
-import type { Student, User } from '@prisma/client'
+import type { Student } from '@prisma/client'
 
 import { TRPCError, initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 
+import type { ClientUser } from '../prisma/PrismaTypes'
 import type { Context } from '../server/context'
 
 import { userHasPermission } from '../domain/user/UserRoles'
@@ -11,7 +12,16 @@ const t = initTRPC.context<Context>().create({
   errorFormatter({ shape }) {
     return shape
   },
+  isDev: process.env.NODE_ENV === 'development',
   transformer: superjson,
+})
+
+t.middleware(async ({ ctx, next, path, type }) => {
+  const result = await next()
+
+  ctx.req.log.info({ path, result, type, user: ctx.user })
+
+  return result
 })
 
 export const router = t.router
@@ -24,7 +34,7 @@ export const studentOnlyProcedure = t.procedure.use(
       return opts.next({
         ctx: {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          user: ctx.user as { Student: Student } & User,
+          user: ctx.user as { Student: Student } & ClientUser,
         },
       })
     }

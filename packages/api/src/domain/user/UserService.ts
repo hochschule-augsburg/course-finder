@@ -1,6 +1,4 @@
-import type { User } from '@prisma/client'
-
-import type { UserExtended } from '../../prisma/PrismaTypes'
+import type { ClientUser, ClientUserExtended } from '../../prisma/PrismaTypes'
 
 import { pwdAuth as ldapPwdAuth } from './ldap/LdapAuth'
 import { pwdAuth as localPwdAuth } from './local/LocalAuth'
@@ -11,8 +9,8 @@ export type AuthResult =
       | { cause: 'service-not-available' }
     ))
   | ({ success: true } & (
-      | { twoFA: false; user: UserExtended }
-      | { twoFA: true; user: User }
+      | { twoFA: false; user: ClientUserExtended }
+      | { twoFA: true; user: ClientUser }
     ))
 
 export async function authenticate(

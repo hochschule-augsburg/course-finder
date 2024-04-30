@@ -18,11 +18,12 @@ export type EnrollPhase = Phase
 
 export type EnrolledCourse = StudentChoice
 
-export type UserExtended = {
+export type ClientUser = { auth: { twoFA?: boolean } } & Omit<User, 'auth'>
+export type ClientUserExtended = {
   Faculty: Faculty | null
   Prof?: Prof | null
   Student?: Student | null
-} & User
+} & ClientUser
 
 type TimeInterval<T> = { from: T; to: T }
 
