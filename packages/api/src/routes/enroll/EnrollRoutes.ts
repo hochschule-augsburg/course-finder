@@ -88,7 +88,7 @@ export const enrollRouter = router({
   upsert: enrollProcedure
     .input(
       z.object({
-        creditsNeeded: creditsZodType,
+        creditsNeeded: creditsZodType.optional(),
         moduleCode: z.string(),
         points: z.number().int().safe(),
       }),
@@ -104,7 +104,7 @@ export const enrollRouter = router({
               points: input.points,
             },
           },
-          creditsNeeded: input.creditsNeeded,
+          creditsNeeded: input.creditsNeeded ?? 0,
           phaseId: input.phaseId,
           username: ctx.user.Student.username,
         },

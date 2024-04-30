@@ -4,7 +4,7 @@ import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn } from 'vuetify/components'
+import { VBtn, VTextField } from 'vuetify/components'
 import { VForm } from 'vuetify/components/VForm'
 
 import '../styles/settings.scss'
@@ -20,6 +20,8 @@ const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
+
+const creditsNeeded = ref<number>(0)
 
 function openSubjectDialog(moduleCode: string) {
   selectedSubject.value = coursesStore.subjects.find(
@@ -56,7 +58,7 @@ async function validate() {
   loading.value = true
 
   try {
-    await enrollmentStore.enroll()
+    await enrollmentStore.enroll(creditsNeeded.value)
   } catch (error) {
     console.log(error)
   } finally {
@@ -94,6 +96,11 @@ function reset() {
       width="90%"
     >
       <VForm ref="form">
+        <VTextField
+          v-model.number="creditsNeeded"
+          label="Credits Needed"
+          required
+        />
         <VTextField
           v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"

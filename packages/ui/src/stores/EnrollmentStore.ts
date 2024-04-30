@@ -58,9 +58,10 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     ).map(extendEnrolled)
   }
 
-  function enroll() {
+  function enroll(creditsNeeded: number) {
     if (coursesStore.currentPhase) {
       return trpc.enroll.bulk.mutate({
+        creditsNeeded: creditsNeeded,
         data: enrolledSubjects.value,
         phaseId: coursesStore.currentPhase.id,
       })
@@ -76,6 +77,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
         }),
       )
       await trpc.enroll.upsert.mutate({
+        creditsNeeded: undefined,
         moduleCode,
         phaseId: coursesStore.currentPhase.id,
         points: 0,
