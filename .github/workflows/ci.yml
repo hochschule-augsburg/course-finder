@@ -20,6 +20,7 @@ jobs:
 
       - uses: pnpm/action-setup@v3
         with:
+          node-version: 21
           version: 8
           run_install: |
             - recursive: true
