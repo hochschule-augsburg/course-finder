@@ -99,7 +99,6 @@ export const enrollRouter = router({
         create: {
           StudentChoice: {
             create: {
-              lastChange: new Date(),
               moduleCode: input.moduleCode,
               points: input.points,
             },

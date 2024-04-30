@@ -22,6 +22,42 @@ describe('AssignmentAlgorithm', () => {
       out: Record<string, string[]>,
     ]
   >([
+    ['no students', [], {}],
+    [
+      'no choice',
+      [{ StudentChoice: [], creditsNeeded: 0, username: 'user1' }],
+      { user1: [] },
+    ],
+    [
+      'no points',
+      [
+        {
+          StudentChoice: [{ moduleCode: '3', points: 0 }],
+          creditsNeeded: 0,
+          username: 'user1',
+        },
+      ],
+      { user1: [] },
+    ],
+    [
+      '2 for course',
+      [
+        {
+          StudentChoice: [{ moduleCode: '3', points: 1000 }],
+          creditsNeeded: 3,
+          username: 'user1',
+        },
+        {
+          StudentChoice: [{ moduleCode: '3', points: 1000 }],
+          creditsNeeded: 3,
+          username: 'user2',
+        },
+      ],
+      {
+        user1: ['3'],
+        user2: ['3'],
+      },
+    ],
     [
       'not enough credits',
       [
