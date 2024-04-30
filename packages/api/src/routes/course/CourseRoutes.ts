@@ -12,7 +12,7 @@ export type CourseExtended = {
   offeredCourse: {
     appointments: CourseAppointmentsJson<Date>
   } & Omit<OfferedCourse, 'appointments'>
-} & Course
+} & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
   getCurrentPhase: studentProcedure.query(async () => {
@@ -27,17 +27,27 @@ export const courseRouter = router({
     .query(async ({ input }): Promise<CourseExtended[]> => {
       return (
         await prisma.course.findMany({
-          include: {
+          select: {
             Faculty: true,
             Lecturers: {
               select: { User: { select: { name: true, username: true } } },
             },
+            creditPoints: true,
+            externLecturers: true,
+            extraInfo: true,
+            facultyName: true,
+            infoUrl: true,
+            moduleCode: true,
             offeredCourse: {
               // include only the offeredCourses that are indicated by input
               where: {
                 phaseId: { equals: input.phaseId },
               },
             },
+            published: true,
+            semesterHours: true,
+            title: true,
+            varyingCP: true,
           },
           // select only the courses that have an offeredCourse included
           where: {
@@ -73,5 +83,19 @@ export const courseRouter = router({
           },
         }
       })
+    }),
+  getPdf: studentProcedure
+    .input(z.object({ moduleCode: z.string() }))
+    .query(async ({ input }) => {
+      const course = await prisma.course.findFirst({
+        select: { pdf: true },
+        where: {
+          moduleCode: input.moduleCode,
+        },
+      })
+      if (!course) {
+        throw new Error(`Course with moduleCode ${input.moduleCode} not found`)
+      }
+      return { pdf: course.pdf ? new Int8Array(course.pdf) : null }
     }),
 })

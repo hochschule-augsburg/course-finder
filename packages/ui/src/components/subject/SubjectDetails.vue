@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/enrollment'
 
+import { trpc } from '@/api/trpc'
+import { useAsyncState } from '@vueuse/core'
 import { ref } from 'vue'
-import VuePdfEmbed, { useVuePdfEmbed } from 'vue-pdf-embed'
+import VuePdfEmbed from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/style/annotationLayer.css'
 import 'vue-pdf-embed/dist/style/index.css'
 import 'vue-pdf-embed/dist/style/textLayer.css'
 
-const { subject } = defineProps<{
+const props = defineProps<{
   subject: Subject
 }>()
 
-const { doc } = useVuePdfEmbed({
-  source: `/WPFs/${subject.moduleCode}.pdf`,
-})
-
+const { state: pdfSource } = useAsyncState(
+  async () =>
+    (await trpc.course.getPdf.query({ moduleCode: props.subject.moduleCode }))
+      .pdf,
+  undefined,
+)
 const fullscreen = ref(false)
 </script>
 
@@ -129,26 +133,35 @@ const fullscreen = ref(false)
             <VIcon class="mr-3" size="32">mdi-alert-circle</VIcon>
             <h4>Hinweis</h4>
           </div>
+          <p v-if="subject.extraInfo" class="mb-4 px-3 d-flex flex-column">
+            {{ subject.extraInfo }}
+          </p>
           <p
             v-if="subject.offeredCourse.extraInfo"
-            class="mb-4 px-3 d-flex flex-column"
+            class="font-italic mb-4 px-3 d-flex flex-column"
           >
             {{ subject.offeredCourse.extraInfo }}
           </p>
         </VSheet>
       </VCarouselItem>
 
-      <VCarouselItem>
+      <VCarouselItem v-if="subject.infoUrl || pdfSource">
         <VBtn
           class="floating"
           icon="mdi-fullscreen"
           @click="fullscreen = true"
         />
         <VuePdfEmbed
-          :source="doc"
+          v-if="pdfSource"
+          :source="pdfSource"
           class="pdfView"
           annotation-layer
           text-layer
+        />
+        <iframe
+          v-else-if="subject.infoUrl"
+          :src="subject.infoUrl"
+          class="pdfView"
         />
       </VCarouselItem>
     </VCarousel>
@@ -158,12 +171,17 @@ const fullscreen = ref(false)
         icon="mdi-fullscreen-exit"
         @click="fullscreen = false"
       />
-      <!-- TODO: try reusing doc (doesn`t load pdf second time) -->
       <VuePdfEmbed
-        :source="`/WPFs/${subject.moduleCode}.pdf`"
+        v-if="pdfSource"
+        :source="pdfSource"
         class="pdfView"
         annotation-layer
         text-layer
+      />
+      <iframe
+        v-else-if="subject.infoUrl"
+        :src="subject.infoUrl"
+        class="pdfView"
       />
     </VDialog>
   </div>
@@ -178,6 +196,7 @@ const fullscreen = ref(false)
 }
 .pdfView {
   height: 100%;
+  width: 100%;
   overflow-y: scroll;
 }
 .modal {

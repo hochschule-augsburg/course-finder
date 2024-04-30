@@ -1,6 +1,7 @@
 /* cSpell:disable */
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
+import { readFileSync } from 'fs'
 
 import dummyCourses from './dummyCourses.json'
 import dummyOfferedCourses from './dummyOfferedCourses.json'
@@ -78,19 +79,9 @@ async function main() {
     data: {
       Lecturers: { connect: { username: 'scholz' } },
       creditPoints: 6,
-      description: {
-        de: 'Beschreibung des Kurses...',
-        en: 'Description of the course...',
-      },
-      examType: { content: [], for: 'all' },
-      examinationNumbers: ['CS101-001', 'CS101-002'],
       facultyName: 'Gestaltung',
-      language: 'English',
-      learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-      literature: ['Textbook 1', 'Textbook 2'],
       moduleCode: 'CS101',
       published: true,
-      requirements: ['Basic understanding of programming'],
       semesterHours: 4,
       title: {
         de: 'Einführung in die Informatik',
@@ -102,19 +93,9 @@ async function main() {
     data: {
       Lecturers: { connect: { username: 'scholz' } },
       creditPoints: 4,
-      description: {
-        de: 'Beschreibung des Kurses...',
-        en: 'Description of the course...',
-      },
-      examType: { content: [], for: 'all' },
-      examinationNumbers: ['PHIL101-001', 'PHIL101-002'],
       facultyName: 'Informatik',
-      language: 'English',
-      learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-      literature: ['Philosophy Book 1', 'Philosophy Book 2'],
       moduleCode: 'PHIL101',
       published: true,
-      requirements: ['None'],
       semesterHours: 3,
       title: {
         de: 'Einführung in die Philosophie',
@@ -126,19 +107,9 @@ async function main() {
     data: {
       Lecturers: { connect: { username: 'prof1' } },
       creditPoints: 6,
-      description: {
-        de: 'Beschreibung des Kurses...',
-        en: 'Description of the course...',
-      },
-      examType: { content: [], for: 'all' },
-      examinationNumbers: ['MATH101-001', 'MATH101-002'],
       facultyName: 'Informatik',
-      language: 'English',
-      learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-      literature: ['Calculus Book 1', 'Calculus Book 2'],
       moduleCode: 'MATH101',
       published: true,
-      requirements: ['High school mathematics'],
       semesterHours: 4,
       title: { de: 'Analysis I', en: 'Calculus I' },
     },
@@ -147,20 +118,9 @@ async function main() {
     data: [
       {
         creditPoints: 5,
-        description: {
-          de: 'Beschreibung des Kurses...',
-          en: 'Description of the course...',
-        },
-        examType: { content: [], for: 'all' },
-        examinationNumbers: ['CHEM101-001', 'CHEM101-002'],
-        externLecturers: ['Professor 4'],
         facultyName: 'Informatik',
-        language: 'English',
-        learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        literature: ['Chemistry Book 1', 'Chemistry Book 2'],
         moduleCode: 'CHEM101',
         published: true,
-        requirements: ['Basic understanding of science'],
         semesterHours: 3,
         title: {
           de: 'Einführung in die Chemie',
@@ -169,39 +129,19 @@ async function main() {
       },
       {
         creditPoints: 4,
-        description: {
-          de: 'Beschreibung des Kurses...',
-          en: 'Description of the course...',
-        },
-        examType: { content: [], for: 'all' },
-        examinationNumbers: ['HIST101-001', 'HIST101-002'],
         externLecturers: ['Professor 5'],
         facultyName: 'Informatik',
-        language: 'English',
-        learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        literature: ['History Book 1', 'History Book 2'],
         moduleCode: 'HIST101',
         published: true,
-        requirements: ['None'],
         semesterHours: 3,
         title: { de: 'Weltgeschichte', en: 'World History' },
       },
       {
         creditPoints: 6,
-        description: {
-          de: 'Beschreibung des Kurses...',
-          en: 'Description of the course...',
-        },
-        examType: { content: [], for: 'all' },
-        examinationNumbers: ['PHYS101-001', 'PHYS101-002'],
         externLecturers: ['Professor 6'],
         facultyName: 'Informatik',
-        language: 'English',
-        learningGoals: { de: 'Lernziele...', en: 'Learning goals...' },
-        literature: ['Physics Book 1', 'Physics Book 2'],
         moduleCode: 'PHYS101',
         published: true,
-        requirements: ['High school physics'],
         semesterHours: 4,
         title: { de: 'Physik für Ingenieure', en: 'Physics for Engineers' },
       },
@@ -539,7 +479,13 @@ async function main() {
     ],
   })
 
-  await prisma.course.createMany({ data: dummyCourses })
+  const stubPdf = readFileSync('./prisma/assets/COM4.WP.pdf')
+  await prisma.course.createMany({
+    data: dummyCourses.map((e) => ({
+      ...e,
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
+    })),
+  })
   // @ts-expect-error ingore for now
   await prisma.offeredCourse.createMany({ data: dummyOfferedCourses })
 }

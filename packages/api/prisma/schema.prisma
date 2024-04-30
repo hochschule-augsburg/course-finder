@@ -55,36 +55,27 @@ model Faculty {
 }
 
 model Course {
-  moduleCode         String          @id
+  moduleCode      String          @id
   /// title module
   /// [I18n]
-  title              Json
-  published          Boolean         @default(false)
-  examinationNumbers String[]
-  Lecturers          Prof[]
+  title           Json
+  published       Boolean         @default(false)
+  Lecturers       Prof[]
   /// if lecturer is not in the system
-  externLecturers    String[]
-  requirements       String[]
-  /// spoken language
-  language           String
-  Faculty            Faculty?        @relation(fields: [facultyName], references: [name])
-  facultyName        String?
+  externLecturers String[]
+  Faculty         Faculty?        @relation(fields: [facultyName], references: [name])
+  facultyName     String?
   /// SWS
-  semesterHours      Int
+  semesterHours   Int
   /// CP
-  creditPoints       Int
-  timeDistribution   String?
-  /// [ExamType]
-  examType           Json
-  /// [I18n]
-  description        Json
-  /// [I18n]
-  learningGoals      Json
-  literature         String[]
-  /// Link to the moodle course
-  moodleCourse       String?
-  website            String?
-  offeredCourse      OfferedCourse[]
+  creditPoints    Int
+  varyingCP       Json?
+  /// Url for optional iframe info
+  infoUrl         String?
+  pdf             Bytes?
+  /// addition information about course could be relevant if there is not infoUrl
+  extraInfo       String?
+  offeredCourse   OfferedCourse[]
 }
 
 model Enrollphase {
@@ -109,6 +100,9 @@ model OfferedCourse {
   StudentChoice   StudentChoice[]
 
   extraInfo    String?
+  moodleCourse String?
+  /// Array of fields of study
+  for          String[]
   /// [CourseAppointments]
   appointments Json
 

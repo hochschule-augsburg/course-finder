@@ -49,34 +49,6 @@ declare global {
         }
       | { method: 'local'; password: string; salt: string }
     )
-    // TODO
-    type ExamType = {
-      additionalInfo?: string
-      content: Array<
-        {
-          helpers: {
-            specs: string
-            type: 'book' | 'calculator' | 'cheatsheet' | 'open-book'
-          }
-          percentage: number
-        } & (
-          | {
-              minutes: number
-              type: 'written'
-            }
-          | {
-              specs: string
-              type: 'seminar-paper'
-            }
-          | {
-              type: 'oral'
-            }
-          | { specs: string; type: 'presentation' }
-          | { specs: string; type: 'project' }
-        )
-      >
-      for: string
-    }
   }
 }
 
