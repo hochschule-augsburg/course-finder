@@ -1,0 +1,27 @@
+{
+  "autorun": false,
+  "terminals": [
+    {
+      "name": "api server",
+      "icon": "rocket",
+      "command": "pnpm dev",
+      "cwd": "packages/api"
+    },
+    {
+      "name": "ui server",
+      "icon": "file-media",
+      "command": "pnpm dev",
+      "cwd": "packages/ui"
+    },
+    {
+      "name": "api",
+      "icon": "hubot",
+      "focus": true,
+      "cwd": "packages/api"
+    },
+    {
+      "name": "ui",
+      "cwd": "packages/ui"
+    }
+  ]
+}

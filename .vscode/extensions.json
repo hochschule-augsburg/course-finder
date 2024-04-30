@@ -9,6 +9,7 @@
     "vue.volar",
     "stylelint.vscode-stylelint",
     "prisma.prisma",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "fabiospampinato.vscode-terminals"
   ]
 }
