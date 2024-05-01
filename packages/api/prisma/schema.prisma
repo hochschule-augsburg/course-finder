@@ -17,16 +17,14 @@ datasource db {
 
 model User {
   // users have to be clean up every semester
-  username    String   @id
-  email       String
-  name        String
-  Student     Student?
-  Prof        Prof?
+  username String   @id
+  email    String
+  name     String
+  Student  Student?
   /// [Auth]
-  auth        Json
-  type        String
-  Faculty     Faculty  @relation(fields: [facultyName], references: [name])
-  facultyName String
+  auth     Json
+  type     String
+  Course   Course[]
 }
 
 model Student {
@@ -36,46 +34,41 @@ model Student {
   term         Int?
   regNumber    String?
   StudentPhase StudentPhase[]
-}
-
-model Prof {
-  username  String   @id
-  User      User     @relation(fields: [username], references: [username])
-  telephone String?
-  office    String?
-  Module    Course[]
+  Faculty      Faculty        @relation(fields: [facultyName], references: [name])
+  facultyName  String
 }
 
 model Faculty {
-  name           String   @id
+  name           String    @id
   /// [I18n]
   translatedName Json
   Courses        Course[]
-  Users          User[]
+  Student        Student[]
 }
 
 model Course {
-  moduleCode      String          @id
+  moduleCode     String          @id
   /// title module
   /// [I18n]
-  title           Json
-  published       Boolean         @default(false)
-  Lecturers       Prof[]
+  title          Json
+  published      Boolean         @default(false)
+  editor         User?           @relation(fields: [editorUsername], references: [username])
+  editorUsername String?
   /// if lecturer is not in the system
-  externLecturers String[]
-  Faculty         Faculty?        @relation(fields: [facultyName], references: [name])
-  facultyName     String?
+  lecturers      String[]
+  Faculty        Faculty?        @relation(fields: [facultyName], references: [name])
+  facultyName    String?
   /// SWS
-  semesterHours   Int
+  semesterHours  Int
   /// CP
-  creditPoints    Int
-  varyingCP       Json?
+  creditPoints   Int
+  varyingCP      Json?
   /// Url for optional iframe info
-  infoUrl         String?
-  pdf             Bytes?
+  infoUrl        String?
+  pdf            Bytes?
   /// addition information about course could be relevant if there is not infoUrl
-  extraInfo       String?
-  offeredCourse   OfferedCourse[]
+  extraInfo      String?
+  offeredCourse  OfferedCourse[]
 }
 
 model Enrollphase {

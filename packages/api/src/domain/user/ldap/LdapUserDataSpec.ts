@@ -1,10 +1,8 @@
-import { parse } from 'date-fns'
 import { z } from 'zod'
 
 const commonData = z.object({
   cn: z.string(),
   mail: z.string(),
-  ou: z.string(),
   uid: z.string(),
 })
 
@@ -13,42 +11,55 @@ const studentData = commonData.extend({
   dfnEduPersonFieldOfStudyString: z.string(),
   dfnEduPersonTermsOfStudy: z.string(),
   employeeType: z.literal('Studenten'),
+  ou: z.string(),
   schacDateOfBirth: z.string(),
 })
 
-const profData = commonData.extend({
-  employeeType: z.literal('Professoren'),
-  facsimileTelephoneNumber: z.string(),
-  physicalDeliveryOfficeName: z.string(),
+const otherData = commonData.extend({
+  employeeType: z.union([
+    z.literal('Professoren'),
+    z.literal('Angestellte'),
+    z.literal('Wissenschaftliche Mitarbeiter'),
+    z.literal('MAPR'),
+    z.array(z.string()),
+  ]),
 })
 
+const employeeTypeToUserRole: Record<string, 'Professor' | 'User'> = {
+  Angestellte: 'User',
+  MAPR: 'User',
+  Professoren: 'Professor',
+  'Wissenschaftliche Mitarbeiter': 'User',
+}
+
 export const resultSpec = z
-  .discriminatedUnion('employeeType', [studentData, profData])
+  .union([studentData, otherData])
   .transform((data) => {
     const common = {
       email: data.mail,
-      facultyName: data.ou,
       name: data.cn,
       username: data.uid,
     }
-    switch (data.employeeType) {
-      case 'Studenten':
-        return {
-          ...common,
-          birthDate: parse(data.schacDateOfBirth, 'yyyyMMdd', new Date()),
-          fieldOfStudy: data.dfnEduPersonFieldOfStudyString,
-          name: data.cn,
-          regNumber: data.carLicense,
-          term: Number(data.dfnEduPersonTermsOfStudy.split('$')[1]),
-          type: 'Student',
-        } as const
-      case 'Professoren':
-        return {
-          ...common,
-          office: data.physicalDeliveryOfficeName,
-          telephone: data.facsimileTelephoneNumber,
-          type: 'Professor',
-        } as const
+    if (data.employeeType === 'Studenten') {
+      return {
+        ...common,
+        facultyName: data.ou,
+        fieldOfStudy: data.dfnEduPersonFieldOfStudyString,
+        name: data.cn,
+        regNumber: data.carLicense,
+        term: Number(data.dfnEduPersonTermsOfStudy.split('$')[1]),
+        type: 'Student',
+      } as const
+    }
+    return {
+      ...common,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      type:
+        employeeTypeToUserRole[
+          typeof data.employeeType === 'object'
+            ? data.employeeType[0]
+            : data.employeeType
+        ] ?? 'User',
     }
   })
 

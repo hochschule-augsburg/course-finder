@@ -1,7 +1,7 @@
 [
   {
     "creditPoints": 8,
-    "externLecturers": ["Prof. Dr. Stefan Bensch"],
+    "lecturers": ["Prof. Dr. Stefan Bensch"],
     "facultyName": "Informatik",
 
     "moduleCode": "ABAPGL6.WP",
@@ -11,7 +11,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Dr.-Ing. Matthias Niedermaier"],
+    "lecturers": ["Dr.-Ing. Matthias Niedermaier"],
     "facultyName": "Informatik",
 
     "moduleCode": "AST4.WP",
@@ -24,7 +24,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Matthias Regner, M.Eng."],
+    "lecturers": ["Matthias Regner, M.Eng."],
     "facultyName": "Informatik",
 
     "moduleCode": "AEKDS4.WP",
@@ -37,7 +37,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Dipl.-Inf. (FH) Gregor Liebermann, M.Sc."],
+    "lecturers": ["Dipl.-Inf. (FH) Gregor Liebermann, M.Sc."],
     "facultyName": "Informatik",
 
     "moduleCode": "SCRUM4.WP",
@@ -50,9 +50,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": [
-      "Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA"
-    ],
+    "lecturers": ["Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA"],
     "facultyName": "Informatik",
 
     "moduleCode": "PYTHON4.WP",
@@ -65,7 +63,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Stefan Bensch"],
+    "lecturers": ["Prof. Dr. Stefan Bensch"],
     "facultyName": "Informatik",
 
     "moduleCode": "BEINF4.WP",
@@ -78,7 +76,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Prof. Dr. Bj\u00f6rn Steven H\u00e4ckel"],
+    "lecturers": ["Prof. Dr. Bj\u00f6rn Steven H\u00e4ckel"],
     "facultyName": "Informatik",
 
     "moduleCode": "CHRIMG2.WP",
@@ -91,7 +89,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
+    "lecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
     "facultyName": "Informatik",
 
     "moduleCode": "COM4.WP",
@@ -101,7 +99,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
+    "lecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
     "facultyName": "Informatik",
 
     "moduleCode": "COMDR.WP",
@@ -111,7 +109,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Philip McClenaghan"],
+    "lecturers": ["Philip McClenaghan"],
     "facultyName": "Informatik",
 
     "moduleCode": "CGDEV4.WP",
@@ -121,7 +119,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Christoph Buck"],
+    "lecturers": ["Prof. Dr. Christoph Buck"],
     "facultyName": "Informatik",
 
     "moduleCode": "CES4.WP",
@@ -134,7 +132,7 @@
   },
   {
     "creditPoints": 4,
-    "externLecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
+    "lecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
     "facultyName": "Informatik",
 
     "moduleCode": "DB3.WP",
@@ -144,7 +142,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Rolf Winter"],
+    "lecturers": ["Prof. Dr. Rolf Winter"],
     "facultyName": "Informatik",
 
     "moduleCode": "DAKO4.WP",
@@ -157,7 +155,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr.-Ing. Thomas Kirchmeier"],
+    "lecturers": ["Prof. Dr.-Ing. Thomas Kirchmeier"],
     "facultyName": "Informatik",
 
     "moduleCode": "DAKOFZ4.WP",
@@ -170,7 +168,7 @@
   },
   {
     "creditPoints": 3,
-    "externLecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
+    "lecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
     "facultyName": "Informatik",
 
     "moduleCode": "DBANW3.WP",
@@ -180,7 +178,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Christoph Buck"],
+    "lecturers": ["Prof. Dr. Christoph Buck"],
     "facultyName": "Informatik",
 
     "moduleCode": "DIGINN4.WP",
@@ -190,7 +188,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Dr. Norbert Gerth"],
+    "lecturers": ["Prof. Dr. Norbert Gerth"],
     "facultyName": "Informatik",
 
     "moduleCode": "DIBUS.WP",
@@ -203,7 +201,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Jens Lauterbach"],
+    "lecturers": ["Prof. Dr. Jens Lauterbach"],
     "facultyName": "Informatik",
 
     "moduleCode": "DTO4.WP",
@@ -213,7 +211,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Dr. Norbert Gerth"],
+    "lecturers": ["Prof. Dr. Norbert Gerth"],
     "facultyName": "Informatik",
 
     "moduleCode": "ECOMM6.WP",
@@ -223,7 +221,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Peter Schulik, M.Sc."],
+    "lecturers": ["Peter Schulik, M.Sc."],
     "facultyName": "Informatik",
 
     "moduleCode": "ITFORE6.WP",
@@ -236,7 +234,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Dr. Phil. Alessandra Zarcone"],
+    "lecturers": ["Dr. Phil. Alessandra Zarcone"],
     "facultyName": "Informatik",
 
     "moduleCode": "EMSV4.WP",
@@ -249,7 +247,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Arne Mayer"],
+    "lecturers": ["Prof. Dr. Arne Mayer"],
     "facultyName": "Informatik",
 
     "moduleCode": "ELHS4.WP",
@@ -262,7 +260,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Michael Strohmeier"],
+    "lecturers": ["Prof. Dr. Michael Strohmeier"],
     "facultyName": "Informatik",
 
     "moduleCode": "EROB4.WP",
@@ -275,7 +273,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Dr. Hubert H\u00f6gl"],
+    "lecturers": ["Prof. Dr. Hubert H\u00f6gl"],
     "facultyName": "Informatik",
 
     "moduleCode": "LINUX6.WP",
@@ -285,7 +283,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
+    "lecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
     "facultyName": "Informatik",
 
     "moduleCode": "EDPS2.WP",
@@ -298,7 +296,7 @@
   },
   {
     "creditPoints": 6,
-    "externLecturers": ["Prof. Dr. Norbert Gerth"],
+    "lecturers": ["Prof. Dr. Norbert Gerth"],
     "facultyName": "Informatik",
 
     "moduleCode": "EXGD4.WP",
@@ -308,7 +306,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Alexander von Bodisco"],
+    "lecturers": ["Prof. Dr. Alexander von Bodisco"],
     "facultyName": "Informatik",
 
     "moduleCode": "PROG.2",
@@ -321,7 +319,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Gundolf Kiefer"],
+    "lecturers": ["Prof. Dr. Gundolf Kiefer"],
     "facultyName": "Informatik",
 
     "moduleCode": "FSD4.WP",
@@ -334,7 +332,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["M.A. Katharina Heimrath"],
+    "lecturers": ["M.A. Katharina Heimrath"],
     "facultyName": "Informatik",
 
     "moduleCode": "FGMG4.WP",
@@ -344,7 +342,7 @@
   },
   {
     "creditPoints": 8,
-    "externLecturers": ["Prof. Dr. Wolfgang Kowarschick"],
+    "lecturers": ["Prof. Dr. Wolfgang Kowarschick"],
     "facultyName": "Informatik",
 
     "moduleCode": "FSWD6.WP",
@@ -357,7 +355,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
+    "lecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
     "facultyName": "Informatik",
 
     "moduleCode": "DEVOPS4.WP",
@@ -367,7 +365,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Volodymyr Brovkov"],
+    "lecturers": ["Prof. Dr. Volodymyr Brovkov"],
     "facultyName": "Informatik",
 
     "moduleCode": "HARSO.WP",
@@ -380,7 +378,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Alexander von Bodisco"],
+    "lecturers": ["Prof. Dr. Alexander von Bodisco"],
     "facultyName": "Informatik",
 
     "moduleCode": "HIP.WP",
@@ -393,7 +391,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Peter R\u00f6sch"],
+    "lecturers": ["Prof. Dr. Peter R\u00f6sch"],
     "facultyName": "Informatik",
 
     "moduleCode": "INDBV4.WP",
@@ -406,7 +404,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr.-Ing. Thomas Kirchmeier"],
+    "lecturers": ["Prof. Dr.-Ing. Thomas Kirchmeier"],
     "facultyName": "Informatik",
 
     "moduleCode": "INDIV4.WP",
@@ -419,7 +417,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
+    "lecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
     "facultyName": "Informatik",
 
     "moduleCode": "INUM4.WP",
@@ -432,7 +430,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Dipl.-Ing. Harald R\u00f6ser"],
+    "lecturers": ["Dipl.-Ing. Harald R\u00f6ser"],
     "facultyName": "Informatik",
 
     "moduleCode": "SAPERP4.WP",
@@ -445,7 +443,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Michael Kipp"],
+    "lecturers": ["Prof. Dr. Michael Kipp"],
     "facultyName": "Informatik",
 
     "moduleCode": "INTENG4.WP",
@@ -455,7 +453,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Dr. Peter R\u00f6sch"],
+    "lecturers": ["Prof. Dr. Peter R\u00f6sch"],
     "facultyName": "Informatik",
 
     "moduleCode": "IACOGR6.WP",
@@ -468,7 +466,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Stephan Zimmermann"],
+    "lecturers": ["Prof. Dr. Stephan Zimmermann"],
     "facultyName": "Informatik",
 
     "moduleCode": "ITC4.WP",
@@ -478,7 +476,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Lothar Braun"],
+    "lecturers": ["Prof. Lothar Braun"],
     "facultyName": "Informatik",
 
     "moduleCode": "ITSICH6.WP",
@@ -488,7 +486,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Arne Mayer"],
+    "lecturers": ["Prof. Dr. Arne Mayer"],
     "facultyName": "Informatik",
 
     "moduleCode": "ITSCT4.WP",
@@ -498,7 +496,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Johannes Ewald, M.Sc."],
+    "lecturers": ["Johannes Ewald, M.Sc."],
     "facultyName": "Informatik",
 
     "moduleCode": "JAVSCR2.WP",
@@ -508,7 +506,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Wolfgang Kowarschick"],
+    "lecturers": ["Prof. Dr. Wolfgang Kowarschick"],
     "facultyName": "Informatik",
 
     "moduleCode": "KLPRO.WP",
@@ -521,7 +519,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Harry Sch\u00e4fle"],
+    "lecturers": ["Harry Sch\u00e4fle"],
     "facultyName": "Informatik",
 
     "moduleCode": "ITSN2.WP",
@@ -534,7 +532,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Michael Predeschly"],
+    "lecturers": ["Prof. Dr. Michael Predeschly"],
     "facultyName": "Informatik",
 
     "moduleCode": "KDBT4.WP",
@@ -547,7 +545,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Stephan Zimmermann"],
+    "lecturers": ["Prof. Dr. Stephan Zimmermann"],
     "facultyName": "Informatik",
 
     "moduleCode": "LEANIT4.WP",
@@ -557,7 +555,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Dieter Thalmayr"],
+    "lecturers": ["Dieter Thalmayr"],
     "facultyName": "Informatik",
 
     "moduleCode": "LINLPI2.WP",
@@ -567,7 +565,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Dieter Thalmayr"],
+    "lecturers": ["Dieter Thalmayr"],
     "facultyName": "Informatik",
 
     "moduleCode": "LPICAD2.WP",
@@ -577,7 +575,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Dr. Thomas Rist"],
+    "lecturers": ["Prof. Dr. Thomas Rist"],
     "facultyName": "Informatik",
 
     "moduleCode": "KI6.WP",
@@ -587,7 +585,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Oliver Seitz M.Sc.,"],
+    "lecturers": ["Oliver Seitz M.Sc.,"],
     "facultyName": "Informatik",
 
     "moduleCode": "MCODK4.WP",
@@ -600,7 +598,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr.-Ing. Alexandra Teynor"],
+    "lecturers": ["Prof. Dr.-Ing. Alexandra Teynor"],
     "facultyName": "Informatik",
 
     "moduleCode": "MKML4.WP",
@@ -613,7 +611,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Dr. Lothar Braun"],
+    "lecturers": ["Dr. Lothar Braun"],
     "facultyName": "Informatik",
 
     "moduleCode": "NETP.WP",
@@ -626,7 +624,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Michael Kipp"],
+    "lecturers": ["Prof. Dr. Michael Kipp"],
     "facultyName": "Informatik",
 
     "moduleCode": "NNDL4.WP",
@@ -639,7 +637,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Michael Predeschly"],
+    "lecturers": ["Prof. Dr. Michael Predeschly"],
     "facultyName": "Informatik",
 
     "moduleCode": "NoSQL4.WP",
@@ -649,7 +647,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr.-Ing. Thomas Kirchmeier"],
+    "lecturers": ["Prof. Dr.-Ing. Thomas Kirchmeier"],
     "facultyName": "Informatik",
 
     "moduleCode": "OPPYTH4.WP",
@@ -662,7 +660,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Hubert H\u00f6gl"],
+    "lecturers": ["Prof. Dr. Hubert H\u00f6gl"],
     "facultyName": "Informatik",
 
     "moduleCode": "OSSWE4.WP",
@@ -675,7 +673,7 @@
   },
   {
     "creditPoints": 7,
-    "externLecturers": ["Prof. Dipl.-Ing. Georg Stark"],
+    "lecturers": ["Prof. Dipl.-Ing. Georg Stark"],
     "facultyName": "Informatik",
 
     "moduleCode": "PRRO.WP",
@@ -688,7 +686,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Wolfgang Kratsch"],
+    "lecturers": ["Prof. Dr. Wolfgang Kratsch"],
     "facultyName": "Informatik",
 
     "moduleCode": "PRCINT4.WP",
@@ -698,7 +696,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
+    "lecturers": ["Prof. Matthias Kolonko, Ph.D. (ONPU)"],
     "facultyName": "Informatik",
 
     "moduleCode": "DBP4.WP",
@@ -711,7 +709,7 @@
   },
   {
     "creditPoints": 8,
-    "externLecturers": ["Prof. Dr. Peter R\u00f6sch"],
+    "lecturers": ["Prof. Dr. Peter R\u00f6sch"],
     "facultyName": "Informatik",
 
     "moduleCode": "PROGPY6.WP",
@@ -724,7 +722,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Anja Metzner"],
+    "lecturers": ["Prof. Dr. Anja Metzner"],
     "facultyName": "Informatik",
 
     "moduleCode": "PWA4.WP",
@@ -737,7 +735,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Nik Klever"],
+    "lecturers": ["Prof. Dr. Nik Klever"],
     "facultyName": "Informatik",
 
     "moduleCode": "PRJU4.WP",
@@ -747,7 +745,7 @@
   },
   {
     "creditPoints": 10,
-    "externLecturers": ["Prof. Dr. Alexander von Bodisco"],
+    "lecturers": ["Prof. Dr. Alexander von Bodisco"],
     "facultyName": "Informatik",
 
     "moduleCode": "FUT.WP",
@@ -760,7 +758,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Volodymyr Brovkov"],
+    "lecturers": ["Prof. Dr. Volodymyr Brovkov"],
     "facultyName": "Informatik",
 
     "moduleCode": "RFID3.WP",
@@ -770,7 +768,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Kai de Wals"],
+    "lecturers": ["Kai de Wals"],
     "facultyName": "Informatik",
 
     "moduleCode": "SEENG.WP",
@@ -783,7 +781,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Alexander von Bodisco"],
+    "lecturers": ["Prof. Dr. Alexander von Bodisco"],
     "facultyName": "Informatik",
 
     "moduleCode": "SLP.WP",
@@ -796,7 +794,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Dr. Marc Zeller (Siemens AG, M\u00fcnchen)"],
+    "lecturers": ["Dr. Marc Zeller (Siemens AG, M\u00fcnchen)"],
     "facultyName": "Informatik",
 
     "moduleCode": "SRASYS2.WP",
@@ -809,7 +807,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Phillip Heidegger"],
+    "lecturers": ["Prof. Dr. Phillip Heidegger"],
     "facultyName": "Informatik",
 
     "moduleCode": "TYPSCR4.WP",
@@ -822,7 +820,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Phillip Heidegger"],
+    "lecturers": ["Prof. Dr. Phillip Heidegger"],
     "facultyName": "Informatik",
 
     "moduleCode": "SECloud.WP",
@@ -835,7 +833,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Dipl.-Wirt.-Inf. (FH) Andrea Obermeyer, MBA"],
+    "lecturers": ["Dipl.-Wirt.-Inf. (FH) Andrea Obermeyer, MBA"],
     "facultyName": "Informatik",
 
     "moduleCode": "SWPJMG.WP",
@@ -848,7 +846,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Christoph Buck"],
+    "lecturers": ["Prof. Dr. Christoph Buck"],
     "facultyName": "Informatik",
 
     "moduleCode": "START4.WP",
@@ -861,7 +859,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Christoph Baur, B.Sc."],
+    "lecturers": ["Christoph Baur, B.Sc."],
     "facultyName": "Informatik",
 
     "moduleCode": "SUCHMA.WP",
@@ -874,7 +872,7 @@
   },
   {
     "creditPoints": 6,
-    "externLecturers": ["Prof. Dr. Hubert H\u00f6gl"],
+    "lecturers": ["Prof. Dr. Hubert H\u00f6gl"],
     "facultyName": "Informatik",
 
     "moduleCode": "SNP5.WP",
@@ -884,7 +882,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Stefan Kaindl"],
+    "lecturers": ["Stefan Kaindl"],
     "facultyName": "Informatik",
 
     "moduleCode": "UGES2.WP",
@@ -897,7 +895,7 @@
   },
   {
     "creditPoints": 2,
-    "externLecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
+    "lecturers": ["Prof. Dr. J\u00fcrgen Scholz"],
     "facultyName": "Informatik",
 
     "moduleCode": "VERINF.WP",
@@ -910,7 +908,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Philip McClenaghan"],
+    "lecturers": ["Philip McClenaghan"],
     "facultyName": "Informatik",
 
     "moduleCode": "VISTH.WP",
@@ -920,7 +918,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Prof. Dr. Markus Degen"],
+    "lecturers": ["Prof. Dr. Markus Degen"],
     "facultyName": "Informatik",
 
     "moduleCode": "IFPP4.WP",
@@ -933,7 +931,7 @@
   },
   {
     "creditPoints": 5,
-    "externLecturers": ["Michael Jaser, M. Sc."],
+    "lecturers": ["Michael Jaser, M. Sc."],
     "facultyName": "Informatik",
 
     "moduleCode": "NODEJS4.WP",

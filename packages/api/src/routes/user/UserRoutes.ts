@@ -77,7 +77,7 @@ export const authRouter = router({
           return 'code-invalid'
         }
         const user = await prisma.user.findUnique({
-          include: { Faculty: true, Prof: true, Student: true },
+          include: { Student: true },
           where: { username: input.username },
         })
         ctx.req.session.twoFA = undefined

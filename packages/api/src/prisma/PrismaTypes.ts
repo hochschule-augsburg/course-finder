@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import type {
-  Faculty,
   Enrollphase as Phase,
-  Prof,
   Student,
   StudentChoice,
   User,
@@ -20,8 +18,6 @@ export type EnrolledCourse = StudentChoice
 
 export type ClientUser = { auth: { twoFA?: boolean } } & Omit<User, 'auth'>
 export type ClientUserExtended = {
-  Faculty: Faculty | null
-  Prof?: Prof | null
   Student?: Student | null
 } & ClientUser
 

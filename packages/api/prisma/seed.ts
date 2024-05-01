@@ -39,15 +39,8 @@ async function main() {
   // Create professors
   await prisma.user.create({
     data: {
-      Prof: {
-        create: {
-          office: 'abc',
-          telephone: '0000/0000',
-        },
-      },
       auth: { method: 'ldap' },
       email: 'juergen.scholz@hs-augsburg.de',
-      facultyName: 'Informatik',
       name: 'Jürgen Scholz',
       type: 'Professor',
       username: 'scholz',
@@ -55,19 +48,12 @@ async function main() {
   })
   await prisma.user.create({
     data: {
-      Prof: {
-        create: {
-          office: 'xyz',
-          telephone: '1111/1111',
-        },
-      },
       auth: {
         method: 'local',
         password: hashPassword('prof1', 'salt'),
         salt: 'salt',
       },
       email: 'another.professor@example.com',
-      facultyName: 'Informatik',
       name: 'Another Professor',
       type: 'Professor',
       username: 'prof1',
@@ -77,9 +63,9 @@ async function main() {
   // Create courses
   await prisma.course.create({
     data: {
-      Lecturers: { connect: { username: 'scholz' } },
       creditPoints: 6,
       facultyName: 'Gestaltung',
+      lecturers: ['scholz'],
       moduleCode: 'CS101',
       published: true,
       semesterHours: 4,
@@ -91,9 +77,9 @@ async function main() {
   })
   await prisma.course.create({
     data: {
-      Lecturers: { connect: { username: 'scholz' } },
       creditPoints: 4,
       facultyName: 'Informatik',
+      lecturers: ['scholz'],
       moduleCode: 'PHIL101',
       published: true,
       semesterHours: 3,
@@ -105,9 +91,9 @@ async function main() {
   })
   await prisma.course.create({
     data: {
-      Lecturers: { connect: { username: 'prof1' } },
       creditPoints: 6,
       facultyName: 'Informatik',
+      lecturers: ['prof1'],
       moduleCode: 'MATH101',
       published: true,
       semesterHours: 4,
@@ -129,8 +115,8 @@ async function main() {
       },
       {
         creditPoints: 4,
-        externLecturers: ['Professor 5'],
         facultyName: 'Informatik',
+        lecturers: ['Professor 5'],
         moduleCode: 'HIST101',
         published: true,
         semesterHours: 3,
@@ -138,8 +124,8 @@ async function main() {
       },
       {
         creditPoints: 6,
-        externLecturers: ['Professor 6'],
         facultyName: 'Informatik',
+        lecturers: ['Professor 6'],
         moduleCode: 'PHYS101',
         published: true,
         semesterHours: 4,
@@ -295,7 +281,6 @@ async function main() {
           salt: 'salt',
         },
         email: 'singhraj@example.com',
-        facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Singh Raj',
         type: 'Student',
         username: 'singhraj',
@@ -307,7 +292,6 @@ async function main() {
           salt: 'salt',
         },
         email: 'mitroska@example.com',
-        facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Mitroska',
         type: 'Student',
         username: 'mitroska',
@@ -319,7 +303,6 @@ async function main() {
           salt: 'salt',
         },
         email: 'seka@example.com',
-        facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Seka',
         type: 'Student',
         username: 'seka',
@@ -332,7 +315,6 @@ async function main() {
           twoFA: true,
         },
         email: 'stud1@example.com',
-        facultyName: 'Informatik', // Replace with actual faculty name
         name: 'Stud1',
         type: 'Student',
         username: 'stud1',
@@ -342,10 +324,18 @@ async function main() {
 
   await prisma.student.createMany({
     data: [
-      { fieldOfStudy: 'Computer Science', username: 'singhraj' },
-      { fieldOfStudy: 'Mathematics', username: 'mitroska' },
-      { fieldOfStudy: 'Physics', username: 'seka' },
-      { fieldOfStudy: 'Biology', username: 'stud1' },
+      {
+        facultyName: 'Informatik',
+        fieldOfStudy: 'Computer Science',
+        username: 'singhraj',
+      },
+      {
+        facultyName: 'Informatik',
+        fieldOfStudy: 'Mathematics',
+        username: 'mitroska',
+      },
+      { facultyName: 'Informatik', fieldOfStudy: 'Physics', username: 'seka' },
+      { facultyName: 'Informatik', fieldOfStudy: 'Biology', username: 'stud1' },
     ],
   })
 

@@ -67,10 +67,6 @@ export const courseRouter = router({
         }
         return {
           ...e,
-          Lecturers: e.Lecturers.map((l) => ({
-            name: l.User.name,
-            username: l.User.username,
-          })),
           offeredCourse: {
             ...offeredCourse,
             appointments: {
