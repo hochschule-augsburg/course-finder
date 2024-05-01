@@ -355,28 +355,24 @@ async function main() {
     data: [
       // For singhraj
       {
-        lastChange: new Date(),
         moduleCode: 'PHIL101',
         phaseId: phase.id,
         points: 250,
         username: 'singhraj',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'MATH101',
         phaseId: phase.id,
         points: 200,
         username: 'singhraj',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'CHEM101',
         phaseId: phase.id,
         points: 300,
         username: 'singhraj',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'HIST101',
         phaseId: phase.id,
         points: 250,
@@ -384,28 +380,24 @@ async function main() {
       },
       // For mitroska
       {
-        lastChange: new Date(),
         moduleCode: 'PHIL101',
         phaseId: phase.id,
         points: 180,
         username: 'mitroska',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'MATH101',
         phaseId: phase.id,
         points: 220,
         username: 'mitroska',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'CHEM101',
         phaseId: phase.id,
         points: 250,
         username: 'mitroska',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'HIST101',
         phaseId: phase.id,
         points: 350,
@@ -413,28 +405,24 @@ async function main() {
       },
       // For seka
       {
-        lastChange: new Date(),
         moduleCode: 'PHIL101',
         phaseId: phase.id,
         points: 150,
         username: 'seka',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'MATH101',
         phaseId: phase.id,
         points: 200,
         username: 'seka',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'CHEM101',
         phaseId: phase.id,
         points: 350,
         username: 'seka',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'HIST101',
         phaseId: phase.id,
         points: 300,
@@ -442,28 +430,24 @@ async function main() {
       },
       // For stud1
       {
-        lastChange: new Date(),
         moduleCode: 'PHIL101',
         phaseId: phase.id,
         points: 220,
         username: 'stud1',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'MATH101',
         phaseId: phase.id,
         points: 180,
         username: 'stud1',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'CHEM101',
         phaseId: phase.id,
         points: 200,
         username: 'stud1',
       },
       {
-        lastChange: new Date(),
         moduleCode: 'HIST101',
         phaseId: phase.id,
         points: 400,

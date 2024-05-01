@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/CoursesStore'
-
-import { useCoursesStore } from '@/stores/CoursesStore'
+import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn } from 'vuetify/components'
@@ -11,9 +11,10 @@ import '../styles/settings.scss'
 
 const { locale } = useI18n()
 
-const enrollmentStore = useCoursesStore()
+const enrollmentStore = useEnrollmentStore()
+const coursesStore = useCoursesStore()
 
-const visible = defineModel<boolean>()
+const visible = defineModel<boolean>('visible')
 
 const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
@@ -21,20 +22,10 @@ const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 
 function openSubjectDialog(moduleCode: string) {
-  selectedSubject.value = enrollmentStore.subjects.find(
+  selectedSubject.value = coursesStore.subjects.find(
     (s) => s.moduleCode === moduleCode,
   )
   showSubjectDialog.value = true
-}
-
-function removeSubject(moduleCode: string) {
-  const subject = enrollmentStore.subjects.find(
-    (s) => s.moduleCode === moduleCode,
-  )
-
-  if (subject) {
-    subject.selected = false
-  }
 }
 
 function back() {
@@ -55,9 +46,8 @@ async function validate() {
   }
 
   if (
-    enrollmentStore.selectedSubjects.length > 0 && // make it possible to reset enrollment
-    enrollmentStore.selectedSubjects.reduce((a, c) => a + c.points, 0) !==
-      enrollmentStore.maxPoints
+    enrollmentStore.enrolledSubjects.length > 0 && // make it possible to reset enrollment
+    sumBy(enrollmentStore.enrolledSubjects, 'points') !== MAX_POINTS
   ) {
     form.value?.items.forEach((i) => i.errorMessages.push('maxPoints = 1000'))
     return
@@ -67,7 +57,6 @@ async function validate() {
 
   try {
     await enrollmentStore.enroll()
-    await enrollmentStore.init()
   } catch (error) {
     console.log(error)
   } finally {
@@ -106,7 +95,7 @@ function reset() {
     >
       <VForm ref="form">
         <VTextField
-          v-for="subject in enrollmentStore.selectedSubjects"
+          v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"
           :key="subject.moduleCode"
           :label="locale === 'de' ? subject.title.de : subject.title.en"
@@ -114,7 +103,7 @@ function reset() {
           append-icon="mdi-delete"
           append-inner-icon="mdi-book-information-variant"
           required
-          @click:append="removeSubject(subject.moduleCode)"
+          @click:append="enrollmentStore.removeSubject(subject.moduleCode)"
           @click:append-inner="openSubjectDialog(subject.moduleCode)"
         />
 

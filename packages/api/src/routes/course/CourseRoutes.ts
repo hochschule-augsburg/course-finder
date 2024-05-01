@@ -5,7 +5,7 @@ import { z } from 'zod'
 import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes'
 
 import { prisma } from '../../prisma/prisma'
-import { router, studentProcedure } from '../trpc'
+import { publicProcedure, router, studentProcedure } from '../trpc'
 
 export type CourseExtended = {
   offeredCourse: {
@@ -14,7 +14,7 @@ export type CourseExtended = {
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
-  getCourses: studentProcedure.query(async () => {
+  getCourses: publicProcedure.query(async () => {
     return await prisma.course.findMany({ select: courseFields })
   }),
   getCurrentPhase: studentProcedure.query(async () => {
@@ -69,7 +69,7 @@ export const courseRouter = router({
         }
       })
     }),
-  getPdf: studentProcedure
+  getPdf: publicProcedure
     .input(z.object({ moduleCode: z.string() }))
     .query(async ({ input }) => {
       const course = await prisma.course.findFirst({

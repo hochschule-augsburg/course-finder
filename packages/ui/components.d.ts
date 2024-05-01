@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ConfirmDialog: typeof import('./src/components/ConfirmDialog.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/CustomNavbar.vue')['default']
     EnrollmentForm: typeof import('./src/components/EnrollmentForm.vue')['default']
@@ -15,6 +16,7 @@ declare module 'vue' {
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
     InfoDialog: typeof import('./src/components/InfoDialog.vue')['default']
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
+    ModalDialog: typeof import('./src/components/ModalDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubjectDetails: typeof import('./src/components/subject/SubjectDetails.vue')['default']
@@ -23,5 +25,6 @@ declare module 'vue' {
     SubjectTableRow: typeof import('./src/components/subject/SubjectTableRow.vue')['default']
     SubjectTile: typeof import('./src/components/subject/SubjectTile.vue')['default']
     SubjectTiles: typeof import('./src/components/subject/SubjectTiles.vue')['default']
+    UseDialog: typeof import('./src/components/useDialog.vue')['default']
   }
 }

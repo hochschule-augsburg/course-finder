@@ -166,7 +166,7 @@ export const useFiltersStore = defineStore('filters', () => {
       (s) =>
         !!s.title.de?.toLowerCase().includes(searchString) ||
         !!s.title.en?.toLowerCase().includes(searchString) ||
-        s.allLecturers.some((e) => e.toLowerCase().includes(searchString)),
+        s.lecturers.some((e) => e.toLowerCase().includes(searchString)),
     )
   }
 

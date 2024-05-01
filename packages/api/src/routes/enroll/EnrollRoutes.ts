@@ -46,7 +46,6 @@ export const enrollRouter = router({
           StudentChoice: {
             createMany: {
               data: input.data.map((e) => ({
-                lastChange: new Date(),
                 moduleCode: e.moduleCode,
                 points: e.points,
               })),
@@ -98,12 +97,10 @@ export const enrollRouter = router({
           StudentChoice: {
             upsert: {
               create: {
-                lastChange: new Date(),
                 moduleCode: input.moduleCode,
                 points: input.points,
               },
               update: {
-                lastChange: new Date(),
                 points: input.points,
               },
               where: {
@@ -144,7 +141,9 @@ async function getStudentChoices(phaseId: number, username: string) {
   return (
     (
       await prisma.studentPhase.findUnique({
-        include: { StudentChoice: true },
+        select: {
+          StudentChoice: { select: { moduleCode: true, points: true } },
+        },
         where: {
           username_phaseId: {
             phaseId,

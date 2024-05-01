@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useCoursesStore } from '@/stores/CoursesStore'
+import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { ref } from 'vue'
 
-const enrollmentStore = useCoursesStore()
+const enrollmentStore = useEnrollmentStore()
 const subjectView = ref<'grid' | 'list'>('grid')
 const visible = ref(false)
 </script>
@@ -10,7 +10,7 @@ const visible = ref(false)
 <template>
   <div class="container">
     <EnrollmentOverview :visible="visible" />
-    <EnrollmentForm v-model="visible" />
+    <EnrollmentForm v-model:visible="visible" />
     <div v-if="!visible">
       <FilterSection />
       <VBtnToggle
@@ -24,7 +24,7 @@ const visible = ref(false)
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
       <VBtn
-        v-if="false"
+        v-if="enrollmentStore.enrolledSubjects.length > 0"
         class="px-3 floating"
         icon="mdi-arrow-right"
         @click="visible = true"

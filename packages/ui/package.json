@@ -17,8 +17,11 @@
   "dependencies": {
     "@mdi/font": "7.4.47",
     "@trpc/client": "next",
+    "@types/lodash-es": "^4.17.12",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vueuse/core": "^10.9.0",
     "core-js": "^3.37.0",
+    "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "superjson": "^2.2.1",

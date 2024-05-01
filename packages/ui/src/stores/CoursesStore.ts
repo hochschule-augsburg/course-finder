@@ -1,7 +1,4 @@
-import type {
-  EnrolledCourse as _EnrolledCourse,
-  EnrollPhase,
-} from '@api/prisma/PrismaTypes'
+import type { EnrollPhase } from '@api/prisma/PrismaTypes'
 import type { CourseExtended } from '@api/routes/course/CourseRoutes'
 
 import { trpc } from '@/api/trpc'
@@ -11,21 +8,9 @@ import { computed, ref, watch } from 'vue'
 import { useUserStore } from './UserStore'
 import { useFiltersStore } from './filters'
 
-export type Meeting = {
-  from: string
-  to: string
-}
-
 export type Subject = {
   offeredCourse?: CourseExtended['offeredCourse']
 } & Omit<CourseExtended, 'offeredCourse'>
-
-export type EnrolledCourse = _EnrolledCourse & {
-  title?: {
-    de?: string
-    en?: string
-  }
-}
 
 export const useCoursesStore = defineStore('courses', () => {
   const userStore = useUserStore()
@@ -41,9 +26,12 @@ export const useCoursesStore = defineStore('courses', () => {
     return filtered
   })
 
-  watch(userStore, () => {
-    void update()
-  })
+  watch(
+    () => userStore.user,
+    () => {
+      void update()
+    },
+  )
 
   void update()
   return {
@@ -55,7 +43,11 @@ export const useCoursesStore = defineStore('courses', () => {
   }
 
   async function update() {
-    currentPhase.value = await trpc.course.getCurrentPhase.query()
+    if (userStore.user?.type !== 'Student') {
+      currentPhase.value = undefined
+    } else {
+      currentPhase.value = await trpc.course.getCurrentPhase.query()
+    }
     if (currentPhase.value) {
       await updatePhase(currentPhase.value.id)
     } else {
