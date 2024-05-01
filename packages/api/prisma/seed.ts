@@ -479,7 +479,7 @@ async function main() {
     ],
   })
 
-  const stubPdf = readFileSync('./prisma/assets/COM4.WP.pdf')
+  const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
   await prisma.course.createMany({
     data: dummyCourses.map((e) => ({
       ...e,
