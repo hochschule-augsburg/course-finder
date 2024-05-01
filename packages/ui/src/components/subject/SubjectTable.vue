@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { useI18n } from 'vue-i18n'
+import { VCheckbox } from 'vuetify/components'
 
-const enrollmentStore = useEnrollmentStore()
+const enrollmentStore = useCoursesStore()
 const { locale } = useI18n()
 </script>
 
@@ -18,10 +19,11 @@ const { locale } = useI18n()
       >
         <template #default="{ expanded }">
           <VCheckbox
-            v-model="subject.selected"
+            :model-value="subject.moduleCode"
             class="checkbox"
             hide-details
             @click.stop
+            @update:model-value="console.log"
           />
           <VContainer class="ma-0">
             <VRow no-gutters>
@@ -31,60 +33,68 @@ const { locale } = useI18n()
                 </strong>
               </VCol>
               <VCol cols="3"> {{ subject.semesterHours }} SWS </VCol>
-              <VCol
-                v-if="subject.offeredCourse.appointments.type === 'weekly'"
-                cols="4"
-              >
-                <template
-                  v-for="(date, i) in subject.offeredCourse.appointments.dates"
-                  :key="i"
+              <template v-if="subject.offeredCourse">
+                <VCol
+                  v-if="subject.offeredCourse.appointments.type === 'weekly'"
+                  cols="4"
                 >
-                  <span>
-                    {{
-                      date.from.toLocaleDateString([], {
-                        weekday: 'long',
-                      })
-                    }}
-                    <br />
-                  </span>
-                </template>
-              </VCol>
-              <VCol
-                v-else-if="subject.offeredCourse.appointments.type === 'block'"
-              >
-                Blockveranstaltung
-              </VCol>
-              <VCol v-else> Irregulär </VCol>
+                  <template
+                    v-for="(date, i) in subject.offeredCourse.appointments
+                      .dates"
+                    :key="i"
+                  >
+                    <span>
+                      {{
+                        date.from.toLocaleDateString([], {
+                          weekday: 'long',
+                        })
+                      }}
+                      <br />
+                    </span>
+                  </template>
+                </VCol>
+                <VCol
+                  v-else-if="
+                    subject.offeredCourse.appointments.type === 'block'
+                  "
+                >
+                  Blockveranstaltung
+                </VCol>
+                <VCol v-else> Irregulär </VCol>
+              </template>
             </VRow>
             <VRow no-gutters>
               <VCol class="v-card-subtitle" cols="5">
-                {{ subject.allLecturers.join(', ') }}
+                {{ subject.lecturers.join(', ') }}
               </VCol>
               <VCol cols="3"> {{ subject.creditPoints }} CP </VCol>
-              <VCol
-                v-if="subject.offeredCourse.appointments.type === 'weekly'"
-                cols="4"
-              >
-                <template
-                  v-for="(date, i) in subject.offeredCourse.appointments.dates"
-                  :key="i"
+              <template v-if="subject.offeredCourse">
+                <VCol
+                  v-if="subject.offeredCourse.appointments.type === 'weekly'"
+                  cols="4"
                 >
-                  <span>
-                    {{
-                      date.from.toLocaleTimeString([], {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      }) +
-                      ' - ' +
-                      date.from.toLocaleTimeString([], {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })
-                    }}
-                    <br />
-                  </span>
-                </template>
-              </VCol>
+                  <template
+                    v-for="(date, i) in subject.offeredCourse.appointments
+                      .dates"
+                    :key="i"
+                  >
+                    <span>
+                      {{
+                        date.from.toLocaleTimeString([], {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        }) +
+                        ' - ' +
+                        date.from.toLocaleTimeString([], {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })
+                      }}
+                      <br />
+                    </span>
+                  </template>
+                </VCol>
+              </template>
             </VRow>
           </VContainer>
         </template>

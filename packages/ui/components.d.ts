@@ -20,6 +20,8 @@ declare module 'vue' {
     SubjectDetails: typeof import('./src/components/subject/SubjectDetails.vue')['default']
     SubjectDialog: typeof import('./src/components/subject/SubjectDialog.vue')['default']
     SubjectTable: typeof import('./src/components/subject/SubjectTable.vue')['default']
+    SubjectTableRow: typeof import('./src/components/subject/SubjectTableRow.vue')['default']
+    SubjectTile: typeof import('./src/components/subject/SubjectTile.vue')['default']
     SubjectTiles: typeof import('./src/components/subject/SubjectTiles.vue')['default']
   }
 }

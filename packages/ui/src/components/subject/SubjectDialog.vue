@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/enrollment'
+import type { Subject } from '@/stores/CoursesStore'
 
 import { useI18n } from 'vue-i18n'
 
@@ -18,7 +18,7 @@ const { locale } = useI18n()
           {{ locale === 'de' ? subject.title.de : subject.title.en }}
         </strong>
         -
-        {{ subject.allLecturers.join(', ') }}
+        {{ subject.lecturers.join(', ') }}
       </VCardTitle>
       <VCardText class="pa-0 pb-3 px-3">
         <SubjectDetails :subject="subject" />

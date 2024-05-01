@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { useI18n } from 'vue-i18n'
 
 defineProps<{
   visible: boolean
 }>()
-const enrollmentStore = useEnrollmentStore()
+const enrollmentStore = useCoursesStore()
 const { locale } = useI18n()
 </script>
 
@@ -31,7 +31,12 @@ const { locale } = useI18n()
       }}
     </p>
     <div class="ml-3">
-      <li v-for="s in enrollmentStore.enrolledCourses" :key="s.moduleCode">
+      <li
+        v-for="s in [
+          /*enrolled */
+        ]"
+        :key="s.moduleCode"
+      >
         {{ `${locale === 'de' ? s.title?.de : s.title?.en} (${s.points})` }}
       </li>
     </div>

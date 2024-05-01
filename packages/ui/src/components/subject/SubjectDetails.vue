@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/enrollment'
+import type { Subject } from '@/stores/CoursesStore'
 
 import { trpc } from '@/api/trpc'
 import { useAsyncState } from '@vueuse/core'
@@ -45,89 +45,95 @@ const fullscreen = ref(false)
             <p>{{ subject.semesterHours }} SWS</p>
             <p>{{ subject.creditPoints }} CPs</p>
           </div>
-          <div class="mb-1 d-flex align-end">
-            <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
-            <h4>Teilnehmer</h4>
-          </div>
-          <p class="mb-4 px-3">
-            {{
-              subject.offeredCourse.minParticipants +
-              '-' +
-              subject.offeredCourse.maxParticipants
-            }}
-          </p>
-
-          <div class="mb-1 d-flex align-end">
-            <VIcon class="mr-3" size="32">mdi-calendar</VIcon>
-            <h4>Termine</h4>
-          </div>
-          <p
-            v-if="subject.offeredCourse.appointments.type === 'weekly'"
-            class="mb-4 px-3 d-flex flex-column"
-          >
-            <template v-for="date in subject.offeredCourse.appointments.dates">
+          <template v-if="subject.offeredCourse">
+            <div class="mb-1 d-flex align-end">
+              <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
+              <h4>Teilnehmer</h4>
+            </div>
+            <p class="mb-4 px-3">
               {{
-                date.from.toLocaleDateString([], {
-                  weekday: 'long',
-                  hour: 'numeric',
-                  minute: '2-digit',
-                }) +
-                ' - ' +
-                date.to.toLocaleTimeString([], {
-                  hour: 'numeric',
-                  minute: '2-digit',
-                })
-              }}
-            </template>
-          </p>
-
-          <div
-            v-else-if="subject.offeredCourse.appointments.type === 'block'"
-            class="mb-4 px-3 d-flex flex-column"
-          >
-            <p
-              v-for="(date, i) in subject.offeredCourse.appointments.dates"
-              :key="subject.moduleCode + 'block' + i"
-            >
-              {{
-                date.from.toLocaleDateString([], {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: '2-digit',
-                }) +
-                ' - ' +
-                date.to.toLocaleDateString([], {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: '2-digit',
-                })
+                subject.offeredCourse.minParticipants +
+                '-' +
+                subject.offeredCourse.maxParticipants
               }}
             </p>
-          </div>
 
-          <div
-            v-else-if="subject.offeredCourse.appointments.type === 'irregular'"
-            class="mb-4 px-3 d-flex flex-column"
-          >
+            <div class="mb-1 d-flex align-end">
+              <VIcon class="mr-3" size="32">mdi-calendar</VIcon>
+              <h4>Termine</h4>
+            </div>
             <p
-              v-for="(date, i) in subject.offeredCourse.appointments.dates"
-              :key="subject.moduleCode + 'irregular' + i"
+              v-if="subject.offeredCourse.appointments.type === 'weekly'"
+              class="mb-4 px-3 d-flex flex-column"
             >
-              {{
-                date.from.toLocaleDateString([], {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: '2-digit',
-                }) +
-                ' - ' +
-                date.to.toLocaleDateString([], {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: '2-digit',
-                })
-              }}
+              <template
+                v-for="date in subject.offeredCourse.appointments.dates"
+              >
+                {{
+                  date.from.toLocaleDateString([], {
+                    weekday: 'long',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                  }) +
+                  ' - ' +
+                  date.to.toLocaleTimeString([], {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                  })
+                }}
+              </template>
             </p>
-          </div>
+
+            <div
+              v-else-if="subject.offeredCourse.appointments.type === 'block'"
+              class="mb-4 px-3 d-flex flex-column"
+            >
+              <p
+                v-for="(date, i) in subject.offeredCourse.appointments.dates"
+                :key="subject.moduleCode + 'block' + i"
+              >
+                {{
+                  date.from.toLocaleDateString([], {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  }) +
+                  ' - ' +
+                  date.to.toLocaleDateString([], {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  })
+                }}
+              </p>
+            </div>
+
+            <div
+              v-else-if="
+                subject.offeredCourse.appointments.type === 'irregular'
+              "
+              class="mb-4 px-3 d-flex flex-column"
+            >
+              <p
+                v-for="(date, i) in subject.offeredCourse.appointments.dates"
+                :key="subject.moduleCode + 'irregular' + i"
+              >
+                {{
+                  date.from.toLocaleDateString([], {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  }) +
+                  ' - ' +
+                  date.to.toLocaleDateString([], {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  })
+                }}
+              </p>
+            </div>
+          </template>
 
           <div class="mb-1 d-flex align-end">
             <VIcon class="mr-3" size="32">mdi-alert-circle</VIcon>
@@ -137,7 +143,7 @@ const fullscreen = ref(false)
             {{ subject.extraInfo }}
           </p>
           <p
-            v-if="subject.offeredCourse.extraInfo"
+            v-if="subject.offeredCourse?.extraInfo"
             class="font-italic mb-4 px-3 d-flex flex-column"
           >
             {{ subject.offeredCourse.extraInfo }}

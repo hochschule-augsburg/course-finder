@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { ref } from 'vue'
 
-const enrollmentStore = useEnrollmentStore()
+const enrollmentStore = useCoursesStore()
 const subjectView = ref<'grid' | 'list'>('grid')
 const visible = ref(false)
 </script>
@@ -24,7 +24,7 @@ const visible = ref(false)
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
       <VBtn
-        v-if="enrollmentStore.selectedSubjects.length > 0"
+        v-if="false"
         class="px-3 floating"
         icon="mdi-arrow-right"
         @click="visible = true"

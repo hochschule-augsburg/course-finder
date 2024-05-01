@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import type { Subject } from './enrollment'
+import type { Subject } from './CoursesStore'
 
 export type Options = {
   option: string
@@ -30,6 +30,9 @@ export const useFiltersStore = defineStore('filters', () => {
     {
       filterFn: (subjects, options) =>
         subjects.filter((s) => {
+          if (!s.offeredCourse) {
+            return true
+          }
           if (
             !!(
               s.offeredCourse.appointments.type === 'weekly' &&
@@ -51,6 +54,9 @@ export const useFiltersStore = defineStore('filters', () => {
     {
       filterFn: (subjects, options) =>
         subjects.filter((s) => {
+          if (!s.offeredCourse) {
+            return true
+          }
           if (s.offeredCourse.appointments.type === 'weekly') {
             return s.offeredCourse.appointments.dates.some(
               (d) => options[d.from.getDay()].selected,
@@ -112,8 +118,8 @@ export const useFiltersStore = defineStore('filters', () => {
       filterFn: (subjects, range) =>
         subjects.filter(
           (s) =>
-            (s.offeredCourse.minParticipants ?? 0) >= range[0] &&
-            (s.offeredCourse.maxParticipants ?? 100) <= range[1],
+            (s.offeredCourse?.minParticipants ?? 0) >= range[0] &&
+            (s.offeredCourse?.maxParticipants ?? 100) <= range[1],
         ),
       max: 100,
       min: 0,

@@ -18,6 +18,7 @@ main()
   })
 
 async function main() {
+  const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
   // Create faculties
   await prisma.faculty.createMany({
     data: [
@@ -79,6 +80,7 @@ async function main() {
     data: {
       creditPoints: 4,
       facultyName: 'Informatik',
+      infoUrl: 'https://example.com',
       lecturers: ['scholz'],
       moduleCode: 'PHIL101',
       published: true,
@@ -95,6 +97,7 @@ async function main() {
       facultyName: 'Informatik',
       lecturers: ['prof1'],
       moduleCode: 'MATH101',
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
       published: true,
       semesterHours: 4,
       title: { de: 'Analysis I', en: 'Calculus I' },
@@ -469,15 +472,22 @@ async function main() {
     ],
   })
 
-  const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
   await prisma.course.createMany({
     data: dummyCourses.map((e) => ({
       ...e,
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
     })),
   })
-  // @ts-expect-error ingore for now
-  await prisma.offeredCourse.createMany({ data: dummyOfferedCourses })
+  await prisma.offeredCourse.createMany({
+    data: dummyOfferedCourses.map((course) => ({
+      ...course,
+      appointments: {
+        dates: course.appointments.dates,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+        type: course.appointments.type as any,
+      },
+    })),
+  })
 }
 
 function hashPassword(password: string, salt: string) {

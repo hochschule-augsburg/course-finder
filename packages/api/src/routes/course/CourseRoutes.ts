@@ -8,13 +8,15 @@ import { prisma } from '../../prisma/prisma'
 import { router, studentProcedure } from '../trpc'
 
 export type CourseExtended = {
-  Lecturers: { name: string; username: string }[]
   offeredCourse: {
     appointments: CourseAppointmentsJson<Date>
   } & Omit<OfferedCourse, 'appointments'>
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
+  getCourses: studentProcedure.query(async () => {
+    return await prisma.course.findMany({ select: courseFields })
+  }),
   getCurrentPhase: studentProcedure.query(async () => {
     return (await prisma.enrollphase.findFirst({})) ?? undefined
   }),
@@ -28,26 +30,13 @@ export const courseRouter = router({
       return (
         await prisma.course.findMany({
           select: {
-            Faculty: true,
-            Lecturers: {
-              select: { User: { select: { name: true, username: true } } },
-            },
-            creditPoints: true,
-            externLecturers: true,
-            extraInfo: true,
-            facultyName: true,
-            infoUrl: true,
-            moduleCode: true,
+            ...courseFields,
             offeredCourse: {
               // include only the offeredCourses that are indicated by input
               where: {
                 phaseId: { equals: input.phaseId },
               },
             },
-            published: true,
-            semesterHours: true,
-            title: true,
-            varyingCP: true,
           },
           // select only the courses that have an offeredCourse included
           where: {
@@ -95,3 +84,18 @@ export const courseRouter = router({
       return { pdf: course.pdf ? new Int8Array(course.pdf) : null }
     }),
 })
+
+const courseFields = {
+  Faculty: true,
+  creditPoints: true,
+  editorUsername: true,
+  extraInfo: true,
+  facultyName: true,
+  infoUrl: true,
+  lecturers: true,
+  moduleCode: true,
+  published: true,
+  semesterHours: true,
+  title: true,
+  varyingCP: true,
+}

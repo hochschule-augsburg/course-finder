@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/enrollment'
+import type { Subject } from '@/stores/CoursesStore'
 
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn } from 'vuetify/components'
@@ -11,7 +11,7 @@ import '../styles/settings.scss'
 
 const { locale } = useI18n()
 
-const enrollmentStore = useEnrollmentStore()
+const enrollmentStore = useCoursesStore()
 
 const visible = defineModel<boolean>()
 
