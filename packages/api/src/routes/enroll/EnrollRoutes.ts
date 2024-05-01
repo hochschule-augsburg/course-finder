@@ -71,8 +71,6 @@ export const enrollRouter = router({
           },
         },
       })
-
-      return getStudentChoices(ctx.phase.id, ctx.user.username)
     }),
   list: enrollProcedure
     .input(z.object({ phaseId: z.number() }))
@@ -120,7 +118,6 @@ export const enrollRouter = router({
           },
         },
       })
-      return getStudentChoices(ctx.phase.id, ctx.user.username)
     }),
 })
 
