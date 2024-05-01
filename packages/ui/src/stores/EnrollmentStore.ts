@@ -5,7 +5,6 @@ import { computed, ref, watch } from 'vue'
 import type { Subject } from './CoursesStore'
 
 import { useCoursesStore } from './CoursesStore'
-import { useUserStore } from './UserStore'
 
 export type EnrolledCourse = {
   moduleCode: string
@@ -34,17 +33,13 @@ export function useCourseEnroll(subject: Subject) {
 }
 
 export const useEnrollmentStore = defineStore('enrollment', () => {
-  const userStore = useUserStore()
   const coursesStore = useCoursesStore()
 
   const enrolledSubjects = ref<EnrolledCourse[]>([])
 
   watch(
-    [() => userStore.user, () => coursesStore.currentPhase],
-    ([user, phase]) => {
-      if (user?.type !== 'Student' || !phase) {
-        enrolledSubjects.value = []
-      }
+    () => coursesStore.currentPhase,
+    () => {
       void update()
     },
     { immediate: true },
