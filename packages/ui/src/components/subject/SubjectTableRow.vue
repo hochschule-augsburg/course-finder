@@ -1,36 +1,13 @@
 <script lang="ts" setup>
 import type { Subject } from '@/stores/CoursesStore'
 
-import { useCourseEnroll } from '@/stores/EnrollmentStore'
 import { useI18n } from 'vue-i18n'
 
-import { dialogService } from '../DialogService'
+import EnrollCheckbox from './EnrollCheckbox.vue'
 
-const props = defineProps<{ subject: Subject }>()
+defineProps<{ subject: Subject }>()
 
 const { locale } = useI18n()
-
-const { modelValue: enrolled, update: updateEnrolled } = useCourseEnroll(
-  props.subject,
-)
-
-async function handleUpdateEnroll() {
-  if (enrolled.value?.points) {
-    const result = await new Promise((resolve) =>
-      dialogService.showDialog({
-        onCancel: () => resolve(false),
-        onConfirm: () => resolve(true),
-        text: 'points-get-lost',
-        title: 'confirm-action',
-      }),
-    )
-    if (!result) {
-      // TODO check box ist blöd
-      return
-    }
-  }
-  updateEnrolled(!enrolled.value)
-}
 </script>
 
 <template>
@@ -40,13 +17,10 @@ async function handleUpdateEnroll() {
       color="rgb(var(--v-theme-secondary))"
     >
       <template #default="{ expanded }">
-        <VCheckbox
+        <EnrollCheckbox
           v-if="subject.offeredCourse"
-          :model-value="!!enrolled"
+          :subject
           class="checkbox"
-          hide-details
-          @click.stop
-          @update:model-value="handleUpdateEnroll"
         />
         <VContainer class="ma-0">
           <VRow no-gutters>
@@ -127,7 +101,8 @@ async function handleUpdateEnroll() {
 <style scoped lang="scss">
 .checkbox {
   position: absolute;
-  translate: -1.8rem -2rem;
+  top: var(--element-spacing-xs);
+  left: var(--element-spacing-xs);
 }
 
 .title-ellipsis {

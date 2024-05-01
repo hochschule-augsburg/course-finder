@@ -91,7 +91,7 @@ function reset() {
       elevation="1"
       max-width="var(--dialog-max-width)"
       rounded="lg"
-      width="var(--dialog-width)"
+      width="90%"
     >
       <VForm ref="form">
         <VTextField
@@ -122,7 +122,7 @@ function reset() {
   height: 100%;
 }
 .formHead {
-  width: var(--dialog-width);
+  width: 90%;
   max-width: var(--dialog-max-width);
 }
 </style>

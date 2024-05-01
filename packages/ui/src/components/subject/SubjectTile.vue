@@ -1,37 +1,13 @@
 <script lang="ts" setup>
 import type { Subject } from '@/stores/CoursesStore'
 
-import { useCourseEnroll } from '@/stores/EnrollmentStore'
 import { useI18n } from 'vue-i18n'
-import { VCheckbox } from 'vuetify/components'
 
-import { dialogService } from '../DialogService'
+import EnrollCheckbox from './EnrollCheckbox.vue'
 
-const props = defineProps<{ subject: Subject }>()
+defineProps<{ subject: Subject }>()
 
 const { locale } = useI18n()
-
-const { modelValue: enrolled, update: updateEnrolled } = useCourseEnroll(
-  props.subject,
-)
-
-async function handleUpdateEnroll() {
-  if (enrolled.value?.points) {
-    const result = await new Promise((resolve) =>
-      dialogService.showDialog({
-        onCancel: () => resolve(false),
-        onConfirm: () => resolve(true),
-        text: 'points-get-lost',
-        title: 'confirm-action',
-      }),
-    )
-    if (!result) {
-      // TODO checkbox ist blöd
-      return
-    }
-  }
-  updateEnrolled(!enrolled.value)
-}
 </script>
 
 <template>
@@ -45,11 +21,7 @@ async function handleUpdateEnroll() {
     hover
   >
     <template v-if="subject.offeredCourse" #append>
-      <VCheckbox
-        :model-value="!!enrolled"
-        @click.stop
-        @update:model-value="handleUpdateEnroll"
-      />
+      <EnrollCheckbox :subject />
     </template>
     <VCardText>
       <VRow align="end" justify="end" style="height: 7rem">

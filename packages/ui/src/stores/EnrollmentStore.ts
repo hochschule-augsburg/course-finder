@@ -45,14 +45,14 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
       if (user?.type !== 'Student' || !phase) {
         enrolledSubjects.value = []
       }
-      void init()
+      void update()
     },
     { immediate: true },
   )
 
   return { addSubject, enroll, enrolledSubjects, removeSubject }
 
-  async function init() {
+  async function update() {
     if (!coursesStore.currentPhase) {
       return
     }

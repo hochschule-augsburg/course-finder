@@ -10,6 +10,7 @@ declare module 'vue' {
     ConfirmDialog: typeof import('./src/components/ConfirmDialog.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/CustomNavbar.vue')['default']
+    EnrollCheckbox: typeof import('./src/components/subject/EnrollCheckbox.vue')['default']
     EnrollmentForm: typeof import('./src/components/EnrollmentForm.vue')['default']
     EnrollmentOverview: typeof import('./src/components/EnrollmentOverview.vue')['default']
     FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
