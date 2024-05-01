@@ -7,7 +7,7 @@ import {
   VCardText,
   VCardTitle,
   VDialog,
-  VRow,
+  VSpacer,
 } from 'vuetify/components'
 
 export type DialogOptions = {
@@ -26,39 +26,43 @@ export const dialogService = {
     dialog?.open(options)
   },
 }
+export const ModalDialog = defineComponent(
+  () => {
+    const dialogOptions = ref<DialogOptions | undefined>()
+    const { t } = useI18n()
 
-export const ModalDialog = defineComponent(() => {
-  const dialogOptions = ref<DialogOptions | undefined>()
-  const { t } = useI18n()
+    dialog = {
+      open: (options) => {
+        dialogOptions.value = options
+      },
+    }
 
-  dialog = {
-    open: (options) => {
-      dialogOptions.value = options
-    },
-  }
+    function cancel() {
+      dialogOptions.value?.onCancel()
+      dialogOptions.value = undefined
+    }
 
-  function cancel() {
-    dialogOptions.value?.onCancel()
-    dialogOptions.value = undefined
-  }
+    function confirm() {
+      dialogOptions.value?.onConfirm()
+      dialogOptions.value = undefined
+    }
 
-  function confirm() {
-    dialogOptions.value?.onConfirm()
-    dialogOptions.value = undefined
-  }
-  return () => (
-    <VDialog
-      max-width="400"
-      modelValue={!!dialogOptions.value}
-      onUpdate:modelValue={cancel}
-    >
-      <VCard>
-        <VCardTitle class="headline">
-          {t(dialogOptions.value?.title ?? '')}
-        </VCardTitle>
-        <VCardText> {t(dialogOptions.value?.text ?? '')} </VCardText>
-        <VCardActions>
-          <VRow align="end" justify="end">
+    if (import.meta.hot) {
+      import.meta.hot.invalidate()
+    }
+    return () => (
+      <VDialog
+        max-width="400"
+        modelValue={!!dialogOptions.value}
+        onUpdate:modelValue={cancel}
+      >
+        <VCard>
+          <VCardTitle class="headline">
+            {t(dialogOptions.value?.title ?? '')}
+          </VCardTitle>
+          <VCardText> {t(dialogOptions.value?.text ?? '')} </VCardText>
+          <VCardActions>
+            <VSpacer />
             <VBtn
               color="error"
               // @ts-expect-error wrong typing
@@ -73,9 +77,10 @@ export const ModalDialog = defineComponent(() => {
             >
               {t('confirm')}
             </VBtn>
-          </VRow>
-        </VCardActions>
-      </VCard>
-    </VDialog>
-  )
-})
+          </VCardActions>
+        </VCard>
+      </VDialog>
+    )
+  },
+  { name: 'ModalDialog' },
+)
