@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AdminSubjectList: typeof import('./src/components/AdminSubjectList.vue')['default']
+    CreateEnrollphase: typeof import('./src/components/CreateEnrollphase.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/CustomNavbar.vue')['default']
     EnrollCheckbox: typeof import('./src/components/subject/EnrollCheckbox.vue')['default']
