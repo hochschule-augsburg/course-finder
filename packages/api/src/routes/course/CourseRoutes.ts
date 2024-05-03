@@ -5,7 +5,7 @@ import { z } from 'zod'
 import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes'
 
 import { prisma } from '../../prisma/prisma'
-import { publicProcedure, router, studentProcedure } from '../trpc'
+import { publicProcedure, router, studentOnlyProcedure } from '../trpc'
 
 export type CourseExtended = {
   offeredCourse: {
@@ -17,10 +17,10 @@ export const courseRouter = router({
   getCourses: publicProcedure.query(async () => {
     return await prisma.course.findMany({ select: courseFields })
   }),
-  getCurrentPhase: studentProcedure.query(async () => {
+  getCurrentPhase: studentOnlyProcedure.query(async () => {
     return (await prisma.enrollphase.findFirst({})) ?? undefined
   }),
-  getOfferedCourses: studentProcedure
+  getOfferedCourses: studentOnlyProcedure
     .input(
       z.object({
         phaseId: z.number(),

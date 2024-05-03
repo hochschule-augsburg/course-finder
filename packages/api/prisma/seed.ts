@@ -280,6 +280,17 @@ async function main() {
       {
         auth: {
           method: 'local',
+          password: hashPassword('admin', 'salt'),
+          salt: 'salt',
+        },
+        email: 'admin@example.com',
+        name: 'Admin',
+        type: 'Admin',
+        username: 'admin',
+      },
+      {
+        auth: {
+          method: 'local',
           password: hashPassword('singhraj', 'salt'),
           salt: 'salt',
         },

@@ -113,6 +113,9 @@ export const enrollRouter = router({
           where: { id: input.phaseId },
         })
       }),
+    getCurrentPhase: adminProcedure.query(async () => {
+      return (await prisma.enrollphase.findFirst({})) ?? undefined
+    }),
     list: adminProcedure.query(async () => {
       return await prisma.enrollphase.findMany({
         select: { id: true, start: true },
