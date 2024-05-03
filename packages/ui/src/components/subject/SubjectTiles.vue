@@ -18,7 +18,10 @@ function openSubjectDialog(moduleCode: string) {
 
 <template>
   <div>
-    <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
+    <SubjectDialog
+      v-model:visible="showSubjectDialog"
+      :subject="selectedSubject"
+    />
     <VContainer>
       <VRow justify="center">
         <VCol

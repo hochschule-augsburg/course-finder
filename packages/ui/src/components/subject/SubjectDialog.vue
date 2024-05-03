@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n'
 defineProps<{
   subject?: Subject
 }>()
-const showSubjectDialog = defineModel<boolean>()
+const showSubjectDialog = defineModel<boolean>('visible')
 const { locale } = useI18n()
 </script>
 

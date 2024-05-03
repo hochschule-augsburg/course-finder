@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
 import type { Subject } from './CoursesStore'
+
+import { useUserStore } from './UserStore'
 
 export type Options = {
   option: string
@@ -10,6 +12,7 @@ export type Options = {
 
 export type OptionsFilter = {
   filterFn: (subjects: Subject[], options: Options[]) => Subject[]
+  hidden?: boolean
   name: string
   options: Options[]
 }
@@ -18,6 +21,7 @@ export type RangeFilter = {
     subjects: Subject[],
     range: [min: number, max: number],
   ) => Subject[]
+  hidden?: boolean
   max: number
   min: number
   name: string
@@ -25,10 +29,14 @@ export type RangeFilter = {
 }
 
 export const useFiltersStore = defineStore('filters', () => {
+  const userStore = useUserStore()
   const search = ref<string>('')
-  const optionsFilters = ref<OptionsFilter[]>([
+  const hideNonStudentFilters = computed(
+    () => userStore.user?.type !== 'Student',
+  )
+  const optionsFilters: OptionsFilter[] = reactive([
     {
-      filterFn: (subjects, options) =>
+      filterFn: (subjects: Subject[], options: Options[]) =>
         subjects.filter((s) => {
           if (!s.offeredCourse) {
             return true
@@ -45,6 +53,7 @@ export const useFiltersStore = defineStore('filters', () => {
           }
           return false
         }),
+      hidden: hideNonStudentFilters,
       name: 'Veranstaltungsart',
       options: [
         { option: 'wöchentlich', selected: false },
@@ -79,6 +88,7 @@ export const useFiltersStore = defineStore('filters', () => {
           }
           return false
         }),
+      hidden: hideNonStudentFilters,
       name: 'Wochentag',
       // TODO: use i18n (index instead of names)
       options: [
@@ -93,9 +103,9 @@ export const useFiltersStore = defineStore('filters', () => {
     },
   ])
 
-  const rangeFilters = ref<RangeFilter[]>([
+  const rangeFilters: RangeFilter[] = reactive([
     {
-      filterFn: (subjects, range) =>
+      filterFn: (subjects: Subject[], range: [min: number, max: number]) =>
         subjects.filter(
           (s) => s.semesterHours >= range[0] && s.semesterHours <= range[1],
         ),
@@ -105,7 +115,7 @@ export const useFiltersStore = defineStore('filters', () => {
       range: [0, 20],
     },
     {
-      filterFn: (subjects, range) =>
+      filterFn: (subjects: Subject[], range: [min: number, max: number]) =>
         subjects.filter(
           (s) => s.creditPoints >= range[0] && s.creditPoints <= range[1],
         ),
@@ -115,12 +125,13 @@ export const useFiltersStore = defineStore('filters', () => {
       range: [0, 20],
     },
     {
-      filterFn: (subjects, range) =>
+      filterFn: (subjects: Subject[], range: [min: number, max: number]) =>
         subjects.filter(
           (s) =>
             (s.offeredCourse?.minParticipants ?? 0) >= range[0] &&
             (s.offeredCourse?.maxParticipants ?? 100) <= range[1],
         ),
+      hidden: hideNonStudentFilters,
       max: 100,
       min: 0,
       name: 'Teilnehmer',
@@ -129,13 +140,11 @@ export const useFiltersStore = defineStore('filters', () => {
   ])
 
   const activeRangeFilters = computed(() =>
-    rangeFilters.value.filter(
-      (f) => f.min !== f.range[0] || f.max !== f.range[1],
-    ),
+    rangeFilters.filter((f) => f.min !== f.range[0] || f.max !== f.range[1]),
   )
 
   const activeOptionsFilters = computed(() =>
-    optionsFilters.value.filter((f) => f.options.some((o) => o.selected)),
+    optionsFilters.filter((f) => f.options.some((o) => o.selected)),
   )
 
   const activeOptions = computed(() => {
@@ -145,6 +154,22 @@ export const useFiltersStore = defineStore('filters', () => {
     })
     return activeOptions
   })
+
+  watch(() => userStore.user, resetFilters)
+
+  return {
+    activeOptions,
+    activeOptionsFilters,
+    activeRangeFilters,
+    applyFilters,
+    optionsFilters,
+    rangeFilters,
+    resetFilter,
+    resetFilters,
+    resetSearch,
+    search,
+    searchSubjects,
+  }
 
   function applyFilters(subjects: Subject[]): Subject[] {
     activeRangeFilters.value.forEach((filter) => {
@@ -179,8 +204,8 @@ export const useFiltersStore = defineStore('filters', () => {
   }
 
   function resetFilters() {
-    rangeFilters.value.forEach((f) => resetRange(f))
-    optionsFilters.value.forEach((f) => {
+    rangeFilters.forEach((f) => resetRange(f))
+    optionsFilters.forEach((f) => {
       f.options.forEach((o) => {
         o.selected = false
       })
@@ -188,12 +213,12 @@ export const useFiltersStore = defineStore('filters', () => {
   }
 
   function resetFilter(name: string) {
-    rangeFilters.value.forEach((f) => {
+    rangeFilters.forEach((f) => {
       if (f.name === name) {
         f = resetRange(f)
       }
     })
-    optionsFilters.value.forEach((f) => {
+    optionsFilters.forEach((f) => {
       f.options.forEach((o) => {
         if (o.option === name) {
           o.selected = false
@@ -204,19 +229,5 @@ export const useFiltersStore = defineStore('filters', () => {
 
   function resetSearch() {
     search.value = ''
-  }
-
-  return {
-    activeOptions,
-    activeOptionsFilters,
-    activeRangeFilters,
-    applyFilters,
-    optionsFilters,
-    rangeFilters,
-    resetFilter,
-    resetFilters,
-    resetSearch,
-    search,
-    searchSubjects,
   }
 })
