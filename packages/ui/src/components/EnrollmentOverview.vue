@@ -2,17 +2,13 @@
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { useI18n } from 'vue-i18n'
-
-defineProps<{
-  visible: boolean
-}>()
 const enrollmentStore = useEnrollmentStore()
 const coursesStore = useCoursesStore()
 const { locale } = useI18n()
 </script>
 
 <template>
-  <div v-if="coursesStore.currentPhase && !visible" class="mx-2">
+  <div v-if="coursesStore.currentPhase" class="mx-2">
     <h2>
       {{
         locale === 'de'

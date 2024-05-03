@@ -4,7 +4,7 @@ import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VTextField } from 'vuetify/components'
+import { VBtn, VDialog, VSheet, VTextField } from 'vuetify/components'
 import { VForm } from 'vuetify/components/VForm'
 
 import '../styles/settings.scss'
@@ -74,27 +74,25 @@ function reset() {
 </script>
 
 <template>
-  <div
-    v-if="visible"
-    class="d-flex flex-column align-center justify-center container"
-  >
-    <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
-    <div class="d-flex align-start formHead">
-      <VBtn
-        prepend-icon="mdi-arrow-left"
-        text="zurück"
-        variant="plain"
-        @click="back"
-      />
-    </div>
+  <VDialog v-model:model-value="visible" max-width="500">
+    <SubjectDialog
+      v-model:visible="showSubjectDialog"
+      :subject="selectedSubject"
+    />
     <VSheet
       class="pa-5"
       color="rgb(var(--v-theme-secondary))"
-      elevation="1"
       max-width="var(--dialog-max-width)"
       rounded="lg"
-      width="90%"
     >
+      <div class="d-flex align-start formHead">
+        <VBtn
+          prepend-icon="mdi-arrow-left"
+          text="zurück"
+          variant="plain"
+          @click="back"
+        />
+      </div>
       <VForm ref="form">
         <VTextField
           v-model.number="creditsNeeded"
@@ -121,7 +119,7 @@ function reset() {
         </VRow>
       </VForm>
     </VSheet>
-  </div>
+  </VDialog>
 </template>
 
 <style scoped lang="scss">
