@@ -85,7 +85,7 @@ export const courseRouter = router({
     }),
 })
 
-const courseFields = {
+export const courseFields = {
   Faculty: true,
   creditPoints: true,
   editorUsername: true,
