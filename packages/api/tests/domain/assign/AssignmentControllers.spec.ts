@@ -14,7 +14,6 @@ describe('AssignmentStudentController', () => {
     phase = {
       StudentChoice: [
         {
-          lastChange: new Date(),
           moduleCode: '1',
           phaseId: 0,
           points: 1000,
@@ -66,7 +65,6 @@ describe('AssignmentStudentController', () => {
 
   it('should check if finished', () => {
     phase.StudentChoice.push({
-      lastChange: new Date(),
       moduleCode: '2',
       phaseId: 0,
       points: 1,
