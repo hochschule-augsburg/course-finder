@@ -7,45 +7,76 @@ import { ref } from 'vue'
 const adminStore = useAdminStore()
 
 const showModalForm = ref(false)
-const selectedSubject = ref<Subject>(adminStore.subjects[0])
 
+const selectedSubject = ref<Subject>(adminStore.subjects[0])
 const formData = ref({
+  Lecturers: '',
   creditPoints: 0,
-  description: {},
-  examType: {},
-  examinationNumbers: [] as string[],
-  externLecturers: [] as string[],
+  description: { de: '', en: '' }, /// [I18n]
+  examType: { for: '' },
+  examinationNumbers: ['', ''],
+  externLecturers: ['', ''],
   language: '',
-  lecturers: [] as any[],
+  learningGoals: { de: '', en: '' }, /// [I18n]
+  requirements: ['', ''],
   semesterHours: 0,
-  title: {},
+  title: { de: '', en: '' }, /// [I18n]
 })
 
 function selectSubject(s: Subject) {
   selectedSubject.value = s
-  // Prefill form data with selected subject's data
-  formData.value.title = s.title
-  formData.value.lecturers = s.Lecturers
-  formData.value.externLecturers = s.externLecturers
+  formData.value.Lecturers = getLecturers(s.Lecturers)
   formData.value.creditPoints = s.creditPoints
-  formData.value.description = s.description
-  formData.value.examType = s.examType
+  formData.value.description.de = s.description.de ?? ''
+  formData.value.description.en = s.description.en ?? ''
+  formData.value.examType.for = s.examType.for
   formData.value.examinationNumbers = s.examinationNumbers
+  formData.value.externLecturers = s.externLecturers
+  formData.value.language = s.language
+  formData.value.learningGoals.de = s.learningGoals.de ?? ''
+  formData.value.learningGoals.en = s.learningGoals.en ?? ''
+  formData.value.requirements = s.requirements
   formData.value.semesterHours = s.semesterHours
+  formData.value.title.de = s.title.de ?? ''
+  formData.value.title.en = s.title.en ?? ''
   showModalForm.value = true
+  console.log(formData.value)
 }
 
 function saveSubject() {
-  selectedSubject.value.title = formData.value.title
-  //TODO: ????
-  selectedSubject.value.Lecturers = formData.value.lecturers
+  selectedSubject.value.title.en = formData.value.title.en
+  selectedSubject.value.Lecturers = parseLecturers(formData.value.Lecturers)
+  selectedSubject.value.creditPoints = formData.value.creditPoints
+  selectedSubject.value.description.en = formData.value.description.en
+  selectedSubject.value.description.de = formData.value.description.de
+  selectedSubject.value.examType.for = formData.value.examType.for
+  selectedSubject.value.examinationNumbers = formData.value.examinationNumbers
   selectedSubject.value.externLecturers = formData.value.externLecturers
+  selectedSubject.value.language = formData.value.language
+  selectedSubject.value.learningGoals.en = formData.value.learningGoals.en
+  selectedSubject.value.learningGoals.de = formData.value.learningGoals.de
+  selectedSubject.value.requirements = formData.value.requirements
+  selectedSubject.value.semesterHours = formData.value.semesterHours
+  selectedSubject.value.title.en = formData.value.title.en
+  selectedSubject.value.title.de = formData.value.title.de
+
   showModalForm.value = false
+  // TODO: Change subject in store
+  // TODO: Send request to backend
+  console.log(selectedSubject.value)
+  console.log(selectedSubject.value.moduleCode)
 }
 
-interface Lecturer {
+type Lecturer = {
   name: string
   username: string
+}
+
+function parseLecturers(lecturers: string) {
+  return lecturers.split(',').map((name) => ({
+    name: name.trim(),
+    username: '',
+  }))
 }
 
 function getLecturers(lecturers: Lecturer[]) {
@@ -89,11 +120,22 @@ function getLecturers(lecturers: Lecturer[]) {
         <VCardText>
           <VRow dense>
             <VCol cols="12" md="4" sm="6">
-              <VTextField v-model="formData.title" label="Title" required />
+              <VTextField
+                v-model="formData.title.en"
+                label="Title (en)"
+                required
+              />
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
-                :model-value="getLecturers(selectedSubject.Lecturers)"
+                v-model="formData.title.de"
+                label="Title (de)"
+                required
+              />
+            </VCol>
+            <VCol cols="12" md="4" sm="6">
+              <VTextField
+                v-model="formData.Lecturers"
                 hint="separate with comma"
                 label="Lecturers*"
                 required
@@ -101,7 +143,7 @@ function getLecturers(lecturers: Lecturer[]) {
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
-                :model-value="selectedSubject.externLecturers"
+                v-model="formData.externLecturers"
                 hint="separate with comma"
                 label="Extern lecturers*"
                 required
@@ -109,7 +151,7 @@ function getLecturers(lecturers: Lecturer[]) {
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
-                :model-value="selectedSubject.creditPoints"
+                v-model="formData.creditPoints"
                 label="Credit points (CP)"
                 type="number"
                 required
@@ -117,7 +159,7 @@ function getLecturers(lecturers: Lecturer[]) {
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
-                :model-value="selectedSubject.semesterHours"
+                v-model="formData.semesterHours"
                 label="Semester Hours (SWS)"
                 type="number"
                 required
@@ -125,43 +167,74 @@ function getLecturers(lecturers: Lecturer[]) {
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
-                :model-value="selectedSubject.examinationNumbers"
+                v-model="formData.examinationNumbers"
                 label="Examination numbers*"
                 required
               />
             </VCol>
-            <VCol cols="12" sm="6">
+            <VCol cols="12" md="4" sm="6">
               <VTextField
-                :model-value="selectedSubject.examType.for"
+                v-model="formData.examType.for"
                 label="Exam type"
                 required
               />
             </VCol>
-            <VCol cols="12" sm="6">
+            <VCol md="4" sm="12">
               <VSelect
+                v-model="formData.language"
                 :items="['German', 'English']"
-                :model-value="selectedSubject.language"
                 label="Language"
                 required
               />
             </VCol>
-            <VCol>
+            <VCol cols="12">
+              <VTextField
+                v-model="formData.requirements"
+                label="Requirements"
+                required
+              />
+            </VCol>
+            <VCol cols="6">
               <VTextarea
-                :model-value="selectedSubject.description.en"
-                label="Description"
+                v-model="formData.description.en"
+                label="Description (en)"
+                type="text"
+                required
+              />
+            </VCol>
+            <VCol cols="6">
+              <VTextarea
+                v-model="formData.description.de"
+                label="Description (de)"
+                type="text"
+                required
+              />
+            </VCol>
+            <VCol cols="12">
+              <VTextarea
+                v-model="formData.learningGoals.en"
+                label="Learning goals (en)"
+                type="text"
+                required
+              />
+            </VCol>
+            <VCol cols="12">
+              <VTextarea
+                v-model="formData.learningGoals.de"
+                label="Learning goals (de)"
                 type="text"
                 required
               />
             </VCol>
           </VRow>
           <small class="text-caption text-medium-emphasis"
-            >*separate multiple elements with ,</small
+            >*separate multiple elements with comma</small
           >
         </VCardText>
         <VDivider />
         <template #actions>
           <VBtn text="Cancel" @click="showModalForm = false" />
-          <VBtn class="ms-auto" text="Save" @click="showModalForm = false" />
+          <VBtn class="ms-auto" text="Save" @click="saveSubject" />
         </template>
       </VCard>
     </VDialog>
