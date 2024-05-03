@@ -92,12 +92,13 @@ model OfferedCourse {
   maxParticipants Int?
   StudentChoice   StudentChoice[]
 
-  extraInfo    String?
-  moodleCourse String?
+  extraInfo       String?
+  moodleCourse    String?
   /// Array of fields of study
-  for          String[]
+  for             String[]
   /// [CourseAppointments]
-  appointments Json
+  appointments    Json
+  PhaseAssignment PhaseAssignment[]
 
   @@id([phaseId, moduleCode])
 }
@@ -109,7 +110,8 @@ model StudentPhase {
   phaseId       Int
   StudentChoice StudentChoice[]
 
-  creditsNeeded Int
+  creditsNeeded    Int
+  PhaseAssignments PhaseAssignment[]
 
   @@id([username, phaseId])
 }
@@ -124,4 +126,13 @@ model StudentChoice {
   points Int
 
   @@id([moduleCode, username, phaseId])
+}
+
+model PhaseAssignment {
+  id            Int           @id @default(autoincrement())
+  phaseId       Int
+  username      String
+  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
+  offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode])
+  moduleCode    String
 }
