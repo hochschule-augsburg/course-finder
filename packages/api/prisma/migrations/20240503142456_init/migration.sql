@@ -61,7 +61,7 @@ CREATE TABLE "Enrollphase" (
 CREATE TABLE "OfferedCourse" (
     "phaseId" INTEGER NOT NULL,
     "moduleCode" TEXT NOT NULL,
-    "minParticipants" INTEGER,
+    "minParticipants" INTEGER NOT NULL DEFAULT 0,
     "maxParticipants" INTEGER,
     "extraInfo" TEXT,
     "moodleCourse" TEXT,
@@ -75,6 +75,7 @@ CREATE TABLE "OfferedCourse" (
 CREATE TABLE "StudentPhase" (
     "username" TEXT NOT NULL,
     "phaseId" INTEGER NOT NULL,
+    "creditsNeeded" INTEGER NOT NULL,
 
     CONSTRAINT "StudentPhase_pkey" PRIMARY KEY ("username","phaseId")
 );
@@ -85,9 +86,18 @@ CREATE TABLE "StudentChoice" (
     "phaseId" INTEGER NOT NULL,
     "username" TEXT NOT NULL,
     "points" INTEGER NOT NULL,
-    "lastChange" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "StudentChoice_pkey" PRIMARY KEY ("moduleCode","username","phaseId")
+);
+
+-- CreateTable
+CREATE TABLE "PhaseAssignment" (
+    "id" SERIAL NOT NULL,
+    "phaseId" INTEGER NOT NULL,
+    "username" TEXT NOT NULL,
+    "moduleCode" TEXT NOT NULL,
+
+    CONSTRAINT "PhaseAssignment_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
@@ -119,3 +129,9 @@ ALTER TABLE "StudentChoice" ADD CONSTRAINT "StudentChoice_moduleCode_phaseId_fke
 
 -- AddForeignKey
 ALTER TABLE "StudentChoice" ADD CONSTRAINT "StudentChoice_username_phaseId_fkey" FOREIGN KEY ("username", "phaseId") REFERENCES "StudentPhase"("username", "phaseId") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PhaseAssignment" ADD CONSTRAINT "PhaseAssignment_username_phaseId_fkey" FOREIGN KEY ("username", "phaseId") REFERENCES "StudentPhase"("username", "phaseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PhaseAssignment" ADD CONSTRAINT "PhaseAssignment_phaseId_moduleCode_fkey" FOREIGN KEY ("phaseId", "moduleCode") REFERENCES "OfferedCourse"("phaseId", "moduleCode") ON DELETE RESTRICT ON UPDATE CASCADE;

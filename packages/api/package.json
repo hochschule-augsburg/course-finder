@@ -53,6 +53,7 @@
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate dev reset",
+    "db:migrate": "prisma migrate dev",
     "postinstall": "pnpm db:generate"
   },
   "prisma": {
