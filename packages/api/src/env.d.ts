@@ -11,6 +11,9 @@ declare global {
 
       // 32 characters long
       SESSION_SECRET?: string
+
+      SERVER_HOSTNAME?: string
+      SERVER_PORT?: string
     }
   }
 }
