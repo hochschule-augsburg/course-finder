@@ -1,4 +1,4 @@
-import type { ClientUserExtended } from '@api/prisma/PrismaTypes'
+import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
 
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useUserStore } from '@/stores/UserStore'

@@ -1,5 +1,5 @@
-import type { EnrollPhase } from '@api/prisma/PrismaTypes'
-import type { CourseExtended } from '@api/routes/course/CourseRoutes'
+import type { EnrollPhase } from '@workspace/api/src/prisma/PrismaTypes'
+import type { CourseExtended } from '@workspace/api/src/routes/course/CourseRoutes'
 
 import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
