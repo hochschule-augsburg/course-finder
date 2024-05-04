@@ -13,9 +13,7 @@ import {
 export type DialogOptions = {
   onCancel: () => void
   onConfirm: () => void
-  // translated
   text: string
-  // translated
   title: string
 }
 
@@ -57,10 +55,8 @@ export const ModalDialog = defineComponent(
         onUpdate:modelValue={cancel}
       >
         <VCard>
-          <VCardTitle class="headline">
-            {t(dialogOptions.value?.title ?? '')}
-          </VCardTitle>
-          <VCardText> {t(dialogOptions.value?.text ?? '')} </VCardText>
+          <VCardTitle class="headline">{dialogOptions.value?.title}</VCardTitle>
+          <VCardText> {dialogOptions.value?.text} </VCardText>
           <VCardActions>
             <VSpacer />
             <VBtn
@@ -68,14 +64,14 @@ export const ModalDialog = defineComponent(
               // @ts-expect-error wrong typing
               onClick={cancel}
             >
-              {t('cancel')}
+              {t('global.cancel')}
             </VBtn>
             <VBtn
               color="success"
               // @ts-expect-error wrong typing
               onClick={confirm}
             >
-              {t('confirm')}
+              {t('global.confirm')}
             </VBtn>
           </VCardActions>
         </VCard>
