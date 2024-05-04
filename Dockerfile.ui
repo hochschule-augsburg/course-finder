@@ -1,6 +1,8 @@
 FROM node:21-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 RUN corepack enable
 
 FROM base AS build
