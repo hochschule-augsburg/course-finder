@@ -19,8 +19,10 @@ EXPOSE 2022
 RUN pnpm run db:generate
 CMD [ "pnpm", "start" ]
 
-FROM base AS ui
+FROM nginx:stable-alpine AS ui
 COPY --from=build /usr/src/app/packages/ui/dist /prod/ui
 WORKDIR /prod/ui
+
 EXPOSE 3000 
-CMD [ "echo", "start" ]
+
+CMD ["nginx", "-g", "daemon off;"]

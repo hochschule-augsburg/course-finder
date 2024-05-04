@@ -24,22 +24,13 @@ services:
       context: ../
       target: ui
     ports:
-      - 3000:3000
-    restart: unless-stopped
-
-  reverse-proxy:
-    build: ./reverse-proxy
-    cap_add:
-      - NET_ADMIN
-    ports:
       - '80:80'
       - '443:443'
       - '443:443/udp'
     network:
       - proxy-network
     volumes:
-      - ./caddy/data:/data
-      - ./caddy/config:/config
+      - ./certs:/prod/certs
 
     restart: unless-stopped
 
@@ -50,5 +41,7 @@ services:
     ports:
       - 5432:5432
     network_mode: bridge
+    volumes:
+      - ./database:/var/lib/postgresql/data
 
     restart: unless-stopped
