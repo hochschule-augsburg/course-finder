@@ -14,6 +14,7 @@ export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
     return ctx.req.session.user
   }),
+  // rate limited by reverse proxy
   login: publicProcedure
     .input(z.object({ password: z.string(), username: z.string() }))
     .mutation(
@@ -55,6 +56,7 @@ export const authRouter = router({
   logout: publicProcedure.mutation(async ({ ctx }) => {
     await ctx.req.session.destroy()
   }),
+  // rate limited by reverse proxy
   twoFA: publicProcedure
     .input(z.object({ otp: z.string(), username: z.string() }))
     .mutation(

@@ -1,0 +1,21 @@
+subject-registration.informatik.tha.de {
+    # Global rate limiting
+   #@rateLimited {
+   #    path_regexp rateLimit /rate-limit
+   #}
+   #route @rateLimited {
+   #    rate_limit {
+   #        limit 100r/s
+   #        burst 50
+   #    }
+   #    respond "Rate limited" 429
+   #}
+
+    route /trpc* {
+        reverse_proxy api:2022
+    }
+
+    route * {
+        reverse_proxy frontend:3000
+    }
+}
