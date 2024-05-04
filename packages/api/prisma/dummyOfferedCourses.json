@@ -12,20 +12,20 @@
   },
   {
     "phaseId": 1,
-    "moduleCode": "COM4.WP",
+    "moduleCode": "KI6.WP",
     "minParticipants": 0,
-    "maxParticipants": 80,
+    "maxParticipants": 59,
     "appointments": {
       "dates": [{ "from": "2024-04-02T08:00:00", "to": "2024-04-02T13:10:00" }],
       "type": "weekly"
     },
-    "extraInfo": ""
+    "extraInfo": "max. 59 Teilnehmer / es ist kein größerer Raum verfügbar zu dieser Zeit"
   },
   {
     "phaseId": 1,
-    "moduleCode": "NoSQL4.WP",
+    "moduleCode": "MISSING SMART DECISION",
     "minParticipants": 0,
-    "maxParticipants": 35,
+    "maxParticipants": 40,
     "appointments": {
       "dates": [
         {
@@ -35,11 +35,11 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": "weitere Teilnehmer aus Data Science"
+    "extraInfo": ""
   },
   {
     "phaseId": 1,
-    "moduleCode": "LINUX6.WP",
+    "moduleCode": "FSWD6.WP",
     "minParticipants": 0,
     "maxParticipants": 80,
     "appointments": {
@@ -55,9 +55,9 @@
   },
   {
     "phaseId": 1,
-    "moduleCode": "MCODK4.WP",
+    "moduleCode": "NoSQL4.WP",
     "minParticipants": 0,
-    "maxParticipants": 40,
+    "maxParticipants": 35,
     "appointments": {
       "dates": [
         {
@@ -67,13 +67,13 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": ""
+    "extraInfo": "weitere Teilnehmer aus Data Science"
   },
   {
     "phaseId": 1,
-    "moduleCode": "DEVOPS4.WP",
+    "moduleCode": "LINUX6.WP",
     "minParticipants": 0,
-    "maxParticipants": 40,
+    "maxParticipants": 80,
     "appointments": {
       "dates": [
         {
@@ -87,9 +87,9 @@
   },
   {
     "phaseId": 1,
-    "moduleCode": "INDBV4.WP",
+    "moduleCode": "MCODK4.WP",
     "minParticipants": 0,
-    "maxParticipants": 30,
+    "maxParticipants": 40,
     "appointments": {
       "dates": [
         {
@@ -103,31 +103,58 @@
   },
   {
     "phaseId": 1,
-    "moduleCode": "DBANW3.WP",
-    "appointments": { "dates": [], "type": "block" },
+    "moduleCode": "BEINF4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-05T11:40:00",
+          "to": "2024-04-05T15:30:00"
+        }
+      ],
+      "type": "weekly"
+    },
     "minParticipants": 0,
-    "maxParticipants": 10,
-    "extraInfo": "am Ende des Semesters"
+    "extraInfo": "findet online statt - Beginn 04.04.2024"
   },
   {
     "phaseId": 1,
-    "moduleCode": "ITSICH6.WP",
+    "moduleCode": "SUCHMA.WP",
     "minParticipants": 0,
     "maxParticipants": 40,
     "appointments": {
       "dates": [
         {
-          "from": "2024-04-01T08:00:00",
-          "to": "2024-04-01T13:10:00"
+          "from": "2024-04-05T09:50:00",
+          "to": "2024-04-05T13:10:00"
+        },
+        {
+          "from": "2024-04-19T09:50:00",
+          "to": "2024-04-19T13:10:00"
+        },
+        {
+          "from": "2024-05-03T09:50:00",
+          "to": "2024-05-03T13:10:00"
+        },
+        {
+          "from": "2024-05-24T09:50:00",
+          "to": "2024-05-24T13:10:00"
+        },
+        {
+          "from": "2024-06-14T09:50:00",
+          "to": "2024-06-14T13:10:00"
+        },
+        {
+          "from": "2024-06-21T09:50:00",
+          "to": "2024-06-21T13:10:00"
         }
       ],
-      "type": "weekly"
+      "type": "block"
     },
-    "extraInfo": ""
+    "extraInfo": "Ein weitere Termin wird noch vereinbart"
   },
   {
     "phaseId": 1,
-    "moduleCode": "NETP.WP",
+    "moduleCode": "DEVOPS4.WP",
     "minParticipants": 0,
     "maxParticipants": 40,
     "appointments": {
@@ -143,9 +170,9 @@
   },
   {
     "phaseId": 1,
-    "moduleCode": "OSSWE4.WP",
+    "moduleCode": "INDBV4.WP",
     "minParticipants": 0,
-    "maxParticipants": 40,
+    "maxParticipants": 30,
     "appointments": {
       "dates": [
         {
@@ -155,13 +182,13 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": ""
+    "extraInfo": "M2.02 und zoom"
   },
   {
     "phaseId": 1,
-    "moduleCode": "EMSV4.WP",
+    "moduleCode": "DBANW3.WP",
     "minParticipants": 0,
-    "maxParticipants": 60,
+    "maxParticipants": 10,
     "appointments": {
       "dates": [
         {
@@ -171,29 +198,53 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": "20 Pl�tze f�r die Fakult�t f�r Gestaltung und 60 Pl�tze f�r die Fakult�t f�r extraInformatik  = gesamt 80 = max. Raumgr��e"
+    "extraInfo": "Am Ende des Semesters"
   },
   {
     "phaseId": 1,
-    "moduleCode": "INUM4.WP",
+    "moduleCode": "TODO Industrial Security Basics",
     "minParticipants": 0,
-    "maxParticipants": 38,
+    "maxParticipants": 5,
     "appointments": {
       "dates": [
         {
-          "from": "2024-04-04T09:50:00",
-          "to": "2024-04-04T13:10:00"
+          "from": "2024-04-26T14:00:00",
+          "to": "2024-04-26T17:10:00"
+        },
+        {
+          "from": "2024-05-03T14:00:00",
+          "to": "2024-05-03T17:10:00"
+        },
+        {
+          "from": "2024-05-17T14:00:00",
+          "to": "2024-05-17T17:10:00"
+        },
+        {
+          "from": "2024-05-24T14:00:00",
+          "to": "2024-05-24T17:10:00"
+        },
+        {
+          "from": "2024-06-14T14:00:00",
+          "to": "2024-06-14T17:10:00"
+        },
+        {
+          "from": "2024-06-21T14:00:00",
+          "to": "2024-06-21T17:10:00"
+        },
+        {
+          "from": "2024-06-28T14:00:00",
+          "to": "2024-06-28T17:10:00"
         }
       ],
-      "type": "weekly"
+      "type": "block"
     },
-    "extraInfo": "max. 38 Teilnehmer / es ist kein gr��erer Raum verf�gbar zu dieser Zeit"
+    "extraInfo": "21. Juni Exkursion"
   },
   {
     "phaseId": 1,
-    "moduleCode": "NNDL4.WP",
+    "moduleCode": "IACOGR6.WP",
     "minParticipants": 0,
-    "maxParticipants": 60,
+    "maxParticipants": 20,
     "appointments": {
       "dates": [
         {
@@ -203,11 +254,11 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": "Pflichtname f�r den Studiengang Data Science"
+    "extraInfo": "findet für IA6 (Gestaltung) statt"
   },
   {
     "phaseId": 1,
-    "moduleCode": "PWA4.WP",
+    "moduleCode": "ITSICH6",
     "minParticipants": 0,
     "maxParticipants": 40,
     "appointments": {
@@ -223,9 +274,9 @@
   },
   {
     "phaseId": 1,
-    "moduleCode": "PYTHON4.WP",
+    "moduleCode": "START4.WP",
     "minParticipants": 0,
-    "maxParticipants": 50,
+    "maxParticipants": 25,
     "appointments": {
       "dates": [
         {
@@ -235,13 +286,13 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": "weitere Teilnehmer �ber die Fakult�t f�r Gestaltung"
+    "extraInfo": "weitere Teilnehmer aus anderen Fakultäten"
   },
   {
     "phaseId": 1,
-    "moduleCode": "OPPYTH4.WP",
+    "moduleCode": "SCRUM4.WP",
     "minParticipants": 0,
-    "maxParticipants": 0,
+    "maxParticipants": 30,
     "appointments": {
       "dates": [
         {
@@ -251,118 +302,222 @@
       ],
       "type": "weekly"
     },
-    "extraInfo": "Pflichtname f�r den Studiengang Data Science / Anmeldung �ber moodle, da die erste Vorlesung am 20.03.2024 beginnt"
+    "extraInfo": ""
   },
   {
     "phaseId": 1,
-    "moduleCode": "FSD4.WP",
+    "moduleCode": "ECOMM6.WP",
     "minParticipants": 0,
     "maxParticipants": 30,
-    "extraInfo": "Laufzeit �ber 2 Semester, Anmeldung direkt �ber Herrn Prof. Dr. Kiefer",
-    "appointments": { "dates": [], "type": "irregulär" }
+    "appointments": { "dates": [], "type": "irregulär" },
+    "extraInfo": "Entweder ECommerce oder Digital Business Leadership Skills"
   },
   {
     "phaseId": 1,
-    "moduleCode": "AST4.WP",
+    "moduleCode": "DIBUS.WP",
     "appointments": {
       "dates": [
         {
-          "from": "2024-03-11",
-          "to": "2024-03-16"
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
         }
       ],
-      "type": "block"
+      "type": "weekly"
     },
     "minParticipants": 0,
     "maxParticipants": 20,
-    "extraInfo": "ausgebucht, ganztags"
+    "extraInfo": "im SoSe 2024 keine Teilnehmer über die Fakultät für Gestaltung"
   },
   {
     "phaseId": 1,
-    "moduleCode": "CGDEV4.WP",
+    "moduleCode": "AEKDS4.WP",
     "appointments": {
       "dates": [
         {
-          "from": "2024-03-04",
-          "to": "2024-03-08"
-        },
-        {
-          "from": "2024-03-11",
-          "to": "2024-03-12"
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
         }
       ],
       "type": "block"
     },
     "minParticipants": 0,
-    "maxParticipants": 25,
-    "extraInfo": "ausgebucht"
+    "maxParticipants": 30,
+    "extraInfo": "im SoSe 2024 keine Teilnehmer über die Fakultät für Gestaltung"
   },
   {
     "phaseId": 1,
-    "moduleCode": "VISTH.WP",
+    "moduleCode": "IFPP4.WP",
     "appointments": {
       "dates": [
         {
-          "from": "2024-02-22",
-          "to": "2024-02-23"
-        },
-        {
-          "from": "2024-02-26",
-          "to": "2024-03-01"
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
         }
       ],
-      "type": "block"
+      "type": "weekly"
     },
     "minParticipants": 0,
-    "maxParticipants": 25,
-    "extraInfo": "ausgebucht"
-  },
-  {
-    "phaseId": 1,
-    "moduleCode": "LINLPI2.WP",
-    "appointments": {
-      "dates": [
-        {
-          "from": "2024-03-19",
-          "to": "2024-03-21"
-        }
-      ],
-      "type": "block"
-    },
-    "minParticipants": 0,
-    "maxParticipants": 25,
-    "extraInfo": "ausgebucht"
-  },
-  {
-    "phaseId": 1,
-    "moduleCode": "LPICAD2.WP",
-    "appointments": {
-      "dates": [
-        {
-          "from": "2024-02-22",
-          "to": "2024-02-24"
-        }
-      ],
-      "type": "block"
-    },
-    "minParticipants": 0,
-    "maxParticipants": 25,
-    "extraInfo": "ausgebucht"
-  },
-  {
-    "phaseId": 1,
-    "moduleCode": "CHRIMG2.WP",
-    "appointments": {
-      "dates": [
-        {
-          "from": "2024-03-12",
-          "to": "2024-03-14"
-        }
-      ],
-      "type": "block"
-    },
-    "minParticipants": 0,
-    "maxParticipants": 100,
+    "maxParticipants": 40,
     "extraInfo": ""
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "ITSCT4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 50,
+    "extraInfo": "Vorlesung in Englisch"
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "NETP.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 40,
+    "extraInfo": ""
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "OSSWE4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 40,
+    "extraInfo": ""
+  },
+
+  {
+    "phaseId": 1,
+    "moduleCode": "KLPRO.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "extraInfo": ""
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "PRRO.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 38,
+    "extraInfo": ""
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "EMSV4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 60,
+    "extraInfo": "20 Extra Plätze für die Fakultät Gestaltung"
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "INUM4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 38,
+    "extraInfo": ""
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "DTO4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 50,
+    "extraInfo": ""
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "NNDL4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 60,
+    "extraInfo": "Pflichtfach für den Studiengang Data Science"
+  },
+  {
+    "phaseId": 1,
+    "moduleCode": "PYTHON4.WP",
+    "appointments": {
+      "dates": [
+        {
+          "from": "2024-04-03T14:00:00",
+          "to": "2024-04-03T17:10:00"
+        }
+      ],
+      "type": "weekly"
+    },
+    "minParticipants": 0,
+    "maxParticipants": 50,
+    "extraInfo": "weitere Teilnehmer über die Fakultät für Gestaltung"
   }
 ]
