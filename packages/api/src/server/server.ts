@@ -56,7 +56,11 @@ export async function createServer(opts: ServerOptions) {
   }
   async function start() {
     try {
-      await server.listen({ port })
+      await server.listen({
+        // relevant for docker
+        host: '0.0.0.0',
+        port,
+      })
       console.log('listening on port', port)
     } catch (err) {
       server.log.error(err)

@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      target: api
+    env_file:
+      - ./.env
+    ports:
+      - 2022:2022
+    network_mode: bridge
+    restart: always
+    links:
+      - database
+    depends_on:
+      - database
+  ui:
+    build:
+      context: .
+      target: ui
+    ports:
+      - 3000:3000
+    restart: always
+  database:
+    image: postgres:alpine
+    env_file:
+      - ./.env
+    ports:
+      - 5432:5432
+    network_mode: bridge
+    restart: always
