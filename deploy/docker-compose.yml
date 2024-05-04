@@ -1,36 +1,39 @@
 # keep in sync with prod
 
-networks:
-  proxy-network:
-    external:
-      name: proxy-network
-
 services:
   api:
     build:
       context: ../
+      dockerfile: Dockerfile.api
       target: api
     env_file:
       - ./.env
-    ports:
-      - 2022:2022
     network_mode: bridge
+    links:
+      - database
 
     restart: unless-stopped
     depends_on:
       - database
+
   ui:
     build:
       context: ../
+      dockerfile: Dockerfile.ui
       target: ui
     ports:
       - '80:80'
       - '443:443'
       - '443:443/udp'
-    network:
-      - proxy-network
     volumes:
-      - ./certs:/prod/certs
+      # TODO use server
+      - /etc/letsencrypt/live/example.com/:/prod/certs
+      - ./docker/subject-enroll.conf:/etc/nginx/conf.d/subject-enroll.conf
+    network_mode: bridge
+    links:
+      - api
+    depends_on:
+      - api
 
     restart: unless-stopped
 
@@ -38,10 +41,11 @@ services:
     image: postgres:alpine
     env_file:
       - ./.env
-    ports:
-      - 5432:5432
     network_mode: bridge
     volumes:
-      - ./database:/var/lib/postgresql/data
+      - ./docker/database:/var/lib/postgresql/data
+    ports:
+      # only development
+      - '5432:5432'
 
     restart: unless-stopped
