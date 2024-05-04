@@ -1,5 +1,8 @@
-unknown-error: Unknown error
-confirm: Confirm
-cancel: Cancel
-points-get-lost: The assigned points will be lost!
-confirm-action: Confirm action
+global:
+  unknown-error: Unknown error
+  confirm: Confirm
+  cancel: Cancel
+  close: Close
+  reset: Reset
+  confirm-action: Confirm action
+  back: Back

@@ -1,5 +1,8 @@
-unknown-error: Unbekannter Fehler
-confirm: Bestätigen
-cancel: Abbrechen
-points-get-lost: Die vergebenen Punkte gehen verloren!
-confirm-action: Aktion bestätigen
+global:
+  unknown-error: Unbekannter Fehler
+  confirm: Bestätigen
+  cancel: Abbrechen
+  close: Schließen
+  reset: Zurücksetzen
+  confirm-action: Aktion bestätigen
+  back: Zurück

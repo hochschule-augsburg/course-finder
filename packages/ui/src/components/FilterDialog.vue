@@ -2,10 +2,12 @@
 import { useFiltersStore } from '@/stores/filters'
 import { storeToRefs } from 'pinia'
 import { defineModel } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const showFilterDialog = defineModel<boolean>()
 const filtersStore = useFiltersStore()
 const { optionsFilters, rangeFilters } = storeToRefs(useFiltersStore())
+const { t } = useI18n()
 
 function resetFilters() {
   filtersStore.resetFilters()
@@ -59,11 +61,11 @@ function resetFilters() {
       </VCardText>
 
       <VCardActions class="mx-4">
-        <VBtn text="Reset" variant="plain" @click="resetFilters" />
+        <VBtn :text="t('global.reset')" variant="plain" @click="resetFilters" />
         <VSpacer />
         <VBtn
+          :text="t('global.close')"
           color="primary"
-          text="Close"
           variant="tonal"
           @click="showFilterDialog = false"
         />

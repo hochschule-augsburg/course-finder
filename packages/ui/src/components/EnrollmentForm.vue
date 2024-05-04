@@ -10,6 +10,7 @@ import { VForm } from 'vuetify/components/VForm'
 import '../styles/settings.scss'
 
 const { locale } = useI18n()
+const { t } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
 const coursesStore = useCoursesStore()
@@ -34,10 +35,9 @@ function back() {
   visible.value = false
 }
 
-// TODO better error msgs + i18n
 const pointInputRules = [
-  (i: string) => !!i || 'Input is required',
-  (i: string) => /^[1-9]\d*$/.test(i) || 'Input must be an integer', // check is input is valid int > 0
+  (i: string) => !!i || t('field-required'),
+  (i: string) => /^[1-9]\d*$/.test(i) || t('integer-input'), // check is input is valid int > 0
 ]
 
 async function validate() {
@@ -51,7 +51,9 @@ async function validate() {
     enrollmentStore.enrolledSubjects.length > 0 && // make it possible to reset enrollment
     sumBy(enrollmentStore.enrolledSubjects, 'points') !== MAX_POINTS
   ) {
-    form.value?.items.forEach((i) => i.errorMessages.push('maxPoints = 1000'))
+    form.value?.items
+      .slice(1)
+      .forEach((i) => i.errorMessages.push(t('points-sum-1000')))
     return
   }
 
@@ -87,8 +89,8 @@ function reset() {
     >
       <div class="d-flex align-start formHead">
         <VBtn
+          :text="t('back')"
           prepend-icon="mdi-arrow-left"
-          text="zurück"
           variant="plain"
           @click="back"
         />
@@ -96,7 +98,7 @@ function reset() {
       <VForm ref="form">
         <VTextField
           v-model.number="creditsNeeded"
-          label="Credits Needed"
+          :label="t('credits-wanted')"
           required
         />
         <VTextField
@@ -115,7 +117,7 @@ function reset() {
         <VRow align="center" class="mt-2 px-3">
           <VBtn icon="mdi-restore" size="small" @click="reset" />
           <VSpacer />
-          <VBtn :loading="loading" text="Anmelden" @click="validate" />
+          <VBtn :loading="loading" :text="t('register')" @click="validate" />
         </VRow>
       </VForm>
     </VSheet>
@@ -131,3 +133,18 @@ function reset() {
   max-width: var(--dialog-max-width);
 }
 </style>
+
+<i18n lang="yaml">
+de:
+  register: Anmelden
+  field-required: Dies ist ein Pflichtfeld!
+  integer-input: Bitte eine ganze Zahl eingeben!
+  credits-wanted: Bestrebte Credit Points
+  points-sum-1000: Insgesamt 1000 Punkte vergeben!
+en:
+  register: Register
+  field-required: This field is required!
+  integer-input: This field must be an integer!
+  credits-wanted: Credits wanted
+  points-sum-1000: allocate 1000 points in total!
+</i18n>
