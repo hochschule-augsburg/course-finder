@@ -10,18 +10,20 @@ const tableOne: Subject[] = reactive(enrollmentStore.subjects)
 //TODO: Always offered courses should be automatically in tableTwo
 const tableTwo: Subject[] = reactive([])
 
-function startDrag(event: DragEvent, subject: Subject): void {
+function startDrag(event: DragEvent, subject: Subject, table: string): void {
   console.log(subject)
 
   if (event.dataTransfer) {
     event.dataTransfer.dropEffect = 'move'
     event.dataTransfer.effectAllowed = 'move'
     event.dataTransfer.setData('itemID', subject.moduleCode)
+    event.dataTransfer.setData('tableID', table)
   }
 }
 
-function onDrop(event: DragEvent): void {
+function onDrop(event: DragEvent, droppedTable: string): void {
   const itemID = event.dataTransfer?.getData('itemID')
+  const tableID = event.dataTransfer?.getData('tableID')
 
   const indexInTableOne = tableOne.findIndex(
     (item) => item.moduleCode === itemID,
@@ -31,17 +33,17 @@ function onDrop(event: DragEvent): void {
   )
 
   if (indexInTableOne >= 0) {
-    const foundSubject = tableOne.find(
-      (item) => item.moduleCode === itemID,
-    ) as Subject
-    tableTwo.push(foundSubject)
-    tableOne.splice(indexInTableOne, 1)
+    if (tableID !== droppedTable) {
+      const foundSubject = tableOne.find((item) => item.moduleCode === itemID)
+      tableTwo.push(foundSubject)
+      tableOne.splice(indexInTableOne, 1)
+    }
   } else if (indexInTableTwo >= 0) {
-    const foundSubject = tableTwo.find(
-      (item) => item.moduleCode === itemID,
-    ) as Subject
-    tableOne.push(foundSubject)
-    tableTwo.splice(indexInTableTwo, 1)
+    if (tableID !== droppedTable) {
+      const foundSubject = tableTwo.find((item) => item.moduleCode === itemID)
+      tableOne.push(foundSubject)
+      tableTwo.splice(indexInTableTwo, 1)
+    }
   }
 }
 </script>
@@ -54,7 +56,7 @@ function onDrop(event: DragEvent): void {
           class="drop-zone"
           @dragenter.prevent
           @dragover.prevent
-          @drop="onDrop($event)"
+          @drop="onDrop($event, 'table1')"
         >
           <div>Course</div>
           <div
@@ -62,7 +64,7 @@ function onDrop(event: DragEvent): void {
             :key="subject.moduleCode"
             class="drag-el"
             draggable="true"
-            @dragstart="startDrag($event, subject)"
+            @dragstart="startDrag($event, subject, 'table1')"
           >
             {{ subject.title.en }}
           </div>
@@ -73,7 +75,7 @@ function onDrop(event: DragEvent): void {
           class="drop-zone"
           @dragenter.prevent
           @dragover.prevent
-          @drop="onDrop($event)"
+          @drop="onDrop($event, 'table2')"
         >
           <div>Offered courses</div>
           <div
@@ -81,7 +83,7 @@ function onDrop(event: DragEvent): void {
             :key="subject.moduleCode"
             class="drag-el"
             draggable="true"
-            @dragstart="startDrag($event, subject)"
+            @dragstart="startDrag($event, subject, 'table2')"
           >
             {{ subject.title.en }}
           </div>
