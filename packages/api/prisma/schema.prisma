@@ -97,6 +97,14 @@ model Enrollphase {
   description    Json
   offeredCourses OfferedCourse[]
   studentPhases  StudentPhase[]
+  phase          Phase
+}
+
+enum Phase {
+  REGISTRATION
+  WARNING_BEFORE_END
+  DRAWING
+  FINISHED
 }
 
 model OfferedCourse {
