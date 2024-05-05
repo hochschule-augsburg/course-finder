@@ -12,15 +12,15 @@ const selectedSubject = ref<Subject>(adminStore.subjects[0])
 const formData = ref({
   Lecturers: '',
   creditPoints: 0,
-  description: { de: '', en: '' }, /// [I18n]
+  description: { de: '', en: '' }, // [I18n]
   examType: { for: '' },
   examinationNumbers: ['', ''],
   externLecturers: ['', ''],
   language: '',
-  learningGoals: { de: '', en: '' }, /// [I18n]
+  learningGoals: { de: '', en: '' }, // [I18n]
   requirements: ['', ''],
   semesterHours: 0,
-  title: { de: '', en: '' }, /// [I18n]
+  title: { de: '', en: '' }, // [I18n]
 })
 
 function selectSubject(s: Subject) {
@@ -61,8 +61,8 @@ function saveSubject() {
   selectedSubject.value.title.de = formData.value.title.de
 
   showModalForm.value = false
-  // TODO: Change subject in store
   // TODO: Send request to backend
+  // TODO: Change subject in store
   console.log(selectedSubject.value)
   console.log(selectedSubject.value.moduleCode)
 }
@@ -89,15 +89,21 @@ function getLecturers(lecturers: Lecturer[]) {
     <VTable>
       <thead>
         <tr>
+          <th class="text-left">Nr.</th>
           <th class="text-left">Name</th>
           <th class="text-left">Professor</th>
+          <th>CP</th>
+          <th>SWS</th>
           <th class="text-left">Edit</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="subject in adminStore.subjects" :key="subject.moduleCode">
+          <td>{{ subject.moduleCode }}</td>
           <td>{{ subject.title.en }}</td>
           <td>{{ subject.allLecturers.toString() }}</td>
+          <td>{{ subject.creditPoints }}</td>
+          <td>{{ subject.semesterHours }}</td>
           <td>
             <VBtn @click="selectSubject(subject)">
               <VIcon size="25">mdi-pencil</VIcon>
