@@ -8,9 +8,6 @@ services:
       target: api
     env_file:
       - ./.env
-    network_mode: bridge
-    links:
-      - database
     restart: unless-stopped
     depends_on:
       - database
@@ -25,12 +22,10 @@ services:
       - '443:443'
       - '443:443/udp'
     volumes:
-      # TODO use server
-      - /etc/letsencrypt/live/example.com/:/prod/certs
+      - ${CERTS_PRIVKEY}:/prod/certs/privkey.pem
+      - ${CERTS_CHAIN}:/prod/certs/chain.pem
+      - ${CERTS_FULLCHAIN}:/prod/certs/fullchain.pem
       - ./subject-enroll.conf.local:/etc/nginx/conf.d/subject-enroll.conf
-    network_mode: bridge
-    links:
-      - api
     depends_on:
       - api
 
@@ -40,11 +35,10 @@ services:
     image: postgres:alpine
     env_file:
       - ./.env
-    network_mode: bridge
     volumes:
-      - ./var/lib/data:/var/lib/postgresql/data
+      - /var/lib/data:/var/lib/postgresql/data
     ports:
       # only development
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
 
     restart: unless-stopped
