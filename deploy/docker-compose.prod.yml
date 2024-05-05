@@ -1,19 +1,30 @@
 # keep in sync with dev
+
 services:
   api:
     build:
       context: ../
+      dockerfile: Dockerfile.api
       target: api
     env_file:
       - ./.env
-    ports:
-      - 2022:2022
-    network_mode: bridge
-    restart: always
+    restart: unless-stopped
+
   ui:
     build:
       context: ../
+      dockerfile: Dockerfile.ui
       target: ui
     ports:
-      - 3000:3000
-    restart: always
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ${CERTS_PRIVKEY}:/prod/certs/privkey.pem
+      - ${CERTS_CHAIN}:/prod/certs/chain.pem
+      - ${CERTS_FULLCHAIN}:/prod/certs/fullchain.pem
+      - ./subject-enroll.conf.local:/etc/nginx/conf.d/subject-enroll.conf
+    depends_on:
+      - api
+
+    restart: unless-stopped
