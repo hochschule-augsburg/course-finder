@@ -1,8 +1,8 @@
 import { assign } from '../../domain/assign/AssignmentAlgorithm'
 import { prisma } from '../../prisma/prisma'
-import { courseRouter } from '../course/CourseRoutes'
-import { enrollRouter } from '../enroll/EnrollRoutes'
 import { adminProcedure, router } from '../trpc'
+import { coursesRoutes } from './courses/AdminCoursesRoutes'
+import { enrollRouter } from './enroll/AdminEnrollRoutes'
 
 export const adminRouter = router({
   /**
@@ -22,6 +22,6 @@ export const adminRouter = router({
     })
     return results
   }),
-  courses: courseRouter,
+  courses: coursesRoutes,
   enroll: enrollRouter,
 })
