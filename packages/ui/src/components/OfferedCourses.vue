@@ -37,6 +37,7 @@ function onDrop(event: DragEvent, droppedTable: string): void {
       tableTwo.push(foundSubject)
       tableOne.splice(indexInTableOne, 1)
     }
+    //TODO: Remove subject from offeredCourseList if its there
   } else if (indexInTableTwo >= 0 && tableID !== droppedTable) {
     const foundSubject = tableTwo.find((item) => item.moduleCode === itemID)
     if (foundSubject !== undefined) {
@@ -73,10 +74,6 @@ const formData = ref({
 function selectSubject(s: Subject) {
   selectedSubject.value = s
   formData.value.moduleCode = s.moduleCode
-  formData.value.appointments = {
-    dates: s.offeredCourse.appointments.dates,
-    type: s.offeredCourse.appointments.type,
-  }
   formData.value.extraInfo = s.offeredCourse.extraInfo ?? ''
   formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
   formData.value.minParticipants = s.offeredCourse.minParticipants ?? 0
@@ -88,21 +85,45 @@ function selectSubject(s: Subject) {
 }
 
 function saveSubject() {
-  selectedSubject.value.offeredCourse.moduleCode = formData.value.moduleCode
-  // TODO: Put appointment object together with intervals
-  selectedSubject.value.offeredCourse.appointments = formData.value.appointments
-  selectedSubject.value.offeredCourse.extraInfo = formData.value.extraInfo
   selectedSubject.value.offeredCourse.maxParticipants =
     formData.value.maxParticipants
   selectedSubject.value.offeredCourse.minParticipants =
     formData.value.minParticipants
-
+  selectedSubject.value.offeredCourse.extraInfo = formData.value.extraInfo
+  selectedSubject.value.offeredCourse.appointments = getAppointmentData()
+  // TODO: Send offeredcourselist object to backend
+  // TODO: Change subject in store
   offeredCourseList.push(selectedSubject)
   showModalForm.value = false
-  // TODO: Change subject in store
 }
 
-// TODO: Send offeredcourselist object to backend
+function getAppointmentData() {
+  const datesArray: Array<{
+    from: Date
+    to: Date
+  }> = []
+  const courseIntervals = intervals.value.filter(
+    (inter) => inter.of === selectedSubject.value.moduleCode,
+  )
+  courseIntervals.forEach(function (interval) {
+    datesArray.push({
+      from: new Date(interval.from),
+      to: new Date(interval.to),
+    })
+  })
+
+  const appointmentType = getAppointmentType()
+  return { dates: datesArray, type: appointmentType }
+}
+
+function getAppointmentType(): 'block' | 'irregular' | 'weekly' {
+  if (checkedString.checked === 'weekly') {
+    return 'weekly'
+  } else if (checkedString.checked === 'block') {
+    return 'block'
+  }
+  return 'irregular'
+}
 
 /*The following code handles the logic to create and delete date 
 intervals for course appointments*/
@@ -134,7 +155,7 @@ function generateCourseInterval(
 }
 
 function addInterval(moduleCode: string, from?: string, to?: string) {
-  // Check if an object with the same from, of, and to values already exists
+  // Check if same object exists (except for id)
   const existingIndex = intervals.value.findIndex(
     (interval) =>
       interval.from === from &&
@@ -161,18 +182,19 @@ function getDisplayDate(date: Date) {
   return date.toLocaleString('en-GB').replaceAll('/', '.')
 }
 
-const checkedArray = ref([''])
+/*Prefill radio button group*/
+const checkedString = reactive({
+  checked: '',
+})
 
 function isChecked(type: string) {
-  checkedArray.value = ['']
+  checkedString.checked = ''
   if (type === 'weekly') {
-    checkedArray.value.push('weekly')
-  }
-  if (type === 'block') {
-    checkedArray.value.push('block')
-  }
-  if (type === 'irregular') {
-    checkedArray.value.push('irregular')
+    checkedString.checked = 'weekly'
+  } else if (type === 'block') {
+    checkedString.checked = 'block'
+  } else if (type === 'irregular') {
+    checkedString.checked = 'irregular'
   }
 }
 </script>
@@ -274,7 +296,7 @@ function isChecked(type: string) {
               />
             </VCol>
             <VCol cols="12">
-              <VIcon>mdi-calendar</VIcon><Strong>Appointment dates</Strong>
+              <VIcon>mdi-calendar</VIcon><Strong>Appointment(s)</Strong>
               <div
                 v-for="(interval, index) in getInterval(
                   selectedSubject.moduleCode,
@@ -307,32 +329,11 @@ function isChecked(type: string) {
               </VBtn>
             </VCol>
             <VCol>
-              <div style="display: flex">
-                <VCheckbox
-                  v-model="checkedArray"
-                  class="checkbox"
-                  label="weekly"
-                  value="weekly"
-                  hide-details
-                  @click.stop
-                />
-                <VCheckbox
-                  v-model="checkedArray"
-                  class="checkbox"
-                  label="block"
-                  value="block"
-                  hide-details
-                  @click.stop
-                />
-                <VCheckbox
-                  v-model="checkedArray"
-                  class="checkbox"
-                  label="irregular"
-                  value="irregular"
-                  hide-details
-                  @click.stop
-                />
-              </div>
+              <VRadioGroup v-model="checkedString.checked" inline>
+                <VRadio label="weekly" value="weekly" />
+                <VRadio label="block" value="block" />
+                <VRadio label="irregular" value="irregular" />
+              </VRadioGroup>
             </VCol>
             <VCol cols="12">
               <VTextarea
