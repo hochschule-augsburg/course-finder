@@ -80,8 +80,11 @@ function selectSubject(s: Subject) {
   formData.value.extraInfo = s.offeredCourse.extraInfo ?? ''
   formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
   formData.value.minParticipants = s.offeredCourse.minParticipants ?? 0
-  showModalForm.value = true
+
   intervals.value = intervals.value.filter((interval) => interval.id !== -1)
+  generateCourseInterval(s.offeredCourse.appointments.dates, s.moduleCode)
+  isChecked(s.offeredCourse.appointments.type)
+  showModalForm.value = true
 }
 
 function saveSubject() {
@@ -117,12 +120,60 @@ function getInterval(moduleCode: string) {
   return intervals.value.filter((inter) => inter.of === moduleCode)
 }
 
-function addInterval(moduleCode: string) {
-  intervals.value.push({ from: '', id: dateId++, of: moduleCode, to: '' })
+function generateCourseInterval(
+  dates: Array<TimeInterval<Date>>,
+  moduleCode: string,
+) {
+  dates.forEach(function (date) {
+    addInterval(
+      moduleCode,
+      date.from.toISOString().slice(0, 16),
+      date.to.toISOString().slice(0, 16),
+    )
+  })
+}
+
+function addInterval(moduleCode: string, from?: string, to?: string) {
+  // Check if an object with the same from, of, and to values already exists
+  const existingIndex = intervals.value.findIndex(
+    (interval) =>
+      interval.from === from &&
+      interval.of === moduleCode &&
+      interval.to === to,
+  )
+
+  // If the object doesn't exist, push the new object
+  if (existingIndex === -1) {
+    intervals.value.push({
+      from: from ?? '',
+      id: dateId++,
+      of: moduleCode,
+      to: to ?? '',
+    })
+  }
 }
 
 function removeInterval(index: number) {
   intervals.value = intervals.value.filter((inter) => inter.id !== index)
+}
+
+function getDisplayDate(date: Date) {
+  return date.toLocaleString('en-GB').replaceAll('/', '.')
+}
+
+const checkedArray = ref([''])
+
+function isChecked(type: string) {
+  checkedArray.value = ['']
+  if (type === 'weekly') {
+    checkedArray.value.push('weekly')
+  }
+  if (type === 'block') {
+    checkedArray.value.push('block')
+  }
+  if (type === 'irregular') {
+    checkedArray.value.push('irregular')
+  }
 }
 </script>
 
@@ -163,13 +214,31 @@ function removeInterval(index: number) {
             draggable="true"
             @dragstart="startDrag($event, subject, 'table2')"
           >
-            {{ subject.title.en }} <a @click="selectSubject(subject)">- Edit</a>
-            <div>
-              {{ subject.offeredCourse.appointments.dates }}
+            {{ subject.title.en }}
+            <a @click="selectSubject(subject)"
+              ><VIcon class="pencil-icon" size="20">mdi-pencil</VIcon></a
+            >
+            <div>Type: {{ subject.offeredCourse.appointments.type }}</div>
+            <div
+              v-for="(timespan, index) in subject.offeredCourse.appointments
+                .dates"
+              :key="index"
+            >
+              <div>
+                <strong>From:</strong>
+                {{ getDisplayDate(timespan.from) }}
+                <strong>To:</strong>
+                {{ getDisplayDate(timespan.to) }}
+              </div>
             </div>
             <div>
+              Min participants:
               {{ subject.offeredCourse.minParticipants }}
+              Max participants:
               {{ subject.offeredCourse.maxParticipants }}
+            </div>
+            <div>
+              Extra information:
               {{ subject.offeredCourse.extraInfo }}
             </div>
           </div>
@@ -237,7 +306,34 @@ function removeInterval(index: number) {
                 Add Date
               </VBtn>
             </VCol>
-            <!-- TODO: Add weekly, block, irregular option -->
+            <VCol>
+              <div style="display: flex">
+                <VCheckbox
+                  v-model="checkedArray"
+                  class="checkbox"
+                  label="weekly"
+                  value="weekly"
+                  hide-details
+                  @click.stop
+                />
+                <VCheckbox
+                  v-model="checkedArray"
+                  class="checkbox"
+                  label="block"
+                  value="block"
+                  hide-details
+                  @click.stop
+                />
+                <VCheckbox
+                  v-model="checkedArray"
+                  class="checkbox"
+                  label="irregular"
+                  value="irregular"
+                  hide-details
+                  @click.stop
+                />
+              </div>
+            </VCol>
             <VCol cols="12">
               <VTextarea
                 v-model="formData.extraInfo"
@@ -262,7 +358,7 @@ function removeInterval(index: number) {
 
 <style scoped lang="scss">
 $backgroundColor: #ecf0f1;
-$itemBackgroundColor: #ffffff;
+$itemBackgroundColor: #ecf0f1;
 $borderColor: #ff266d;
 $itemColor: #000000;
 $paddingValue: 1%;
@@ -281,5 +377,9 @@ $paddingValue: 1%;
   border-style: solid;
   color: $itemColor;
   padding: $paddingValue;
+}
+
+.pencil-icon {
+  cursor: pointer;
 }
 </style>
