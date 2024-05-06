@@ -4,30 +4,14 @@ import type { Subject } from '@/stores/AdminStore'
 import { useAdminStore } from '@/stores/AdminStore'
 import { reactive, ref } from 'vue'
 
-type TimeInterval<T> = { from: T; to: T }
-
-export type CourseAppointmentsJson<T> =
-  | {
-      /**
-       * Ignore days, months and years
-       */
-      dates: Array<TimeInterval<T>>
-      type: 'weekly'
-    }
-  | {
-      dates: Array<TimeInterval<T>>
-      type: 'block' | 'irregular'
-    }
-
 const enrollmentStore = useAdminStore()
 
+/*Following code handles the logic for drag and drop */
 const tableOne: Subject[] = reactive(enrollmentStore.subjects)
 //TODO: Always offered courses should be automatically in tableTwo
 const tableTwo: Subject[] = reactive([])
 
 function startDrag(event: DragEvent, subject: Subject, table: string): void {
-  console.log(subject)
-
   if (event.dataTransfer) {
     event.dataTransfer.dropEffect = 'move'
     event.dataTransfer.effectAllowed = 'move'
@@ -62,6 +46,22 @@ function onDrop(event: DragEvent, droppedTable: string): void {
   }
 }
 
+/*The following code handles the logic for the edit form of an course */
+type TimeInterval<Date> = { from: Date; to: Date }
+
+export type CourseAppointmentsJson<Date> =
+  | {
+      /**
+       * Ignore days, months and years
+       */
+      dates: Array<TimeInterval<Date>>
+      type: 'weekly'
+    }
+  | {
+      dates: Array<TimeInterval<Date>>
+      type: 'block' | 'irregular'
+    }
+
 const showModalForm = ref(false)
 const offeredCourseList = []
 
@@ -82,11 +82,12 @@ function selectSubject(s: Subject) {
   formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
   formData.value.minParticipants = s.offeredCourse.minParticipants ?? 0
   showModalForm.value = true
-  console.log(formData.value)
+  intervals.value = intervals.value.filter((interval) => interval.id !== -1)
 }
 
 function saveSubject() {
   selectedSubject.value.offeredCourse.moduleCode = formData.value.moduleCode
+  // TODO: Put appointment object together with intervals
   selectedSubject.value.offeredCourse.appointments = formData.value.appointments
   selectedSubject.value.offeredCourse.extraInfo = formData.value.extraInfo
   selectedSubject.value.offeredCourse.maxParticipants =
@@ -100,6 +101,30 @@ function saveSubject() {
 }
 
 // TODO: Send offeredcourselist object to backend
+
+/*The following code handles the logic to create and delete date 
+intervals for course appointments*/
+let dateId = 0
+
+const intervals = ref([{ from: '', id: -1, of: '', to: '' }])
+
+function getInterval(moduleCode: string) {
+  const intervalArray = intervals.value.filter(
+    (inter) => inter.of === moduleCode,
+  )
+  if (intervalArray.length === 0) {
+    addInterval(moduleCode)
+  }
+  return intervals.value.filter((inter) => inter.of === moduleCode)
+}
+
+function addInterval(moduleCode: string) {
+  intervals.value.push({ from: '', id: dateId++, of: moduleCode, to: '' })
+}
+
+function removeInterval(index: number) {
+  intervals.value = intervals.value.filter((inter) => inter.id !== index)
+}
 </script>
 
 <template>
@@ -181,12 +206,39 @@ function saveSubject() {
               />
             </VCol>
             <VCol cols="12">
-              <VTextarea
-                v-model="formData.appointments.dates"
-                label="Appointments"
-                required
-              />
+              <VIcon>mdi-calendar</VIcon><Strong>Appointment dates</Strong>
+              <div
+                v-for="(interval, index) in getInterval(
+                  selectedSubject.moduleCode,
+                )"
+                :key="interval.id"
+              >
+                <div style="display: flex">
+                  Date Id: {{ interval.id }}
+                  <div v-if="index !== 0">
+                    <VIcon @click="removeInterval(interval.id)">
+                      mdi-trash-can-outline
+                    </VIcon>
+                  </div>
+                </div>
+                <VTextField
+                  v-model="interval.from"
+                  label="from"
+                  type="datetime-local"
+                  required
+                />
+                <VTextField
+                  v-model="interval.to"
+                  label="to"
+                  type="datetime-local"
+                  required
+                />
+              </div>
+              <VBtn @click="addInterval(selectedSubject.moduleCode)">
+                Add Date
+              </VBtn>
             </VCol>
+            <!-- TODO: Add weekly, block, irregular option -->
             <VCol cols="12">
               <VTextarea
                 v-model="formData.extraInfo"
