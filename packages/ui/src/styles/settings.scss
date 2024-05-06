@@ -19,6 +19,13 @@
 }
 
 // custom styles
+$customdividerrem: 0.063rem;
+$customdividercolor: black;
+.nav-divider {
+  color: $customdividercolor;
+  padding-top: $customdividerrem;
+}
+
 .hoverable-card:hover .v-card-title {
   color: rgb(var(--v-theme-primary));
 }

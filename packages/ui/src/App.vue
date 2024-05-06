@@ -9,7 +9,7 @@ useUserStore()
 
 <template>
   <VApp>
-    <Navbar />
+    <CustomNavbar />
     <VMain class="my-4 mx-2">
       <ModalDialog />
       <RouterView />

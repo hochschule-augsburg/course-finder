@@ -22,6 +22,8 @@ declare module 'vue' {
     InfoDialog: typeof import('./src/components/InfoDialog.vue')['default']
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
     OfferedCourses: typeof import('./src/components/admin/OfferedCourses.vue')['default']
+    NavbarDesktop: typeof import('./src/components/NavbarDesktop.vue')['default']
+    NavbarMobile: typeof import('./src/components/NavbarMobile.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubjectDetails: typeof import('./src/components/subject/SubjectDetails.vue')['default']
