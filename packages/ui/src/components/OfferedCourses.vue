@@ -31,15 +31,15 @@ function onDrop(event: DragEvent, droppedTable: string): void {
     (item) => item.moduleCode === itemID,
   )
 
-  if (indexInTableOne >= 0) {
-    if (tableID !== droppedTable) {
-      const foundSubject = tableOne.find((item) => item.moduleCode === itemID)
+  if (indexInTableOne >= 0 && tableID !== droppedTable) {
+    const foundSubject = tableOne.find((item) => item.moduleCode === itemID)
+    if (foundSubject !== undefined) {
       tableTwo.push(foundSubject)
       tableOne.splice(indexInTableOne, 1)
     }
-  } else if (indexInTableTwo >= 0) {
-    if (tableID !== droppedTable) {
-      const foundSubject = tableTwo.find((item) => item.moduleCode === itemID)
+  } else if (indexInTableTwo >= 0 && tableID !== droppedTable) {
+    const foundSubject = tableTwo.find((item) => item.moduleCode === itemID)
+    if (foundSubject !== undefined) {
       tableOne.push(foundSubject)
       tableTwo.splice(indexInTableTwo, 1)
     }
@@ -49,25 +49,21 @@ function onDrop(event: DragEvent, droppedTable: string): void {
 /*The following code handles the logic for the edit form of an course */
 type TimeInterval<Date> = { from: Date; to: Date }
 
-export type CourseAppointmentsJson<Date> =
-  | {
-      /**
-       * Ignore days, months and years
-       */
-      dates: Array<TimeInterval<Date>>
-      type: 'weekly'
-    }
-  | {
-      dates: Array<TimeInterval<Date>>
-      type: 'block' | 'irregular'
-    }
+type CourseAppointmentsJson<Date> = {
+  dates: Array<TimeInterval<Date>>
+  type: 'block' | 'irregular' | 'weekly'
+}
 
 const showModalForm = ref(false)
 const offeredCourseList = []
 
 const selectedSubject = ref<Subject>(enrollmentStore.subjects[0])
+const initialAppointment: CourseAppointmentsJson<Date> = {
+  dates: [],
+  type: 'weekly',
+}
 const formData = ref({
-  appointments: {} as CourseAppointmentsJson<Date>,
+  appointments: initialAppointment,
   extraInfo: '',
   maxParticipants: 0,
   minParticipants: 0,
@@ -77,7 +73,10 @@ const formData = ref({
 function selectSubject(s: Subject) {
   selectedSubject.value = s
   formData.value.moduleCode = s.moduleCode
-  formData.value.appointments = s.offeredCourse.appointments
+  formData.value.appointments = {
+    dates: s.offeredCourse.appointments.dates,
+    type: s.offeredCourse.appointments.type,
+  }
   formData.value.extraInfo = s.offeredCourse.extraInfo ?? ''
   formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
   formData.value.minParticipants = s.offeredCourse.minParticipants ?? 0
