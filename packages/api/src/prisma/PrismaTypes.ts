@@ -32,8 +32,18 @@ export type CourseAppointmentsJson<T> =
       type: 'weekly'
     }
   | {
+      /**
+       * exact dates and time
+       */
       dates: TimeInterval<T>[]
-      type: 'block' | 'irregular'
+      type: 'irregular'
+    }
+  | {
+      /**
+       * ignore time
+       */
+      dates: TimeInterval<T>[]
+      type: 'block'
     }
 declare global {
   namespace PrismaJson {
