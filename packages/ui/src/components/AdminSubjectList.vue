@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/AdminStore'
+import type { Subject } from '@/stores/CoursesStore'
 
-import { useAdminStore } from '@/stores/AdminStore'
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { ref } from 'vue'
 
-const adminStore = useAdminStore()
+const adminStore = useCoursesStore()
 
 const showModalForm = ref(false)
 
@@ -60,7 +60,7 @@ function saveSubject() {
         <tr v-for="subject in adminStore.subjects" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
           <td>{{ subject.title.en }}</td>
-          <td>{{ subject.allLecturers.toString() }}</td>
+          <td>{{ subject.lecturers.toString() }}</td>
           <td>{{ subject.creditPoints }}</td>
           <td>{{ subject.semesterHours }}</td>
           <td>
@@ -133,7 +133,7 @@ function saveSubject() {
               <VTextField
                 v-model="formData.lecturers"
                 hint="separate with comma"
-                label="Extern lecturers*"
+                label="Lecturers*"
                 required
               />
             </VCol>

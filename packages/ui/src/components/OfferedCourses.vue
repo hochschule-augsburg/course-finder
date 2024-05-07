@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/AdminStore'
+import type { Subject } from '@/stores/CoursesStore'
 
-import { useAdminStore } from '@/stores/AdminStore'
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { reactive, ref } from 'vue'
 
-const enrollmentStore = useAdminStore()
+const enrollmentStore = useCoursesStore()
 
 /*Following code handles the logic for drag and drop */
 const tableOne: Subject[] = reactive(enrollmentStore.subjects)
@@ -72,25 +72,32 @@ const formData = ref({
 })
 
 function selectSubject(s: Subject) {
+  //Remove dummy interval item
+  intervals.value = intervals.value.filter((interval) => interval.id !== -1)
+
   selectedSubject.value = s
   formData.value.moduleCode = s.moduleCode
-  formData.value.extraInfo = s.offeredCourse.extraInfo ?? ''
-  formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
-  formData.value.minParticipants = s.offeredCourse.minParticipants ?? 0
 
-  intervals.value = intervals.value.filter((interval) => interval.id !== -1)
-  generateCourseInterval(s.offeredCourse.appointments.dates, s.moduleCode)
-  isChecked(s.offeredCourse.appointments.type)
+  if (s.offeredCourse !== undefined) {
+    formData.value.extraInfo = s.offeredCourse.extraInfo ?? ''
+    formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
+    formData.value.minParticipants = s.offeredCourse.minParticipants
+
+    generateCourseInterval(s.offeredCourse.appointments.dates, s.moduleCode)
+    isChecked(s.offeredCourse.appointments.type)
+  }
   showModalForm.value = true
 }
 
 function saveSubject() {
-  selectedSubject.value.offeredCourse.maxParticipants =
-    formData.value.maxParticipants
-  selectedSubject.value.offeredCourse.minParticipants =
-    formData.value.minParticipants
-  selectedSubject.value.offeredCourse.extraInfo = formData.value.extraInfo
-  selectedSubject.value.offeredCourse.appointments = getAppointmentData()
+  if (selectedSubject.value.offeredCourse !== undefined) {
+    selectedSubject.value.offeredCourse.maxParticipants =
+      formData.value.maxParticipants
+    selectedSubject.value.offeredCourse.minParticipants =
+      formData.value.minParticipants
+    selectedSubject.value.offeredCourse.extraInfo = formData.value.extraInfo
+    selectedSubject.value.offeredCourse.appointments = getAppointmentData()
+  }
   // TODO: Send offeredcourselist object to backend
   // TODO: Change subject in store
   offeredCourseList.push(selectedSubject)
@@ -148,8 +155,12 @@ function generateCourseInterval(
   dates.forEach(function (date) {
     addInterval(
       moduleCode,
-      date.from.toISOString().slice(0, 16),
-      date.to.toISOString().slice(0, 16),
+      new Date(date.from.getTime() - date.to.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16),
+      new Date(date.to.getTime() - date.to.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16),
     )
   })
 }
@@ -240,9 +251,9 @@ function isChecked(type: string) {
             <a @click="selectSubject(subject)"
               ><VIcon class="pencil-icon" size="20">mdi-pencil</VIcon></a
             >
-            <div>Type: {{ subject.offeredCourse.appointments.type }}</div>
+            <div>Type: {{ subject.offeredCourse?.appointments.type }}</div>
             <div
-              v-for="(timespan, index) in subject.offeredCourse.appointments
+              v-for="(timespan, index) in subject.offeredCourse?.appointments
                 .dates"
               :key="index"
             >
@@ -255,13 +266,13 @@ function isChecked(type: string) {
             </div>
             <div>
               Min participants:
-              {{ subject.offeredCourse.minParticipants }}
+              {{ subject.offeredCourse?.minParticipants }}
               Max participants:
-              {{ subject.offeredCourse.maxParticipants }}
+              {{ subject.offeredCourse?.maxParticipants }}
             </div>
             <div>
               Extra information:
-              {{ subject.offeredCourse.extraInfo }}
+              {{ subject.offeredCourse?.extraInfo }}
             </div>
           </div>
         </div>

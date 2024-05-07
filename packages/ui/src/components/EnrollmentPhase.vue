@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useAdminStore } from '@/stores/AdminStore'
+import { useCoursesStore } from '@/stores/CoursesStore'
 
-const enrollmentStore = useAdminStore()
+const enrollmentStore = useCoursesStore()
 const phase = enrollmentStore.currentPhase
 
 function formatDate(dateString: string | undefined) {
