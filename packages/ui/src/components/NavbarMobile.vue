@@ -84,7 +84,11 @@ const infoDialogVisible = ref(false)
           prepend-icon="mdi-logout-variant"
           @click="userStore.logout"
         />
-        <VMenu v-else transition="slide-y-transition">
+        <VMenu
+          v-else
+          :close-on-content-click="false"
+          transition="slide-y-transition"
+        >
           <template #activator="{ props }">
             <VListItem
               v-bind="props"
