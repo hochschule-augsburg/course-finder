@@ -9,7 +9,7 @@ const { t } = useI18n()
   <VDialog v-model:model-value="showInfoDialog" max-width="800">
     <VCard>
       <VCardTitle>
-        {{ t('InfoDialogTitel') }}
+        {{ t('info-title') }}
       </VCardTitle>
       <VCardText>
         Lorem ipsum dolor sit amet, semper quis, sapien id natoque elit. Nostra
@@ -43,7 +43,7 @@ const { t } = useI18n()
       <VCardActions>
         <VSpacer />
         <VBtn
-          :text="t('InfoDialogSchliessen')"
+          :text="t('info-close')"
           variant="text"
           @click="showInfoDialog = false"
         />
@@ -54,10 +54,10 @@ const { t } = useI18n()
 
 <i18n lang="yaml">
 en:
-  InfoDialogTitel: Explanation
-  InfoDialogSchliessen: Close
+  info-title: Explanation
+  info-close: Close
 
 de:
-  InfoDialogTitel: Erklärung
-  InfoDialogSchliessen: Schliessen
+  info-title: Erklärung
+  info-close: Schliessen
 </i18n>
