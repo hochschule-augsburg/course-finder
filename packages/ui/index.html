@@ -42,6 +42,35 @@
     frame-src 'self' example.com tha.de;"
     />
     <!-- csp also in web-server -->
+    <style>
+      html {
+        background-color: white;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html {
+          /* vuetify dark background color */
+          background-color: rgb(18, 18, 18);
+        }
+      }
+    </style>
+    <script>
+      const theme = localStorage.getItem('theme')
+      if (theme === 'customDarkTheme') {
+        setDarkThemeForIndex()
+      } else if (!theme) {
+        const prefersDarkMode = window.matchMedia(
+          '(prefers-color-scheme: dark)',
+        ).matches
+        if (prefersDarkMode) {
+          setDarkThemeForIndex()
+        }
+      }
+      function setDarkThemeForIndex() {
+        document.getElementsByTagName('html')[0].style.backgroundColor =
+          'rgb(18, 18, 18)'
+      }
+    </script>
   </head>
 
   <body>
