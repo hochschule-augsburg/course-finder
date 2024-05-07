@@ -14,12 +14,12 @@ const theme = useTheme()
 const selectedTheme = ref<ThemeOptions>('auto')
 
 const themes = {
-  auto: getPreferedColorScheme(),
+  auto: getPreferredColorScheme(),
   dark: 'customDarkTheme',
   light: 'customLightTheme',
 }
 
-function getPreferedColorScheme() {
+function getPreferredColorScheme() {
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)',
   ).matches

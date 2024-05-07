@@ -6,8 +6,6 @@ import { VBtn, VMenu } from 'vuetify/components'
 
 import type { LocaleOptions, ThemeOptions } from './CustomNavbar.vue'
 
-import InfoDialog from './InfoDialog.vue'
-
 defineProps<{
   changeLocale: (newLocale: LocaleOptions) => void
   changeTheme: (newTheme: ThemeOptions) => void
