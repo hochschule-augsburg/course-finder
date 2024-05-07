@@ -13,7 +13,7 @@ const formData = ref({
   creditPoints: 0,
   editorUsername: '',
   extraInfo: '',
-  lecturers: ['', ''],
+  lecturers: [''],
   semesterHours: 0,
   title: { de: '', en: '' }, // [I18n]
   varyingCP: {},
