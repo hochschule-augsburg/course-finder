@@ -6,7 +6,7 @@ import { useDisplay, useTheme } from 'vuetify'
 export type ThemeOptions = 'auto' | 'dark' | 'light'
 export type LocaleOptions = 'de' | 'en'
 
-const display = useDisplay()
+const { mobile } = useDisplay()
 
 const { locale } = useI18n()
 const theme = useTheme()
@@ -64,7 +64,7 @@ onMounted(() => {
 
 <template>
   <VAppBar>
-    <template v-if="display.mobile">
+    <template v-if="mobile">
       <NavbarMobile
         :change-locale="changeLocale"
         :change-theme="changeTheme"
