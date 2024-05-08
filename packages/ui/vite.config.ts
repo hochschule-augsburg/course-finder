@@ -63,6 +63,9 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    headers: {
+      'content-security-policy': "frame-ancestors 'self' *tha.de;",
+    },
   },
   test: {
     // perhaps changes later to jsdom but happydom is faster

@@ -96,7 +96,7 @@ function reset() {
     >
       <div class="d-flex align-start formHead">
         <VBtn
-          :text="t('back')"
+          :text="t('global.back')"
           prepend-icon="mdi-arrow-left"
           variant="plain"
           @click="back"
