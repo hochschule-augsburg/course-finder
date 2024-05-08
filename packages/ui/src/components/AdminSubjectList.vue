@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/CoursesStore'
 
+import { trpc } from '@/api/trpc'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { ref } from 'vue'
 
@@ -13,33 +14,77 @@ const formData = ref({
   creditPoints: 0,
   editorUsername: '',
   extraInfo: '',
-  lecturers: [''],
+  facultyName: '',
+  lecturers: '',
   semesterHours: 0,
   title: { de: '', en: '' }, // [I18n]
-  varyingCP: {},
+  varyingCP: '',
 })
 
 function selectSubject(s: Subject) {
   selectedSubject.value = s
   formData.value.creditPoints = s.creditPoints
   formData.value.semesterHours = s.semesterHours
+  formData.value.facultyName = s.facultyName ?? ''
   formData.value.title.de = s.title.de ?? ''
   formData.value.title.en = s.title.en ?? ''
-  //TODO: Assign varyingCP, extraInfo, editorUsername and lecturers
+  formData.value.lecturers = s.lecturers.join(', ')
+  formData.value.varyingCP = varyingCPToString(s.varyingCP)
+  formData.value.extraInfo = s.extraInfo ?? ''
+  formData.value.editorUsername = s.editorUsername ?? ''
+
   showModalForm.value = true
-  console.log(formData.value)
 }
 
-function saveSubject() {
-  selectedSubject.value.title.en = formData.value.title.en
-  selectedSubject.value.creditPoints = formData.value.creditPoints
-  selectedSubject.value.semesterHours = formData.value.semesterHours
-  selectedSubject.value.title.en = formData.value.title.en
-  selectedSubject.value.title.de = formData.value.title.de
-  //TODO: Assign varyingCP, extraInfo, editorUsername and lecturers
-  //TODO: Save offered courses in selectedSubject
+function varyingCPToString(varyingCP: unknown) {
+  if (
+    typeof varyingCP === 'object' &&
+    varyingCP !== null &&
+    !Array.isArray(varyingCP)
+  ) {
+    const keyValuePairs = Object.entries(varyingCP).map(([key, value]) => {
+      return `${key}: ${value}`
+    })
+
+    const resultString = keyValuePairs.join(', ')
+    return resultString
+  }
+  return ''
+}
+
+function parseVaryingCP(input: string) {
+  const dictionary: { [key: string]: number } = {}
+  const pairs = input.split(',').map((pair) => pair.trim())
+
+  pairs.forEach((pair) => {
+    const [key, value] = pair.split(':').map((item) => item.trim())
+    dictionary[key] = Number(value)
+  })
+  return dictionary
+}
+
+async function saveSubject() {
+  const inputData = {
+    creditPoints: formData.value.creditPoints,
+    editorUsername: formData.value.editorUsername,
+    extraInfo: formData.value.extraInfo,
+    facultyName: formData.value.facultyName,
+    lecturers: formData.value.lecturers.split(',').map((item) => item.trim()),
+    moduleCode: selectedSubject.value.moduleCode,
+    semesterHours: formData.value.semesterHours,
+    title: {
+      de: formData.value.title.de,
+      en: formData.value.title.en,
+    },
+    varyingCP: parseVaryingCP(formData.value.varyingCP),
+  }
+  try {
+    await trpc.admin.courses.update.mutate(inputData)
+    console.log('Success updating subject')
+  } catch (e) {
+    console.log('Error updating Subject')
+  }
   showModalForm.value = false
-  // TODO: Send request to backend and Change subject in store
 }
 </script>
 

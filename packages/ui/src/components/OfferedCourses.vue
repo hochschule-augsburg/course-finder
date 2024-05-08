@@ -4,10 +4,10 @@ import type { Subject } from '@/stores/CoursesStore'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { reactive, ref } from 'vue'
 
-const enrollmentStore = useCoursesStore()
+const coursesStore = useCoursesStore()
 
 /*Following code handles the logic for drag and drop */
-const tableOne: Subject[] = reactive(enrollmentStore.subjects)
+const tableOne: Subject[] = reactive(coursesStore.subjects)
 //TODO: Always offered courses should be automatically in tableTwo
 const tableTwo: Subject[] = reactive([])
 
@@ -56,9 +56,30 @@ type CourseAppointmentsJson<Date> = {
 }
 
 const showModalForm = ref(false)
-const offeredCourseList = []
 
-const selectedSubject = ref<Subject>(enrollmentStore.subjects[0])
+interface SharedObject {
+  array: [
+    {
+      appointments: {
+        dates: Array<{ from: Date; to: Date }>
+        type: 'block' | 'irregular' | 'weekly'
+      }
+      extraInfo: string
+      for: string[]
+      maxParticipants: number
+      minParticipants: number
+      moduleCode: string
+    },
+  ]
+}
+
+const props = defineProps<{
+  offeredCoursesArray: SharedObject | undefined
+}>()
+
+const offeredCoursesArray = ref(props.offeredCoursesArray)
+
+const selectedSubject = ref<Subject>(coursesStore.subjects[0])
 const initialAppointment: CourseAppointmentsJson<Date> = {
   dates: [],
   type: 'weekly',
@@ -66,9 +87,9 @@ const initialAppointment: CourseAppointmentsJson<Date> = {
 const formData = ref({
   appointments: initialAppointment,
   extraInfo: '',
+  for: '',
   maxParticipants: 0,
   minParticipants: 0,
-  moduleCode: '',
 })
 
 function selectSubject(s: Subject) {
@@ -76,12 +97,12 @@ function selectSubject(s: Subject) {
   intervals.value = intervals.value.filter((interval) => interval.id !== -1)
 
   selectedSubject.value = s
-  formData.value.moduleCode = s.moduleCode
 
   if (s.offeredCourse !== undefined) {
     formData.value.extraInfo = s.offeredCourse.extraInfo ?? ''
     formData.value.maxParticipants = s.offeredCourse.maxParticipants ?? 0
     formData.value.minParticipants = s.offeredCourse.minParticipants
+    formData.value.for = s.offeredCourse.for.join(', ')
 
     generateCourseInterval(s.offeredCourse.appointments.dates, s.moduleCode)
     isChecked(s.offeredCourse.appointments.type)
@@ -90,27 +111,28 @@ function selectSubject(s: Subject) {
 }
 
 function saveSubject() {
-  if (selectedSubject.value.offeredCourse !== undefined) {
-    selectedSubject.value.offeredCourse.maxParticipants =
-      formData.value.maxParticipants
-    selectedSubject.value.offeredCourse.minParticipants =
-      formData.value.minParticipants
-    selectedSubject.value.offeredCourse.extraInfo = formData.value.extraInfo
-    selectedSubject.value.offeredCourse.appointments = getAppointmentData()
+  // TODO: Forward offeredCourseData to AdminCreateEnroll
+  // TODO: Mirror change in store
+  const offeredCourseData = {
+    appointments: getAppointmentData(selectedSubject.value.moduleCode),
+    extraInfo: formData.value.extraInfo,
+    for: formData.value.for.split(',').map((item) => item.trim()),
+    maxParticipants: formData.value.maxParticipants,
+    minParticipants: formData.value.minParticipants,
+    moduleCode: selectedSubject.value.moduleCode,
   }
-  // TODO: Send offeredcourselist object to backend
-  // TODO: Change subject in store
-  offeredCourseList.push(selectedSubject)
+  offeredCoursesArray.value?.array.push(offeredCourseData)
+  console.log('offeredCourse pushed')
   showModalForm.value = false
 }
 
-function getAppointmentData() {
+function getAppointmentData(moduleCode: string) {
   const datesArray: Array<{
     from: Date
     to: Date
   }> = []
   const courseIntervals = intervals.value.filter(
-    (inter) => inter.of === selectedSubject.value.moduleCode,
+    (inter) => inter.of === moduleCode,
   )
   courseIntervals.forEach(function (interval) {
     datesArray.push({
@@ -307,6 +329,14 @@ function isChecked(type: string) {
               />
             </VCol>
             <VCol cols="12">
+              <VTextField
+                v-model="formData.for"
+                hint="E.g. IN, WIN, TI,"
+                label="For fields of study"
+                required
+              />
+            </VCol>
+            <VCol cols="12">
               <VIcon>mdi-calendar</VIcon><Strong>Appointment(s)</Strong>
               <div
                 v-for="(interval, index) in getInterval(
@@ -361,7 +391,7 @@ function isChecked(type: string) {
         <VDivider />
         <template #actions>
           <VBtn text="Cancel" @click="showModalForm = false" />
-          <VBtn class="ms-auto" text="Save" @click="showModalForm = false" />
+          <VBtn class="ms-auto" text="Save" @click="saveSubject" />
         </template>
       </VCard>
     </VDialog>
