@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { trpc } from '@/api/trpc'
+import { ref } from 'vue'
 
 interface offeredCourseData {
   appointments: {
@@ -16,41 +17,53 @@ interface offeredCourseData {
 
 const sharedObject = ref<offeredCourseData[]>([])
 
-const newEnrollmentData = reactive({
-  description: '',
+const formData = ref({
+  description: { de: '', en: '' }, // [I18n]
   end: '',
-  offeredCourses: [],
   start: '',
-  title: '',
+  title: { de: '', en: '' }, // [I18n]
 })
 
-function createEnrollment() {
-  sharedObject.value.forEach(function (offCou) {
-    console.log(offCou)
-  })
-
+async function createEnrollment() {
+  const enrollmentPhaseData = {
+    description: {
+      de: formData.value.description.de,
+      en: formData.value.description.en,
+    },
+    end: formData.value.end,
+    offeredCourses: sharedObject.value,
+    start: formData.value.start,
+    title: { de: formData.value.title.de, en: formData.value.title.en },
+  }
+  try {
+    await trpc.admin.enroll.phase.create.mutate(enrollmentPhaseData)
+    console.log('Success creating enroll phase')
+  } catch (e) {
+    console.log('Error creating enroll phase')
+  }
   sharedObject.value = []
 }
 </script>
 
 <template>
   <VForm>
-    <VContainer fluid>
+    <VContainer>
       <VRow justify="center">
-        <VCol cols="10">
-          <h1>Create enrollment</h1>
+        <VCol cols="12" sm="5"><h1>Create enrollment</h1></VCol>
+        <VCol cols="12" sm="5"><VSpacer /></VCol>
+      </VRow>
+      <VRow justify="center">
+        <VCol cols="12" sm="5">
           <VTextField
-            v-model="newEnrollmentData.start"
+            v-model="formData.start"
             label="Start date"
             type="datetime-local"
             required
           />
         </VCol>
-      </VRow>
-      <VRow justify="center">
-        <VCol cols="10">
+        <VCol cols="12" sm="5">
           <VTextField
-            v-model="newEnrollmentData.end"
+            v-model="formData.end"
             label="End date"
             type="datetime-local"
             required
@@ -58,20 +71,25 @@ function createEnrollment() {
         </VCol>
       </VRow>
       <VRow justify="center">
-        <VCol cols="10">
-          <VTextField
-            v-model="newEnrollmentData.title"
-            label="Title"
-            required
-          />
+        <VCol cols="12" sm="5">
+          <VTextField v-model="formData.title.en" label="Title (en)" required />
+        </VCol>
+        <VCol cols="12" sm="5">
+          <VTextField v-model="formData.title.de" label="Title (de)" required />
         </VCol>
       </VRow>
       <VRow justify="center">
-        <VCol cols="10">
+        <VCol cols="12" sm="10">
           <VTextarea
-            v-model="newEnrollmentData.description"
-            label="Description"
-            clearable
+            v-model="formData.description.en"
+            label="Description (en)"
+            required
+          />
+        </VCol>
+        <VCol cols="12" sm="10">
+          <VTextarea
+            v-model="formData.description.de"
+            label="Description (de)"
             required
           />
         </VCol>

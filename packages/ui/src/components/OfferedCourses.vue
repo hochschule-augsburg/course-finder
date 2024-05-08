@@ -160,7 +160,6 @@ function saveSubject() {
     moodleCourse: formData.value.moodleCourse,
   }
   offeredCoursesArray.value.push(offeredCourseData)
-
   // change display information
   selectedSubject.value.offeredCourse = {
     ...offeredCourseData,
@@ -284,7 +283,7 @@ function isChecked(type: string) {
 </script>
 
 <template>
-  <VContainer>
+  <VContainer fluid="true">
     <VRow>
       <VCol cols="12" lg="6">
         <div
@@ -293,15 +292,31 @@ function isChecked(type: string) {
           @dragover.prevent
           @drop="onDrop($event, 'table1')"
         >
-          <div>Course</div>
-          <div
-            v-for="subject in tableOne"
-            :key="subject.moduleCode"
-            class="drag-el"
-            draggable="true"
-            @dragstart="startDrag($event, subject, 'table1')"
-          >
-            {{ subject.title.en }}
+          <div class="left-column">
+            <div
+              v-for="subject in tableOne.slice(
+                0,
+                Math.ceil(tableOne.length / 2),
+              )"
+              :key="subject.moduleCode"
+              class="drag-el"
+              draggable="true"
+              @dragstart="startDrag($event, subject, 'table1')"
+            >
+              {{ subject.title.en }}
+            </div>
+          </div>
+
+          <div class="right-column">
+            <div
+              v-for="subject in tableOne.slice(Math.ceil(tableOne.length / 2))"
+              :key="subject.moduleCode"
+              class="drag-el"
+              draggable="true"
+              @dragstart="startDrag($event, subject, 'table1')"
+            >
+              {{ subject.title.en }}
+            </div>
           </div>
         </div>
       </VCol>
@@ -495,5 +510,15 @@ $paddingValue: 1%;
 
 .dateId-box {
   padding-top: $paddingValue;
+}
+
+.left-column {
+  float: left;
+  width: 50%;
+}
+
+.right-column {
+  float: right;
+  width: 50%;
 }
 </style>
