@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
-import { VBtn, VMenu, VToolbarTitle } from 'vuetify/components'
+import {
+  VAppBar,
+  VBtn,
+  VIcon,
+  VMenu,
+  VSpacer,
+  VToolbarTitle,
+  VTooltip,
+} from 'vuetify/components'
 
 const userStore = useUserStore()
 

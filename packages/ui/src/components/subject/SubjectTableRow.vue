@@ -2,9 +2,15 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useI18n } from 'vue-i18n'
+import {
+  VCol,
+  VContainer,
+  VExpansionPanelText,
+  VExpansionPanelTitle,
+  VRow,
+} from 'vuetify/components'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
-
 defineProps<{ subject: Subject }>()
 
 const { locale } = useI18n()

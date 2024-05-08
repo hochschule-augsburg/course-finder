@@ -3,6 +3,7 @@ import type { Subject } from '@/stores/CoursesStore'
 
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { ref } from 'vue'
+import { VCol, VContainer, VRow } from 'vuetify/components'
 
 const coursesStore = useCoursesStore()
 const showSubjectDialog = ref<boolean>(false)

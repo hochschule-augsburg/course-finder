@@ -2,6 +2,7 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useI18n } from 'vue-i18n'
+import { VCard, VCardText, VCol, VRow } from 'vuetify/components'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
 

@@ -4,6 +4,7 @@ import type { RangeFilter } from '@/stores/filters'
 import { useFiltersStore } from '@/stores/filters'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { VChip, VChipGroup, VIcon, VTextField } from 'vuetify/components'
 
 const { search } = storeToRefs(useFiltersStore())
 const filtersStore = useFiltersStore()

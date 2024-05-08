@@ -4,7 +4,14 @@ import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VDialog, VSheet, VTextField } from 'vuetify/components'
+import {
+  VBtn,
+  VDialog,
+  VRow,
+  VSheet,
+  VSpacer,
+  VTextField,
+} from 'vuetify/components'
 import { VForm } from 'vuetify/components/VForm'
 
 import '../styles/settings.scss'
