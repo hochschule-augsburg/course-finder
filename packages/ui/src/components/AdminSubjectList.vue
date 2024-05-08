@@ -54,7 +54,10 @@ function varyingCPToString(varyingCP: unknown) {
 
 function parseVaryingCP(input: string) {
   const dictionary: { [key: string]: number } = {}
-  const pairs = input.split(',').map((pair) => pair.trim())
+  const pairs = input
+    .split(',')
+    .map((pair) => pair.trim())
+    .filter((item) => item !== '')
 
   pairs.forEach((pair) => {
     const [key, value] = pair.split(':').map((item) => item.trim())
@@ -69,7 +72,10 @@ async function saveSubject() {
     editorUsername: formData.value.editorUsername,
     extraInfo: formData.value.extraInfo,
     facultyName: formData.value.facultyName,
-    lecturers: formData.value.lecturers.split(',').map((item) => item.trim()),
+    lecturers: formData.value.lecturers
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item !== ''),
     moduleCode: selectedSubject.value.moduleCode,
     semesterHours: formData.value.semesterHours,
     title: {

@@ -36,14 +36,54 @@ function onDrop(event: DragEvent, droppedTable: string): void {
     if (foundSubject !== undefined) {
       tableTwo.push(foundSubject)
       tableOne.splice(indexInTableOne, 1)
+      handlePuttingInAgainLogic(foundSubject)
     }
-    //TODO: Remove subject from offeredCourseList if its there
+    //TODO: Remove subject from offeredCourseArray if its there
   } else if (indexInTableTwo >= 0 && tableID !== droppedTable) {
     const foundSubject = tableTwo.find((item) => item.moduleCode === itemID)
     if (foundSubject !== undefined) {
       tableOne.push(foundSubject)
       tableTwo.splice(indexInTableTwo, 1)
+      handlePuttingBackLogic(foundSubject)
     }
+  }
+}
+
+const removeStore = ref<offeredCourseData[]>([])
+
+function handlePuttingBackLogic(subject: Subject) {
+  //Retrieve the data from the shared object
+  const offeredCourseData = offeredCoursesArray.value.filter(
+    (course) => course.moduleCode === subject.moduleCode,
+  )
+  //Remove the data from the shared object
+  offeredCoursesArray.value = offeredCoursesArray.value.filter(
+    (course) => course.moduleCode !== subject.moduleCode,
+  )
+  //Remove old data in case it is already in removeStore
+  removeStore.value = removeStore.value.filter(
+    (data) => data.moduleCode !== subject.moduleCode,
+  )
+  //Put retrieved data in removeStore
+  offeredCourseData.forEach(function (data) {
+    removeStore.value.push(data)
+  })
+}
+
+function handlePuttingInAgainLogic(subject: Subject) {
+  //Try to retrieve data from remove store
+  const offeredCourseData = removeStore.value.filter(
+    (data) => data.moduleCode === subject.moduleCode,
+  )
+  //Remove data from remove store
+  removeStore.value = removeStore.value.filter(
+    (data) => data.moduleCode !== subject.moduleCode,
+  )
+  //Putting back data in shared object if it is there
+  if (offeredCourseData !== undefined) {
+    offeredCourseData.forEach(function (data) {
+      offeredCoursesArray.value.push(data)
+    })
   }
 }
 
@@ -67,6 +107,7 @@ interface offeredCourseData {
   maxParticipants: number
   minParticipants: number
   moduleCode: string
+  moodleCourse: string
 }
 
 const props = defineProps<{
@@ -86,12 +127,10 @@ const formData = ref({
   for: '',
   maxParticipants: 0,
   minParticipants: 0,
+  moodleCourse: '',
 })
 
 function selectSubject(s: Subject) {
-  //Remove dummy interval item TODO: Solve this problem later
-  intervals.value = intervals.value.filter((interval) => interval.id !== -1)
-
   selectedSubject.value = s
 
   if (s.offeredCourse !== undefined) {
@@ -107,19 +146,27 @@ function selectSubject(s: Subject) {
 }
 
 function saveSubject() {
-  // TODO: Forward offeredCourseData to AdminCreateEnroll
-  // TODO: Mirror change in store
+  // TODO: Mirror change in store after successful request in parent component
   const offeredCourseData = {
     appointments: getAppointmentData(selectedSubject.value.moduleCode),
     extraInfo: formData.value.extraInfo,
-    //TODO: Remove empty string in for
-    for: formData.value.for.split(',').map((item) => item.trim()),
+    for: formData.value.for
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item !== ''),
     maxParticipants: formData.value.maxParticipants,
     minParticipants: formData.value.minParticipants,
     moduleCode: selectedSubject.value.moduleCode,
+    moodleCourse: formData.value.moodleCourse,
   }
   offeredCoursesArray.value.push(offeredCourseData)
-  console.log('offeredCourse pushed')
+
+  // change display information
+  selectedSubject.value.offeredCourse = {
+    ...offeredCourseData,
+    phaseId: 0,
+  }
+
   showModalForm.value = false
 }
 
@@ -129,7 +176,7 @@ function getAppointmentData(moduleCode: string) {
     to: Date
   }> = []
   const courseIntervals = intervals.value.filter(
-    (inter) => inter.of === moduleCode,
+    (inter) => inter.of === moduleCode && inter.from !== '',
   )
   courseIntervals.forEach(function (interval) {
     datesArray.push({
@@ -153,9 +200,14 @@ function getAppointmentType(): 'block' | 'irregular' | 'weekly' {
 
 /*The following code handles the logic to create and delete date 
 intervals for course appointments*/
-let dateId = 0
+interface frontendInterval {
+  from: string
+  id: number
+  of: string
+  to: string
+}
 
-const intervals = ref([{ from: '', id: -1, of: '', to: '' }])
+const intervals = ref<frontendInterval[]>([])
 
 function getInterval(moduleCode: string) {
   const intervalArray = intervals.value.filter(
@@ -183,6 +235,8 @@ function generateCourseInterval(
     )
   })
 }
+
+let dateId = 0
 
 function addInterval(moduleCode: string, from?: string, to?: string) {
   // Check if same object exists (except for id)
@@ -299,7 +353,7 @@ function isChecked(type: string) {
     </VRow>
     <VDialog
       v-model="showModalForm"
-      min-width="800"
+      min-width="auto"
       transition="false"
       width="auto"
     >
@@ -309,7 +363,7 @@ function isChecked(type: string) {
       >
         <VCardText>
           <VRow dense>
-            <VCol cols="12" md="6">
+            <VCol cols="12" sm="6">
               <VTextField
                 v-model="formData.minParticipants"
                 label="Minimum participants"
@@ -317,7 +371,7 @@ function isChecked(type: string) {
                 required
               />
             </VCol>
-            <VCol cols="12" md="6">
+            <VCol cols="12" sm="6">
               <VTextField
                 v-model="formData.maxParticipants"
                 label="Maximum participants"
@@ -327,9 +381,9 @@ function isChecked(type: string) {
             </VCol>
             <VCol cols="12">
               <VTextField
-                v-model="formData.for"
-                hint="E.g. IN, WIN, TI,"
-                label="For fields of study"
+                v-model="formData.moodleCourse"
+                label="Moodle course link"
+                type="url"
                 required
               />
             </VCol>
@@ -341,7 +395,7 @@ function isChecked(type: string) {
                 )"
                 :key="interval.id"
               >
-                <div style="display: flex">
+                <div class="dateId-box" style="display: flex">
                   Date Id: {{ interval.id }}
                   <div v-if="index !== 0">
                     <VIcon @click="removeInterval(interval.id)">
@@ -349,22 +403,39 @@ function isChecked(type: string) {
                     </VIcon>
                   </div>
                 </div>
-                <VTextField
-                  v-model="interval.from"
-                  label="from"
-                  type="datetime-local"
-                  required
-                />
-                <VTextField
-                  v-model="interval.to"
-                  label="to"
-                  type="datetime-local"
-                  required
-                />
+                <VRow>
+                  <VCol cols="12" sm="6">
+                    <VTextField
+                      v-model="interval.from"
+                      label="from"
+                      type="datetime-local"
+                      hide-details
+                      required
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="6">
+                    <VTextField
+                      v-model="interval.to"
+                      label="to"
+                      type="datetime-local"
+                      hide-details
+                      required
+                    />
+                  </VCol>
+                </VRow>
               </div>
+              <br />
               <VBtn @click="addInterval(selectedSubject.moduleCode)">
                 Add Date
               </VBtn>
+            </VCol>
+            <VCol cols="12" sm="6">
+              <VTextField
+                v-model="formData.for"
+                hint="E.g. IN, WIN, TI,"
+                label="For fields of study"
+                required
+              />
             </VCol>
             <VCol>
               <VRadioGroup v-model="checkedString.checked" inline>
@@ -420,5 +491,9 @@ $paddingValue: 1%;
 
 .pencil-icon {
   cursor: pointer;
+}
+
+.dateId-box {
+  padding-top: $paddingValue;
 }
 </style>

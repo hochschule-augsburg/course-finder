@@ -11,6 +11,7 @@ interface offeredCourseData {
   maxParticipants: number
   minParticipants: number
   moduleCode: string
+  moodleCourse: string
 }
 
 const sharedObject = ref<offeredCourseData[]>([])
@@ -24,11 +25,10 @@ const newEnrollmentData = reactive({
 })
 
 function createEnrollment() {
-  if (sharedObject.value !== undefined) {
-    sharedObject.value.forEach(function (offCou) {
-      console.log(offCou)
-    })
-  }
+  sharedObject.value.forEach(function (offCou) {
+    console.log(offCou)
+  })
+
   sharedObject.value = []
 }
 </script>
