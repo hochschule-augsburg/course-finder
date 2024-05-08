@@ -25,7 +25,7 @@ export async function pwdAuth(
   })
 
   // https://ldapwiki.com/wiki/Wiki.jsp?page=DN%20Escape%20Values
-  if (/[ *().&[\]`|@$%^?{}! ,\\#+<>;"=']/.test(username)) {
+  if (/[ *().&[\]`|%^?{}! ,\\#+<>;"=']/.test(username)) {
     return { cause: 'invalid-credentials', success: false }
   }
 

@@ -75,7 +75,7 @@ async function login() {
 
 function validUsername(input: string) {
   return (
-    !/[*().&[\]`|@$%^?{}! ,\\#+<>;"=']/.test(input) ||
+    !/[*().&[\]`|%^?{}! ,\\#+<>;"=']/.test(input) ||
     t('error.invalid-characters')
   )
 }

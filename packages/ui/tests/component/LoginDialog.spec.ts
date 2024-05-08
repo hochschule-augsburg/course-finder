@@ -35,7 +35,7 @@ describe('LoginDialog.vue', () => {
         .findAllComponents(VTextField)
         .find((e) => e.props('label') === 'Password')
         ?.props('errorMessages'),
-    ).toBe('unknown-error')
+    ).toBe('global.unknown-error')
   })
 
   it('should do twoFA', async () => {
@@ -85,7 +85,7 @@ describe('LoginDialog.vue', () => {
     await wrapper.vm.twoFALogin()
 
     // @ts-ignore
-    expect(wrapper.vm.error).toBe('unknown-error')
+    expect(wrapper.vm.error).toBe('global.unknown-error')
 
     const error = 'code-expired'
     userStore.login.mockResolvedValueOnce(error)

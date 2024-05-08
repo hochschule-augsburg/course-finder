@@ -64,6 +64,8 @@ export default defineConfig({
   server: {
     port: 3000,
     headers: {
+      'x-content-type-options': 'nosniff',
+      'Cross-Origin-Opener-Policy': 'same-origin',
       'content-security-policy': "frame-ancestors 'self';",
     },
   },

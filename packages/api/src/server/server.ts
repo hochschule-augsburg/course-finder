@@ -29,7 +29,9 @@ export async function createServer() {
   await server.register(fastifyCookie)
   await server.register(fastifySession, {
     cookie: {
+      httpOnly: true,
       sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     },
     secret: process.env.SESSION_SECRET,
   })
