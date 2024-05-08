@@ -64,7 +64,7 @@ export default defineConfig({
   server: {
     port: 3000,
     headers: {
-      'content-security-policy': "frame-ancestors 'self' *tha.de;",
+      'content-security-policy': "frame-ancestors 'self';",
     },
   },
   test: {

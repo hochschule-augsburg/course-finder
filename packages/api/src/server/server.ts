@@ -28,12 +28,13 @@ export async function createServer() {
 
   await server.register(fastifyCookie)
   await server.register(fastifySession, {
+    cookie: {
+      sameSite: 'strict',
+    },
     secret: process.env.SESSION_SECRET,
   })
   await server.register(fastifyCors, {
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     origin: (origin, cb) => {
       if (
         origin === undefined ||
