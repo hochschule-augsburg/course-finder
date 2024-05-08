@@ -24,6 +24,11 @@ export async function pwdAuth(
     url,
   })
 
+  // https://ldapwiki.com/wiki/Wiki.jsp?page=DN%20Escape%20Values
+  if (/[ *().&[\]`|@$%^?{}! ,\\#+<>;"=']/.test(username)) {
+    return { cause: 'invalid-credentials', success: false }
+  }
+
   let result: UserDataType
   try {
     await client.bind(`uid=${username},${baseDn}`, password)

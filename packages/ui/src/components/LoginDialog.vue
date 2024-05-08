@@ -37,7 +37,7 @@ async function twoFALogin() {
     result = await storeLogin(username.value, password.value, otp.value)
   } catch (e) {
     console.error(e)
-    error.value = 'unknown-error'
+    error.value = 'global.unknown-error'
     return
   } finally {
     pending.value = false
@@ -56,7 +56,7 @@ async function login() {
     result = await storeLogin(username.value, password.value)
   } catch (e) {
     console.error(e)
-    error.value = 'unknown-error'
+    error.value = 'global.unknown-error'
     return
   } finally {
     pending.value = false
@@ -72,6 +72,13 @@ async function login() {
   }
   error.value = `error.${result}`
 }
+
+function validUsername(input: string) {
+  return (
+    !/[*().&[\]`|@$%^?{}! ,\\#+<>;"=']/.test(input) ||
+    t('error.invalid-characters')
+  )
+}
 </script>
 
 <template>
@@ -83,6 +90,7 @@ async function login() {
           v-model="username"
           :error="!!error"
           :label="t('username')"
+          :rules="[validUsername]"
           autofocus
           required
           @update:model-value="error = undefined"
@@ -137,6 +145,7 @@ en:
     two-fa-required: Two-factor authentication required
     invalid-credentials: Invalid credentials
     already-logged-in: Already logged in
+    invalid-characters: Invalid characters
     tow-fa:
       code-invalid: Invalid code
       code-expired: Code expired
@@ -150,6 +159,7 @@ de:
     two-fa-required: Zwei-Faktor-Authentifizierung erforderlich
     invalid-credentials: Ungültige Anmeldeinformationen
     already-logged-in: Bereits angemeldet
+    invalid-characters: Ungültige Zeichen
     tow-fa:
       code-invalid: Ungültiger Code
       code-expired: Code abgelaufen
