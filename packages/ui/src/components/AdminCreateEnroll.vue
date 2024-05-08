@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 
-interface SharedObject {
-  array: [
-    {
-      appointments: {
-        dates: Array<{ from: Date; to: Date }>
-        type: 'block' | 'irregular' | 'weekly'
-      }
-      extraInfo: string
-      for: string[]
-      maxParticipants: number
-      minParticipants: number
-      moduleCode: string
-    },
-  ]
+interface offeredCourseData {
+  appointments: {
+    dates: Array<{ from: Date; to: Date }>
+    type: 'block' | 'irregular' | 'weekly'
+  }
+  extraInfo: string
+  for: string[]
+  maxParticipants: number
+  minParticipants: number
+  moduleCode: string
 }
 
-const sharedObject = ref<SharedObject>()
+const sharedObject = ref<offeredCourseData[]>([])
 
 const newEnrollmentData = reactive({
   description: '',
@@ -29,30 +25,11 @@ const newEnrollmentData = reactive({
 
 function createEnrollment() {
   if (sharedObject.value !== undefined) {
-    sharedObject.value.array.forEach(function (offCou) {
+    sharedObject.value.forEach(function (offCou) {
       console.log(offCou)
     })
   }
-  resetSharedObject()
-}
-
-function resetSharedObject() {
-  if (sharedObject.value !== undefined) {
-    sharedObject.value.array = [
-      {
-        appointments: {
-          dates: [{ from: new Date(), to: new Date() }],
-          type: 'block' || 'irregular' || 'weekly',
-        },
-        extraInfo: '',
-        for: ['', ''],
-        maxParticipants: 0,
-        minParticipants: 0,
-        moduleCode: '',
-      },
-    ]
-    sharedObject.value.array.pop()
-  }
+  sharedObject.value = []
 }
 </script>
 

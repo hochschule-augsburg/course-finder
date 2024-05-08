@@ -57,24 +57,20 @@ type CourseAppointmentsJson<Date> = {
 
 const showModalForm = ref(false)
 
-interface SharedObject {
-  array: [
-    {
-      appointments: {
-        dates: Array<{ from: Date; to: Date }>
-        type: 'block' | 'irregular' | 'weekly'
-      }
-      extraInfo: string
-      for: string[]
-      maxParticipants: number
-      minParticipants: number
-      moduleCode: string
-    },
-  ]
+interface offeredCourseData {
+  appointments: {
+    dates: Array<{ from: Date; to: Date }>
+    type: 'block' | 'irregular' | 'weekly'
+  }
+  extraInfo: string
+  for: string[]
+  maxParticipants: number
+  minParticipants: number
+  moduleCode: string
 }
 
 const props = defineProps<{
-  offeredCoursesArray: SharedObject | undefined
+  offeredCoursesArray: offeredCourseData[]
 }>()
 
 const offeredCoursesArray = ref(props.offeredCoursesArray)
@@ -93,7 +89,7 @@ const formData = ref({
 })
 
 function selectSubject(s: Subject) {
-  //Remove dummy interval item
+  //Remove dummy interval item TODO: Solve this problem later
   intervals.value = intervals.value.filter((interval) => interval.id !== -1)
 
   selectedSubject.value = s
@@ -116,12 +112,13 @@ function saveSubject() {
   const offeredCourseData = {
     appointments: getAppointmentData(selectedSubject.value.moduleCode),
     extraInfo: formData.value.extraInfo,
+    //TODO: Remove empty string in for
     for: formData.value.for.split(',').map((item) => item.trim()),
     maxParticipants: formData.value.maxParticipants,
     minParticipants: formData.value.minParticipants,
     moduleCode: selectedSubject.value.moduleCode,
   }
-  offeredCoursesArray.value?.array.push(offeredCourseData)
+  offeredCoursesArray.value.push(offeredCourseData)
   console.log('offeredCourse pushed')
   showModalForm.value = false
 }
