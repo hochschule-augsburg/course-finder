@@ -12,6 +12,7 @@ import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
+    await ctx.req.session.save()
     return ctx.req.session.user
   }),
   // rate limited by reverse proxy
@@ -49,6 +50,7 @@ export const authRouter = router({
           return 'two-fa-required'
         }
         ctx.req.session.user = result.user
+        ctx.req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7 // 1 week
         await ctx.req.session.save()
         return result.user
       },
