@@ -4,4 +4,5 @@ export enum Phase {
   EmailNotification = 'EmailNotification',
   Drawing = 'Drawing',
   Finished = 'Finished',
+  Closed = 'Closed',
 }

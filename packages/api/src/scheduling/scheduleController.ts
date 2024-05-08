@@ -6,9 +6,12 @@ import { phaseService } from './phaseService'
 // diese Funktion überprüft, ob eine Phase aktiviert ist
 export async function scheduleRegistration() {
   const phaseStartTime = phaseService.getPhaseStartTime(
-    phaseService.getCurrentPhase() || Phase.Registration, // Braucht einen default-Wert(vielleicht "Phase.Closed" für wenn keine Phase aktiviert sein)
+    phaseService.getCurrentPhase() || Phase.Closed, // Provide a default value for getCurrentPhase()
   )
-  if (phaseStartTime) {
+  if (
+    phaseStartTime !== undefined &&
+    phaseService.getCurrentPhase === undefined
+  ) {
     schedule.scheduleJob(phaseStartTime, () => {
       monitorRegistrationCycle()
     })
@@ -18,46 +21,43 @@ export async function scheduleRegistration() {
 // hier kann die Phase gestartet werden
 // muss noch dynamischer gemacht werden
 export async function startScheduling() {
+  phaseService.setCurrentPhase(Phase.Registration)
   const registrationStartTime = new Date('2024-05-10T00:00:00')
   const registrationEndTime = new Date('2024-05-10T23:59:59')
   phaseService.setPhaseStartTime(Phase.Registration, registrationStartTime)
   phaseService.setPhaseEndTime(Phase.Registration, registrationEndTime)
+  scheduleRegistration()
 }
 
 // muss noch überarbeitet werden
 function monitorRegistrationCycle() {
-  let currentPhase = phaseService.getCurrentPhase()
+  let currentPhase = phaseService.getCurrentPhase() || Phase.Closed
   const now = new Date()
-  const registrationPhaseEndTime = new Date('2024-05-05T23:59:59')
-  const warningBeforeEndTime = new Date(
-    registrationPhaseEndTime.getTime() - 2 * 24 * 60 * 60 * 1000,
-  ) // Two days before the end time
-  const drawingTime = new Date(registrationPhaseEndTime.getTime() + 1000)
-  // One second after the end time
+  const registrationPhaseEndTime =
+    phaseService.getPhaseEndTime(currentPhase) || now
 
   // Check the current registration cycle status
-  if (now < warningBeforeEndTime && currentPhase !== Phase.Registration) {
-    currentPhase = Phase.Registration
-    console.log('Registration phase started.')
+  if (now < registrationPhaseEndTime && currentPhase === Phase.Registration) {
+    console.log('Registration phase.')
   } else if (
-    now >= warningBeforeEndTime &&
-    now < registrationPhaseEndTime &&
-    currentPhase !== Phase.EmailNotification
+    (now >= registrationPhaseEndTime && currentPhase === Phase.Registration) ||
+    (now < registrationPhaseEndTime && currentPhase === Phase.EmailNotification)
   ) {
     currentPhase = Phase.EmailNotification
-    console.log('Warning before the end of registration phase.')
+    console.log('Email Notification started.')
     // Code for sending emails can be placed here
   } else if (
-    now >= registrationPhaseEndTime &&
-    now < drawingTime &&
-    currentPhase !== Phase.Drawing
+    (now >= registrationPhaseEndTime &&
+      currentPhase === Phase.EmailNotification) ||
+    (now < registrationPhaseEndTime && currentPhase === Phase.Drawing)
   ) {
-    currentPhase = Phase.Drawing
-    console.log('Registration phase ended. Drawing started.')
-    // Code for drawing can be placed here
-    // Email
-  } else if (now >= drawingTime && currentPhase !== Phase.Finished) {
-    currentPhase = Phase.Drawing
+    console.log('Drawing.')
+    // Code for E can be placed here
+  } else if (
+    now >= registrationPhaseEndTime &&
+    currentPhase === Phase.Drawing
+  ) {
+    currentPhase = Phase.Finished
     console.log('Drawing completed. Registration cycle finished.')
     // Code for cleanup or further actions can be placed here
   } else if (currentPhase === null) {

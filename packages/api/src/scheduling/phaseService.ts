@@ -10,6 +10,7 @@ class PhaseService {
     [Phase.EmailNotification]: undefined,
     [Phase.Drawing]: undefined,
     [Phase.Finished]: undefined,
+    [Phase.Closed]: undefined,
   }
 
   private phaseStartTimes: Record<Phase, Date | undefined> = {
@@ -17,6 +18,7 @@ class PhaseService {
     [Phase.EmailNotification]: undefined,
     [Phase.Drawing]: undefined,
     [Phase.Finished]: undefined,
+    [Phase.Closed]: undefined,
   }
 
   private constructor() {
