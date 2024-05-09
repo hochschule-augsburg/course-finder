@@ -44,8 +44,12 @@ export const useCoursesStore = defineStore('courses', () => {
 
   async function update() {
     try {
-      const phase = await trpc.course.getCurrentPhase.query()
-      currentPhase.value = phase
+      if (userStore.user?.type === 'Student') {
+        const phase = await trpc.course.getCurrentPhase.query()
+        currentPhase.value = phase
+      } else {
+        currentPhase.value = undefined
+      }
     } catch (e) {
       currentPhase.value = undefined
     }

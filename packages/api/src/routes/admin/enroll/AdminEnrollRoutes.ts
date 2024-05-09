@@ -63,9 +63,9 @@ export const enrollRouter = router({
       .input(
         z.object({
           description: i18nInput,
-          end: z.string(),
+          end: z.date(),
           offeredCourses: z.array(offeredCourseSpec),
-          start: z.string(),
+          start: z.date(),
           title: i18nInput,
         }),
       )
@@ -122,7 +122,6 @@ export const enrollRouter = router({
         orderBy: {
           start: 'desc',
         },
-        select: { id: true, start: true },
       })
     }),
   },

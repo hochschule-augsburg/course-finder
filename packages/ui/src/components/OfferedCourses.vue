@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/CoursesStore'
 
-import { useCoursesStore } from '@/stores/CoursesStore'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { reactive, ref } from 'vue'
 
-const coursesStore = useCoursesStore()
+const coursesStore = useAdminCoursesStore()
 
 /*Following code handles the logic for drag and drop */
-const tableOne: Subject[] = reactive(coursesStore.subjects)
+const tableOne: Subject[] = reactive(coursesStore.courses)
 //TODO: Always offered courses should be automatically in tableTwo
 const tableTwo: Subject[] = reactive([])
 
@@ -116,7 +116,7 @@ const props = defineProps<{
 
 const offeredCoursesArray = ref(props.offeredCoursesArray)
 
-const selectedSubject = ref<Subject>(coursesStore.subjects[0])
+const selectedSubject = ref<Subject>(coursesStore.courses[0])
 const initialAppointment: CourseAppointmentsJson<Date> = {
   dates: [],
   type: 'weekly',
@@ -154,8 +154,8 @@ function saveSubject() {
       .split(',')
       .map((item) => item.trim())
       .filter((item) => item !== ''),
-    maxParticipants: formData.value.maxParticipants,
-    minParticipants: formData.value.minParticipants,
+    maxParticipants: Number(formData.value.maxParticipants),
+    minParticipants: Number(formData.value.minParticipants),
     moduleCode: selectedSubject.value.moduleCode,
     moodleCourse: formData.value.moodleCourse,
   }

@@ -41,24 +41,18 @@ export const coursesRoutes = router({
         },
       })
     }),
-  list: adminProcedure
-    .input(z.object({ moduleCodes: z.array(z.string()) }))
-    .query(async ({ input }) => {
-      return await prisma.course.findMany({
-        orderBy: {
-          moduleCode: 'asc',
-        },
-        select: courseFields,
-        where: {
-          moduleCode: {
-            in: input.moduleCodes,
-          },
-        },
-      })
-    }),
+  list: adminProcedure.query(async () => {
+    return await prisma.course.findMany({
+      orderBy: {
+        moduleCode: 'asc',
+      },
+      select: courseFields,
+    })
+  }),
   update: adminProcedure.input(courseSpec).mutation(async ({ input }) => {
     return await prisma.course.update({
       data: input,
+      select: courseFields,
       where: { moduleCode: input.moduleCode },
     })
   }),

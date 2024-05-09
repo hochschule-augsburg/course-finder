@@ -16,6 +16,8 @@ export type EnrollPhase = Phase
 
 export type EnrolledCourse = StudentChoice
 
+export type { Course } from '@prisma/client'
+
 export type ClientUser = { auth: { twoFA?: boolean } } & Omit<User, 'auth'>
 export type ClientUserExtended = {
   Student?: Student | null

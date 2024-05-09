@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/CoursesStore'
+import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { trpc } from '@/api/trpc'
-import { useCoursesStore } from '@/stores/CoursesStore'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { merge } from 'lodash-es'
 import { ref } from 'vue'
 
-const adminStore = useCoursesStore()
+const adminStore = useAdminCoursesStore()
 
 const showModalForm = ref(false)
 
-const selectedSubject = ref<Subject>(adminStore.subjects[0])
+const selectedSubject = ref<Course>(adminStore.courses[0])
 const formData = ref({
   creditPoints: 0,
   editorUsername: '',
@@ -21,7 +22,7 @@ const formData = ref({
   varyingCP: '',
 })
 
-function selectSubject(s: Subject) {
+function selectSubject(s: Course) {
   selectedSubject.value = s
   formData.value.creditPoints = s.creditPoints
   formData.value.semesterHours = s.semesterHours
@@ -85,8 +86,8 @@ async function saveSubject() {
     varyingCP: parseVaryingCP(formData.value.varyingCP),
   }
   try {
-    await trpc.admin.courses.update.mutate(inputData)
-    console.log('Success updating subject')
+    const result = await trpc.admin.courses.update.mutate(inputData)
+    merge(selectedSubject.value, result)
   } catch (e) {
     console.log('Error updating Subject')
   }
@@ -108,7 +109,7 @@ async function saveSubject() {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="subject in adminStore.subjects" :key="subject.moduleCode">
+        <tr v-for="subject in adminStore.courses" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
           <td>{{ subject.title.en }}</td>
           <td>{{ subject.lecturers.toString() }}</td>

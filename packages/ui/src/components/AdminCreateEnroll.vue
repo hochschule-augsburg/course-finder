@@ -30,9 +30,9 @@ async function createEnrollment() {
       de: formData.value.description.de,
       en: formData.value.description.en,
     },
-    end: formData.value.end,
+    end: new Date(formData.value.end),
     offeredCourses: sharedObject.value,
-    start: formData.value.start,
+    start: new Date(formData.value.start),
     title: { de: formData.value.title.de, en: formData.value.title.en },
   }
   try {

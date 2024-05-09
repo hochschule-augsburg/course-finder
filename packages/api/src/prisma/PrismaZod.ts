@@ -15,6 +15,6 @@ export const jsonAppointmentsSpec = z.object({
 })
 
 export const i18nInput = z.union([
-  z.object({ de: z.string() }),
-  z.object({ en: z.string() }),
+  z.object({ de: z.string(), en: z.string().optional() }),
+  z.object({ de: z.string().optional(), en: z.string() }),
 ])
