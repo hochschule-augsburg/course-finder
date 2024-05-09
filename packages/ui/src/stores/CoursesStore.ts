@@ -7,7 +7,7 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
 import { useUserStore } from './UserStore'
-import { useFiltersStore } from './filters'
+import { useFiltersStore } from './FiltersStore'
 
 export type Subject = {
   offeredCourse?: CourseExtended['offeredCourse']

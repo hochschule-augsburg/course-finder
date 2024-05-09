@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { RangeFilter } from '@/stores/filters'
+import type { RangeFilter } from '@/stores/FiltersStore'
 
-import { useFiltersStore } from '@/stores/filters'
+import { useFiltersStore } from '@/stores/FiltersStore'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { VChip, VChipGroup, VIcon, VTextField } from 'vuetify/components'

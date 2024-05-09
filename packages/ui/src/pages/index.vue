@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
 defineOptions({
@@ -14,6 +14,20 @@ const pendingEnroll = computed(() =>
 )
 const subjectView = ref<'grid' | 'list'>('grid')
 const enrollFormVisible = ref(false)
+
+watch(subjectView, (currentView) => {
+  localStorage.setItem('subjectView', currentView)
+})
+
+onMounted(() => {
+  const savedView = window.localStorage.getItem('subjectView')
+
+  if (savedView && savedView === 'grid') {
+    subjectView.value = savedView
+  } else {
+    subjectView.value = 'list'
+  }
+})
 </script>
 
 <template>

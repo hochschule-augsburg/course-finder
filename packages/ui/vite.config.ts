@@ -33,7 +33,7 @@ export default defineConfig({
     vueJsxPlugin(),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
-      autoImport: false,
+      autoImport: true,
     }),
     Components(),
     VueI18nPlugin({
