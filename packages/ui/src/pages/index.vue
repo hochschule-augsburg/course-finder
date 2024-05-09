@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { computed, ref } from 'vue'
-import { VBtn } from 'vuetify/components'
+import { VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
 defineOptions({
   name: 'CourseEnrollmentOverview',

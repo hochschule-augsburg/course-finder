@@ -7,12 +7,12 @@ import { useI18n } from 'vue-i18n'
 import {
   VBtn,
   VDialog,
+  VForm,
   VRow,
   VSheet,
   VSpacer,
   VTextField,
 } from 'vuetify/components'
-import { VForm } from 'vuetify/components/VForm'
 
 import '../styles/settings.scss'
 

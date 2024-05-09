@@ -15,6 +15,15 @@ import vueJsxPlugin from '@vitejs/plugin-vue-jsx'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    holdUntilCrawlEnd: false,
+    include: [
+      '@vueuse/core',
+      'vue-pdf-embed',
+      'lodash-es',
+      'vuetify/lib/directives/index.mjs',
+    ],
+  },
   define: { 'process.env': {} },
   plugins: [
     VueRouter(),
@@ -24,10 +33,7 @@ export default defineConfig({
     vueJsxPlugin(),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
-      autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
+      autoImport: false,
     }),
     Components(),
     VueI18nPlugin({

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { VApp, VMain } from 'vuetify/components'
+
 import { ModalDialog } from './components/DialogService'
 import { useUserStore } from './stores/UserStore'
 
