@@ -45,6 +45,9 @@ export const coursesRoutes = router({
     .input(z.object({ moduleCodes: z.array(z.string()) }))
     .query(async ({ input }) => {
       return await prisma.course.findMany({
+        orderBy: {
+          moduleCode: 'asc',
+        },
         select: courseFields,
         where: {
           moduleCode: {

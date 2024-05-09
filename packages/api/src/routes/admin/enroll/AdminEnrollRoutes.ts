@@ -39,6 +39,7 @@ export const enrollRouter = router({
       .query(async () => {
         return await prisma.offeredCourse.findMany({
           include: { Course: { select: { moduleCode: true, title: true } } },
+          orderBy: { moduleCode: 'asc' },
         })
       }),
     update: adminProcedure
@@ -118,6 +119,9 @@ export const enrollRouter = router({
     }),
     list: adminProcedure.query(async () => {
       return await prisma.enrollphase.findMany({
+        orderBy: {
+          start: 'desc',
+        },
         select: { id: true, start: true },
       })
     }),
