@@ -68,7 +68,7 @@ function parseVaryingCP(input: string) {
 
 async function saveSubject() {
   const inputData = {
-    creditPoints: formData.value.creditPoints,
+    creditPoints: Number(formData.value.creditPoints),
     editorUsername: formData.value.editorUsername,
     extraInfo: formData.value.extraInfo,
     facultyName: formData.value.facultyName,
@@ -77,7 +77,7 @@ async function saveSubject() {
       .map((item) => item.trim())
       .filter((item) => item !== ''),
     moduleCode: selectedSubject.value.moduleCode,
-    semesterHours: formData.value.semesterHours,
+    semesterHours: Number(formData.value.semesterHours),
     title: {
       de: formData.value.title.de,
       en: formData.value.title.en,

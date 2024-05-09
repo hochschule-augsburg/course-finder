@@ -5,12 +5,17 @@ import { prisma } from '../../../prisma/prisma'
 import { courseFields } from '../../course/CourseRoutes'
 import { adminProcedure, router } from '../../trpc'
 
+const nullString = z
+  .string()
+  .transform((v) => (v.trim() ? v.trim() : undefined))
+  .optional()
+
 const courseSpec = z.object({
   creditPoints: z.number().int(),
-  editorUsername: z.string().optional(),
-  extraInfo: z.string().optional(),
+  editorUsername: nullString,
+  extraInfo: nullString,
   facultyName: z.string(),
-  infoUrl: z.string().optional(),
+  infoUrl: nullString,
   lecturers: z.array(z.string()).optional(),
   moduleCode: z.string(),
   published: z.boolean().optional(),
