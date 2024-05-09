@@ -283,89 +283,85 @@ function isChecked(type: string) {
 </script>
 
 <template>
-  <VContainer fluid="true">
-    <VRow>
-      <VCol cols="12" lg="6">
-        <div
-          class="drop-zone"
-          @dragenter.prevent
-          @dragover.prevent
-          @drop="onDrop($event, 'table1')"
-        >
-          <div class="left-column">
-            <div
-              v-for="subject in tableOne.slice(
-                0,
-                Math.ceil(tableOne.length / 2),
-              )"
-              :key="subject.moduleCode"
-              class="drag-el"
-              draggable="true"
-              @dragstart="startDrag($event, subject, 'table1')"
-            >
-              {{ subject.title.en }}
-            </div>
-          </div>
-
-          <div class="right-column">
-            <div
-              v-for="subject in tableOne.slice(Math.ceil(tableOne.length / 2))"
-              :key="subject.moduleCode"
-              class="drag-el"
-              draggable="true"
-              @dragstart="startDrag($event, subject, 'table1')"
-            >
-              {{ subject.title.en }}
-            </div>
-          </div>
-        </div>
-      </VCol>
-      <VCol cols="12" lg="6">
-        <div
-          class="drop-zone"
-          @dragenter.prevent
-          @dragover.prevent
-          @drop="onDrop($event, 'table2')"
-        >
-          <div>Offered courses</div>
+  <div>
+    <!-- TODO reactivity-->
+    <div style="display: flex">
+      <div
+        class="drop-zone"
+        @dragenter.prevent
+        @dragover.prevent
+        @drop="onDrop($event, 'table1')"
+      >
+        <div>Available courses</div>
+        <div class="left-column">
           <div
-            v-for="subject in tableTwo"
+            v-for="subject in tableOne.slice(0, Math.ceil(tableOne.length / 2))"
             :key="subject.moduleCode"
             class="drag-el"
             draggable="true"
-            @dragstart="startDrag($event, subject, 'table2')"
+            @dragstart="startDrag($event, subject, 'table1')"
           >
             {{ subject.title.en }}
-            <a @click="selectSubject(subject)"
-              ><VIcon class="pencil-icon" size="20">mdi-pencil</VIcon></a
-            >
-            <div>Type: {{ subject.offeredCourse?.appointments.type }}</div>
-            <div
-              v-for="(timespan, index) in subject.offeredCourse?.appointments
-                .dates"
-              :key="index"
-            >
-              <div>
-                <strong>From:</strong>
-                {{ getDisplayDate(timespan.from) }}
-                <strong>To:</strong>
-                {{ getDisplayDate(timespan.to) }}
-              </div>
-            </div>
-            <div>
-              Min participants:
-              {{ subject.offeredCourse?.minParticipants }}
-              Max participants:
-              {{ subject.offeredCourse?.maxParticipants }}
-            </div>
-            <div>
-              Extra information:
-              {{ subject.offeredCourse?.extraInfo }}
-            </div>
           </div>
         </div>
-      </VCol>
-    </VRow>
+
+        <div class="right-column">
+          <div
+            v-for="subject in tableOne.slice(Math.ceil(tableOne.length / 2))"
+            :key="subject.moduleCode"
+            class="drag-el"
+            draggable="true"
+            @dragstart="startDrag($event, subject, 'table1')"
+          >
+            {{ subject.title.en }}
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="drop-zone"
+        @dragenter.prevent
+        @dragover.prevent
+        @drop="onDrop($event, 'table2')"
+      >
+        <div>Offered courses</div>
+        <div
+          v-for="subject in tableTwo"
+          :key="subject.moduleCode"
+          class="drag-el"
+          draggable="true"
+          @dragstart="startDrag($event, subject, 'table2')"
+        >
+          {{ subject.title.en }}
+          <a @click="selectSubject(subject)"
+            ><VIcon class="pencil-icon" size="20">mdi-pencil</VIcon></a
+          >
+          <div>Type: {{ subject.offeredCourse?.appointments.type }}</div>
+          <div
+            v-for="(timespan, index) in subject.offeredCourse?.appointments
+              .dates"
+            :key="index"
+          >
+            <div>
+              <strong>From:</strong>
+              {{ getDisplayDate(timespan.from) }}
+              <strong>To:</strong>
+              {{ getDisplayDate(timespan.to) }}
+            </div>
+          </div>
+          <div>
+            Min participants:
+            {{ subject.offeredCourse?.minParticipants }}
+            Max participants:
+            {{ subject.offeredCourse?.maxParticipants }}
+          </div>
+          <div>
+            Extra information:
+            {{ subject.offeredCourse?.extraInfo }}
+          </div>
+        </div>
+      </div>
+    </div>
     <VDialog
       v-model="showModalForm"
       min-width="auto"
@@ -478,7 +474,7 @@ function isChecked(type: string) {
         </template>
       </VCard>
     </VDialog>
-  </VContainer>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -489,10 +485,12 @@ $itemColor: #000000;
 $paddingValue: 1%;
 
 .drop-zone {
-  width: 95%;
+  width: 50%;
   background-color: $backgroundColor;
   padding: $paddingValue;
   min-height: 10%;
+  max-height: 70em;
+  overflow-y: auto;
 }
 
 .drag-el {

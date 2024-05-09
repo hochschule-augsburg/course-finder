@@ -95,14 +95,23 @@ async function createEnrollment() {
         </VCol>
       </VRow>
       <VRow justify="center">
+        <VCol cols="12" sm="5"><h1>Offered Courses</h1></VCol>
+        <VCol cols="12" sm="5"><VSpacer /></VCol>
+      </VRow>
+      <VRow justify="center">
         <VCol cols="10">
           <OfferedCourses :offered-courses-array="sharedObject" />
+        </VCol>
+      </VRow>
+      <VRow justify="center">
+        <VCol cols="12" sm="5">
           <VBtn
             justify="center"
             text="Create enrollment"
             @click="createEnrollment"
           />
         </VCol>
+        <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
     </VContainer>
   </VForm>
