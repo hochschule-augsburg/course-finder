@@ -6,8 +6,8 @@ import { debounce } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
-import { useUserStore } from './UserStore'
 import { useFiltersStore } from './FiltersStore'
+import { useUserStore } from './UserStore'
 
 export type Subject = {
   offeredCourse?: CourseExtended['offeredCourse']
