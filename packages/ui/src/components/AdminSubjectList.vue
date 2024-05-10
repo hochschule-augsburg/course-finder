@@ -126,6 +126,7 @@ async function saveSubject() {
     </VTable>
     <VDialog
       v-model="showModalForm"
+      max-width="1000"
       min-width="800"
       transition="false"
       width="auto"
