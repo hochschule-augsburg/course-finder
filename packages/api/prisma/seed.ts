@@ -2,6 +2,7 @@
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
 import { readFileSync } from 'fs'
+import { uniqBy } from 'lodash-es'
 
 import { data as coursesData } from './assets/courses'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24'
@@ -163,10 +164,16 @@ async function main() {
   Promise.all(
     [
       ['Informatik (Bachelor)', '1'],
-      ['Informatik (Bachelor)', 'infba'],
-      ['Wirtschaftsinformatik (Bachelor)', 'winba'],
-      ['Technische Informatik (Bachelor)', 'tiba'],
-      ['Informatik (Master)', 'infma'],
+      ['Informatik (Bachelor)', 'in'],
+      ['Wirtschaftsinformatik (Bachelor)', 'win'],
+      ['Technische Informatik (Bachelor)', 'ti'],
+      ['International Information Systems (Bachelor)', 'iis'],
+      ['Interaktive Medien (Bachelor)', 'ia'],
+      ['Applied Research (Master)', 'mapr'],
+      ['Informatik (Master)', 'min'],
+      ['Business Information Systems (Master)', 'bis'],
+      ['Interaktive Mediensysteme (Master)', 'ims'],
+      ['Industrielle Sicherheit', 'ins'],
     ].map(async ([study, abbr]) => {
       await prisma.user.create({
         data: {
@@ -205,6 +212,13 @@ async function main() {
   })
   await prisma.offeredCourse.createMany({
     data: offeredCoursesWS2324Data,
+  })
+
+  await prisma.offeredCourse.createMany({
+    data: uniqBy(
+      [...offeredCoursesSS24Data, ...offeredCoursesWS2324Data],
+      (e) => e.moduleCode,
+    ).map((e) => ({ ...e, phaseId: 3 })),
   })
 }
 
