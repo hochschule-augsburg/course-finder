@@ -3,8 +3,9 @@ import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
 import { readFileSync } from 'fs'
 
-import dummyCourses from './dummyCourses.json'
-import dummyOfferedCourses from './dummyOfferedCourses.json'
+import { data as coursesData } from './assets/courses'
+import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24'
+import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24'
 
 const prisma = new PrismaClient()
 
@@ -85,18 +86,49 @@ async function main() {
   )
 
   // Create enroll phases
-  const phase = await prisma.enrollphase.create({
+  await prisma.enrollphase.create({
+    data: {
+      description: {
+        de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
+        en: 'Registration for the elective courses for the summer semester 2023',
+      },
+      end: new Date('2023-10-06'),
+      id: 1,
+      start: new Date('2024-09-29'),
+      title: {
+        de: 'FWP Anmeldung Wintersemester 2023/24',
+        en: 'FWP Registration Winter Semester 2023/24',
+      },
+    },
+  })
+
+  await prisma.enrollphase.create({
+    data: {
+      description: {
+        de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
+        en: 'Registration for the elective courses for the summer semester 2023',
+      },
+      end: new Date('2024-03-18'),
+      id: 2,
+      start: new Date('2024-03-03'),
+      title: {
+        de: 'FWP Anmeldung Sommersemester 2024',
+        en: 'FWP Registration Summer Semester 2024',
+      },
+    },
+  })
+  await prisma.enrollphase.create({
     data: {
       description: {
         de: 'Beschreibung der Anmeldephase...',
         en: 'Description of enrollment phase...',
       },
-      end: new Date('2024-05-15'),
-      id: 1,
-      start: new Date('2024-02-28'),
+      end: new Date('2024-07-15'),
+      id: 3,
+      start: new Date('2024-03-30'),
       title: {
-        de: 'Anmeldung zum Sommersemester 2024',
-        en: 'Spring Semester 2024 Enrollment',
+        de: 'Testanmeldungsphase 2024',
+        en: 'Test Registration Phase 2024',
       },
     },
   })
@@ -141,7 +173,7 @@ async function main() {
           Student: {
             create: {
               StudentPhase: {
-                create: { creditsNeeded: 10, phaseId: phase.id },
+                create: { creditsNeeded: 10, phaseId: 3 },
               },
               facultyName: 'Informatik',
               fieldOfStudy: study,
@@ -163,20 +195,16 @@ async function main() {
   )
 
   await prisma.course.createMany({
-    data: dummyCourses.map((e) => ({
+    data: coursesData.map((e) => ({
       ...e,
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
     })),
   })
   await prisma.offeredCourse.createMany({
-    data: dummyOfferedCourses.map((course) => ({
-      ...course,
-      appointments: {
-        dates: course.appointments.dates,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-        type: course.appointments.type as any,
-      },
-    })),
+    data: offeredCoursesSS24Data,
+  })
+  await prisma.offeredCourse.createMany({
+    data: offeredCoursesWS2324Data,
   })
 }
 
