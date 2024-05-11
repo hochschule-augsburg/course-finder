@@ -7,7 +7,7 @@ FROM base AS build
 COPY . /build
 WORKDIR /build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run --filter=api build
+RUN pnpm run --filter=api bundle
 RUN pnpm deploy --filter=api --prod /prod/api
 
 FROM base AS api

@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "dev": "docker start postgres-sub-enroll & tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
-    "build": "tsc --noEmit && esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
+    "build": "tsc --noEmit && pnpm run bundle",
+    "bundle": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
     "start": "env NODE_ENV=production node dist/main.js",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --ext .ts . --fix",
