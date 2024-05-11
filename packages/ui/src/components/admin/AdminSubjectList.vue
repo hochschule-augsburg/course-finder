@@ -147,7 +147,7 @@ async function saveSubject() {
     >
       <VCard
         :title="
-          t('edit-title', [
+          t('dialog.edit-title', [
             locale === 'en'
               ? selectedSubject.title.en
               : selectedSubject.title.de,
@@ -247,7 +247,7 @@ en:
     lecturers: Lecturers
     extra-info: Extra Information
     hint:
-      comma: List separated by comas
+      comma: List separated by commas
 de:
   name: Name
   lecturer: Dozent
@@ -263,5 +263,5 @@ de:
     lecturers: Dozenten
     extra-info: Zusätzliche Informationen
     hint:
-      comma: List mit Kommas getrennt
+      comma: Liste mit Kommas getrennt
 </i18n>
