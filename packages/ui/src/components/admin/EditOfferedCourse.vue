@@ -23,7 +23,7 @@ const emits = defineEmits<{
 const formData = ref<OfferedCourseData>()
 
 watchEffect(() => {
-  formData.value = structuredClone(props.offeredCourse)
+  formData.value = Object.assign({}, props.offeredCourse)
 })
 
 function submit() {

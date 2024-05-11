@@ -12,7 +12,7 @@ const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 const coursesStore = useAdminCoursesStore()
 
 /*Following code handles the logic for drag and drop */
-const tableOne: Course[] = reactive(coursesStore.courses)
+const tableOne: Course[] = reactive([...coursesStore.courses])
 
 function startDrag(event: DragEvent, moduleCode: string, table: string): void {
   if (event.dataTransfer) {
@@ -33,6 +33,7 @@ function onDrop(event: DragEvent, droppedTable: string): void {
   const indexInTableTwo = offeredCoursesArray.value.findIndex(
     (item) => item.Course.moduleCode === itemID,
   )
+  console.log(itemID, tableID, droppedTable, indexInTableOne, indexInTableTwo)
 
   if (indexInTableOne >= 0 && tableID !== droppedTable) {
     const foundSubject = tableOne.find((item) => item.moduleCode === itemID)
@@ -64,6 +65,7 @@ function onDrop(event: DragEvent, droppedTable: string): void {
 const removeStore = ref<OfferedCourseData[]>([])
 
 function handlePuttingBackLogic(subject: Subject) {
+  console.log(subject)
   //Retrieve the data from the shared object
   const offeredCourseData = offeredCoursesArray.value.filter(
     (course) => course.Course.moduleCode === subject.moduleCode,
