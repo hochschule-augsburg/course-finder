@@ -15,7 +15,7 @@ declare module 'vue' {
     EnrollCheckbox: typeof import('./src/components/subject/EnrollCheckbox.vue')['default']
     EnrollmentForm: typeof import('./src/components/EnrollmentForm.vue')['default']
     EnrollmentOverview: typeof import('./src/components/EnrollmentOverview.vue')['default']
-    EnrollmentPhase: typeof import('./src/components/EnrollmentPhase.vue')['default']
+    EnrollmentPhase: typeof import('./src/components/admin/EnrollmentPhase.vue')['default']
     FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
     InfoDialog: typeof import('./src/components/InfoDialog.vue')['default']

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VCol, VContainer, VRow } from 'vuetify/components'
+import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import { VCol, VContainer, VRow } from 'vuetify/components'
     </VRow>
     <VRow justify="center">
       <VCol cols="10">
-        <VBtn text="Create enrollment phase" to="/createEnrollment" />
+        <VBtn text="Create enrollment phase" to="admin/enroll-phase" />
       </VCol>
     </VRow>
     <VRow justify="center">

@@ -27,8 +27,8 @@ function handleLogout() {
 
     <VSpacer />
 
-    <VBtn text="Admin" to="/admin" icon>
-      <VIcon size="28">mdi-cog-outline</VIcon>
+    <VBtn v-if="userStore.user?.type === 'Admin'" text="Admin" to="/admin" icon>
+      <VIcon size="28">mdi-shield-crown-outline</VIcon>
       <VTooltip activator="parent" location="bottom"> Admin </VTooltip>
     </VBtn>
 
