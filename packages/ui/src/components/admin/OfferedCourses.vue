@@ -4,12 +4,15 @@ import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { VIcon } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 
 const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 
 const coursesStore = useAdminCoursesStore()
+const { locale, t } = useI18n()
 
 /*Following code handles the logic for drag and drop */
 const tableOne: Course[] = reactive([...coursesStore.courses])
@@ -118,7 +121,7 @@ const editOfferedCourse = ref<number>(-1)
         @dragover.prevent
         @drop="onDrop($event, 'table1')"
       >
-        <div>Available courses</div>
+        <div>{{ t('available-courses') }}</div>
         <div class="left-column">
           <div
             v-for="subject in tableOne.slice(0, Math.ceil(tableOne.length / 2))"
@@ -127,7 +130,7 @@ const editOfferedCourse = ref<number>(-1)
             draggable="true"
             @dragstart="startDrag($event, subject.moduleCode, 'table1')"
           >
-            {{ subject.title.en }}
+            {{ locale === 'en' ? subject.title.en : subject.title.de }}
           </div>
         </div>
 
@@ -139,7 +142,7 @@ const editOfferedCourse = ref<number>(-1)
             draggable="true"
             @dragstart="startDrag($event, subject.moduleCode, 'table1')"
           >
-            {{ subject.title.en }}
+            {{ locale === 'en' ? subject.title.en : subject.title.de }}
           </div>
         </div>
       </div>
@@ -150,7 +153,7 @@ const editOfferedCourse = ref<number>(-1)
         @dragover.prevent
         @drop="onDrop($event, 'table2')"
       >
-        <div>Offered courses</div>
+        <div>{{ t('offered-courses') }}</div>
         <div
           v-for="(subject, index) in offeredCoursesArray"
           :key="subject.Course.moduleCode"
@@ -158,31 +161,37 @@ const editOfferedCourse = ref<number>(-1)
           draggable="true"
           @dragstart="startDrag($event, subject.Course.moduleCode, 'table2')"
         >
-          {{ subject.Course.title.en }}
-          <a @click="editOfferedCourse = index"
-            ><VIcon class="pencil-icon" size="20">mdi-pencil</VIcon></a
+          {{
+            locale === 'en' ? subject.Course.title.en : subject.Course.title.de
+          }}
+          <VIcon
+            class="pencil-icon"
+            size="20"
+            @click="editOfferedCourse = index"
           >
-          <div>Type: {{ subject.appointments.type }}</div>
+            mdi-pencil
+          </VIcon>
+          <div>{{ t('type') }}: {{ subject.appointments.type }}</div>
           <div
             v-for="(timespan, appointIndex) in subject.appointments.dates"
             :key="appointIndex"
           >
             <div>
-              <strong>From:</strong>
+              <strong>{{ t('from') }}:</strong>
               {{ getDisplayDate(timespan.from) }}
-              <strong>To:</strong>
+              <strong>{{ t('to') }}:</strong>
               {{ getDisplayDate(timespan.to) }}
             </div>
           </div>
           <div>
-            Min participants:
-            {{ subject.minParticipants }}
-            Max participants:
-            {{ subject.maxParticipants }}
+            {{ t('min-participants') }}: {{ subject.minParticipants }}
+            <template v-if="subject.maxParticipants">
+              {{ t('max-participants') }}:
+              {{ subject.maxParticipants }}
+            </template>
           </div>
-          <div>
-            Extra information:
-            {{ subject.extraInfo }}
+          <div v-if="subject.extraInfo">
+            {{ t('extra-info') }}: {{ subject.extraInfo }}
           </div>
         </div>
       </div>
@@ -200,6 +209,27 @@ const editOfferedCourse = ref<number>(-1)
     />
   </div>
 </template>
+
+<i18n lang="yaml">
+en:
+  available-courses: Available courses
+  offered-courses: Offered courses
+  type: Type
+  from: From
+  to: To
+  min-participants: Min participants
+  max-participants: Max participants
+  extra-info: Extra information
+de:
+  available-courses: Verfügbare Kurse
+  offered-courses: Angebote Kurse
+  type: Typ
+  from: Von
+  to: Bis
+  min-participants: Mindestteilnehmer
+  max-participants: Maximale Teilnehmer
+  extra-info: Zusätzliche Informationen
+</i18n>
 
 <style scoped lang="scss">
 $backgroundColor: #ecf0f1;

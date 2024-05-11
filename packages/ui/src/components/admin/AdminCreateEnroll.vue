@@ -77,14 +77,16 @@ async function createEnrollment() {
   <VForm>
     <VContainer>
       <VRow justify="center">
-        <VCol cols="12" sm="5"><h1>Create enrollment</h1></VCol>
+        <VCol cols="12" sm="5">
+          <h1>{{ t('create-enrollment') }}</h1>
+        </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
       <VRow justify="center">
         <VCol cols="12" sm="5">
           <VTextField
             v-model="formData.start"
-            label="Start date"
+            :label="t('start-date')"
             type="datetime-local"
             required
           />
@@ -92,7 +94,7 @@ async function createEnrollment() {
         <VCol cols="12" sm="5">
           <VTextField
             v-model="formData.end"
-            label="End date"
+            :label="t('end-date')"
             type="datetime-local"
             required
           />
@@ -100,30 +102,40 @@ async function createEnrollment() {
       </VRow>
       <VRow justify="center">
         <VCol cols="12" sm="5">
-          <VTextField v-model="formData.title.en" label="Title (en)" required />
+          <VTextField
+            v-model="formData.title.en"
+            :label="t('title-en')"
+            required
+          />
         </VCol>
         <VCol cols="12" sm="5">
-          <VTextField v-model="formData.title.de" label="Title (de)" required />
+          <VTextField
+            v-model="formData.title.de"
+            :label="t('title-de')"
+            required
+          />
         </VCol>
       </VRow>
       <VRow justify="center">
         <VCol cols="12" sm="10">
           <VTextarea
             v-model="formData.description.en"
-            label="Description (en)"
+            :label="t('description-en')"
             required
           />
         </VCol>
         <VCol cols="12" sm="10">
           <VTextarea
             v-model="formData.description.de"
-            label="Description (de)"
+            :label="t('description-de')"
             required
           />
         </VCol>
       </VRow>
       <VRow justify="center">
-        <VCol cols="12" sm="5"><h1>Offered Courses</h1></VCol>
+        <VCol cols="12" sm="5">
+          <h1>{{ t('offered-courses') }}</h1>
+        </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
       <VRow justify="center">
@@ -151,8 +163,8 @@ async function createEnrollment() {
       <VRow justify="center">
         <VCol cols="12" sm="5">
           <VBtn
+            :text="t('create-enrollment')"
             justify="center"
-            text="Create enrollment"
             @click="createEnrollment"
           />
         </VCol>
@@ -164,9 +176,25 @@ async function createEnrollment() {
 
 <i18n lang="yaml">
 en:
-  load-old-phases: load Passed Enroll Phases
+  create-enrollment: Create enrollment
+  start-date: Start date
+  end-date: End date
+  title-en: Title (en)
+  title-de: Title (de)
+  description-en: Description (en)
+  description-de: Description (de)
+  offered-courses: Offered Courses
+  load-old-phases: Load Passed Enroll Phases
   clear: Clear Selection
 de:
+  create-enrollment: Anmeldung erstellen
+  start-date: Startdatum
+  end-date: Enddatum
+  title-en: Titel (en)
+  title-de: Titel (de)
+  description-en: Beschreibung (en)
+  description-de: Beschreibung (de)
+  offered-courses: Angebotene Kurse
   load-old-phases: Vergangene Anmeldephasen laden
   clear: Auswahl löschen
 </i18n>

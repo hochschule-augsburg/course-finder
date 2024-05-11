@@ -5,8 +5,23 @@ import { trpc } from '@/api/trpc'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import {
+  VBtn,
+  VCard,
+  VCardText,
+  VCol,
+  VDialog,
+  VDivider,
+  VIcon,
+  VRow,
+  VTable,
+  VTextField,
+} from 'vuetify/components'
 
 const adminStore = useAdminCoursesStore()
+
+const { locale, t } = useI18n()
 
 const showModalForm = ref(false)
 
@@ -100,18 +115,18 @@ async function saveSubject() {
     <VTable>
       <thead>
         <tr>
-          <th class="text-left">Nr.</th>
-          <th class="text-left">Name</th>
-          <th class="text-left">Professor</th>
+          <th class="text-left">{{ t('no.') }}</th>
+          <th class="text-left">{{ t('name') }}</th>
+          <th class="text-left">{{ t('lecturer') }}</th>
           <th>CP</th>
           <th>SWS</th>
-          <th class="text-left">Edit</th>
+          <th class="text-left">{{ t('global.edit') }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="subject in adminStore.courses" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
-          <td>{{ subject.title.en }}</td>
+          <td>{{ locale === 'en' ? subject.title.en : subject.title.de }}</td>
           <td>{{ subject.lecturers.toString() }}</td>
           <td>{{ subject.creditPoints }}</td>
           <td>{{ subject.semesterHours }}</td>
@@ -122,7 +137,6 @@ async function saveSubject() {
           </td>
         </tr>
       </tbody>
-      <VBtn>Save</VBtn>
     </VTable>
     <VDialog
       v-model="showModalForm"
@@ -132,7 +146,13 @@ async function saveSubject() {
       width="auto"
     >
       <VCard
-        :title="`Edit - ${selectedSubject.title.en}`"
+        :title="
+          t('edit-title', [
+            locale === 'en'
+              ? selectedSubject.title.en
+              : selectedSubject.title.de,
+          ])
+        "
         prepend-icon="mdi-pencil"
       >
         <VCardText>
@@ -140,28 +160,28 @@ async function saveSubject() {
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 v-model="formData.title.en"
-                label="Title (en)"
+                :label="t('dialog.title-en')"
                 required
               />
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 v-model="formData.title.de"
-                label="Title (de)"
+                :label="t('dialog.title-de')"
                 required
               />
             </VCol>
             <VCol>
               <VTextField
                 v-model="formData.editorUsername"
-                label="Editor username"
+                :label="t('dialog.editor-username')"
                 required
               />
             </VCol>
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 v-model="formData.semesterHours"
-                label="Semester Hours (SWS)"
+                :label="$t('dialog.semester-hours')"
                 type="number"
                 required
               />
@@ -169,7 +189,7 @@ async function saveSubject() {
             <VCol cols="12" md="4" sm="6">
               <VTextField
                 v-model="formData.creditPoints"
-                label="Credit points (CP)"
+                :label="$t('dialog.credit-points')"
                 type="number"
                 required
               />
@@ -177,37 +197,71 @@ async function saveSubject() {
             <VCol>
               <VTextField
                 v-model="formData.varyingCP"
-                hint="E.g. IN: 5, WIN:8,"
-                label="Varying CP"
+                :label="$t('dialog.varying-cp')"
                 required
               />
             </VCol>
             <VCol cols="12">
               <VTextField
                 v-model="formData.lecturers"
-                hint="separate with comma"
-                label="Lecturers*"
+                :label="$t('dialog.lecturers')"
                 required
               />
             </VCol>
             <VCol>
               <VTextarea
                 v-model="formData.extraInfo"
-                label="Extra information"
+                :label="$t('dialog.extra-info')"
                 required
               />
             </VCol>
           </VRow>
-          <small class="text-caption text-medium-emphasis"
-            >*separate multiple elements with comma</small
-          >
+          <small class="text-caption text-medium-emphasis">{{
+            t('dialog.hint.comma')
+          }}</small>
         </VCardText>
         <VDivider />
         <template #actions>
-          <VBtn text="Cancel" @click="showModalForm = false" />
-          <VBtn class="ms-auto" text="Save" @click="saveSubject" />
+          <VBtn :text="t('global.cancel')" @click="showModalForm = false" />
+          <VBtn :text="t('global.save')" class="ms-auto" @click="saveSubject" />
         </template>
       </VCard>
     </VDialog>
   </div>
 </template>
+
+<i18n lang="yaml">
+en:
+  edit: Edit
+  name: Name
+  lecturer: Lecturer
+  no.: No.
+  dialog:
+    title: 'Edit - {0}'
+    title-en: Title (English)
+    title-de: Title (German)
+    editor-username: Editor's Username
+    semester-hours: Semester Hours
+    credit-points: Credit Points
+    varying-cp: Varying CP
+    lecturers: Lecturers
+    extra-info: Extra Information
+    hint:
+      comma: List separated by comas
+de:
+  name: Name
+  lecturer: Dozent
+  no.: Nr.
+  dialog:
+    title: 'Bearbeiten - {0}'
+    title-en: Titel (Englisch)
+    title-de: Titel (Deutsch)
+    editor-username: Nutzername des Bearbeiters
+    semester-hours: Semesterstunden
+    credit-points: Credit Points
+    varying-cp: Variierende CP
+    lecturers: Dozenten
+    extra-info: Zusätzliche Informationen
+    hint:
+      comma: List mit Kommas getrennt
+</i18n>
