@@ -2,6 +2,8 @@ global:
   unknown-error: Unbekannter Fehler
   confirm: Bestätigen
   cancel: Abbrechen
+  save: Speichern
+  edit: Bearbeiten
   close: Schließen
   reset: Zurücksetzen
   confirm-action: Aktion bestätigen

@@ -3,11 +3,13 @@ import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
 import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router/auto'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<ClientUserExtended>()
-  void init()
-  return { login, logout, user }
+  const router = useRouter()
+  const initPromise = init()
+  return { initPromise, login, logout, user }
 
   async function login(username: string, password: string, otp?: string) {
     if (otp) {
@@ -39,11 +41,12 @@ export const useUserStore = defineStore('user', () => {
   async function logout() {
     await trpc.auth.logout.mutate()
     user.value = undefined
+    await router.push('/')
   }
 
   async function init() {
     // dev auto login
-    if (import.meta.env.DEV) {
+    if (import.meta.env.VITE_INITIAL_USER && import.meta.env.VITE_INITIAL_PWD) {
       await login(
         import.meta.env.VITE_INITIAL_USER,
         import.meta.env.VITE_INITIAL_PWD,

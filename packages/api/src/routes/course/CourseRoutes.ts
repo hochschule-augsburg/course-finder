@@ -15,7 +15,10 @@ export type CourseExtended = {
 
 export const courseRouter = router({
   getCourses: publicProcedure.query(async () => {
-    return await prisma.course.findMany({ select: courseFields })
+    return await prisma.course.findMany({
+      orderBy: { moduleCode: 'asc' },
+      select: courseFields,
+    })
   }),
   getCurrentPhase: studentOnlyProcedure.query(async () => {
     return (
@@ -35,6 +38,7 @@ export const courseRouter = router({
     .query(async ({ ctx, input }): Promise<CourseExtended[]> => {
       return (
         await prisma.course.findMany({
+          orderBy: { moduleCode: 'asc' },
           select: {
             ...courseFields,
             offeredCourse: {

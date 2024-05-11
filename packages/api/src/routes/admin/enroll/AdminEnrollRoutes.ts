@@ -1,16 +1,22 @@
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-import { i18nInput, jsonAppointmentsSpec } from '../../../prisma/PrismaZod'
+import {
+  i18nInput,
+  jsonAppointmentsSpec,
+  nullString,
+} from '../../../prisma/PrismaZod'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
 
 const offeredCourseSpec = z.object({
   appointments: jsonAppointmentsSpec,
-  extraInfo: z.string().optional(),
+  extraInfo: nullString,
   for: z.array(z.string()),
-  maxParticipants: z.number(),
-  minParticipants: z.number().optional(),
+  maxParticipants: z.number().nullable().optional(),
+  minParticipants: z.number(),
   moduleCode: z.string(),
+  moodleCourse: nullString,
 })
 
 export const enrollRouter = router({
@@ -39,6 +45,7 @@ export const enrollRouter = router({
       .query(async () => {
         return await prisma.offeredCourse.findMany({
           include: { Course: { select: { moduleCode: true, title: true } } },
+          orderBy: { moduleCode: 'asc' },
         })
       }),
     update: adminProcedure
@@ -62,9 +69,9 @@ export const enrollRouter = router({
       .input(
         z.object({
           description: i18nInput,
-          end: z.string(),
+          end: z.date(),
           offeredCourses: z.array(offeredCourseSpec),
-          start: z.string(),
+          start: z.date(),
           title: i18nInput,
         }),
       )
@@ -95,7 +102,7 @@ export const enrollRouter = router({
     get: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .query(async ({ input }) => {
-        return await prisma.enrollphase.findUnique({
+        const result = await prisma.enrollphase.findUnique({
           include: {
             offeredCourses: {
               select: {
@@ -112,13 +119,32 @@ export const enrollRouter = router({
           },
           where: { id: input.phaseId },
         })
+        if (!result) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Phase not found' })
+        }
+
+        return {
+          ...result,
+          offeredCourses: result.offeredCourses.map((course) => ({
+            ...course,
+            appointments: {
+              dates: course.appointments.dates.map(({ from, to }) => ({
+                from: new Date(from),
+                to: new Date(to),
+              })),
+              type: course.appointments.type,
+            },
+          })),
+        }
       }),
     getCurrentPhase: adminProcedure.query(async () => {
       return (await prisma.enrollphase.findFirst({})) ?? undefined
     }),
     list: adminProcedure.query(async () => {
       return await prisma.enrollphase.findMany({
-        select: { id: true, start: true },
+        orderBy: {
+          start: 'desc',
+        },
       })
     }),
   },

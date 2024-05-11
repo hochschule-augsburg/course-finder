@@ -20,10 +20,17 @@ function handleLogout() {
 <template>
   <VAppBar>
     <VToolbarTitle>
-      <span>FWP Anmeldung - Fakultät Informatik</span>
+      <RouterLink class="toolbar-link" to="/">
+        <span>FWP Anmeldung - Fakultät Informatik</span>
+      </RouterLink>
     </VToolbarTitle>
 
     <VSpacer />
+
+    <VBtn v-if="userStore.user?.type === 'Admin'" text="Admin" to="/admin" icon>
+      <VIcon size="28">mdi-shield-crown-outline</VIcon>
+      <VTooltip activator="parent" location="bottom"> Admin </VTooltip>
+    </VBtn>
 
     <VBtn text="help" icon>
       <VIcon size="28">mdi-help-circle-outline</VIcon>

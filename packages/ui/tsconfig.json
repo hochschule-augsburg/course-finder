@@ -36,7 +36,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@workspace/api/*": ["../api/*"]
+      "@workspace/api/*": ["../api/*"],
+      "@tests/*": ["tests/*"]
     }
   }
 }
