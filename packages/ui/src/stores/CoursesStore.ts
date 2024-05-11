@@ -2,11 +2,12 @@ import type { EnrollPhase } from '@workspace/api/src/prisma/PrismaTypes'
 import type { CourseExtended } from '@workspace/api/src/routes/course/CourseRoutes'
 
 import { trpc } from '@/api/trpc'
+import { debounce } from 'lodash-es'
 import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
+import { useFiltersStore } from './FiltersStore'
 import { useUserStore } from './UserStore'
-import { useFiltersStore } from './filters'
 
 export type Subject = {
   offeredCourse?: CourseExtended['offeredCourse']
@@ -18,13 +19,7 @@ export const useCoursesStore = defineStore('courses', () => {
   const currentPhase = ref<EnrollPhase>()
   const maxPoints = ref(1000)
   const subjects = ref<Subject[]>([])
-
-  const filteredSubjects = computed(() => {
-    let filtered: Subject[] = [...subjects.value]
-    filtered = filtersStore.applyFilters(filtered)
-    filtered = filtersStore.searchSubjects(filtered)
-    return filtered
-  })
+  const filteredSubjects = ref<Subject[]>([])
 
   watch(
     () => userStore.user,
@@ -33,7 +28,18 @@ export const useCoursesStore = defineStore('courses', () => {
     },
   )
 
+  watch(
+    [
+      filtersStore.rangeFilters,
+      filtersStore.optionsFilters,
+      () => filtersStore.search,
+      subjects,
+    ],
+    debounce(filterSubjects, 300),
+  )
+
   void update()
+
   return {
     currentPhase,
     filteredSubjects,
@@ -76,5 +82,11 @@ export const useCoursesStore = defineStore('courses', () => {
         s.title.en = s.title.de
       }
     })
+  }
+
+  function filterSubjects() {
+    filteredSubjects.value = [...subjects.value]
+    filteredSubjects.value = filtersStore.applyFilters(filteredSubjects.value)
+    filteredSubjects.value = filtersStore.searchSubjects(filteredSubjects.value)
   }
 })

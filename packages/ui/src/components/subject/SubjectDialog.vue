@@ -2,6 +2,15 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useI18n } from 'vue-i18n'
+import {
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardText,
+  VCardTitle,
+  VDialog,
+  VSpacer,
+} from 'vuetify/components'
 
 defineProps<{
   subject?: Subject

@@ -2,7 +2,16 @@
 import { useUserStore } from '@/stores/UserStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VForm, VTextField } from 'vuetify/components'
+import {
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardText,
+  VCardTitle,
+  VForm,
+  VSpacer,
+  VTextField,
+} from 'vuetify/components'
 
 const emit = defineEmits<{
   success: []

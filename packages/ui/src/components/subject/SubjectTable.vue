@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCoursesStore } from '@/stores/CoursesStore'
-
+import { VExpansionPanel, VExpansionPanels } from 'vuetify/components'
 const coursesStore = useCoursesStore()
 </script>
 

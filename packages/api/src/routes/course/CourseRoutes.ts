@@ -21,7 +21,13 @@ export const courseRouter = router({
     })
   }),
   getCurrentPhase: studentOnlyProcedure.query(async () => {
-    return (await prisma.enrollphase.findFirst({})) ?? undefined
+    return (
+      (await prisma.enrollphase.findFirst({
+        where: {
+          AND: { end: { gte: new Date() }, start: { lte: new Date() } },
+        },
+      })) ?? undefined
+    )
   }),
   getOfferedCourses: studentOnlyProcedure
     .input(
@@ -29,7 +35,7 @@ export const courseRouter = router({
         phaseId: z.number(),
       }),
     )
-    .query(async ({ input }): Promise<CourseExtended[]> => {
+    .query(async ({ ctx, input }): Promise<CourseExtended[]> => {
       return (
         await prisma.course.findMany({
           orderBy: { moduleCode: 'asc' },
@@ -46,6 +52,7 @@ export const courseRouter = router({
           where: {
             offeredCourse: {
               some: {
+                for: { has: ctx.user.Student.fieldOfStudy },
                 phaseId: { equals: input.phaseId },
               },
             },

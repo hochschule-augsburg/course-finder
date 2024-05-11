@@ -2,12 +2,15 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useI18n } from 'vue-i18n'
+import { VCard, VCardText, VCol, VRow } from 'vuetify/components'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
 
 defineProps<{ subject: Subject }>()
 
 const { locale } = useI18n()
+
+const dev = import.meta.env.DEV
 </script>
 
 <template>
@@ -24,6 +27,9 @@ const { locale } = useI18n()
       <EnrollCheckbox :subject />
     </template>
     <VCardText>
+      <span v-if="dev" class="font-italic font-weight-thin">{{
+        subject.moduleCode
+      }}</span>
       <VRow align="end" justify="end" style="height: 7rem">
         <VCol cols="auto" style="text-align: end">
           <p>

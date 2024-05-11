@@ -1,6 +1,6 @@
 {
   "exclude": ["node_modules"],
-  "include": ["src", "tests", "vitest.config.ts", "prisma/seed.ts"],
+  "include": ["src", "tests", "vitest.config.ts", "prisma"],
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,

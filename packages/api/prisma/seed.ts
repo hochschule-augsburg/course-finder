@@ -2,9 +2,11 @@
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
 import { readFileSync } from 'fs'
+import { uniqBy } from 'lodash-es'
 
-import dummyCourses from './dummyCourses.json'
-import dummyOfferedCourses from './dummyOfferedCourses.json'
+import { data as coursesData } from './assets/courses'
+import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24'
+import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24'
 
 const prisma = new PrismaClient()
 
@@ -25,14 +27,6 @@ async function main() {
       {
         name: 'Informatik',
         translatedName: { de: 'Informatik', en: 'ComputerScience' },
-      },
-      {
-        name: 'Gestaltung',
-        translatedName: { de: 'Gestaltung', en: 'Arts' },
-      },
-      {
-        name: 'Naturwissenschaften',
-        translatedName: { de: 'Naturwissenschaften', en: 'Science' },
       },
     ],
   })
@@ -61,220 +55,85 @@ async function main() {
     },
   })
 
-  // Create courses
-  await prisma.course.create({
-    data: {
-      creditPoints: 6,
-      facultyName: 'Gestaltung',
-      lecturers: ['scholz'],
-      moduleCode: 'CS101',
-      published: true,
-      semesterHours: 4,
-      title: {
-        de: 'Einführung in die Informatik',
-        en: 'Introduction to Computer Science',
-      },
-    },
-  })
-  await prisma.course.create({
-    data: {
-      creditPoints: 4,
-      facultyName: 'Informatik',
-      infoUrl: 'https://example.com',
-      lecturers: ['scholz'],
-      moduleCode: 'PHIL101',
-      published: true,
-      semesterHours: 3,
-      title: {
-        de: 'Einführung in die Philosophie',
-        en: 'Introduction to Philosophy',
-      },
-    },
-  })
-  await prisma.course.create({
-    data: {
-      creditPoints: 6,
-      facultyName: 'Informatik',
-      lecturers: ['prof1'],
-      moduleCode: 'MATH101',
-      pdf: Buffer.alloc(stubPdf.length, stubPdf),
-      published: true,
-      semesterHours: 4,
-      title: { de: 'Analysis I', en: 'Calculus I' },
-    },
-  })
-  await prisma.course.createMany({
-    data: [
+  await Promise.all(
+    [
       {
-        creditPoints: 5,
-        facultyName: 'Informatik',
-        moduleCode: 'CHEM101',
-        published: true,
-        semesterHours: 3,
-        title: {
-          de: 'Einführung in die Chemie',
-          en: 'Introduction to Chemistry',
+        pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      },
+      {
+        infoUrl: 'http://example.com',
+      },
+      {
+        extraInfo: 'course extra',
+      },
+    ].map((course, i) => {
+      return prisma.course.create({
+        data: {
+          ...course,
+          Faculty: { connect: { name: 'Informatik' } },
+          creditPoints: 6,
+          editor: { connect: { username: 'scholz' } },
+          lecturers: ['Scholz'],
+          moduleCode: `test${i}`,
+          published: true,
+          semesterHours: 4,
+          title: {
+            de: `Test Kurs ${i}`,
+            en: `Test Course ${i}`,
+          },
         },
-      },
-      {
-        creditPoints: 4,
-        facultyName: 'Informatik',
-        lecturers: ['Professor 5'],
-        moduleCode: 'HIST101',
-        published: true,
-        semesterHours: 3,
-        title: { de: 'Weltgeschichte', en: 'World History' },
-      },
-      {
-        creditPoints: 6,
-        facultyName: 'Informatik',
-        lecturers: ['Professor 6'],
-        moduleCode: 'PHYS101',
-        published: true,
-        semesterHours: 4,
-        title: { de: 'Physik für Ingenieure', en: 'Physics for Engineers' },
-      },
-    ],
-  })
+      })
+    }),
+  )
 
   // Create enroll phases
-  const phase = await prisma.enrollphase.create({
+  await prisma.enrollphase.create({
+    data: {
+      description: {
+        de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
+        en: 'Registration for the elective courses for the summer semester 2023',
+      },
+      end: new Date('2023-10-06'),
+      id: 1,
+      start: new Date('2024-09-29'),
+      title: {
+        de: 'FWP Anmeldung Wintersemester 2023/24',
+        en: 'FWP Registration Winter Semester 2023/24',
+      },
+    },
+  })
+
+  await prisma.enrollphase.create({
+    data: {
+      description: {
+        de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
+        en: 'Registration for the elective courses for the summer semester 2023',
+      },
+      end: new Date('2024-03-18'),
+      id: 2,
+      start: new Date('2024-03-03'),
+      title: {
+        de: 'FWP Anmeldung Sommersemester 2024',
+        en: 'FWP Registration Summer Semester 2024',
+      },
+    },
+  })
+  await prisma.enrollphase.create({
     data: {
       description: {
         de: 'Beschreibung der Anmeldephase...',
         en: 'Description of enrollment phase...',
       },
-      end: new Date('2024-05-15'),
-      id: 1,
-      start: new Date('2024-02-28'),
+      end: new Date('2024-07-15'),
+      id: 3,
+      start: new Date('2024-03-30'),
       title: {
-        de: 'Anmeldung zum Sommersemester 2024',
-        en: 'Spring Semester 2024 Enrollment',
+        de: 'Testanmeldungsphase 2024',
+        en: 'Test Registration Phase 2024',
       },
     },
   })
 
-  // Create offered courses
-  await prisma.offeredCourse.createMany({
-    data: [
-      {
-        appointments: {
-          dates: [
-            {
-              from: new Date('02 October 2024 14:00').toISOString(),
-              to: new Date('02 October 2024 15:30').toISOString(),
-            },
-            {
-              from: new Date('03 October 2024 08:00').toISOString(),
-              to: new Date('03 October 2024 09:30').toISOString(),
-            },
-          ],
-          type: 'irregular',
-        },
-        extraInfo: 'Room A, Building 1',
-        maxParticipants: 40,
-        minParticipants: 10,
-        moduleCode: 'PHIL101',
-        phaseId: 1,
-      },
-      {
-        appointments: {
-          dates: [
-            {
-              from: new Date('02 October 2024 08:00').toISOString(),
-              to: new Date('02 October 2024 09:30').toISOString(),
-            },
-            {
-              from: new Date('03 October 2024 08:00').toISOString(),
-              to: new Date('03 October 2024 09:30').toISOString(),
-            },
-            {
-              from: new Date('04 October 2024 08:00').toISOString(),
-              to: new Date('04 October 2024 09:30').toISOString(),
-            },
-            {
-              from: new Date('05 October 2024 08:00').toISOString(),
-              to: new Date('05 October 2024 09:30').toISOString(),
-            },
-          ],
-          type: 'block',
-        },
-        extraInfo: 'Room B, Building 2',
-        maxParticipants: 35,
-        minParticipants: 5,
-        moduleCode: 'MATH101',
-        phaseId: 1,
-      },
-      {
-        appointments: {
-          dates: [
-            {
-              from: new Date('02 October 2024 08:00').toISOString(),
-              to: new Date('02 October 2024 09:30').toISOString(),
-            },
-            {
-              from: new Date('11 October 2024 09:50').toISOString(),
-              to: new Date('11 October 2024 11:20').toISOString(),
-            },
-            {
-              from: new Date('14 October 2024 08:00').toISOString(),
-              to: new Date('14 October 2024 09:30').toISOString(),
-            },
-            {
-              from: new Date('22 October 2024 14:00').toISOString(),
-              to: new Date('22 October 2024 15:30').toISOString(),
-            },
-          ],
-          type: 'irregular',
-        },
-        extraInfo: 'Room C, Building 3',
-        maxParticipants: 5,
-        minParticipants: 2,
-        moduleCode: 'CHEM101',
-        phaseId: 1,
-      },
-      {
-        appointments: {
-          dates: [
-            {
-              from: new Date('02 October 2024 14:00').toISOString(),
-              to: new Date('02 October 2024 15:30').toISOString(),
-            },
-            {
-              from: new Date('03 October 2024 08:00').toISOString(),
-              to: new Date('03 October 2024 09:30').toISOString(),
-            },
-          ],
-          type: 'weekly',
-        },
-        extraInfo: 'Room D, Building 4',
-        maxParticipants: 50,
-        minParticipants: 5,
-        moduleCode: 'HIST101',
-        phaseId: 1,
-      },
-      {
-        appointments: {
-          dates: [
-            {
-              from: new Date('02 October 2024 14:00').toISOString(),
-              to: new Date('02 October 2024 15:30').toISOString(),
-            },
-            {
-              from: new Date('03 October 2024 08:00').toISOString(),
-              to: new Date('03 October 2024 09:30').toISOString(),
-            },
-          ],
-          type: 'weekly',
-        },
-        extraInfo: 'Room E, Building 5',
-        maxParticipants: 40,
-        minParticipants: 10,
-        moduleCode: 'PHYS101',
-        phaseId: 1,
-      },
-    ],
-  })
   await prisma.user.createMany({
     data: [
       {
@@ -291,197 +150,75 @@ async function main() {
       {
         auth: {
           method: 'local',
-          password: hashPassword('singhraj', 'salt'),
+          password: hashPassword('prof', 'salt'),
           salt: 'salt',
         },
-        email: 'singhraj@example.com',
-        name: 'Singh Raj',
-        type: 'Student',
-        username: 'singhraj',
-      },
-      {
-        auth: {
-          method: 'local',
-          password: hashPassword('mitroska', 'salt'),
-          salt: 'salt',
-        },
-        email: 'mitroska@example.com',
-        name: 'Mitroska',
-        type: 'Student',
-        username: 'mitroska',
-      },
-      {
-        auth: {
-          method: 'local',
-          password: hashPassword('seka', 'salt'),
-          salt: 'salt',
-        },
-        email: 'seka@example.com',
-        name: 'Seka',
-        type: 'Student',
-        username: 'seka',
-      },
-      {
-        auth: {
-          method: 'local',
-          password: hashPassword('stud1', 'salt'),
-          salt: 'salt',
-          twoFA: true,
-        },
-        email: 'stud1@example.com',
-        name: 'Stud1',
-        type: 'Student',
-        username: 'stud1',
+        email: 'admin@example.com',
+        name: 'Prof',
+        type: 'Professor',
+        username: 'prof',
       },
     ],
   })
 
-  await prisma.student.createMany({
-    data: [
-      {
-        facultyName: 'Informatik',
-        fieldOfStudy: 'Computer Science',
-        username: 'singhraj',
-      },
-      {
-        facultyName: 'Informatik',
-        fieldOfStudy: 'Mathematics',
-        username: 'mitroska',
-      },
-      { facultyName: 'Informatik', fieldOfStudy: 'Physics', username: 'seka' },
-      { facultyName: 'Informatik', fieldOfStudy: 'Biology', username: 'stud1' },
-    ],
-  })
-
-  await prisma.studentPhase.createMany({
-    data: [
-      { creditsNeeded: 10, phaseId: phase.id, username: 'singhraj' },
-      { creditsNeeded: 10, phaseId: phase.id, username: 'mitroska' },
-      { creditsNeeded: 10, phaseId: phase.id, username: 'seka' },
-      { creditsNeeded: 10, phaseId: phase.id, username: 'stud1' },
-    ],
-  })
-
-  await prisma.studentChoice.createMany({
-    data: [
-      // For singhraj
-      {
-        moduleCode: 'PHIL101',
-        phaseId: phase.id,
-        points: 250,
-        username: 'singhraj',
-      },
-      {
-        moduleCode: 'MATH101',
-        phaseId: phase.id,
-        points: 200,
-        username: 'singhraj',
-      },
-      {
-        moduleCode: 'CHEM101',
-        phaseId: phase.id,
-        points: 300,
-        username: 'singhraj',
-      },
-      {
-        moduleCode: 'HIST101',
-        phaseId: phase.id,
-        points: 250,
-        username: 'singhraj',
-      },
-      // For mitroska
-      {
-        moduleCode: 'PHIL101',
-        phaseId: phase.id,
-        points: 180,
-        username: 'mitroska',
-      },
-      {
-        moduleCode: 'MATH101',
-        phaseId: phase.id,
-        points: 220,
-        username: 'mitroska',
-      },
-      {
-        moduleCode: 'CHEM101',
-        phaseId: phase.id,
-        points: 250,
-        username: 'mitroska',
-      },
-      {
-        moduleCode: 'HIST101',
-        phaseId: phase.id,
-        points: 350,
-        username: 'mitroska',
-      },
-      // For seka
-      {
-        moduleCode: 'PHIL101',
-        phaseId: phase.id,
-        points: 150,
-        username: 'seka',
-      },
-      {
-        moduleCode: 'MATH101',
-        phaseId: phase.id,
-        points: 200,
-        username: 'seka',
-      },
-      {
-        moduleCode: 'CHEM101',
-        phaseId: phase.id,
-        points: 350,
-        username: 'seka',
-      },
-      {
-        moduleCode: 'HIST101',
-        phaseId: phase.id,
-        points: 300,
-        username: 'seka',
-      },
-      // For stud1
-      {
-        moduleCode: 'PHIL101',
-        phaseId: phase.id,
-        points: 220,
-        username: 'stud1',
-      },
-      {
-        moduleCode: 'MATH101',
-        phaseId: phase.id,
-        points: 180,
-        username: 'stud1',
-      },
-      {
-        moduleCode: 'CHEM101',
-        phaseId: phase.id,
-        points: 200,
-        username: 'stud1',
-      },
-      {
-        moduleCode: 'HIST101',
-        phaseId: phase.id,
-        points: 400,
-        username: 'stud1',
-      },
-    ],
-  })
+  Promise.all(
+    [
+      ['Informatik (Bachelor)', '1'],
+      ['Informatik (Bachelor)', 'in'],
+      ['Wirtschaftsinformatik (Bachelor)', 'win'],
+      ['Technische Informatik (Bachelor)', 'ti'],
+      ['International Information Systems (Bachelor)', 'iis'],
+      ['Interaktive Medien (Bachelor)', 'ia'],
+      ['Applied Research (Master)', 'mapr'],
+      ['Informatik (Master)', 'min'],
+      ['Business Information Systems (Master)', 'bis'],
+      ['Interaktive Mediensysteme (Master)', 'ims'],
+      ['Industrielle Sicherheit', 'ins'],
+    ].map(async ([study, abbr]) => {
+      await prisma.user.create({
+        data: {
+          Student: {
+            create: {
+              StudentPhase: {
+                create: { creditsNeeded: 10, phaseId: 3 },
+              },
+              facultyName: 'Informatik',
+              fieldOfStudy: study,
+              term: 4,
+            },
+          },
+          auth: {
+            method: 'local' as const,
+            password: hashPassword(`stud-${abbr}`, 'salt'),
+            salt: 'salt',
+          },
+          email: `stud${abbr}@example.com`,
+          name: `student ${abbr}`,
+          type: 'Student',
+          username: `stud-${abbr}`,
+        },
+      })
+    }),
+  )
 
   await prisma.course.createMany({
-    data: dummyCourses.map((e) => ({
+    data: coursesData.map((e) => ({
       ...e,
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
     })),
   })
   await prisma.offeredCourse.createMany({
-    data: dummyOfferedCourses.map((course) => ({
-      ...course,
-      appointments: {
-        dates: course.appointments.dates,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-        type: course.appointments.type as any,
-      },
-    })),
+    data: offeredCoursesSS24Data,
+  })
+  await prisma.offeredCourse.createMany({
+    data: offeredCoursesWS2324Data,
+  })
+
+  await prisma.offeredCourse.createMany({
+    data: uniqBy(
+      [...offeredCoursesSS24Data, ...offeredCoursesWS2324Data],
+      (e) => e.moduleCode,
+    ).map((e) => ({ ...e, phaseId: 3 })),
   })
 }
 

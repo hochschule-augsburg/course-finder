@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import { useFiltersStore } from '@/stores/filters'
+import { useFiltersStore } from '@/stores/FiltersStore'
 import { storeToRefs } from 'pinia'
 import { defineModel } from 'vue'
 import { useI18n } from 'vue-i18n'
+import {
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardText,
+  VChip,
+  VChipGroup,
+  VDialog,
+  VDivider,
+  VRangeSlider,
+  VSpacer,
+} from 'vuetify/components'
 
 const showFilterDialog = defineModel<boolean>()
 const filtersStore = useFiltersStore()

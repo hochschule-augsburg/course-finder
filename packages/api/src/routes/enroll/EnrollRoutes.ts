@@ -39,6 +39,22 @@ export const enrollRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
+      if (
+        (
+          await prisma.offeredCourse.findMany({
+            where: {
+              for: { has: ctx.user.Student.fieldOfStudy },
+              moduleCode: { in: input.data.map((e) => e.moduleCode) },
+              phaseId: ctx.phase.id,
+            },
+          })
+        ).length !== input.data.length
+      ) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'modules not offered for you',
+        })
+      }
       await prisma.studentPhase.delete({
         where: {
           username_phaseId: {
@@ -95,6 +111,22 @@ export const enrollRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
+      if (
+        !(await prisma.offeredCourse.findUnique({
+          where: {
+            for: { has: ctx.user.Student.fieldOfStudy },
+            phaseId_moduleCode: {
+              moduleCode: input.moduleCode,
+              phaseId: ctx.phase.id,
+            },
+          },
+        }))
+      ) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'module not offered for you',
+        })
+      }
       await prisma.studentPhase.upsert({
         create: {
           StudentChoice: {
