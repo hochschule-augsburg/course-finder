@@ -1,14 +1,9 @@
 import { z } from 'zod'
 
-import { i18nInput } from '../../../prisma/PrismaZod'
+import { i18nInput, nullString } from '../../../prisma/PrismaZod'
 import { prisma } from '../../../prisma/prisma'
 import { courseFields } from '../../course/CourseRoutes'
 import { adminProcedure, router } from '../../trpc'
-
-const nullString = z
-  .string()
-  .transform((v) => (v.trim() ? v.trim() : undefined))
-  .optional()
 
 const courseSpec = z.object({
   creditPoints: z.number().int(),
