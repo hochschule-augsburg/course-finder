@@ -4,7 +4,7 @@ import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { isWithinInterval } from 'date-fns'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VCol, VSelect } from 'vuetify/components'
+import { VBtn, VCol, VSelect } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 
@@ -26,14 +26,19 @@ const oldPhasesSelect = computed(() =>
     })),
 )
 
-async function loadOldCourses(phaseId: string | undefined) {
-  if (!phaseId) {
-    sharedObject.value = []
-  }
+const loadedOldPhase = ref<string>()
+
+async function loadOldPhase(phaseId: string) {
   const phase = await trpc.admin.enroll.phase.get.query({
     phaseId: Number(phaseId),
   })
   sharedObject.value = phase.offeredCourses
+  loadedOldPhase.value = phaseId
+}
+
+function clearSelection() {
+  sharedObject.value = []
+  loadedOldPhase.value = undefined
 }
 
 const sharedObject = ref<OfferedCourseData[]>([])
@@ -122,14 +127,17 @@ async function createEnrollment() {
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
       <VRow justify="center">
-        <VCol sm="10">
+        <VCol sm="7">
           <VSelect
             :items="oldPhasesSelect"
-            :label="t('old-phases')"
+            :label="t('load-old-phases')"
+            :model-value="loadedOldPhase"
             item-title="text"
-            clearable
-            @update:model-value="loadOldCourses"
+            @update:model-value="loadOldPhase"
           />
+        </VCol>
+        <VCol sm="3">
+          <VBtn :text="t('clear')" @click="clearSelection" />
         </VCol>
       </VRow>
       <VRow justify="center">
@@ -156,7 +164,9 @@ async function createEnrollment() {
 
 <i18n lang="yaml">
 en:
-  old-phases: Passed Enroll Phases
+  load-old-phases: load Passed Enroll Phases
+  clear: Clear Selection
 de:
-  old-phases: Vergangene Anmeldephasen
+  load-old-phases: Vergangene Anmeldephasen laden
+  clear: Auswahl löschen
 </i18n>
