@@ -44,22 +44,11 @@ async function handleUpdateEnroll() {
   >
     <VIcon
       v-if="enrolled?.points"
-      color="green-darken-2"
       icon="mdi-pencil-box-multiple"
       size="large"
     />
-    <VIcon
-      v-else-if="enrolled"
-      color="green-darken-2"
-      icon="mdi-pencil-box"
-      size="large"
-    />
-    <VIcon
-      v-else
-      color="green-darken-2"
-      icon="mdi-checkbox-blank-outline"
-      size="large"
-    />
+    <VIcon v-else-if="enrolled" icon="mdi-pencil-box" size="large" />
+    <VIcon v-else icon="mdi-checkbox-blank-outline" size="large" />
   </div>
 </template>
 

@@ -60,3 +60,9 @@ function handleLogout() {
     </VBtn>
   </VAppBar>
 </template>
+
+<style scoped lang="scss">
+.toolbar-link {
+  color: rgb(var(--v-theme-primary));
+}
+</style>
