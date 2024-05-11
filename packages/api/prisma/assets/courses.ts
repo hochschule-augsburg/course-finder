@@ -174,7 +174,7 @@ export const data: Course[] = [
 
     published: true,
     semesterHours: 4,
-    title: { de: '', en: 'Computer Games Development' },
+    title: { en: 'Computer Games Development' },
     varyingCP: null,
   },
   {
@@ -311,10 +311,9 @@ export const data: Course[] = [
     lecturers: ['Prof. Dr. Jens Lauterbach'],
     moduleCode: 'DTO4.WP',
     pdf: null,
-
     published: true,
     semesterHours: 4,
-    title: { de: '', en: 'Digital Transformation in Organizations' },
+    title: { en: 'Digital Transformation in Organizations' },
     varyingCP: null,
   },
   {
@@ -657,7 +656,7 @@ export const data: Course[] = [
 
     published: true,
     semesterHours: 4,
-    title: { de: '', en: 'Interaction Engineering' },
+    title: { en: 'Interaction Engineering' },
     varyingCP: null,
   },
   {
@@ -724,7 +723,7 @@ export const data: Course[] = [
 
     published: true,
     semesterHours: 4,
-    title: { de: '', en: 'IT Sourcing and Cloud Transformation' },
+    title: { en: 'IT Sourcing and Cloud Transformation' },
     varyingCP: null,
   },
   {
@@ -813,7 +812,7 @@ export const data: Course[] = [
 
     published: true,
     semesterHours: 4,
-    title: { de: '', en: 'Lean IT & Enterprise Architecture' },
+    title: { en: 'Lean IT & Enterprise Architecture' },
     varyingCP: null,
   },
   {
@@ -1337,7 +1336,7 @@ export const data: Course[] = [
 
     published: true,
     semesterHours: 4,
-    title: { de: '', en: 'Visual Thinking for Business' },
+    title: { en: 'Visual Thinking for Business' },
     varyingCP: null,
   },
   {

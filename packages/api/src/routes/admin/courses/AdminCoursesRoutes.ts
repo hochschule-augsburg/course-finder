@@ -24,7 +24,10 @@ export const coursesRoutes = router({
     .input(z.array(courseSpec))
     .mutation(async ({ input }) => {
       return await prisma.course.createMany({
-        data: input,
+        data: input.map((e) => ({
+          ...e,
+          title: { de: e.title.de ?? e.title.en, en: e.title.en ?? e.title.de },
+        })),
       })
     }),
   delete: adminProcedure
@@ -46,7 +49,13 @@ export const coursesRoutes = router({
   }),
   update: adminProcedure.input(courseSpec).mutation(async ({ input }) => {
     return await prisma.course.update({
-      data: input,
+      data: {
+        ...input,
+        title: {
+          de: input.title.de ?? input.title.en,
+          en: input.title.en ?? input.title.de,
+        },
+      },
       select: courseFields,
       where: { moduleCode: input.moduleCode },
     })

@@ -7,6 +7,9 @@ import type {
   User,
 } from '@prisma/client'
 
+/**
+ * None should be undefined it just help programming
+ */
 export type I18nJson = {
   de?: string
   en?: string

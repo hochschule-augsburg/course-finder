@@ -64,23 +64,11 @@ export const useCoursesStore = defineStore('courses', () => {
     } else {
       subjects.value = await trpc.course.getCourses.query()
     }
-    mergeLocals()
   }
 
   async function updatePhase(phaseId: number) {
     subjects.value = await trpc.course.getOfferedCourses.query({
       phaseId: phaseId,
-    })
-  }
-
-  function mergeLocals() {
-    subjects.value.forEach((s) => {
-      if (!s.title.de) {
-        s.title.de = s.title.en
-      }
-      if (!s.title.en) {
-        s.title.en = s.title.de
-      }
     })
   }
 

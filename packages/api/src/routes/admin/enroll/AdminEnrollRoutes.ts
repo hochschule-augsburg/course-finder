@@ -78,7 +78,10 @@ export const enrollRouter = router({
       .mutation(({ input }) => {
         return prisma.enrollphase.create({
           data: {
-            description: input.description,
+            description: {
+              de: input.description.de ?? input.description.en,
+              en: input.description.en ?? input.description.de,
+            },
             end: input.end,
             offeredCourses: {
               create: input.offeredCourses.map((course) => ({
@@ -95,7 +98,10 @@ export const enrollRouter = router({
               })),
             },
             start: input.start,
-            title: input.title,
+            title: {
+              de: input.title.de ?? input.title.en,
+              en: input.title.en ?? input.title.de,
+            },
           },
         })
       }),

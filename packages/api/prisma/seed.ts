@@ -95,7 +95,7 @@ async function main() {
       },
       end: new Date('2023-10-06'),
       id: 1,
-      start: new Date('2024-09-29'),
+      start: new Date('2023-09-29'),
       title: {
         de: 'FWP Anmeldung Wintersemester 2023/24',
         en: 'FWP Registration Winter Semester 2023/24',
@@ -205,6 +205,7 @@ async function main() {
     data: coursesData.map((e) => ({
       ...e,
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      title: { de: e.title.de ?? e.title.en, en: e.title.en ?? e.title.de },
     })),
   })
   await prisma.offeredCourse.createMany({
