@@ -21,7 +21,4 @@ export const nullString = z
   .transform((v) => (v?.trim() ? v : undefined))
   .optional()
 
-export const i18nInput = z.union([
-  z.object({ de: z.string(), en: nullString }),
-  z.object({ de: nullString, en: z.string() }),
-])
+export const i18nInput = z.object({ de: nullString, en: nullString })

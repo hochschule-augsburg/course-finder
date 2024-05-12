@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AdminCreateEnroll: typeof import('./src/components/admin/AdminCreateEnroll.vue')['default']
     AdminSubjectList: typeof import('./src/components/admin/AdminSubjectList.vue')['default']
+    CourseDialog: typeof import('./src/components/admin/CourseDialog.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/CustomNavbar.vue')['default']
     EditOfferedCourse: typeof import('./src/components/admin/EditOfferedCourse.vue')['default']

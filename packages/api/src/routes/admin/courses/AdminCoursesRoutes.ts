@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import { i18nInput, nullString } from '../../../prisma/PrismaZod'
@@ -9,7 +10,7 @@ const courseSpec = z.object({
   creditPoints: z.number().int(),
   editorUsername: nullString,
   extraInfo: nullString,
-  facultyName: z.string(),
+  facultyName: nullString,
   infoUrl: nullString,
   lecturers: z.array(z.string()).optional(),
   moduleCode: z.string(),
@@ -20,16 +21,23 @@ const courseSpec = z.object({
 })
 
 export const coursesRoutes = router({
-  create: adminProcedure
-    .input(z.array(courseSpec))
-    .mutation(async ({ input }) => {
-      return await prisma.course.createMany({
-        data: input.map((e) => ({
-          ...e,
-          title: { de: e.title.de ?? e.title.en, en: e.title.en ?? e.title.de },
-        })),
+  create: adminProcedure.input(courseSpec).mutation(async ({ input }) => {
+    if (!input.moduleCode) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
       })
-    }),
+    }
+    return await prisma.course.create({
+      data: {
+        ...input,
+        title: {
+          de: input.title.de ?? input.title.en,
+          en: input.title.en ?? input.title.de,
+        },
+      },
+      select: courseFields,
+    })
+  }),
   delete: adminProcedure
     .input(z.object({ moduleCodes: z.array(z.string()) }))
     .mutation(async ({ input }) => {
