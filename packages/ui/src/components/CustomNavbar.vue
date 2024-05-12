@@ -64,5 +64,6 @@ function handleLogout() {
 <style scoped lang="scss">
 .toolbar-link {
   color: rgb(var(--v-theme-primary));
+  text-decoration: none;
 }
 </style>
