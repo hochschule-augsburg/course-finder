@@ -2,7 +2,7 @@
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useIntervalFn } from '@vueuse/core'
 import { formatDuration, intervalToDuration, isWithinInterval } from 'date-fns'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale, t } = useI18n()
@@ -32,23 +32,21 @@ const phase = computed(() => {
 
 const remainingTime = ref<string>()
 
-useIntervalFn(
-  () => {
-    const currentDT = new Date()
-    const endDT = phase.value?.end
-    if (!endDT) {
-      return
-    }
+watch(phase, updateRemainingTime, { immediate: true })
 
-    //TODO check if locale is used
-    remainingTime.value = formatDuration(
-      intervalToDuration({ end: endDT, start: currentDT }),
-      { format: ['months', 'weeks', 'days', 'hours', 'minutes'], zero: true },
-    )
-  },
-  2000,
-  { immediate: true },
-)
+useIntervalFn(updateRemainingTime, 10000)
+
+function updateRemainingTime() {
+  if (phase.value) {
+    const duration = intervalToDuration({
+      end: new Date(phase.value.end),
+      start: new Date(),
+    })
+    remainingTime.value = formatDuration(duration, {
+      format: ['months', 'days', 'hours', 'minutes'],
+    })
+  }
+}
 </script>
 
 <template>
