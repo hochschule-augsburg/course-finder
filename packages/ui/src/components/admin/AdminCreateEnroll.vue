@@ -4,7 +4,16 @@ import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { isWithinInterval } from 'date-fns'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VCol, VSelect } from 'vuetify/components'
+import {
+  VBtn,
+  VCol,
+  VContainer,
+  VForm,
+  VRow,
+  VSelect,
+  VTextField,
+  VTextarea,
+} from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 

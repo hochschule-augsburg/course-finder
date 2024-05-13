@@ -2,8 +2,14 @@
 import { useUserStore } from '@/stores/UserStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VMenu, VToolbarTitle } from 'vuetify/components'
-import { VListItem } from 'vuetify/lib/components/index.mjs'
+import {
+  VBtn,
+  VDivider,
+  VList,
+  VListItem,
+  VMenu,
+  VToolbarTitle,
+} from 'vuetify/components'
 
 import type { LocaleOptions, ThemeOptions } from './CustomNavbar.vue'
 
@@ -111,10 +117,6 @@ const infoDialogVisible = ref(false)
 </template>
 
 <style scoped lang="scss">
-.selected {
-  color: rgb(var(--v-theme-primary));
-}
-
 .navbar-container {
   width: 100%;
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { VDivider, VList, VListItem } from 'vuetify/components'
+
 import type { ThemeOptions } from './CustomNavbar.vue'
 
 defineProps<{

@@ -2,7 +2,7 @@
 import { useUserStore } from '@/stores/UserStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VMenu } from 'vuetify/components'
+import { VBtn, VIcon, VMenu, VToolbarTitle, VTooltip } from 'vuetify/components'
 
 import type { LocaleOptions, ThemeOptions } from './CustomNavbar.vue'
 

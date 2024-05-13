@@ -7,9 +7,12 @@ import {
   VBtn,
   VCard,
   VCardText,
+  VCol,
   VDialog,
   VDivider,
+  VRow,
   VTextField,
+  VTextarea,
 } from 'vuetify/components'
 
 const props = defineProps<{ selectedSubject?: Course; visible: boolean }>()

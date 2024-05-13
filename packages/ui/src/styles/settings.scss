@@ -8,7 +8,9 @@
 // src/styles/settings.scss
 
 // Import Vuetify settings
-@use 'vuetify/settings' with ($color-pack: false);
+@use 'vuetify/settings' with (
+  $color-pack: false
+);
 
 :root {
   --dialog-max-width: 32rem;
@@ -32,11 +34,11 @@
 .v-btn:hover {
   color: rgb(var(--v-theme-primary));
 }
+
 .toolbar-link {
-    text-decoration: none;
-    color: rgb(var(--v-theme-primary));
-  }
-  
+  text-decoration: none;
+  color: rgb(var(--v-theme-primary));
+}
 
 .v-list-item:hover {
   color: rgb(var(--v-theme-primary));

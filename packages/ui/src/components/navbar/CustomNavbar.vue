@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDisplay, useTheme } from 'vuetify'
+import { VAppBar } from 'vuetify/components'
 
 export type ThemeOptions = 'auto' | 'dark' | 'light'
 export type LocaleOptions = 'de' | 'en'
@@ -82,10 +83,3 @@ onMounted(() => {
     </template>
   </VAppBar>
 </template>
-
-<style scoped lang="scss">
-.toolbar-link {
-  color: rgb(var(--v-theme-primary));
-  text-decoration: none;
-}
-</style>

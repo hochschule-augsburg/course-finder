@@ -13,6 +13,7 @@ import {
   VRadioGroup,
   VRow,
   VTextField,
+  VTextarea,
 } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
