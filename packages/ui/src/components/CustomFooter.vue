@@ -6,10 +6,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <VFooter
-    class="bg-grey-lighten-1 custom-footer"
-    color="rgb(var(--v-theme-secondary))"
-  >
+  <VFooter class="custom-footer" color="rgb(var(--v-theme-secondary))">
     <VRow justify="center" no-gutters>
       <VBtn
         class="mx-2"

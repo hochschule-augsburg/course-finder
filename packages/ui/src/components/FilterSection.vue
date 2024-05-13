@@ -26,7 +26,7 @@ function getRangeChipLabel(filter: RangeFilter) {
 </script>
 
 <template>
-  <div class="my-4">
+  <div>
     <VTextField
       v-model:model-value="search"
       :label="t('global.search')"

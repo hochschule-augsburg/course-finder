@@ -25,7 +25,7 @@ const enrollFormVisible = ref(false)
   <div class="container">
     <EnrollmentOverview />
     <EnrollmentForm v-model:visible="enrollFormVisible" />
-    <div>
+    <div class="pt-1">
       <FilterSection />
       <VBtnToggle
         v-model="subjectView"

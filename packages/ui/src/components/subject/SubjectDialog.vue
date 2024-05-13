@@ -32,7 +32,7 @@ async function copyLinkToClipboard() {
 
 <template>
   <VDialog v-model:model-value="showSubjectDialog" max-width="750">
-    <VCard v-if="subject" class="pa-2" color="rgb(var(--v-theme-secondary))">
+    <VCard v-if="subject" class="pa-2" color="rgb(var(--v-theme-background))">
       <VCardTitle>
         <div class="d-flex align-center">
           <span class="text-truncate">

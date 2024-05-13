@@ -34,7 +34,7 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
-  <div v-ripple class="enroll-checkbox pa-2" @click="handleUpdateEnroll">
+  <div v-ripple class="pa-2" @click.stop="handleUpdateEnroll">
     <VIcon
       v-if="enrolled?.points"
       icon="mdi-pencil-box-multiple"
@@ -42,6 +42,7 @@ async function handleUpdateEnroll() {
     />
     <VIcon v-else-if="enrolled" icon="mdi-pencil-box" size="large" />
     <VIcon v-else icon="mdi-checkbox-blank-outline" size="large" />
+    {{ enrolled ? enrolled.points : '' }}
   </div>
 </template>
 
