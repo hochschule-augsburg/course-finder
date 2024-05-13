@@ -17,7 +17,6 @@ const dev = import.meta.env.DEV
   <VCard
     :subtitle="subject.lecturers.join(', ')"
     :title="locale === 'de' ? subject.title.de : subject.title.en"
-    class="hoverable-card"
     color="rgb(var(--v-theme-secondary))"
     height="200"
     width="300"

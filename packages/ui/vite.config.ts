@@ -18,6 +18,7 @@ export default defineConfig({
   optimizeDeps: {
     holdUntilCrawlEnd: false,
     include: [
+      'date-fns',
       '@vueuse/core',
       'vue-pdf-embed',
       'lodash-es',
@@ -34,6 +35,9 @@ export default defineConfig({
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
       autoImport: true,
+      styles: {
+        configFile: 'src/styles/settings.scss',
+      },
     }),
     Components(),
     VueI18nPlugin({

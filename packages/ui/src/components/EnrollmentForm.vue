@@ -14,8 +14,6 @@ import {
   VTextField,
 } from 'vuetify/components'
 
-import '../styles/settings.scss'
-
 const { locale } = useI18n()
 const { t } = useI18n()
 

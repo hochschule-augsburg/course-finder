@@ -25,11 +25,9 @@ const infoDialogVisible = ref(false)
 
 <template>
   <div class="d-flex justify-space-between align-center navbar-container">
-    <VToolbarTitle>
-      <RouterLink class="toolbar-link ps-5" to="/">
-        <span>{{ t('navbar-title') }}</span>
-      </RouterLink>
-    </VToolbarTitle>
+    <RouterLink to="/">
+      <VToolbarTitle :text="t('navbar-title')" class="ps-5" />
+    </RouterLink>
 
     <VMenu transition="slide-y-transition">
       <template #activator="{ props }">
@@ -44,7 +42,7 @@ const infoDialogVisible = ref(false)
           to="/admin"
         />
 
-        <VDivider />
+        <VDivider v-if="userStore.user?.type === 'Admin'" />
 
         <VMenu transition="slide-y-transition">
           <template #activator="{ props }">

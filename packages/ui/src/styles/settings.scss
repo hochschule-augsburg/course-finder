@@ -19,11 +19,11 @@
 }
 
 // custom styles
-.hoverable-card:hover .v-card-title {
+.v-card:hover .v-card-title {
   color: rgb(var(--v-theme-primary));
 }
 
-.hoverable-panel:hover .title-ellipsis {
+.v-expansion-panel:hover .v-card-title {
   color: rgb(var(--v-theme-primary));
 }
 
@@ -35,11 +35,11 @@
   color: rgb(var(--v-theme-primary));
 }
 
-.toolbar-link {
-  text-decoration: none;
+.v-list-item:hover {
   color: rgb(var(--v-theme-primary));
 }
 
-.v-list-item:hover {
+a {
+  text-decoration: none;
   color: rgb(var(--v-theme-primary));
 }

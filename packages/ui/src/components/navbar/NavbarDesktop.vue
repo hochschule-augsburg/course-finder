@@ -19,11 +19,9 @@ const infoDialogVisible = ref(false)
 
 <template>
   <div class="d-flex justify-space-between align-center navbar-container">
-    <VToolbarTitle>
-      <RouterLink class="toolbar-link ps-5" to="/">
-        <span>{{ t('navbar-title') }}</span>
-      </RouterLink>
-    </VToolbarTitle>
+    <RouterLink to="/">
+      <VToolbarTitle :text="t('navbar-title')" class="ps-5" />
+    </RouterLink>
 
     <div class="d-flex flex-row pr-4">
       <VBtn
@@ -32,7 +30,7 @@ const infoDialogVisible = ref(false)
         to="/admin"
         icon
       >
-        <VIcon size="28">mdi-shield-crown-outline</VIcon>
+        <VIcon>mdi-shield-crown-outline</VIcon>
         <VTooltip activator="parent" location="start" open-delay="500">
           {{ t('admin') }}
         </VTooltip>
