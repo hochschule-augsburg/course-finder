@@ -26,7 +26,7 @@ const infoDialogVisible = ref(false)
       <template #activator="{ props }">
         <VBtn
           class="mr-1"
-          icon="mdi-dots-vertical"
+          icon="mdi-menu"
           size="large"
           v-bind="props"
         />
