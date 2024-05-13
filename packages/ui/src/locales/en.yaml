@@ -8,8 +8,8 @@ global:
   reset: Reset
   confirm-action: Confirm action
   back: Back
-
   search: Search
+  title: CourseFinder
 
 filter:
   title: Filter

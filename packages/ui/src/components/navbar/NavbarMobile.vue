@@ -26,7 +26,7 @@ const infoDialogVisible = ref(false)
 <template>
   <div class="d-flex justify-space-between align-center navbar-container">
     <RouterLink to="/">
-      <VToolbarTitle :text="t('navbar-title')" class="ps-5" />
+      <VToolbarTitle :text="t('global.title')" class="ps-5" />
     </RouterLink>
 
     <VMenu transition="slide-y-transition">
@@ -123,7 +123,6 @@ const infoDialogVisible = ref(false)
 <i18n lang="yaml">
 en:
   help: Help
-  navbar-title: FWP Application
   change-lang: Select language
   change-theme: Select Mode
   login: Login
@@ -132,7 +131,6 @@ en:
 
 de:
   help: Hilfe
-  navbar-title: FWP Anmeldung
   change-lang: Sprache wählen
   change-theme: Modus wählen
   login: Login
