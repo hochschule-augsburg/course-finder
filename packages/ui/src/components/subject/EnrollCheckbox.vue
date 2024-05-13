@@ -7,8 +7,6 @@ import { VIcon } from 'vuetify/components'
 
 import { dialogService } from '../DialogService'
 
-export type abc = 123
-
 const props = defineProps<{ subject: Subject }>()
 
 const { t } = useI18n()
@@ -36,12 +34,7 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
-  <div
-    v-ripple
-    class="enroll-checkbox pa-2"
-    @click="handleUpdateEnroll"
-    @click.stop
-  >
+  <div v-ripple class="enroll-checkbox pa-2" @click="handleUpdateEnroll">
     <VIcon
       v-if="enrolled?.points"
       icon="mdi-pencil-box-multiple"
