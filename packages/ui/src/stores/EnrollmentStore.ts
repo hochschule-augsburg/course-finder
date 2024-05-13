@@ -49,6 +49,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
 
   async function update() {
     if (!coursesStore.currentPhase) {
+      enrolledSubjects.value = []
       return
     }
     enrolledSubjects.value = (

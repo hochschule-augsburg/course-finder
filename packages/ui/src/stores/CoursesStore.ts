@@ -6,6 +6,7 @@ import { debounce } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
+import { useEnrollmentStore } from './EnrollmentStore'
 import { useFiltersStore } from './FiltersStore'
 import { useUserStore } from './UserStore'
 
@@ -17,9 +18,9 @@ export const useCoursesStore = defineStore('courses', () => {
   const userStore = useUserStore()
   const filtersStore = useFiltersStore()
   const currentPhase = ref<EnrollPhase>()
-  const maxPoints = ref(1000)
   const subjects = ref<Subject[]>([])
   const filteredSubjects = ref<Subject[]>([])
+  const enrollmentStore = useEnrollmentStore()
 
   watch(
     () => userStore.user,
@@ -44,7 +45,6 @@ export const useCoursesStore = defineStore('courses', () => {
     currentPhase,
     filteredSubjects,
     init: update,
-    maxPoints,
     subjects,
   }
 
@@ -76,5 +76,22 @@ export const useCoursesStore = defineStore('courses', () => {
     filteredSubjects.value = [...subjects.value]
     filteredSubjects.value = filtersStore.applyFilters(filteredSubjects.value)
     filteredSubjects.value = filtersStore.searchSubjects(filteredSubjects.value)
+    filteredSubjects.value.sort((a, b) => {
+      const enrolledSubjectA = enrollmentStore.enrolledSubjects.find(
+        (s) => s.moduleCode === a.moduleCode,
+      )
+      const enrolledSubjectB = enrollmentStore.enrolledSubjects.find(
+        (s) => s.moduleCode === b.moduleCode,
+      )
+
+      if (enrolledSubjectA && enrolledSubjectB) {
+        return enrolledSubjectB.points - enrolledSubjectA.points
+      } else if (enrolledSubjectA) {
+        return -1
+      } else if (enrolledSubjectB) {
+        return 1
+      }
+      return a.moduleCode.localeCompare(b.moduleCode)
+    })
   }
 })
