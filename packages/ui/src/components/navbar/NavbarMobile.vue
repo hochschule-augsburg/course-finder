@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/UserStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn, VMenu, VToolbarTitle } from 'vuetify/components'
+import { VListItem } from 'vuetify/lib/components/index.mjs'
 
 import type { LocaleOptions, ThemeOptions } from './CustomNavbar.vue'
 
@@ -18,21 +19,27 @@ const infoDialogVisible = ref(false)
 
 <template>
   <div class="d-flex justify-space-between align-center navbar-container">
-    <VToolbarTitle class="ps-5">
-      <span class="font-weight-bold">{{ t('nav-title') }}</span>
+    <VToolbarTitle>
+      <RouterLink class="toolbar-link ps-5" to="/">
+        <span>{{ t('navbar-title') }}</span>
+      </RouterLink>
     </VToolbarTitle>
 
     <VMenu transition="slide-y-transition">
       <template #activator="{ props }">
-        <VBtn
-          class="mr-1"
-          icon="mdi-menu"
-          size="large"
-          v-bind="props"
-        />
+        <VBtn class="mr-1" icon="mdi-menu" size="large" v-bind="props" />
       </template>
 
       <VList>
+        <VListItem
+          v-if="userStore.user?.type === 'Admin'"
+          :title="t('admin')"
+          prepend-icon="mdi-shield-crown-outline"
+          to="/admin"
+        />
+
+        <VDivider />
+
         <VMenu transition="slide-y-transition">
           <template #activator="{ props }">
             <VListItem
@@ -116,17 +123,19 @@ const infoDialogVisible = ref(false)
 <i18n lang="yaml">
 en:
   help: Help
-  nav-title: FWP Application
+  navbar-title: FWP Application
   change-lang: Select language
   change-theme: Select Mode
   login: Login
   logout: Logout
+  admin: Admin
 
 de:
   help: Hilfe
-  nav-title: FWP Anmeldung
+  navbar-title: FWP Anmeldung
   change-lang: Sprache wählen
   change-theme: Modus wählen
   login: Login
   logout: Logout
+  admin: Admin
 </i18n>

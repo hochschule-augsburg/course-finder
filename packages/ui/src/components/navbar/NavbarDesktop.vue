@@ -19,11 +19,25 @@ const infoDialogVisible = ref(false)
 
 <template>
   <div class="d-flex justify-space-between align-center navbar-container">
-    <VToolbarTitle class="ps-5">
-      <span class="font-weight-bold">{{ t('navbar-title') }}</span>
+    <VToolbarTitle>
+      <RouterLink class="toolbar-link ps-5" to="/">
+        <span>{{ t('navbar-title') }}</span>
+      </RouterLink>
     </VToolbarTitle>
 
     <div class="d-flex flex-row pr-4">
+      <VBtn
+        v-if="userStore.user?.type === 'Admin'"
+        text="Admin"
+        to="/admin"
+        icon
+      >
+        <VIcon size="28">mdi-shield-crown-outline</VIcon>
+        <VTooltip activator="parent" location="start" open-delay="500">
+          {{ t('admin') }}
+        </VTooltip>
+      </VBtn>
+
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
@@ -97,6 +111,7 @@ en:
   change-theme: Select Mode
   login: Login
   logout: Logout
+  admin: Admin
 
 de:
   help: Hilfe
@@ -105,4 +120,5 @@ de:
   change-theme: Modus wählen
   login: Login
   logout: Logout
+  admin: Admin
 </i18n>
