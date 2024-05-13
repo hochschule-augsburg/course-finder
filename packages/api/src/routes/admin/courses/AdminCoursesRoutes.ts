@@ -39,11 +39,11 @@ export const coursesRoutes = router({
     })
   }),
   delete: adminProcedure
-    .input(z.object({ moduleCodes: z.array(z.string()) }))
+    .input(z.object({ moduleCode: z.string() }))
     .mutation(async ({ input }) => {
-      return await prisma.course.deleteMany({
+      return await prisma.course.delete({
         where: {
-          moduleCode: { in: input.moduleCodes },
+          moduleCode: input.moduleCode,
         },
       })
     }),

@@ -4,6 +4,7 @@ global:
   cancel: Cancel
   save: Save
   edit: Edit
+  delete: Delete
   close: Close
   reset: Reset
   confirm-action: Confirm action

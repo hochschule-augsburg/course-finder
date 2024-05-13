@@ -18,6 +18,7 @@ export const courseRouter = router({
     return await prisma.course.findMany({
       orderBy: { moduleCode: 'asc' },
       select: courseFields,
+      where: { published: true },
     })
   }),
   getCurrentPhase: studentOnlyProcedure.query(async () => {

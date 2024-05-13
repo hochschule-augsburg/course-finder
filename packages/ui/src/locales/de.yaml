@@ -3,6 +3,7 @@ global:
   confirm: Bestätigen
   cancel: Abbrechen
   save: Speichern
+  delete: Löschen
   edit: Bearbeiten
   close: Schließen
   reset: Zurücksetzen

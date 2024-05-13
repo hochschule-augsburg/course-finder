@@ -41,8 +41,21 @@ function openEditDialog(subject: Course) {
   showModalForm.value = true
 }
 
-async function processSubject(subject: Course) {
-  await dialogAction?.(subject)
+async function processSubject(subject: Course | undefined) {
+  if (!subject) {
+    showModalForm.value = false
+    await trpc.admin.courses.delete.mutate({
+      moduleCode: selectedSubject.value.moduleCode,
+    })
+    adminStore.courses.splice(
+      adminStore.courses.findIndex(
+        (e) => e.moduleCode === selectedSubject.value.moduleCode,
+      ),
+      1,
+    )
+  } else {
+    await dialogAction?.(subject)
+  }
   showModalForm.value = false
 }
 
