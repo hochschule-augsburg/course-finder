@@ -1,66 +1,115 @@
+/* eslint-disable perfectionist/sort-object-types */
 import schedule from 'node-schedule'
 
-import { Phase } from './phase'
-import { phaseService } from './phaseService'
+import type { I18nJson } from '../prisma/PrismaTypes'
+
+import { PhaseService } from './phaseService'
+
+const phaseService = new PhaseService()
+
+export async function startPhaseSchedulingFromDatabase() {
+  const phases = await phaseService.getAllPhases()
+
+  phases.forEach((phase) => schedulePhase(phase))
+}
 
 // diese Funktion überprüft, ob eine Phase aktiviert ist
-export async function scheduleRegistration() {
-  const phaseStartTime = phaseService.getPhaseStartTime(
-    phaseService.getCurrentPhase() || Phase.Closed, // Provide a default value for getCurrentPhase()
-  )
-  if (
-    phaseStartTime !== undefined &&
-    phaseService.getCurrentPhase === undefined
-  ) {
+function schedulePhase(phase: {
+  id: number
+  start: Date
+  end: Date
+  title: I18nJson
+  description: I18nJson
+}) {
+  const phaseStartTime = phase.start
+  if (phaseStartTime !== undefined || phaseStartTime !== null) {
     schedule.scheduleJob(phaseStartTime, () => {
-      monitorRegistrationCycle()
+      monitorRegistrationCycle(phase)
     })
   }
 }
 
-// hier kann die Phase gestartet werden
-// muss noch dynamischer gemacht werden
-export async function startScheduling() {
-  phaseService.setCurrentPhase(Phase.Registration)
-  const registrationStartTime = new Date('2024-05-10T00:00:00')
-  const registrationEndTime = new Date('2024-05-10T23:59:59')
-  phaseService.setPhaseStartTime(Phase.Registration, registrationStartTime)
-  phaseService.setPhaseEndTime(Phase.Registration, registrationEndTime)
-  scheduleRegistration()
+// Funktion zum Aktualisieren des Zeitplans für eine (laufende) Phase
+function updatePhaseScheduling(
+  phase: {
+    id: number
+    start: Date
+    end: Date
+    title: I18nJson
+    description: I18nJson
+  },
+  newStartTime: Date,
+  newEndTime: Date,
+) {
+  const oldStartTime = phase.start
+  if (oldStartTime) {
+    schedule.cancelJob(oldStartTime.toString())
+  }
+  phase.start = newStartTime
+  phase.end = newEndTime
+  schedulePhase(phase)
 }
 
-// muss noch überarbeitet werden
-function monitorRegistrationCycle() {
-  let currentPhase = phaseService.getCurrentPhase() || Phase.Closed
-  const now = new Date()
-  const registrationPhaseEndTime =
-    phaseService.getPhaseEndTime(currentPhase) || now
+// Funktion zum Löschen des Zeitplans für eine (laufende) Phase und Löschen der Phase aus der Datenbank
+function deletePhaseScheduling(phase: {
+  id: number
+  start: Date
+  end: Date
+  title: I18nJson
+  description: I18nJson
+}) {
+  const phaseStartTime = phase.start
+  if (phaseStartTime) {
+    schedule.cancelJob(phaseStartTime.toString()) // Zeitplan für die Phase löschen
+  }
+  phaseService.deletePhase(phase.id) // Phase aus der Datenbank löschen
+}
 
-  // Check the current registration cycle status
-  if (now < registrationPhaseEndTime && currentPhase === Phase.Registration) {
-    console.log('Registration phase.')
-  } else if (
-    (now >= registrationPhaseEndTime && currentPhase === Phase.Registration) ||
-    (now < registrationPhaseEndTime && currentPhase === Phase.EmailNotification)
-  ) {
-    currentPhase = Phase.EmailNotification
-    console.log('Email Notification started.')
-    // Code for sending emails can be placed here
-  } else if (
-    (now >= registrationPhaseEndTime &&
-      currentPhase === Phase.EmailNotification) ||
-    (now < registrationPhaseEndTime && currentPhase === Phase.Drawing)
-  ) {
-    console.log('Drawing.')
-    // Code for E can be placed here
-  } else if (
-    now >= registrationPhaseEndTime &&
-    currentPhase === Phase.Drawing
-  ) {
-    currentPhase = Phase.Finished
-    console.log('Drawing completed. Registration cycle finished.')
-    // Code for cleanup or further actions can be placed here
-  } else if (currentPhase === null) {
-    console.log('Registration cycle already finished.')
+async function monitorRegistrationCycle(phase: {
+  id: number
+  start: Date
+  end: Date
+  title: I18nJson
+  description: I18nJson
+}) {
+  const now = new Date()
+  const phaseStartTime = new Date(phase.start)
+  const phaseEndTime = new Date(phase.end)
+  const warningBeforeEndTime = new Date(
+    phaseEndTime.getTime() - 2 * 24 * 60 * 60 * 1000,
+  ) // Zwei Tage vor dem Endzeitpunkt
+  const drawingTime = new Date(phaseEndTime.getTime() + 1000) // Eine Sekunde nach dem Endzeitpunkt
+
+  // Überprüfen des Status des aktuellen Phasenzyklus
+  if (now < phaseStartTime) {
+    // console.log(`Phase "${phase.title}" has not started yet.`)
+  } else if (now >= phaseStartTime && now < warningBeforeEndTime) {
+    console.log(`Phase "${phase.title}" is currently ongoing.`)
+    // Hier könnten weitere Aktionen ausgeführt werden
+    const phaseName = phase.title.en
+    switch (phaseName) {
+      case 'Registration':
+        // Code für die Registrationsphase
+        break
+      case 'Email Notification':
+        // Code für die E-Mail-Benachrichtigungsphase
+        break
+      case 'Drawing':
+        // Code für die Auslosungsphase
+        break
+      case 'Finished':
+        // Code für die abgeschlossene Phase
+        break
+      default:
+        break
+    }
+  } else if (now >= warningBeforeEndTime && now < phaseEndTime) {
+    console.log(`Warning: Phase "${phase.title}" is ending soon.`)
+  } else if (now >= phaseEndTime && now < drawingTime) {
+    console.log(`Phase "${phase.title}" has ended. Drawing started.`)
+  } else if (now >= drawingTime) {
+    console.log(
+      `Drawing completed for phase "${phase.title}". Phase cycle finished.`,
+    )
   }
 }

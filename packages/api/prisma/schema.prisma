@@ -102,9 +102,9 @@ model Enrollphase {
 
 enum Phase {
   REGISTRATION
-  WARNING_BEFORE_END
+  EMAILNOTIFICATION
   DRAWING
-  FINISHED
+  FINISHED 
 }
 
 model OfferedCourse {
