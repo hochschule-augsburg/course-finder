@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { differenceBy, groupBy } from 'lodash-es'
+import { differenceBy } from 'lodash-es'
 import { z } from 'zod'
 
 import { assign } from '../../../domain/assign/AssignmentAlgorithm'
@@ -52,27 +52,21 @@ export const assignRouter = router({
     .query(async ({ input }) => {
       const [allCourses, assignedCourses] = await Promise.all([
         prisma.offeredCourse.findMany({
-          select: { Course: { select: { title: true } }, moduleCode: true },
+          select: { moduleCode: true },
           where: { phaseId: input.phaseId },
         }),
-        prisma.phaseAssignment.findMany({
-          select: {
-            moduleCode: true,
-            offeredCourse: { select: { Course: { select: { title: true } } } },
-            username: true,
-          },
+        prisma.phaseAssignment.groupBy({
+          _count: { username: true },
+          by: ['moduleCode'],
           where: { phaseId: input.phaseId },
         }),
       ])
       return [
-        ...Object.values(groupBy(assignedCourses, 'username')).map((e) => ({
-          count: e.length,
-          moduleCode: e[0].moduleCode,
-        })),
+        ...assignedCourses,
         ...differenceBy(allCourses, assignedCourses, 'moduleCode').map((e) => ({
-          count: 0,
+          _count: { username: 0 },
           moduleCode: e.moduleCode,
         })),
-      ]
+      ].map((e) => ({ count: e._count.username, moduleCode: e.moduleCode }))
     }),
 })
