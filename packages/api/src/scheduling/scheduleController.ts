@@ -42,6 +42,7 @@ function updatePhaseScheduling(
   newEndTime: Date,
 ) {
   const oldStartTime = phase.start
+  // Frage: Soll der Job gestoppt werden, wenn z.B nur die Endzeit geändert wird?
   if (oldStartTime) {
     schedule.cancelJob(oldStartTime.toString())
   }
@@ -75,15 +76,11 @@ async function monitorRegistrationCycle(phase: {
   const now = new Date()
   const phaseStartTime = new Date(phase.start)
   const phaseEndTime = new Date(phase.end)
-  const warningBeforeEndTime = new Date(
-    phaseEndTime.getTime() - 2 * 24 * 60 * 60 * 1000,
-  ) // Zwei Tage vor dem Endzeitpunkt
-  const drawingTime = new Date(phaseEndTime.getTime() + 1000) // Eine Sekunde nach dem Endzeitpunkt
 
   // Überprüfen des Status des aktuellen Phasenzyklus
   if (now < phaseStartTime) {
     // console.log(`Phase "${phase.title}" has not started yet.`)
-  } else if (now >= phaseStartTime && now < warningBeforeEndTime) {
+  } else if (now >= phaseStartTime) {
     console.log(`Phase "${phase.title}" is currently ongoing.`)
     // Hier könnten weitere Aktionen ausgeführt werden
     const phaseName = phase.title.en
@@ -103,13 +100,7 @@ async function monitorRegistrationCycle(phase: {
       default:
         break
     }
-  } else if (now >= warningBeforeEndTime && now < phaseEndTime) {
-    console.log(`Warning: Phase "${phase.title}" is ending soon.`)
-  } else if (now >= phaseEndTime && now < drawingTime) {
-    console.log(`Phase "${phase.title}" has ended. Drawing started.`)
-  } else if (now >= drawingTime) {
-    console.log(
-      `Drawing completed for phase "${phase.title}". Phase cycle finished.`,
-    )
+  } else if (now >= phaseEndTime) {
+    console.log(`Phase "${phase.title}" has ended.`)
   }
 }

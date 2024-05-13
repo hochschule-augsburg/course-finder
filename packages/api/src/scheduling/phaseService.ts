@@ -8,9 +8,8 @@ interface Phase {
   id: number
   start: Date
   end: Date
-  title: I18nJson // Hinzugefügt
-  description: I18nJson // Hinzugefügt
-  // Weitere Eigenschaften je nach Bedarf
+  title: I18nJson
+  description: I18nJson
 }
 
 export class PhaseService {
@@ -20,6 +19,15 @@ export class PhaseService {
     this.prisma = new PrismaClient()
   }
 
+  /**
+   * Creates a new enrollment phase.
+   * @param start - The start date of the enrollment phase.
+   * @param end - The end date of the enrollment phase.
+   * @param title - The title of the enrollment phase in internationalized JSON format.
+   * @param description - The description of the enrollment phase in internationalized JSON format.
+   * @returns A Promise that resolves to the created enrollment phase.
+   * @throws If there is an error while creating the phase.
+   */
   async createPhase(
     start: Date,
     end: Date,
@@ -41,6 +49,12 @@ export class PhaseService {
     }
   }
 
+  /**
+   * Deletes a phase with the specified ID.
+   * @param phaseId - The ID of the phase to delete.
+   * @returns A Promise that resolves when the phase is deleted.
+   * @throws If an error occurs while deleting the phase.
+   */
   async deletePhase(phaseId: number): Promise<void> {
     try {
       await this.prisma.enrollphase.delete({
@@ -53,19 +67,32 @@ export class PhaseService {
     }
   }
 
+  /**
+   * Retrieves all phases from the database.
+   * @returns A promise that resolves to an array of Phase objects.
+   */
   async getAllPhases(): Promise<Phase[]> {
-    // Hier könntest du die Phasen aus der Datenbank abrufen und zurückgeben
-    const phases = await this.prisma.enrollphase.findMany() // Annahme: Prisma-Abfrage, um alle Phasen abzurufen
+    const phases = await this.prisma.enrollphase.findMany()
     return phases.map((phase) => ({
       id: phase.id,
       start: phase.start,
       end: phase.end,
-      title: phase.title, // Hinzugefügt
-      description: phase.description, // Hinzugefügt
-      // Weitere Eigenschaften je nach Bedarf
+      title: phase.title,
+      description: phase.description,
     }))
   }
 
+  /**
+   * Updates a phase with the specified ID.
+   *
+   * @param phaseId - The ID of the phase to update.
+   * @param start - The start date of the phase.
+   * @param end - The end date of the phase.
+   * @param title - The title of the phase in I18nJson format.
+   * @param description - The description of the phase in I18nJson format.
+   * @returns A Promise that resolves to the updated EnrollPhase object.
+   * @throws If there was an error updating the phase.
+   */
   async updatePhase(
     phaseId: number,
     start: Date,
@@ -88,6 +115,4 @@ export class PhaseService {
       throw new Error(`Failed to update phase with ID ${phaseId}: ${error}`)
     }
   }
-
-  // Weitere Methoden zum Erstellen, Aktualisieren und Löschen von Phasen
 }
