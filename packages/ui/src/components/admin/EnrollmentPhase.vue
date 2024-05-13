@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useIntervalFn } from '@vueuse/core'
-import { formatDuration, intervalToDuration, isWithinInterval } from 'date-fns'
+import { formatDuration, intervalToDuration } from 'date-fns'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
+
+const props = defineProps<{
+  phaseId?: number
+}>()
+
 const phase = computed(() => {
-  const phase = adminCoursesStore.phases.find((e) =>
-    isWithinInterval(new Date(), {
-      end: new Date(e.end),
-      start: new Date(e.start),
-    }),
-  )
+  const phase = adminCoursesStore.phases.find((e) => e.id === props.phaseId)
   if (phase) {
     return {
       ...phase,
@@ -38,9 +38,14 @@ useIntervalFn(updateRemainingTime, 10000)
 
 function updateRemainingTime() {
   if (phase.value) {
+    const now = new Date()
+    if (phase.value.end.getTime() < now.getTime()) {
+      remainingTime.value = undefined
+      return
+    }
     const duration = intervalToDuration({
       end: new Date(phase.value.end),
-      start: new Date(),
+      start: now,
     })
     remainingTime.value = formatDuration(duration, {
       format: ['months', 'days', 'hours', 'minutes'],
@@ -51,7 +56,6 @@ function updateRemainingTime() {
 
 <template>
   <div>
-    <h1>{{ t('title') }}</h1>
     <div v-if="phase" class="current-phase">
       <h2>
         {{ t('phase') }}:
@@ -72,13 +76,11 @@ function updateRemainingTime() {
 
 <i18n lang="yaml">
 en:
-  title: Administration
   phase: Current phase
   start: Start
   end: End
   remaining-time: Remaining Time
 de:
-  title: Verwaltung
   phase: Aktuelle Phase
   start: Start
   end: Ende

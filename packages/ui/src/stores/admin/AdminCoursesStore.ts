@@ -5,8 +5,9 @@ import type {
 
 import { trpc } from '@/api/trpc'
 import { useAsyncState } from '@vueuse/core'
+import { isWithinInterval } from 'date-fns'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export type Course = Omit<ApiCourse, 'pdf'>
 
@@ -14,11 +15,20 @@ export type Phase = EnrollPhase
 
 export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const courses = ref<Course[]>([])
-
   const phases = ref<Phase[]>([])
+
+  const currentPhase = computed(() => {
+    return phases.value.find((e) =>
+      isWithinInterval(new Date(), {
+        end: new Date(e.end),
+        start: new Date(e.start),
+      }),
+    )
+  })
 
   return {
     courses,
+    currentPhase,
     isInit: useAsyncState(async () => {
       await init()
       return true
