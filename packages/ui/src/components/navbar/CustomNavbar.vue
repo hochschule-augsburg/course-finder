@@ -29,7 +29,7 @@ function getPreferredColorScheme() {
 function changeTheme(newTheme: ThemeOptions) {
   selectedTheme.value = newTheme
   theme.global.name.value = themes[newTheme]
-  localStorage.setItem('theme', themes[newTheme])
+  localStorage.setItem('theme', newTheme)
 }
 
 function changeLocale(newLocale: LocaleOptions) {
@@ -38,12 +38,14 @@ function changeLocale(newLocale: LocaleOptions) {
 }
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const savedTheme = localStorage.getItem('theme') as ThemeOptions
   const savedLocale = window.localStorage.getItem('locale')
   const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 
   if (savedTheme) {
-    theme.global.name.value = savedTheme
+    selectedTheme.value = savedTheme
+    theme.global.name.value = themes[savedTheme]
   } else {
     theme.global.name.value = themes['auto']
   }
