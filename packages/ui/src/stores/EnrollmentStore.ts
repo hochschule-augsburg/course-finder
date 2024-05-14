@@ -7,12 +7,13 @@ import type { Subject } from './CoursesStore'
 import { useCoursesStore } from './CoursesStore'
 
 export type EnrolledCourse = {
+  autoFillOption?: 'fallback' | 'prio'
   moduleCode: string
   points: number
   title: { de?: string; en?: string }
 }
 
-export const MAX_POINTS = 1000
+export const MAX_POINTS = 100
 
 export function useCourseEnroll(subject: Subject) {
   const enrollmentStore = useEnrollmentStore()

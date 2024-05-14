@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { type Subject } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
@@ -18,7 +18,6 @@ const { locale } = useI18n()
 const { t } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
-const coursesStore = useCoursesStore()
 
 const visible = defineModel<boolean>('visible')
 
@@ -26,23 +25,49 @@ const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
-
 const creditsNeeded = ref<number>(0)
 
-function openSubjectDialog(moduleCode: string) {
-  selectedSubject.value = coursesStore.subjects.find(
-    (s) => s.moduleCode === moduleCode,
-  )
-  showSubjectDialog.value = true
+const autoFillOptions = {
+  fallback: { icon: 'mdi-alpha-f-circle' },
+  prio: { icon: 'mdi-alpha-p-circle' },
+}
+
+function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
+  if (!currentOption) {
+    return 'prio'
+  }
+  return currentOption === 'fallback' ? 'prio' : 'fallback'
 }
 
 function back() {
   visible.value = false
 }
 
+function autoFill() {
+  let remPoints = MAX_POINTS
+
+  const fallbackSubjects = enrollmentStore.enrolledSubjects.filter(
+    (s) => s.autoFillOption === 'fallback',
+  )
+  const prioSubjects = enrollmentStore.enrolledSubjects.filter(
+    (s) => s.autoFillOption === 'prio',
+  )
+
+  fallbackSubjects.forEach((s) => {
+    if (remPoints > 0) {
+      s.points = 1
+      remPoints--
+    }
+  })
+
+  const prioPoints = Math.floor(remPoints / prioSubjects.length)
+  prioSubjects.forEach((s) => {
+    s.points = prioPoints
+  })
+}
+
 const pointInputRules = [
-  (i: string) => !!i || t('field-required'),
-  (i: string) => /^[1-9]\d*$/.test(i) || t('integer-input'), // check is input is valid int > 0
+  (i: string) => /^[0-9]\d*$/.test(i || '0') || t('integer-input'), // check is input is valid int >= 0
 ]
 
 async function validate() {
@@ -58,7 +83,7 @@ async function validate() {
   ) {
     form.value?.items
       .slice(1)
-      .forEach((i) => i.errorMessages.push(t('points-sum-1000')))
+      .forEach((i) => i.errorMessages.push(t('points-sum-100')))
     return
   }
 
@@ -92,34 +117,50 @@ function reset() {
       max-width="var(--dialog-max-width)"
       rounded="lg"
     >
-      <div class="d-flex align-start formHead">
+      <div class="d-flex justify-space-between mb-2">
         <VBtn
           :text="t('global.back')"
           prepend-icon="mdi-arrow-left"
           variant="plain"
           @click="back"
         />
+        <VBtn icon="mdi-pen" size="small" @click="autoFill" />
       </div>
       <VForm ref="form">
         <VTextField
           v-model.number="creditsNeeded"
           :label="t('credits-wanted')"
+          color="rgb(var(--v-theme-primary))"
+          hide-details
           required
         />
+        <VDivider :thickness="2" class="my-4" />
         <VTextField
           v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"
           :key="subject.moduleCode"
           :label="locale === 'de' ? subject.title.de : subject.title.en"
           :rules="pointInputRules"
-          append-icon="mdi-delete"
-          append-inner-icon="mdi-book-information-variant"
+          color="rgb(var(--v-theme-primary))"
           required
-          @click:append="enrollmentStore.removeSubject(subject.moduleCode)"
-          @click:append-inner="openSubjectDialog(subject.moduleCode)"
-        />
-
-        <VRow align="center" class="mt-2 px-3">
+        >
+          <template #append-inner>
+            <VIcon
+              @click.prevent="
+                subject.autoFillOption = getNextAutoFillOption(
+                  subject.autoFillOption,
+                )
+              "
+            >
+              {{
+                subject.autoFillOption
+                  ? autoFillOptions[subject.autoFillOption].icon
+                  : 'mdi-alpha-m-circle'
+              }}
+            </VIcon>
+          </template>
+        </VTextField>
+        <VRow align="center" class="mt-2 mb-1 px-3">
           <VBtn icon="mdi-restore" size="small" @click="reset" />
           <VSpacer />
           <VBtn :loading="loading" :text="t('register')" @click="validate" />
@@ -133,10 +174,6 @@ function reset() {
 .container {
   height: 100%;
 }
-.formHead {
-  width: 90%;
-  max-width: var(--dialog-max-width);
-}
 </style>
 
 <i18n lang="yaml">
@@ -145,11 +182,11 @@ de:
   field-required: Dies ist ein Pflichtfeld!
   integer-input: Bitte eine ganze Zahl eingeben!
   credits-wanted: Bestrebte Credit Points
-  points-sum-1000: Insgesamt 1000 Punkte vergeben!
+  points-sum-100: Insgesamt 100 Punkte vergeben!
 en:
   register: Register
   field-required: This field is required!
   integer-input: This field must be an integer!
   credits-wanted: Credits wanted
-  points-sum-1000: allocate 1000 points in total!
+  points-sum-100: allocate 100 points in total!
 </i18n>

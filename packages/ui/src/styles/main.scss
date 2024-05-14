@@ -8,6 +8,10 @@
     color: rgb(var(--v-theme-primary));
 }
 
+.v-card:hover .v-card-item__prepend {
+    color: rgb(var(--v-theme-primary));
+}
+
 .v-expansion-panel:hover .v-card-title {
     color: rgb(var(--v-theme-primary));
 }

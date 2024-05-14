@@ -3,7 +3,7 @@ import type { Subject } from '@/stores/CoursesStore'
 
 import { useCourseEnroll } from '@/stores/EnrollmentStore'
 import { useI18n } from 'vue-i18n'
-import { VIcon } from 'vuetify/components'
+import { VBadge, VIcon } from 'vuetify/components'
 
 import { dialogService } from '../DialogService'
 
