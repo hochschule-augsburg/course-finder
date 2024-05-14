@@ -24,6 +24,16 @@
     color: rgb(var(--v-theme-primary));
 }
 
+.v-card:hover .v-badge__badge {
+    background-color: rgb(var(--v-theme-primary));
+    color: white;
+}
+
+.v-expansion-panel:hover .v-badge__badge {
+    background-color: rgb(var(--v-theme-primary));
+    color: white;
+}
+
 a {
     text-decoration: none;
     color: rgb(var(--v-theme-primary));
