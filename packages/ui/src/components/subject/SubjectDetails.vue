@@ -181,12 +181,11 @@ const fullscreen = ref(false)
           icon="mdi-fullscreen"
           @click="fullscreen = true"
         />
-        <div
-          v-if="theme.global.name.value === 'customDarkTheme'"
-          class="pdf-view-dark"
-        />
         <VuePdfEmbed
           v-if="pdfSource"
+          :class="{
+            'pdf-view-dark': theme.global.name.value === 'customDarkTheme',
+          }"
           :source="pdfSource"
           class="pdf-view"
           annotation-layer
@@ -205,12 +204,11 @@ const fullscreen = ref(false)
         icon="mdi-fullscreen-exit"
         @click="fullscreen = false"
       />
-      <div
-        v-if="theme.global.name.value === 'customDarkTheme'"
-        class="pdf-view-dark"
-      />
       <VuePdfEmbed
         v-if="pdfSource"
+        :class="{
+          'pdf-view-dark': theme.global.name.value === 'customDarkTheme',
+        }"
         :source="pdfSource"
         class="pdf-view"
         annotation-layer
@@ -238,15 +236,7 @@ const fullscreen = ref(false)
   overflow-y: scroll;
 }
 .pdf-view-dark {
-  position: absolute;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  mix-blend-mode: difference;
-  z-index: 1;
+  filter: invert(1);
 }
 .modal {
   position: fixed;
