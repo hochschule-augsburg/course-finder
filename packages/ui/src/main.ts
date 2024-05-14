@@ -11,6 +11,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 // Plugins
 import { registerPlugins } from './plugins'
+// Styles
+import './styles/main.scss'
 
 const app = createApp(App)
 

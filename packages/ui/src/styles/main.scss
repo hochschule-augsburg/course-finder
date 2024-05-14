@@ -1,0 +1,30 @@
+:root {
+    --dialog-max-width: 32rem;
+    --floating-margin: 1.5rem;
+    --element-spacing-xs: 0.125rem;
+}
+
+.v-card:hover .v-card-title {
+    color: rgb(var(--v-theme-primary));
+}
+
+.v-expansion-panel:hover .v-card-title {
+    color: rgb(var(--v-theme-primary));
+}
+
+.v-icon:hover {
+    color: rgb(var(--v-theme-primary));
+}
+
+.v-btn:hover {
+    color: rgb(var(--v-theme-primary));
+}
+
+.v-list-item:hover {
+    color: rgb(var(--v-theme-primary));
+}
+
+a {
+    text-decoration: none;
+    color: rgb(var(--v-theme-primary));
+}
