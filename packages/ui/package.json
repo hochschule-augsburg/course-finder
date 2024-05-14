@@ -33,6 +33,7 @@
     "vue": "^3.4.25",
     "vue-i18n": "9",
     "vue-pdf-embed": "^2.0.3",
+    "vuedraggable": "^4.1.0",
     "vuetify": "^3.5.17"
   },
   "devDependencies": {

@@ -6,7 +6,7 @@ import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { merge } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VIcon } from 'vuetify/components'
+import Draggable from 'vuedraggable'
 
 import type { OfferedCourseData } from './types'
 
@@ -116,89 +116,48 @@ const editOfferedCourse = ref<number>(-1)
 
 <template>
   <div>
-    <!-- TODO reactivity-->
-    <div style="display: flex">
-      <div
-        class="drop-zone"
-        @dragenter.prevent
-        @dragover.prevent
-        @drop="onDrop($event, 'table1')"
-      >
-        <div>{{ t('available-courses') }}</div>
-        <div class="left-column">
-          <div
-            v-for="subject in tableOne.slice(0, Math.ceil(tableOne.length / 2))"
-            :key="subject.moduleCode"
-            class="drag-el"
-            draggable="true"
-            @dragstart="startDrag($event, subject.moduleCode, 'table1')"
-          >
-            {{ locale === 'en' ? subject.title.en : subject.title.de }}
-          </div>
-        </div>
+    <VRow>
+      <VCol cols="12" md="6">
+        {{ t('available-courses') }}
+      </VCol>
+      <VCol cols="12" md="6">
+        {{ t('offered-courses') }}
+      </VCol>
+    </VRow>
 
-        <div class="right-column">
-          <div
-            v-for="subject in tableOne.slice(Math.ceil(tableOne.length / 2))"
-            :key="subject.moduleCode"
-            class="drag-el"
-            draggable="true"
-            @dragstart="startDrag($event, subject.moduleCode, 'table1')"
-          >
-            {{ locale === 'en' ? subject.title.en : subject.title.de }}
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="drop-zone"
-        @dragenter.prevent
-        @dragover.prevent
-        @drop="onDrop($event, 'table2')"
-      >
-        <div>{{ t('offered-courses') }}</div>
-        <div
-          v-for="(subject, index) in offeredCoursesArray"
-          :key="subject.moduleCode"
-          class="drag-el"
-          draggable="true"
-          @dragstart="startDrag($event, subject.moduleCode, 'table2')"
+    <br />
+    <VRow>
+      <VCol class="off-course" cols="12" md="6">
+        <Draggable
+          :list="tableOne"
+          class="list-group"
+          ghost-class="ghost"
+          group="courses"
+          item-key="moduleCode"
         >
-          {{
-            locale === 'en' ? subject.Course.title.en : subject.Course.title.de
-          }}
-          <VIcon
-            class="pencil-icon"
-            size="20"
-            @click="editOfferedCourse = index"
-          >
-            mdi-pencil
-          </VIcon>
-          <div>{{ t('type') }}: {{ subject.appointments.type }}</div>
-          <div
-            v-for="(timespan, appointIndex) in subject.appointments.dates"
-            :key="appointIndex"
-          >
-            <div>
-              <strong>{{ t('from') }}:</strong>
-              {{ getDisplayDate(timespan.from) }}
-              <strong>{{ t('to') }}:</strong>
-              {{ getDisplayDate(timespan.to) }}
+          <template #item="{ element }">
+            <div class="list-group-item">
+              {{ element.title.en }}
             </div>
-          </div>
-          <div>
-            {{ t('min-participants') }}: {{ subject.minParticipants }}
-            <template v-if="subject.maxParticipants">
-              {{ t('max-participants') }}:
-              {{ subject.maxParticipants }}
-            </template>
-          </div>
-          <div v-if="subject.extraInfo">
-            {{ t('extra-info') }}: {{ subject.extraInfo }}
-          </div>
-        </div>
-      </div>
-    </div>
+          </template>
+        </Draggable>
+      </VCol>
+      <VCol class="off-course" cols="12" md="6">
+        <Draggable
+          :list="offeredCoursesArray"
+          class="list-group"
+          ghost-class="ghost"
+          group="courses"
+          item-key="moduleCode"
+        >
+          <template #item="{ element }">
+            <div class="list-group-item">
+              {{ element.title.en }}
+            </div>
+          </template>
+        </Draggable>
+      </VCol>
+    </VRow>
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
@@ -281,5 +240,10 @@ $paddingValue: 1%;
 .right-column {
   float: right;
   width: 50%;
+}
+
+.off-course {
+  max-height: 700px;
+  overflow-y: auto;
 }
 </style>
