@@ -39,11 +39,18 @@ function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
   return currentOption === 'fallback' ? 'prio' : 'fallback'
 }
 
-function back() {
-  visible.value = false
-}
+async function autoFill() {
+  const formValidation = await form.value?.validate()
 
-function autoFill() {
+  if (enrollmentStore.enrolledSubjects.some((s) => !s.autoFillOption)) {
+    form.value?.items.slice(1).forEach((item, index) => {
+      if (!enrollmentStore.enrolledSubjects[index].autoFillOption) {
+        item.errorMessages.push(t('select-autofill'))
+      }
+    })
+    return
+  }
+
   let remPoints = MAX_POINTS
 
   const fallbackSubjects = enrollmentStore.enrolledSubjects.filter(
@@ -66,8 +73,8 @@ function autoFill() {
   })
 }
 
-const pointInputRules = [
-  (i: string) => /^[0-9]\d*$/.test(i || '0') || t('integer-input'), // check is input is valid int >= 0
+const integerInputRules = [
+  (i: string) => /^[0-9]\d*$/.test(i) || t('integer-input'), // check is input is valid int >= 0
 ]
 
 async function validate() {
@@ -91,6 +98,9 @@ async function validate() {
 
   try {
     await enrollmentStore.enroll(creditsNeeded.value)
+    enrollmentStore.enrolledSubjects.forEach(
+      (s) => (s.autoFillOption = undefined),
+    )
   } catch (error) {
     console.log(error)
   } finally {
@@ -106,7 +116,7 @@ function reset() {
 </script>
 
 <template>
-  <VDialog v-model:model-value="visible" max-width="500">
+  <VDialog v-model:model-value="visible" max-width="500" persistent>
     <SubjectDialog
       v-model:visible="showSubjectDialog"
       :subject="selectedSubject"
@@ -117,30 +127,21 @@ function reset() {
       max-width="var(--dialog-max-width)"
       rounded="lg"
     >
-      <div class="d-flex justify-space-between mb-2">
-        <VBtn
-          :text="t('global.back')"
-          prepend-icon="mdi-arrow-left"
-          variant="plain"
-          @click="back"
-        />
-        <VBtn icon="mdi-pen" size="small" @click="autoFill" />
-      </div>
       <VForm ref="form">
         <VTextField
           v-model.number="creditsNeeded"
           :label="t('credits-wanted')"
+          :rules="integerInputRules"
           color="rgb(var(--v-theme-primary))"
-          hide-details
           required
         />
-        <VDivider :thickness="2" class="my-4" />
+        <VDivider :thickness="2" class="mt-0 mb-4" />
         <VTextField
           v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"
           :key="subject.moduleCode"
           :label="locale === 'de' ? subject.title.de : subject.title.en"
-          :rules="pointInputRules"
+          :rules="integerInputRules"
           color="rgb(var(--v-theme-primary))"
           required
         >
@@ -161,8 +162,21 @@ function reset() {
           </template>
         </VTextField>
         <VRow align="center" class="mt-2 mb-1 px-3">
-          <VBtn icon="mdi-restore" size="small" @click="reset" />
+          <VBtn size="x-small" icon @click="reset">
+            <VIcon>mdi-restore</VIcon>
+            <VTooltip activator="parent" location="bottom" open-delay="500">
+              {{ t('reset') }}
+            </VTooltip>
+          </VBtn>
           <VSpacer />
+          <VBtn class="mr-3" size="x-small" icon @click="autoFill">
+            <VIcon>mdi-pen</VIcon>
+            oder
+            <VIcon>mdi-auto-fix</VIcon>
+            <VTooltip activator="parent" location="bottom" open-delay="500">
+              {{ t('autofill') }}
+            </VTooltip>
+          </VBtn>
           <VBtn :loading="loading" :text="t('register')" @click="validate" />
         </VRow>
       </VForm>
@@ -183,10 +197,16 @@ de:
   integer-input: Bitte eine ganze Zahl eingeben!
   credits-wanted: Bestrebte Credit Points
   points-sum-100: Insgesamt 100 Punkte vergeben!
+  select-autofill: Autofill Option ungültig
+  reset: Zurücksetzen
+  autofill: Autofill
 en:
   register: Register
   field-required: This field is required!
   integer-input: This field must be an integer!
   credits-wanted: Credits wanted
   points-sum-100: allocate 100 points in total!
+  select-autofill: Invalid autofill option
+  reset: Reset
+  autofill: Autofill
 </i18n>
