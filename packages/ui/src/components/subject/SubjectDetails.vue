@@ -9,6 +9,7 @@ import VuePdfEmbed from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/style/annotationLayer.css'
 import 'vue-pdf-embed/dist/style/index.css'
 import 'vue-pdf-embed/dist/style/textLayer.css'
+import { useTheme } from 'vuetify'
 import {
   VBtn,
   VCarousel,
@@ -30,6 +31,7 @@ const { state: pdfSource } = useAsyncState(
       .pdf,
   undefined,
 )
+const theme = useTheme()
 const fullscreen = ref(false)
 </script>
 
@@ -179,17 +181,21 @@ const fullscreen = ref(false)
           icon="mdi-fullscreen"
           @click="fullscreen = true"
         />
+        <div
+          v-if="theme.global.name.value === 'customDarkTheme'"
+          class="pdf-view-dark"
+        />
         <VuePdfEmbed
           v-if="pdfSource"
           :source="pdfSource"
-          class="pdfView"
+          class="pdf-view"
           annotation-layer
           text-layer
         />
         <iframe
           v-else-if="subject.infoUrl"
           :src="subject.infoUrl"
-          class="pdfView"
+          class="pdf-view"
         />
       </VCarouselItem>
     </VCarousel>
@@ -199,17 +205,21 @@ const fullscreen = ref(false)
         icon="mdi-fullscreen-exit"
         @click="fullscreen = false"
       />
+      <div
+        v-if="theme.global.name.value === 'customDarkTheme'"
+        class="pdf-view-dark"
+      />
       <VuePdfEmbed
         v-if="pdfSource"
         :source="pdfSource"
-        class="pdfView"
+        class="pdf-view"
         annotation-layer
         text-layer
       />
       <iframe
         v-else-if="subject.infoUrl"
         :src="subject.infoUrl"
-        class="pdfView"
+        class="pdf-view"
       />
     </VDialog>
   </div>
@@ -222,10 +232,21 @@ const fullscreen = ref(false)
   right: var(--floating-margin);
   z-index: 3;
 }
-.pdfView {
+.pdf-view {
   height: 100%;
   width: 100%;
   overflow-y: scroll;
+}
+.pdf-view-dark {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  mix-blend-mode: difference;
+  z-index: 1;
 }
 .modal {
   position: fixed;
