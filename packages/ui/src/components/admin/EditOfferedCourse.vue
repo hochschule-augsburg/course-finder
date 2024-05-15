@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
+import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTypes'
+
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -16,21 +19,40 @@ import {
   VTextarea,
 } from 'vuetify/components'
 
-import type { OfferedCourseData } from './types'
-
 const props = defineProps<{
-  offeredCourse?: OfferedCourseData
+  enableDelete?: boolean
+  offeredCourse?: AdminOfferedCourse
   visible?: boolean
 }>()
 const emits = defineEmits<{
-  abort: []
-  submit: [FormData: OfferedCourseData]
+  cancel: []
+  submit: [FormData: AdminOfferedCourse | undefined]
 }>()
 
-const formData = ref<OfferedCourseData>()
+const formData = ref<
+  { appointments: CourseAppointmentsJson<string>; for: string } & Omit<
+    AdminOfferedCourse,
+    'appointments' | 'for'
+  >
+>()
 
 watchEffect(() => {
-  formData.value = Object.assign({}, props.offeredCourse)
+  if (!props.offeredCourse) {
+    formData.value = undefined
+    return
+  }
+  formData.value = {
+    ...props.offeredCourse,
+    appointments: {
+      dates: props.offeredCourse?.appointments.dates.map((e) => ({
+        from: e.from.toISOString(),
+        to: e.to.toISOString(),
+      })),
+      type: props.offeredCourse?.appointments.type,
+    },
+    //TODO change back to list
+    for: props.offeredCourse?.for.join(','),
+  }
 })
 
 const { locale, t } = useI18n()
@@ -39,14 +61,24 @@ function submit() {
   if (!formData.value) {
     return
   }
-  emits('submit', formData.value)
+  emits('submit', {
+    ...formData.value,
+    appointments: {
+      ...formData.value.appointments,
+      dates: formData.value.appointments.dates.map((e) => ({
+        from: new Date(e.from),
+        to: new Date(e.to),
+      })),
+    },
+    for: formData.value.for.split(','),
+  })
 }
 
 function addDate() {
   const last = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
   formData.value?.appointments.dates.push({
-    from: last,
-    to: last,
+    from: last.toString(),
+    to: last.toString(),
   })
 }
 
@@ -61,7 +93,7 @@ function removeDate() {
     max-width="1000"
     min-width="auto"
     transition="false"
-    @update:model-value="$emit('abort')"
+    @update:model-value="$emit('cancel')"
   >
     <VCard
       v-if="formData"
@@ -163,8 +195,18 @@ function removeDate() {
       </VCardText>
       <VDivider />
       <template #actions>
-        <VBtn :text="t('global.cancel')" @click="$emit('abort')" />
-        <VBtn :text="t('global.save')" class="ms-auto" @click="submit" />
+        <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
+        <VSpacer />
+        <VBtn
+          v-if="enableDelete"
+          :text="t('global.delete')"
+          @click="$emit('submit', undefined)"
+        />
+        <VBtn
+          :disabled="!formData.moduleCode"
+          :text="t('global.save')"
+          @click="submit"
+        />
       </template>
     </VCard>
   </VDialog>
