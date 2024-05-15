@@ -35,7 +35,7 @@ const fullscreen = ref(false)
     <VCarousel
       :show-arrows="false"
       color="#000000"
-      height="60vh"
+      height="68vh"
       hide-delimiter-background
     >
       <VCarouselItem>
@@ -45,6 +45,15 @@ const fullscreen = ref(false)
           height="100%"
           rounded="lg"
         >
+          <div class="mb-1 d-flex align-end">
+            <VIcon class="mr-3" size="32">mdi-lectern</VIcon>
+            <h4>Dozenten</h4>
+          </div>
+          <div>
+            <p class="mb-4 px-3">
+              {{ subject.lecturers.join(', ') }}
+            </p>
+          </div>
           <div class="mb-1 d-flex align-end">
             <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
             <h4>Arbeitsaufwand</h4>

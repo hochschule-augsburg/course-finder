@@ -1,27 +1,35 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/CoursesStore'
-
 import { useCoursesStore } from '@/stores/CoursesStore'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { VCol, VContainer, VRow } from 'vuetify/components'
 
-const coursesStore = useCoursesStore()
-const showSubjectDialog = ref<boolean>(false)
-const selectedSubject = ref<Subject | undefined>(undefined)
+const route = useRoute()
+const router = useRouter()
 
-function openSubjectDialog(moduleCode: string) {
-  selectedSubject.value = coursesStore.subjects.find(
-    (s) => s.moduleCode === moduleCode,
-  )
-  showSubjectDialog.value = true
-}
+const coursesStore = useCoursesStore()
+const selectedModuleCode = ref<string | undefined>(
+  route.fullPath?.split('#')[1],
+)
+const selectedSubject = computed(() =>
+  coursesStore.subjects.find((s) => s.moduleCode === selectedModuleCode.value),
+)
+
+watch(selectedModuleCode, () => {
+  if (selectedModuleCode.value) {
+    void router.push(`#${selectedModuleCode.value}`)
+  } else {
+    void router.push('')
+  }
+})
 </script>
 
 <template>
   <div>
     <SubjectDialog
-      v-model:visible="showSubjectDialog"
       :subject="selectedSubject"
+      :visible="!!selectedSubject"
+      @update:visible="selectedModuleCode = undefined"
     />
     <VContainer>
       <VRow justify="center">
@@ -32,7 +40,7 @@ function openSubjectDialog(moduleCode: string) {
         >
           <SubjectTile
             :subject
-            @click="openSubjectDialog(subject.moduleCode)"
+            @click="selectedModuleCode = subject.moduleCode"
           />
         </VCol>
       </VRow>
