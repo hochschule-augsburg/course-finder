@@ -33,14 +33,11 @@ const autoFillOptions = {
 }
 
 function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
-  if (!currentOption) {
-    return 'prio'
-  }
   return currentOption === 'fallback' ? 'prio' : 'fallback'
 }
 
 async function autoFill() {
-  const formValidation = await form.value?.validate()
+  await form.value?.validate()
 
   if (enrollmentStore.enrolledSubjects.some((s) => !s.autoFillOption)) {
     form.value?.items.slice(1).forEach((item, index) => {
@@ -70,6 +67,14 @@ async function autoFill() {
   const prioPoints = Math.floor(remPoints / prioSubjects.length)
   prioSubjects.forEach((s) => {
     s.points = prioPoints
+    remPoints -= prioPoints
+  })
+
+  prioSubjects.forEach((s) => {
+    if (remPoints > 0) {
+      s.points++
+      remPoints--
+    }
   })
 }
 
@@ -98,9 +103,9 @@ async function validate() {
 
   try {
     await enrollmentStore.enroll(creditsNeeded.value)
-    enrollmentStore.enrolledSubjects.forEach(
-      (s) => (s.autoFillOption = undefined),
-    )
+    // enrollmentStore.enrolledSubjects.forEach(
+    //   (s) => (s.autoFillOption = 'undefined'),
+    // )
   } catch (error) {
     console.log(error)
   } finally {
@@ -153,11 +158,7 @@ function reset() {
                 )
               "
             >
-              {{
-                subject.autoFillOption
-                  ? autoFillOptions[subject.autoFillOption].icon
-                  : 'mdi-alpha-m-circle'
-              }}
+              {{ autoFillOptions[subject.autoFillOption].icon }}
             </VIcon>
           </template>
         </VTextField>
@@ -169,26 +170,13 @@ function reset() {
             </VTooltip>
           </VBtn>
           <VSpacer />
-          <VBtn class="mr-3" size="x-small" icon @click="autoFill">
-            <VIcon>mdi-pen</VIcon>
-            oder
-            <VIcon>mdi-auto-fix</VIcon>
-            <VTooltip activator="parent" location="bottom" open-delay="500">
-              {{ t('autofill') }}
-            </VTooltip>
-          </VBtn>
+          <VBtn :text="t('autofill')" class="mr-3" @click="autoFill" />
           <VBtn :loading="loading" :text="t('register')" @click="validate" />
         </VRow>
       </VForm>
     </VSheet>
   </VDialog>
 </template>
-
-<style scoped lang="scss">
-.container {
-  height: 100%;
-}
-</style>
 
 <i18n lang="yaml">
 de:

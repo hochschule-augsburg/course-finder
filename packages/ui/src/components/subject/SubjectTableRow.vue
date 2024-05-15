@@ -20,7 +20,7 @@ const { locale, t } = useI18n()
   <div>
     <VExpansionPanelTitle color="rgb(var(--v-theme-secondary))">
       <EnrollCheckbox v-if="subject.offeredCourse" :subject class="checkbox" />
-      <VContainer class="ma-0">
+      <VContainer class="ma-0 ml-2">
         <VRow no-gutters>
           <VCol cols="5">
             <strong class="v-card-title pl-0">
@@ -102,7 +102,7 @@ const { locale, t } = useI18n()
 <style scoped lang="scss">
 .checkbox {
   position: absolute;
-  top: var(--element-spacing-xs);
+  top: var(--element-spacing-s);
   left: var(--element-spacing-xs);
 }
 </style>

@@ -24,7 +24,7 @@ const infoDialogVisible = ref(false)
 </script>
 
 <template>
-  <div class="d-flex justify-space-between align-center navbar-container">
+  <div class="d-flex justify-space-between align-center w-100">
     <RouterLink to="/">
       <VToolbarTitle :text="t('global.title')" class="ps-5" />
     </RouterLink>
@@ -113,12 +113,6 @@ const infoDialogVisible = ref(false)
     </VMenu>
   </div>
 </template>
-
-<style scoped lang="scss">
-.navbar-container {
-  width: 100%;
-}
-</style>
 
 <i18n lang="yaml">
 en:

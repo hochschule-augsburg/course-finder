@@ -7,7 +7,7 @@ import type { Subject } from './CoursesStore'
 import { useCoursesStore } from './CoursesStore'
 
 export type EnrolledCourse = {
-  autoFillOption?: 'fallback' | 'prio'
+  autoFillOption: 'fallback' | 'prio'
   moduleCode: string
   points: number
   title: { de?: string; en?: string }
@@ -93,13 +93,45 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
         (e) => e.moduleCode === moduleCode,
       )
 
+      const remPoints = enrolledSubjects.value[index].points
       enrolledSubjects.value.splice(index, 1)
+
+      await splitRemPoints(remPoints)
 
       await trpc.enroll.delete.mutate({
         moduleCode,
         phaseId: coursesStore.currentPhase.id,
       })
     }
+  }
+
+  function splitRemPoints(remPoints: number) {
+    const extraPoints = Math.floor(remPoints / enrolledSubjects.value.length)
+
+    enrolledSubjects.value.forEach((s) => {
+      s.points += extraPoints
+      remPoints -= extraPoints
+    })
+
+    enrolledSubjects.value.forEach((s) => {
+      if (remPoints > 0) {
+        s.points++
+        remPoints--
+      }
+    })
+
+    return Promise.all(
+      enrolledSubjects.value.map(
+        (s) =>
+          coursesStore.currentPhase?.id &&
+          trpc.enroll.upsert.mutate({
+            creditsNeeded: undefined,
+            moduleCode: s.moduleCode,
+            phaseId: coursesStore.currentPhase.id,
+            points: s.points,
+          }),
+      ),
+    )
   }
 
   function extendEnrolled(enrolled: {
@@ -114,6 +146,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     }
     return {
       ...enrolled,
+      autoFillOption: 'prio',
       title: course.title,
     }
   }

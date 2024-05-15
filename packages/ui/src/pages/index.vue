@@ -22,7 +22,7 @@ const enrollFormVisible = ref(false)
 </script>
 
 <template>
-  <div class="container">
+  <div class="h-100">
     <EnrollmentOverview />
     <EnrollmentForm v-model:visible="enrollFormVisible" />
     <div class="pt-1">
@@ -52,9 +52,6 @@ const enrollFormVisible = ref(false)
 @import '@/styles/mixins';
 .pending-indicator {
   @include indicator;
-}
-.container {
-  height: 100%;
 }
 .floating {
   position: fixed;
