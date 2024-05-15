@@ -8,7 +8,6 @@ import type {
 import { trpc } from '@/api/trpc'
 import { useAsyncState } from '@vueuse/core'
 import { isWithinInterval } from 'date-fns'
-import { memoize } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -16,7 +15,9 @@ export type Course = Omit<ApiCourse, 'pdf'>
 
 export type Phase = EnrollPhase
 
-export type AdminOfferedCourse = { Course: { title: I18nJson } } & OfferedCourse
+export type AdminOfferedCourse = {
+  Course: { lecturers: string[]; title: I18nJson }
+} & OfferedCourse
 
 export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const courses = ref<Course[]>([])
@@ -25,7 +26,11 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const assignments = ref<
     Record<
       number,
-      Array<{ count: number; moduleCode: string; title?: I18nJson }>
+      Array<{
+        count: number
+        moduleCode: string
+        title?: I18nJson
+      }>
     >
   >({})
 
@@ -37,20 +42,6 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
       }),
     )
   })
-  const fetchOfferedCourses = memoize(async (phaseId: number) => {
-    phaseOfferedCourses.value[phaseId] =
-      await trpc.admin.enroll.offeredCourse.list.query({
-        phaseId,
-      })
-  })
-  const fetchAssignments = memoize(async (phaseId: number) => {
-    assignments.value[phaseId] = (
-      await trpc.admin.assign.list.query({
-        phaseId,
-      })
-    ).map(extendAssignment)
-  })
-
   return {
     assignments,
     courses,
@@ -73,10 +64,50 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
     ])
   }
 
+  async function fetchOfferedCourses(phaseId: number) {
+    if (phaseOfferedCourses.value[phaseId]) {
+      return
+    }
+    phaseOfferedCourses.value[phaseId] = (
+      await trpc.admin.enroll.offeredCourse.list.query({
+        phaseId,
+      })
+    ).map(extendOfferedCourse)
+  }
+
+  async function fetchAssignments(phaseId: number) {
+    if (assignments.value[phaseId]) {
+      return
+    }
+    assignments.value[phaseId] = (
+      await trpc.admin.assign.list.query({
+        phaseId,
+      })
+    ).map(extendAssignment)
+  }
+
+  function extendOfferedCourse<
+    T extends { Course: object; moduleCode: string },
+  >(offeredCourse: T): { Course: { lecturers: string[] } } & T {
+    const course = courses.value.find(
+      (e) => e.moduleCode === offeredCourse.moduleCode,
+    )
+    return {
+      ...offeredCourse,
+      Course: {
+        ...offeredCourse.Course,
+        lecturers: course?.lecturers ?? [],
+      },
+    }
+  }
+
   function extendAssignment(assignment: { count: number; moduleCode: string }) {
     const course = courses.value.find(
       (e) => e.moduleCode === assignment.moduleCode,
     )
-    return { ...assignment, title: course?.title }
+    return {
+      ...assignment,
+      title: course?.title,
+    }
   }
 })

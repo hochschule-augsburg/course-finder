@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Phase } from '@/stores/admin/AdminCoursesStore'
+
 import { trpc } from '@/api/trpc'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { isWithinInterval } from 'date-fns'
@@ -17,8 +19,19 @@ import {
 
 import type { OfferedCourseData } from './types'
 
+const props = defineProps<{ phaseId?: number }>()
+
 const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
+
+const formData = ref<
+  { end: string; id?: number; start: string } & Omit<
+    Phase,
+    'end' | 'id' | 'start'
+  >
+>()
+
+void initFormData()
 
 const oldPhasesSelect = computed(() =>
   adminCoursesStore.phases
@@ -52,14 +65,10 @@ function clearSelection() {
 
 const sharedObject = ref<OfferedCourseData[]>([])
 
-const formData = ref({
-  description: { de: '', en: '' }, // [I18n]
-  end: new Date().toISOString(),
-  start: new Date().toISOString(),
-  title: { de: '', en: '' }, // [I18n]
-})
-
 async function createEnrollment() {
+  if (!formData.value) {
+    return
+  }
   try {
     await trpc.admin.enroll.phase.create.mutate({
       description: {
@@ -77,11 +86,35 @@ async function createEnrollment() {
   }
   sharedObject.value = []
 }
+
+async function initFormData() {
+  if (props.phaseId) {
+    await adminCoursesStore.fetchOfferedCourses(props.phaseId)
+    const phase = adminCoursesStore.phases.find((e) => e.id === props.phaseId)
+    if (!phase) {
+      return
+    }
+    sharedObject.value = adminCoursesStore.phaseOfferedCourses[props.phaseId]
+    formData.value = {
+      ...phase,
+      end: phase.end.toISOString(),
+      start: phase.start.toISOString(),
+    }
+
+    return
+  }
+  formData.value = {
+    description: { de: '', en: '' },
+    end: '',
+    start: '',
+    title: { de: '', en: '' },
+  }
+}
 </script>
 
 <template>
   <VForm>
-    <VContainer>
+    <VContainer v-if="formData">
       <VRow justify="center">
         <VCol cols="12" sm="5">
           <h1>{{ t('create-enrollment') }}</h1>

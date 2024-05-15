@@ -1,17 +1,9 @@
 <script lang="ts" setup>
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import { VBtn, VCol, VRow } from 'vuetify/components'
 
 const route = useRoute()
-const phaseId = Number(route.params.id)
-
-const adminCoursesStore = useAdminCoursesStore()
-onBeforeMount(() => {
-  void adminCoursesStore.fetchOfferedCourses(phaseId)
-})
-/* eslint-disable vue/no-multiple-template-root */
+const phaseId = Number(route.params.phaseId)
 </script>
 
 <template>

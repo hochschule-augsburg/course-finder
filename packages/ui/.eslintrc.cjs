@@ -290,6 +290,7 @@ module.exports = {
       files: ['./src/pages/**/*.vue'],
       rules: {
         'vue/multi-word-component-names': 'off',
+        'vue/no-multiple-template-root': 'off',
       },
     },
   ],
