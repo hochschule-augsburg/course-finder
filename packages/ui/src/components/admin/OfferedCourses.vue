@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import type { OfferedCourseData } from '@/components/admin/types'
 import type { Subject } from '@/stores/CoursesStore'
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { merge } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
+import { VCol, VDivider, VRow } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 
@@ -18,7 +19,7 @@ const { locale, t } = useI18n()
 /*Following code handles the logic for drag and drop */
 const tableOne: Course[] = reactive([...coursesStore.courses])
 
-function startDrag(event: DragEvent, moduleCode: string, table: string): void {
+/*function startDrag(event: DragEvent, moduleCode: string, table: string): void {
   if (event.dataTransfer) {
     event.dataTransfer.dropEffect = 'move'
     event.dataTransfer.effectAllowed = 'move'
@@ -66,7 +67,7 @@ function onDrop(event: DragEvent, droppedTable: string): void {
       handlePuttingBackLogic(foundSubject)
     }
   }
-}
+}*/
 
 const removeStore = ref<OfferedCourseData[]>([])
 
@@ -77,9 +78,9 @@ function handlePuttingBackLogic(subject: Subject) {
     (course) => course.moduleCode === subject.moduleCode,
   )
   //Remove the data from the shared object
-  offeredCoursesArray.value = offeredCoursesArray.value.filter(
-    (course) => course.moduleCode !== subject.moduleCode,
-  )
+  /*offeredCoursesArray.value = offeredCoursesArray.value.filter(
+    (course) => course.Course.moduleCode !== subject.moduleCode,
+  )*/
   //Remove old data in case it is already in removeStore
   removeStore.value = removeStore.value.filter(
     (data) => data.moduleCode !== subject.moduleCode,
@@ -103,8 +104,10 @@ function handlePuttingInAgainLogic(subject: Subject) {
   if (offeredCourseData !== undefined) {
     offeredCourseData.forEach(function (data) {
       offeredCoursesArray.value.push(data)
+      return true
     })
   }
+  return false
 }
 
 function getDisplayDate(date: Date) {
@@ -112,6 +115,78 @@ function getDisplayDate(date: Date) {
 }
 
 const editOfferedCourse = ref<number>(-1)
+
+interface ChangeEvent {
+  added?: {
+    element: Course | OfferedCourseData
+    newIndex: number
+  }
+  moved?: {
+    element: Course | OfferedCourseData
+    newIndex: number
+    oldIndex: number
+  }
+  removed?: {
+    element: Course | OfferedCourseData
+    oldIndex: number
+  }
+}
+
+function handleChangeTableOne(event: ChangeEvent, addItem?: OfferedCourseData) {
+  console.log(event, 'table1')
+  //Add event
+  if (event.added && addItem) {
+    //Convert offeredCourseData to Course
+    const convertedItem = coursesStore.courses.find(
+      (item) => item.moduleCode === addItem.Course.moduleCode,
+    )
+    if (convertedItem && event.added.newIndex) {
+      //Insert converted item into tableOne
+      handlePuttingBackLogic(convertedItem)
+      tableOne.splice(event.added.newIndex, 0, convertedItem)
+    }
+    //Remove event
+  } else if (
+    event.removed !== undefined &&
+    event.removed.oldIndex !== undefined
+  ) {
+    tableOne.splice(event.removed.oldIndex, 1)
+  }
+}
+
+function handleChangeTableTwo(event: ChangeEvent, addItem?: Course) {
+  console.log(event, 'table2')
+  //Add event
+  if (event.added && addItem) {
+    //Insert new offeredCourseData into tableTwo
+    if (!handlePuttingInAgainLogic(addItem)) {
+      offeredCoursesArray.value.splice(event.added.newIndex, 0, {
+        Course: {
+          lecturers: addItem.lecturers,
+          moduleCode: addItem.moduleCode,
+          title: addItem.title,
+        },
+        appointments: { dates: [], type: 'weekly' },
+        extraInfo: null,
+        for: [],
+        maxParticipants: null,
+        minParticipants: 0,
+      })
+      console.log(offeredCoursesArray.value)
+    }
+    //Remove event
+  } else if (
+    event.removed !== undefined &&
+    event.removed.oldIndex !== undefined
+  ) {
+    offeredCoursesArray.value.splice(event.removed.oldIndex, 1)
+  }
+  console.log(offeredCoursesArray.value)
+}
+
+function getModuleCode(item: OfferedCourseData) {
+  return item.Course.moduleCode
+}
 </script>
 
 <template>
@@ -119,46 +194,51 @@ const editOfferedCourse = ref<number>(-1)
     <VRow>
       <VCol cols="12" md="6">
         {{ t('available-courses') }}
+        <VDivider opacity="0" thickness="15px" />
+        <div class="off-course">
+          <Draggable
+            :list="tableOne"
+            class="list-group"
+            group="courses"
+            item-key="moduleCode"
+            @change="handleChangeTableOne($event, $event.added?.element)"
+          >
+            <template #item="{ element }">
+              <div class="list-group-item">
+                {{ element.title.en }}
+              </div>
+            </template>
+          </Draggable>
+        </div>
       </VCol>
       <VCol cols="12" md="6">
         {{ t('offered-courses') }}
+        <VDivider opacity="0" thickness="15px" />
+        <div class="off-course">
+          <Draggable
+            :item-key="getModuleCode"
+            :list="offeredCoursesArray"
+            class="list-group"
+            group="courses"
+            @change="handleChangeTableTwo($event, $event.added?.element)"
+          >
+            <template #item="{ element }">
+              <div class="list-group-item">
+                <div>
+                  {{
+                    locale === 'en'
+                      ? element.Course.title.en
+                      : element.Course.title.de
+                  }}
+                  <!--TODO: The rest of the fields-->
+                </div>
+              </div>
+            </template>
+          </Draggable>
+        </div>
       </VCol>
     </VRow>
-
-    <br />
-    <VRow>
-      <VCol class="off-course" cols="12" md="6">
-        <Draggable
-          :list="tableOne"
-          class="list-group"
-          ghost-class="ghost"
-          group="courses"
-          item-key="moduleCode"
-        >
-          <template #item="{ element }">
-            <div class="list-group-item">
-              {{ element.title.en }}
-            </div>
-          </template>
-        </Draggable>
-      </VCol>
-      <VCol class="off-course" cols="12" md="6">
-        <Draggable
-          :list="offeredCoursesArray"
-          class="list-group"
-          ghost-class="ghost"
-          group="courses"
-          item-key="moduleCode"
-        >
-          <template #item="{ element }">
-            <div class="list-group-item">
-              {{ element.title.en }}
-            </div>
-          </template>
-        </Draggable>
-      </VCol>
-    </VRow>
-    <EditOfferedCourse
+    <!--<EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
       @cancel="editOfferedCourse = -1"
@@ -174,7 +254,7 @@ const editOfferedCourse = ref<number>(-1)
           editOfferedCourse = -1
         }
       "
-    />
+    />-->
   </div>
 </template>
 
@@ -243,7 +323,7 @@ $paddingValue: 1%;
 }
 
 .off-course {
-  max-height: 700px;
+  max-height: 40em;
   overflow-y: auto;
 }
 </style>

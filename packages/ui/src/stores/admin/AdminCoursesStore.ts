@@ -1,3 +1,4 @@
+import type { OfferedCourseData } from '@/components/admin/types'
 import type {
   Course as ApiCourse,
   EnrollPhase,
@@ -11,7 +12,9 @@ import { isWithinInterval } from 'date-fns'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-export type Course = Omit<ApiCourse, 'pdf'>
+export type Course = {
+  offeredCourseData?: OfferedCourseData
+} & Omit<ApiCourse, 'pdf'>
 
 export type Phase = EnrollPhase
 
