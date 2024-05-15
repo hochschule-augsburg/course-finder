@@ -1,3 +1,4 @@
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { useUserStore } from '@/stores/UserStore'
 import { createRouter, createWebHistory } from 'vue-router/auto'
 
@@ -5,13 +6,18 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 })
 
-router.beforeEach(async (to) => {
+router.beforeEach(async (to, from) => {
   if (to.path.startsWith('/admin')) {
     const userStore = useUserStore()
     await userStore.initPromise
     if (userStore.user?.type !== 'Admin') {
       return { path: '/' }
     }
+    return
+  }
+  if (from.path.startsWith('/admin')) {
+    const courseStore = useCoursesStore()
+    courseStore.$reset()
   }
 })
 

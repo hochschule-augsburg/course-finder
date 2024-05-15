@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useIntervalFn } from '@vueuse/core'
 import { formatDuration, intervalToDuration } from 'date-fns'
@@ -47,8 +48,12 @@ function updateRemainingTime() {
       end: new Date(phase.value.end),
       start: now,
     })
+    // date-fns does not do weeks here
+    duration.weeks = Math.floor((duration.days ?? 0) / 7)
+    duration.days = (duration.days ?? 0) % 7
     remainingTime.value = formatDuration(duration, {
-      format: ['months', 'days', 'hours', 'minutes'],
+      format: ['months', 'weeks', 'days', 'hours', 'minutes'],
+      locale: getDateFnsLocale(locale.value),
     })
   }
 }
@@ -58,21 +63,28 @@ function updateRemainingTime() {
   <div>
     <div v-if="phase" class="current-phase">
       <h2>
-        {{ t('phase') }}:
         {{ locale === 'en' ? phase.title.en : phase.title.de }}
       </h2>
-      {{ t('start') }}:
+      <strong>{{ t('start') }}:</strong>
       {{ phase.startFormatted }}
       <br />
-      {{ t('end') }}:
+      <strong>{{ t('end') }}:</strong>
       {{ phase.endFormatted }}
       <br />
       <template v-if="remainingTime">
-        {{ t('remaining-time') }}: {{ remainingTime }}
+        <strong>{{ t('remaining-time') }}:</strong>
+        {{ remainingTime }}
       </template>
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.current-phase {
+  hyphens: auto;
+  white-space: wrap;
+}
+</style>
 
 <i18n lang="yaml">
 en:
