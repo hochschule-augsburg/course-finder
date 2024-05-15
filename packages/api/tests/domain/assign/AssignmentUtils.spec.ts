@@ -1,4 +1,4 @@
-import { isEqual, range, sumBy } from 'lodash-es'
+import { groupBy, isEqual, range, sumBy } from 'lodash-es'
 
 import type { AssignmentStudentController } from '../../../src/domain/assign/AssignmentControllers'
 
@@ -72,13 +72,13 @@ describe('AssignmentUtils', () => {
       ]
       // @ts-ignore
       const normalized = normalizeChoices(choices)
-      Object.values(
-        Object.groupBy(normalized, (choice) => choice.username),
-      ).forEach((choices) => {
-        expect(sumBy(choices, (e) => sumBy(e.StudentChoice, 'points'))).toBe(
-          1000,
-        )
-      })
+      Object.values(groupBy(normalized, (choice) => choice.username)).forEach(
+        (choices) => {
+          expect(sumBy(choices, (e) => sumBy(e.StudentChoice, 'points'))).toBe(
+            1000,
+          )
+        },
+      )
       expect(normalized).toEqual(
         (
           [
