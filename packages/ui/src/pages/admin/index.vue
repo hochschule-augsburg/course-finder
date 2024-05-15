@@ -18,7 +18,8 @@ const adminStore = useAdminCoursesStore()
         <VBtn
           :to="`admin/phase-${adminStore.currentPhase?.id}`"
           height="150"
-          style="text-align: left; text-transform: none"
+          style="text-align: left; text-transform: none; font-weight: normal"
+          width="350"
         >
           <EnrollmentPhase
             :phase-id="adminStore.currentPhase?.id"

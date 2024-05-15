@@ -135,13 +135,6 @@ model PhaseAssignment {
   StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
   offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode])
   moduleCode    String
-  ABC           ABC
 
   @@id([phaseId, tryNo, username, moduleCode])
-}
-
-enum ABC {
-  A
-  B
-  C
 }

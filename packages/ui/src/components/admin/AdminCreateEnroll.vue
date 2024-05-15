@@ -67,10 +67,7 @@ async function createEnrollment() {
         en: formData.value.description.en,
       },
       end: new Date(formData.value.end),
-      offeredCourses: sharedObject.value.map((e) => ({
-        ...e,
-        moduleCode: e.Course.moduleCode,
-      })),
+      offeredCourses: sharedObject.value,
       start: new Date(formData.value.start),
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })

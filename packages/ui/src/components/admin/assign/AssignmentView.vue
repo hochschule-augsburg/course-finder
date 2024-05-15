@@ -1,9 +1,17 @@
 <script lang="ts" setup>
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VCol, VContainer, VIcon, VRow, VTable } from 'vuetify/components'
+import { VBtn, VCol, VContainer, VRow, VTable } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
-const { t } = useI18n()
+const { locale, t } = useI18n()
+
+const adminCoursesStore = useAdminCoursesStore()
+
+onBeforeMount(() => {
+  void adminCoursesStore.fetchAssignments(props.phaseId)
+})
 </script>
 
 <template>
@@ -18,19 +26,21 @@ const { t } = useI18n()
     <VTable>
       <thead>
         <tr>
-          <th class="text-left">{{ t('no.') }}</th>
-          <th class="text-left">{{ t('name') }}</th>
-          <th class="text-left">{{ t('lecturer') }}</th>
-          <th>CP</th>
-          <th>SWS</th>
-          <th>
-            <VBtn @click="openNewDialog">
-              New &nbsp; <VIcon>mdi-invoice-text-plus</VIcon>
-            </VBtn>
-          </th>
+          <th>{{ t('module-code') }}</th>
+          <th>{{ t('title') }}</th>
+          <th>{{ t('count') }}</th>
         </tr>
       </thead>
-      <tbody />
+      <tbody>
+        <tr
+          v-for="course in adminCoursesStore.assignments[props.phaseId]"
+          :key="course.moduleCode"
+        >
+          <td>{{ course.moduleCode }}</td>
+          <td>{{ locale === 'en' ? course.title?.en : course.title?.de }}</td>
+          <td>{{ course.count }}</td>
+        </tr>
+      </tbody>
     </VTable>
   </VContainer>
 </template>

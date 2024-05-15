@@ -3,6 +3,7 @@ import type { Subject } from '@/stores/CoursesStore'
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { merge } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VIcon } from 'vuetify/components'
@@ -34,7 +35,7 @@ function onDrop(event: DragEvent, droppedTable: string): void {
     (item) => item.moduleCode === itemID,
   )
   const indexInTableTwo = offeredCoursesArray.value.findIndex(
-    (item) => item.Course.moduleCode === itemID,
+    (item) => item.moduleCode === itemID,
   )
   console.log(itemID, tableID, droppedTable, indexInTableOne, indexInTableTwo)
 
@@ -48,6 +49,8 @@ function onDrop(event: DragEvent, droppedTable: string): void {
         for: [],
         maxParticipants: null,
         minParticipants: 0,
+        moduleCode: foundSubject.moduleCode,
+        moodleCourse: null,
       })
       tableOne.splice(indexInTableOne, 1)
       handlePuttingInAgainLogic(foundSubject)
@@ -71,15 +74,15 @@ function handlePuttingBackLogic(subject: Subject) {
   console.log(subject)
   //Retrieve the data from the shared object
   const offeredCourseData = offeredCoursesArray.value.filter(
-    (course) => course.Course.moduleCode === subject.moduleCode,
+    (course) => course.moduleCode === subject.moduleCode,
   )
   //Remove the data from the shared object
   offeredCoursesArray.value = offeredCoursesArray.value.filter(
-    (course) => course.Course.moduleCode !== subject.moduleCode,
+    (course) => course.moduleCode !== subject.moduleCode,
   )
   //Remove old data in case it is already in removeStore
   removeStore.value = removeStore.value.filter(
-    (data) => data.Course.moduleCode !== subject.moduleCode,
+    (data) => data.moduleCode !== subject.moduleCode,
   )
   //Put retrieved data in removeStore
   offeredCourseData.forEach(function (data) {
@@ -90,11 +93,11 @@ function handlePuttingBackLogic(subject: Subject) {
 function handlePuttingInAgainLogic(subject: Subject) {
   //Try to retrieve data from remove store
   const offeredCourseData = removeStore.value.filter(
-    (data) => data.Course.moduleCode === subject.moduleCode,
+    (data) => data.moduleCode === subject.moduleCode,
   )
   //Remove data from remove store
   removeStore.value = removeStore.value.filter(
-    (data) => data.Course.moduleCode !== subject.moduleCode,
+    (data) => data.moduleCode !== subject.moduleCode,
   )
   //Putting back data in shared object if it is there
   if (offeredCourseData !== undefined) {
@@ -156,10 +159,10 @@ const editOfferedCourse = ref<number>(-1)
         <div>{{ t('offered-courses') }}</div>
         <div
           v-for="(subject, index) in offeredCoursesArray"
-          :key="subject.Course.moduleCode"
+          :key="subject.moduleCode"
           class="drag-el"
           draggable="true"
-          @dragstart="startDrag($event, subject.Course.moduleCode, 'table2')"
+          @dragstart="startDrag($event, subject.moduleCode, 'table2')"
         >
           {{
             locale === 'en' ? subject.Course.title.en : subject.Course.title.de
@@ -199,10 +202,16 @@ const editOfferedCourse = ref<number>(-1)
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
-      @abort="editOfferedCourse = -1"
+      @cancel="editOfferedCourse = -1"
       @submit="
         (result) => {
-          offeredCoursesArray[editOfferedCourse ?? -1] = result
+          if (!result) {
+            return
+          }
+          offeredCoursesArray[editOfferedCourse ?? -1] = merge(
+            offeredCoursesArray.at(editOfferedCourse),
+            result,
+          )
           editOfferedCourse = -1
         }
       "

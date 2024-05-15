@@ -42,11 +42,23 @@ export const enrollRouter = router({
       }),
     list: adminProcedure
       .input(z.object({ phaseId: z.number() }))
-      .query(async () => {
-        return await prisma.offeredCourse.findMany({
-          include: { Course: { select: { moduleCode: true, title: true } } },
-          orderBy: { moduleCode: 'asc' },
-        })
+      .query(async ({ input }) => {
+        return (
+          await prisma.offeredCourse.findMany({
+            include: { Course: { select: { moduleCode: true, title: true } } },
+            orderBy: { moduleCode: 'asc' },
+            where: { phaseId: input.phaseId },
+          })
+        ).map((course) => ({
+          ...course,
+          appointments: {
+            dates: course.appointments.dates.map((date) => ({
+              from: new Date(date.from),
+              to: new Date(date.to),
+            })),
+            type: course.appointments.type,
+          },
+        }))
       }),
     update: adminProcedure
       .input(
@@ -95,6 +107,7 @@ export const enrollRouter = router({
                 for: { set: course.for },
                 maxParticipants: course.maxParticipants,
                 minParticipants: course.minParticipants,
+                moodleCourse: course.moodleCourse,
               })),
             },
             start: input.start,
@@ -113,13 +126,14 @@ export const enrollRouter = router({
             offeredCourses: {
               select: {
                 Course: {
-                  select: { lecturers: true, moduleCode: true, title: true },
+                  select: { lecturers: true, title: true },
                 },
                 appointments: true,
                 extraInfo: true,
                 for: true,
                 maxParticipants: true,
                 minParticipants: true,
+                moduleCode: true,
               },
             },
           },
@@ -140,6 +154,7 @@ export const enrollRouter = router({
               })),
               type: course.appointments.type,
             },
+            moodleCourse: null,
           })),
         }
       }),

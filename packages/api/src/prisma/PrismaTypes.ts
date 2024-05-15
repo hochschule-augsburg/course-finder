@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import type {
-  Enrollphase as Phase,
-  Student,
-  StudentChoice,
-  User,
+  Course as PCourse,
+  OfferedCourse as POfferedCourse,
+  Enrollphase as PPhase,
+  Student as PStudent,
+  StudentChoice as PStudentChoice,
+  User as PUser,
 } from '@prisma/client'
 
 /**
@@ -15,15 +17,15 @@ export type I18nJson = {
   en?: string
 }
 
-export type EnrollPhase = Phase
+export type EnrollPhase = PPhase
 
-export type EnrolledCourse = StudentChoice
+export type EnrolledCourse = PStudentChoice
 
-export type { Course, OfferedCourse } from '@prisma/client'
+export type Course = Omit<PCourse, 'pdf'>
 
-export type ClientUser = { auth: { twoFA?: boolean } } & Omit<User, 'auth'>
+export type ClientUser = { auth: { twoFA?: boolean } } & Omit<PUser, 'auth'>
 export type ClientUserExtended = {
-  Student?: Student | null
+  Student?: PStudent | null
 } & ClientUser
 
 type TimeInterval<T> = { from: T; to: T }
@@ -50,6 +52,11 @@ export type CourseAppointmentsJson<T> =
       dates: TimeInterval<T>[]
       type: 'block'
     }
+
+export type OfferedCourse = {
+  appointments: CourseAppointmentsJson<Date>
+} & Omit<POfferedCourse, 'appointments' | 'phaseId'>
+
 declare global {
   namespace PrismaJson {
     type I18n = I18nJson
