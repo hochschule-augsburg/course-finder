@@ -29,43 +29,6 @@ function schedulePhase(phase: {
   }
 }
 
-// Funktion zum Aktualisieren des Zeitplans für eine (laufende) Phase
-function updatePhaseScheduling(
-  phase: {
-    id: number
-    start: Date
-    end: Date
-    title: I18nJson
-    description: I18nJson
-  },
-  newStartTime: Date,
-  newEndTime: Date,
-) {
-  const oldStartTime = phase.start
-  // Frage: Soll der Job gestoppt werden, wenn z.B nur die Endzeit geändert wird?
-  if (oldStartTime) {
-    schedule.cancelJob(oldStartTime.toString())
-  }
-  phase.start = newStartTime
-  phase.end = newEndTime
-  schedulePhase(phase)
-}
-
-// Funktion zum Löschen des Zeitplans für eine (laufende) Phase und Löschen der Phase aus der Datenbank
-function deletePhaseScheduling(phase: {
-  id: number
-  start: Date
-  end: Date
-  title: I18nJson
-  description: I18nJson
-}) {
-  const phaseStartTime = phase.start
-  if (phaseStartTime) {
-    schedule.cancelJob(phaseStartTime.toString()) // Zeitplan für die Phase löschen
-  }
-  phaseService.deletePhase(phase.id) // Phase aus der Datenbank löschen
-}
-
 async function monitorRegistrationCycle(phase: {
   id: number
   start: Date

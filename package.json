@@ -29,5 +29,8 @@
     "stylelint:fix": "pnpm --stream --parallel -r run stylelint:fix"
   },
   "type": "module",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "@trpc/server": "^10.45.2"
+  }
 }
