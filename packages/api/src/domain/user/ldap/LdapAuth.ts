@@ -24,6 +24,11 @@ export async function pwdAuth(
     url,
   })
 
+  // https://ldapwiki.com/wiki/Wiki.jsp?page=DN%20Escape%20Values
+  if (/[ *().&[\]`|%^?{}! ,\\#+<>;"=']/.test(username)) {
+    return { cause: 'invalid-credentials', success: false }
+  }
+
   let result: UserDataType
   try {
     await client.bind(`uid=${username},${baseDn}`, password)
@@ -43,23 +48,12 @@ export async function pwdAuth(
   const userInput = {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     ...(pick(result, Object.keys(prisma.user.fields)) as typeof result),
-    Faculty: {
-      connectOrCreate: {
-        create: {
-          name: result.facultyName,
-          translatedName: { de: result.facultyName },
-        },
-        where: { name: result.facultyName },
-      },
-    },
     auth: {
       method: 'ldap',
     },
-    facultyName: undefined,
   } as const
   const user = await prisma.user.upsert({
     create: userInput,
-    include: { Faculty: true },
     update: userInput,
     where: { username: result.username },
   })
@@ -71,7 +65,17 @@ export async function pwdAuth(
     const studentInput = {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       ...(pick(result, Object.keys(prisma.student.fields)) as typeof result),
+      Faculty: {
+        connectOrCreate: {
+          create: {
+            name: result.facultyName,
+            translatedName: { de: result.facultyName },
+          },
+          where: { name: result.facultyName },
+        },
+      },
       User: { connect: { username } },
+      facultyName: undefined,
       username: undefined,
     }
     const student = await prisma.student.upsert({
@@ -85,21 +89,7 @@ export async function pwdAuth(
       user: { Student: student, ...clientUser },
     }
   }
-  if (result.type === 'Professor') {
-    const profInput = {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      ...(pick(result, Object.keys(prisma.prof.fields)) as typeof result),
-      User: { connect: { username } },
-      username: undefined,
-    }
-    const prof = await prisma.prof.upsert({
-      create: profInput,
-      update: profInput,
-      where: { username },
-    })
-    return { success: true, twoFA: false, user: { Prof: prof, ...clientUser } }
-  }
-  return { cause: 'invalid-credentials', success: false }
+  return { success: true, twoFA: false, user: clientUser }
 }
 
 const getConfiguration = once(() => {

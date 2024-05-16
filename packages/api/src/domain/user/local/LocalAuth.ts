@@ -10,7 +10,7 @@ export async function pwdAuth(
 ): Promise<AuthResult> {
   const user =
     (await prisma.user.findUnique({
-      include: { Faculty: true, Prof: true, Student: true },
+      include: { Student: true },
       where: { username },
     })) ?? undefined
 

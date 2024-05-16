@@ -1,27 +1,33 @@
 {
-  "autorun": false,
+  "autokill": true,
   "terminals": [
     {
       "name": "api server",
       "icon": "rocket",
       "command": "pnpm dev",
-      "cwd": "packages/api"
+      "cwd": "packages/api",
+      "dynamicTitle": true,
+      "recycle": true
     },
     {
       "name": "ui server",
       "icon": "file-media",
       "command": "pnpm dev",
-      "cwd": "packages/ui"
+      "cwd": "packages/ui",
+      "dynamicTitle": true,
+      "recycle": true
     },
     {
       "name": "api",
       "icon": "hubot",
       "focus": true,
-      "cwd": "packages/api"
+      "cwd": "packages/api",
+      "recycle": true
     },
     {
       "name": "ui",
-      "cwd": "packages/ui"
+      "cwd": "packages/ui",
+      "recycle": true
     }
   ]
 }

@@ -12,8 +12,10 @@ import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
+    await ctx.req.session.save()
     return ctx.req.session.user
   }),
+  // rate limited by reverse proxy
   login: publicProcedure
     .input(z.object({ password: z.string(), username: z.string() }))
     .mutation(
@@ -48,6 +50,7 @@ export const authRouter = router({
           return 'two-fa-required'
         }
         ctx.req.session.user = result.user
+        ctx.req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7 // 1 week
         await ctx.req.session.save()
         return result.user
       },
@@ -55,6 +58,7 @@ export const authRouter = router({
   logout: publicProcedure.mutation(async ({ ctx }) => {
     await ctx.req.session.destroy()
   }),
+  // rate limited by reverse proxy
   twoFA: publicProcedure
     .input(z.object({ otp: z.string(), username: z.string() }))
     .mutation(
@@ -77,7 +81,7 @@ export const authRouter = router({
           return 'code-invalid'
         }
         const user = await prisma.user.findUnique({
-          include: { Faculty: true, Prof: true, Student: true },
+          include: { Student: true },
           where: { username: input.username },
         })
         ctx.req.session.twoFA = undefined

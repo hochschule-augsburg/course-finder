@@ -1,17 +1,31 @@
 <script setup lang="ts">
-import { useEnrollmentStore } from '@/stores/enrollment'
-import { ref } from 'vue'
+import { useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { useLocalStorage } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import { useDisplay } from 'vuetify'
+import { VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
+
+defineOptions({
+  name: 'CourseEnrollmentOverview',
+})
 
 const enrollmentStore = useEnrollmentStore()
-const subjectView = ref<'grid' | 'list'>('grid')
-const visible = ref(false)
+
+const pendingEnroll = computed(() =>
+  enrollmentStore.enrolledSubjects.some((e) => !e.points),
+)
+const subjectView = useLocalStorage(
+  'subjectView',
+  useDisplay().mobile.value ? 'grid' : 'list',
+)
+const enrollFormVisible = ref(false)
 </script>
 
 <template>
   <div class="container">
-    <EnrollmentOverview :visible="visible" />
-    <EnrollmentForm v-model="visible" />
-    <div v-if="!visible">
+    <EnrollmentOverview />
+    <EnrollmentForm v-model:visible="enrollFormVisible" />
+    <div>
       <FilterSection />
       <VBtnToggle
         v-model="subjectView"
@@ -23,17 +37,22 @@ const visible = ref(false)
       </VBtnToggle>
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
-      <VBtn
-        v-if="enrollmentStore.selectedSubjects.length > 0"
-        class="px-3 floating"
-        icon="mdi-arrow-right"
-        @click="visible = true"
-      />
+      <div v-if="enrollmentStore.enrolledSubjects.length > 0" class="floating">
+        <VBtn icon @click="enrollFormVisible = true">
+          <VIcon>mdi-pen-lock</VIcon>
+          <VTooltip activator="parent" location="top"> Einschreiben </VTooltip>
+        </VBtn>
+        <div v-if="pendingEnroll" class="pending-indicator" />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@import '@/styles/mixins';
+.pending-indicator {
+  @include indicator;
+}
 .container {
   height: 100%;
 }

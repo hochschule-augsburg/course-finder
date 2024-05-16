@@ -1,1 +1,10 @@
-unknown-error: Unknown error
+global:
+  unknown-error: Unknown error
+  confirm: Confirm
+  cancel: Cancel
+  save: Save
+  edit: Edit
+  close: Close
+  reset: Reset
+  confirm-action: Confirm action
+  back: Back

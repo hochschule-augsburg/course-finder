@@ -1,10 +1,11 @@
 /* eslint-disable perfectionist/sort-objects */
-export const UserRoles = {
+export const UserRoles = Object.freeze({
   Logout: 0,
+  User: 50,
   Student: 100,
   Professor: 200,
   Admin: 1000,
-}
+})
 
 export function userHasPermission(
   user: { type: string } | undefined,

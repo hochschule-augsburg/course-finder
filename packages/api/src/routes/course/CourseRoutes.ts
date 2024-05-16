@@ -5,33 +5,42 @@ import { z } from 'zod'
 import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes'
 
 import { prisma } from '../../prisma/prisma'
-import { router, studentProcedure } from '../trpc'
+import { publicProcedure, router, studentOnlyProcedure } from '../trpc'
 
 export type CourseExtended = {
-  Lecturers: { name: string; username: string }[]
   offeredCourse: {
     appointments: CourseAppointmentsJson<Date>
   } & Omit<OfferedCourse, 'appointments'>
-} & Course
+} & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
-  getCurrentPhase: studentProcedure.query(async () => {
-    return (await prisma.enrollphase.findFirst({})) ?? undefined
+  getCourses: publicProcedure.query(async () => {
+    return await prisma.course.findMany({
+      orderBy: { moduleCode: 'asc' },
+      select: courseFields,
+    })
   }),
-  getOfferedCourses: studentProcedure
+  getCurrentPhase: studentOnlyProcedure.query(async () => {
+    return (
+      (await prisma.enrollphase.findFirst({
+        where: {
+          AND: { end: { gte: new Date() }, start: { lte: new Date() } },
+        },
+      })) ?? undefined
+    )
+  }),
+  getOfferedCourses: studentOnlyProcedure
     .input(
       z.object({
         phaseId: z.number(),
       }),
     )
-    .query(async ({ input }): Promise<CourseExtended[]> => {
+    .query(async ({ ctx, input }): Promise<CourseExtended[]> => {
       return (
         await prisma.course.findMany({
-          include: {
-            Faculty: true,
-            Lecturers: {
-              select: { User: { select: { name: true, username: true } } },
-            },
+          orderBy: { moduleCode: 'asc' },
+          select: {
+            ...courseFields,
             offeredCourse: {
               // include only the offeredCourses that are indicated by input
               where: {
@@ -43,6 +52,7 @@ export const courseRouter = router({
           where: {
             offeredCourse: {
               some: {
+                for: { has: ctx.user.Student.fieldOfStudy },
                 phaseId: { equals: input.phaseId },
               },
             },
@@ -57,10 +67,6 @@ export const courseRouter = router({
         }
         return {
           ...e,
-          Lecturers: e.Lecturers.map((l) => ({
-            name: l.User.name,
-            username: l.User.username,
-          })),
           offeredCourse: {
             ...offeredCourse,
             appointments: {
@@ -74,4 +80,33 @@ export const courseRouter = router({
         }
       })
     }),
+  getPdf: publicProcedure
+    .input(z.object({ moduleCode: z.string() }))
+    .query(async ({ input }) => {
+      const course = await prisma.course.findFirst({
+        select: { pdf: true },
+        where: {
+          moduleCode: input.moduleCode,
+        },
+      })
+      if (!course) {
+        throw new Error(`Course with moduleCode ${input.moduleCode} not found`)
+      }
+      return { pdf: course.pdf ? new Int8Array(course.pdf) : null }
+    }),
 })
+
+export const courseFields = {
+  Faculty: true,
+  creditPoints: true,
+  editorUsername: true,
+  extraInfo: true,
+  facultyName: true,
+  infoUrl: true,
+  lecturers: true,
+  moduleCode: true,
+  published: true,
+  semesterHours: true,
+  title: true,
+  varyingCP: true,
+}

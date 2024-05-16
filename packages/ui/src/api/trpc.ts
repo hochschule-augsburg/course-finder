@@ -1,11 +1,8 @@
-import type { AppRouter } from '@api/routes/router'
+import type { AppRouter } from '@workspace/api/src/routes/router'
 
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
 
-import { serverConfig } from '../../../config'
-
-const { url } = serverConfig
 export const trpc = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
@@ -16,7 +13,7 @@ export const trpc = createTRPCClient<AppRouter>({
         })
       },
       transformer: superjson,
-      url,
+      url: import.meta.env.VITE_API_URL + 'trpc',
     }),
   ],
 })
