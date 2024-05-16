@@ -1,8 +1,8 @@
+import { maxBy, minBy } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
 
-import type { Subject } from './CoursesStore'
-
+import { type Subject, useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'
 
 export type Options = {
@@ -30,6 +30,7 @@ export type RangeFilter = {
 
 export const useFiltersStore = defineStore('filters', () => {
   const userStore = useUserStore()
+  const coursesStore = useCoursesStore()
   const search = ref<string>('')
   const hideNonStudentFilters = computed(
     () => userStore.user?.type !== 'Student',
@@ -160,6 +161,7 @@ export const useFiltersStore = defineStore('filters', () => {
   })
 
   watch(() => userStore.user, resetFilters)
+  watch(() => coursesStore.subjects, updateFilters)
 
   return {
     activeOptions,
@@ -233,5 +235,37 @@ export const useFiltersStore = defineStore('filters', () => {
 
   function resetSearch() {
     search.value = ''
+  }
+
+  function updateFilterRange(
+    filterName: string,
+    subjects: Subject[],
+    property: 'creditPoints' | 'semesterHours',
+  ) {
+    const filter = rangeFilters.find((f) => f.name === filterName)
+    if (filter) {
+      filter.range[0] = minBy(subjects, property)?.[property] ?? 0
+      filter.range[1] = maxBy(subjects, property)?.[property] ?? 0
+      filter.min = filter.range[0]
+      filter.max = filter.range[1]
+    }
+  }
+
+  function updateFilters() {
+    if (coursesStore.subjects) {
+      const tlnmFilter = rangeFilters.find((f) => f.name === 'Teilnehmer')
+      if (tlnmFilter) {
+        tlnmFilter.range[0] =
+          maxBy(coursesStore.subjects, 'offeredCourse.minParticipants')
+            ?.offeredCourse?.minParticipants ?? 0
+        tlnmFilter.range[1] =
+          maxBy(coursesStore.subjects, 'offeredCourse.maxParticipants')
+            ?.offeredCourse?.maxParticipants ?? 0
+        tlnmFilter.min = tlnmFilter.range[0]
+        tlnmFilter.max = tlnmFilter.range[1]
+      }
+      updateFilterRange('CP', coursesStore.subjects, 'creditPoints')
+      updateFilterRange('SWS', coursesStore.subjects, 'semesterHours')
+    }
   }
 })

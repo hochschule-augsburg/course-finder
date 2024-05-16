@@ -25,11 +25,11 @@ const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
-const creditsNeeded = ref<number>(0)
+const creditsNeeded = ref<number | undefined>(undefined)
 
 const autoFillOptions = {
-  fallback: { icon: 'mdi-alpha-f-circle' },
-  prio: { icon: 'mdi-alpha-p-circle' },
+  fallback: 'mdi-alpha-f-circle',
+  prio: 'mdi-alpha-p-circle',
 }
 
 function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
@@ -102,7 +102,7 @@ async function validate() {
   loading.value = true
 
   try {
-    await enrollmentStore.enroll(creditsNeeded.value)
+    await enrollmentStore.enroll(creditsNeeded.value ?? 0)
     // enrollmentStore.enrolledSubjects.forEach(
     //   (s) => (s.autoFillOption = 'undefined'),
     // )
@@ -144,24 +144,30 @@ function reset() {
         <VTextField
           v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"
+          :append-inner-icon="autoFillOptions[subject.autoFillOption]"
           :key="subject.moduleCode"
           :label="locale === 'de' ? subject.title.de : subject.title.en"
           :rules="integerInputRules"
           color="rgb(var(--v-theme-primary))"
           required
-        >
-          <template #append-inner>
-            <VIcon
-              @click.prevent="
-                subject.autoFillOption = getNextAutoFillOption(
-                  subject.autoFillOption,
-                )
-              "
-            >
-              {{ autoFillOptions[subject.autoFillOption].icon }}
+          @click:append-inner.stop="
+            subject.autoFillOption = getNextAutoFillOption(
+              subject.autoFillOption,
+            )
+          "
+        />
+        <VRow align="center" class="mb-5 px-3">
+          <div
+            v-for="(icon, option) in autoFillOptions"
+            :key="option"
+            class="pr-2"
+          >
+            <VIcon size="small">
+              {{ icon }}
             </VIcon>
-          </template>
-        </VTextField>
+            {{ option }}
+          </div>
+        </VRow>
         <VRow align="center" class="mt-2 mb-1 px-3">
           <VBtn size="x-small" icon @click="reset">
             <VIcon>mdi-restore</VIcon>
