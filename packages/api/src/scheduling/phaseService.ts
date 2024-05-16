@@ -34,19 +34,15 @@ export class PhaseService {
     title: I18nJson,
     description: I18nJson,
   ): Promise<EnrollPhase> {
-    try {
-      const createdPhase = await this.prisma.enrollphase.create({
-        data: {
-          start,
-          end,
-          title,
-          description,
-        },
-      })
-      return createdPhase
-    } catch (error) {
-      throw new Error(`Failed to create phase: ${error}`)
-    }
+    const createdPhase = await this.prisma.enrollphase.create({
+      data: {
+        start,
+        end,
+        title,
+        description,
+      },
+    })
+    return createdPhase
   }
 
   /**
