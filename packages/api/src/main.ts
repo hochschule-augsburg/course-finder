@@ -1,4 +1,3 @@
-import { serverConfig } from '../../config'
 import { prisma } from './prisma/prisma'
 import { startPhaseSchedulingFromDatabase } from './scheduling/scheduleController'
 import { createServer } from './server/server'

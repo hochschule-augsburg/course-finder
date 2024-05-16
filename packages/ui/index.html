@@ -25,6 +25,52 @@
       name="publisher"
       content="Technische Hochschule Augsburg - Fakultät Informatik"
     />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' http://localhost:2022;
+    script-src-elem 'self' 'unsafe-inline' data:;
+    worker-src 'self' blob:;
+    object-src 'none';
+    base-uri 'none';
+    connect-src 'self' http://localhost:2022;
+    img-src 'self' blob:;
+    style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+    font-src 'self' fonts.gstatic.com fonts.googleapis.com;
+    form-action 'self';
+    frame-src 'self' example.com tha.de;"
+    />
+    <!-- csp also in web-server -->
+    <style>
+      html {
+        background-color: white;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html {
+          /* vuetify dark background color */
+          background-color: rgb(18, 18, 18);
+        }
+      }
+    </style>
+    <script>
+      const theme = localStorage.getItem('theme')
+      if (theme === 'customDarkTheme') {
+        setDarkThemeForIndex()
+      } else if (!theme) {
+        const prefersDarkMode = window.matchMedia(
+          '(prefers-color-scheme: dark)',
+        ).matches
+        if (prefersDarkMode) {
+          setDarkThemeForIndex()
+        }
+      }
+      function setDarkThemeForIndex() {
+        document.getElementsByTagName('html')[0].style.backgroundColor =
+          'rgb(18, 18, 18)'
+      }
+    </script>
   </head>
 
   <body>

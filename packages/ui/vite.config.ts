@@ -11,21 +11,29 @@ import VueRouter from 'unplugin-vue-router/vite'
 // Utilities
 import { defineConfig } from 'vite'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import vueJsxPlugin from '@vitejs/plugin-vue-jsx'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    holdUntilCrawlEnd: false,
+    include: [
+      '@vueuse/core',
+      'vue-pdf-embed',
+      'lodash-es',
+      'vuetify/lib/directives/index.mjs',
+    ],
+  },
   define: { 'process.env': {} },
   plugins: [
     VueRouter(),
     Vue({
       template: { transformAssetUrls },
     }),
+    vueJsxPlugin(),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
       autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
     }),
     Components(),
     VueI18nPlugin({
@@ -44,7 +52,6 @@ export default defineConfig({
         ],
       },
     }),
-
     VueDevTools(),
   ],
   resolve: {
@@ -56,6 +63,11 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    headers: {
+      'x-content-type-options': 'nosniff',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'content-security-policy': "frame-ancestors 'self';",
+    },
   },
   test: {
     // perhaps changes later to jsdom but happydom is faster

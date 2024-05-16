@@ -1,50 +1,50 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/enrollment'
-
-import { useEnrollmentStore } from '@/stores/enrollment'
+import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn } from 'vuetify/components'
-import { VForm } from 'vuetify/components/VForm'
+import {
+  VBtn,
+  VDialog,
+  VForm,
+  VRow,
+  VSheet,
+  VSpacer,
+  VTextField,
+} from 'vuetify/components'
 
 import '../styles/settings.scss'
 
 const { locale } = useI18n()
+const { t } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
+const coursesStore = useCoursesStore()
 
-const visible = defineModel<boolean>()
+const visible = defineModel<boolean>('visible')
 
 const form = ref<VForm | undefined>(undefined)
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 
+const creditsNeeded = ref<number>(0)
+
 function openSubjectDialog(moduleCode: string) {
-  selectedSubject.value = enrollmentStore.subjects.find(
+  selectedSubject.value = coursesStore.subjects.find(
     (s) => s.moduleCode === moduleCode,
   )
   showSubjectDialog.value = true
-}
-
-function removeSubject(moduleCode: string) {
-  const subject = enrollmentStore.subjects.find(
-    (s) => s.moduleCode === moduleCode,
-  )
-
-  if (subject) {
-    subject.selected = false
-  }
 }
 
 function back() {
   visible.value = false
 }
 
-// TODO better error msgs + i18n
 const pointInputRules = [
-  (i: string) => !!i || 'Input is required',
-  (i: string) => /^[1-9]\d*$/.test(i) || 'Input must be an integer', // check is input is valid int > 0
+  (i: string) => !!i || t('field-required'),
+  (i: string) => /^[1-9]\d*$/.test(i) || t('integer-input'), // check is input is valid int > 0
 ]
 
 async function validate() {
@@ -55,19 +55,19 @@ async function validate() {
   }
 
   if (
-    enrollmentStore.selectedSubjects.length > 0 && // make it possible to reset enrollment
-    enrollmentStore.selectedSubjects.reduce((a, c) => a + c.points, 0) !==
-      enrollmentStore.maxPoints
+    enrollmentStore.enrolledSubjects.length > 0 && // make it possible to reset enrollment
+    sumBy(enrollmentStore.enrolledSubjects, 'points') !== MAX_POINTS
   ) {
-    form.value?.items.forEach((i) => i.errorMessages.push('maxPoints = 1000'))
+    form.value?.items
+      .slice(1)
+      .forEach((i) => i.errorMessages.push(t('points-sum-1000')))
     return
   }
 
   loading.value = true
 
   try {
-    await enrollmentStore.enroll()
-    await enrollmentStore.init()
+    await enrollmentStore.enroll(creditsNeeded.value)
   } catch (error) {
     console.log(error)
   } finally {
@@ -83,30 +83,33 @@ function reset() {
 </script>
 
 <template>
-  <div
-    v-if="visible"
-    class="d-flex flex-column align-center justify-center container"
-  >
-    <SubjectDialog v-model="showSubjectDialog" :subject="selectedSubject" />
-    <div class="d-flex align-start formHead">
-      <VBtn
-        prepend-icon="mdi-arrow-left"
-        text="zurück"
-        variant="plain"
-        @click="back"
-      />
-    </div>
+  <VDialog v-model:model-value="visible" max-width="500">
+    <SubjectDialog
+      v-model:visible="showSubjectDialog"
+      :subject="selectedSubject"
+    />
     <VSheet
       class="pa-5"
       color="rgb(var(--v-theme-secondary))"
-      elevation="1"
       max-width="var(--dialog-max-width)"
       rounded="lg"
-      width="var(--dialog-width)"
     >
+      <div class="d-flex align-start formHead">
+        <VBtn
+          :text="t('global.back')"
+          prepend-icon="mdi-arrow-left"
+          variant="plain"
+          @click="back"
+        />
+      </div>
       <VForm ref="form">
         <VTextField
-          v-for="subject in enrollmentStore.selectedSubjects"
+          v-model.number="creditsNeeded"
+          :label="t('credits-wanted')"
+          required
+        />
+        <VTextField
+          v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"
           :key="subject.moduleCode"
           :label="locale === 'de' ? subject.title.de : subject.title.en"
@@ -114,18 +117,18 @@ function reset() {
           append-icon="mdi-delete"
           append-inner-icon="mdi-book-information-variant"
           required
-          @click:append="removeSubject(subject.moduleCode)"
+          @click:append="enrollmentStore.removeSubject(subject.moduleCode)"
           @click:append-inner="openSubjectDialog(subject.moduleCode)"
         />
 
         <VRow align="center" class="mt-2 px-3">
           <VBtn icon="mdi-restore" size="small" @click="reset" />
           <VSpacer />
-          <VBtn :loading="loading" text="Anmelden" @click="validate" />
+          <VBtn :loading="loading" :text="t('register')" @click="validate" />
         </VRow>
       </VForm>
     </VSheet>
-  </div>
+  </VDialog>
 </template>
 
 <style scoped lang="scss">
@@ -133,7 +136,22 @@ function reset() {
   height: 100%;
 }
 .formHead {
-  width: var(--dialog-width);
+  width: 90%;
   max-width: var(--dialog-max-width);
 }
 </style>
+
+<i18n lang="yaml">
+de:
+  register: Anmelden
+  field-required: Dies ist ein Pflichtfeld!
+  integer-input: Bitte eine ganze Zahl eingeben!
+  credits-wanted: Bestrebte Credit Points
+  points-sum-1000: Insgesamt 1000 Punkte vergeben!
+en:
+  register: Register
+  field-required: This field is required!
+  integer-input: This field must be an integer!
+  credits-wanted: Credits wanted
+  points-sum-1000: allocate 1000 points in total!
+</i18n>

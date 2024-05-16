@@ -17,16 +17,14 @@ datasource db {
 
 model User {
   // users have to be clean up every semester
-  username    String   @id
-  email       String
-  name        String
-  Student     Student?
-  Prof        Prof?
+  username String   @id
+  email    String
+  name     String
+  Student  Student?
   /// [Auth]
-  auth        Json
-  type        String
-  Faculty     Faculty  @relation(fields: [facultyName], references: [name])
-  facultyName String
+  auth     Json
+  type     String
+  Course   Course[]
 }
 
 model Student {
@@ -36,55 +34,41 @@ model Student {
   term         Int?
   regNumber    String?
   StudentPhase StudentPhase[]
-}
-
-model Prof {
-  username  String   @id
-  User      User     @relation(fields: [username], references: [username])
-  telephone String?
-  office    String?
-  Module    Course[]
+  Faculty      Faculty        @relation(fields: [facultyName], references: [name])
+  facultyName  String
 }
 
 model Faculty {
-  name           String   @id
+  name           String    @id
   /// [I18n]
   translatedName Json
   Courses        Course[]
-  Users          User[]
+  Student        Student[]
 }
 
 model Course {
-  moduleCode         String          @id
+  moduleCode     String          @id
   /// title module
   /// [I18n]
-  title              Json
-  published          Boolean         @default(false)
-  examinationNumbers String[]
-  Lecturers          Prof[]
+  title          Json
+  published      Boolean         @default(false)
+  editor         User?           @relation(fields: [editorUsername], references: [username])
+  editorUsername String?
   /// if lecturer is not in the system
-  externLecturers    String[]
-  requirements       String[]
-  /// spoken language
-  language           String
-  Faculty            Faculty?        @relation(fields: [facultyName], references: [name])
-  facultyName        String?
+  lecturers      String[]
+  Faculty        Faculty?        @relation(fields: [facultyName], references: [name])
+  facultyName    String?
   /// SWS
-  semesterHours      Int
+  semesterHours  Int
   /// CP
-  creditPoints       Int
-  timeDistribution   String?
-  /// [ExamType]
-  examType           Json
-  /// [I18n]
-  description        Json
-  /// [I18n]
-  learningGoals      Json
-  literature         String[]
-  /// Link to the moodle course
-  moodleCourse       String?
-  website            String?
-  offeredCourse      OfferedCourse[]
+  creditPoints   Int
+  varyingCP      Json?
+  /// Url for optional iframe info
+  infoUrl        String?
+  pdf            Bytes?
+  /// addition information about course could be relevant if there is not infoUrl
+  extraInfo      String?
+  offeredCourse  OfferedCourse[]
 }
 
 model Enrollphase {
@@ -112,13 +96,17 @@ model OfferedCourse {
   phaseId         Int
   Course          Course          @relation(fields: [moduleCode], references: [moduleCode])
   moduleCode      String
-  minParticipants Int?
+  minParticipants Int             @default(0)
   maxParticipants Int?
   StudentChoice   StudentChoice[]
 
-  extraInfo    String?
+  extraInfo       String?
+  moodleCourse    String?
+  /// Array of fields of study
+  for             String[]
   /// [CourseAppointments]
-  appointments Json
+  appointments    Json
+  PhaseAssignment PhaseAssignment[]
 
   @@id([phaseId, moduleCode])
 }
@@ -130,6 +118,9 @@ model StudentPhase {
   phaseId       Int
   StudentChoice StudentChoice[]
 
+  creditsNeeded    Int
+  PhaseAssignments PhaseAssignment[]
+
   @@id([username, phaseId])
 }
 
@@ -140,8 +131,16 @@ model StudentChoice {
   StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId], onDelete: Cascade)
   username      String
 
-  points     Int
-  lastChange DateTime
+  points Int
 
   @@id([moduleCode, username, phaseId])
+}
+
+model PhaseAssignment {
+  id            Int           @id @default(autoincrement())
+  phaseId       Int
+  username      String
+  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
+  offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode])
+  moduleCode    String
 }

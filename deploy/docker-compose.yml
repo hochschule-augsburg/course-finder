@@ -1,0 +1,44 @@
+# keep in sync with prod
+
+services:
+  api:
+    build:
+      context: ../
+      dockerfile: Dockerfile.api
+      target: api
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    depends_on:
+      - database
+
+  ui:
+    build:
+      context: ../
+      dockerfile: Dockerfile.ui
+      target: ui
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ${CERTS_PRIVKEY}:/prod/certs/privkey.pem
+      - ${CERTS_CHAIN}:/prod/certs/chain.pem
+      - ${CERTS_FULLCHAIN}:/prod/certs/fullchain.pem
+      - ./subject-enroll.conf.local:/etc/nginx/conf.d/subject-enroll.conf
+    depends_on:
+      - api
+
+    restart: unless-stopped
+
+  database:
+    image: postgres:alpine
+    env_file:
+      - ./.env
+    volumes:
+      - /var/lib/data:/var/lib/postgresql/data
+    ports:
+      # only development
+      - '127.0.0.1:5432:5432'
+
+    restart: unless-stopped

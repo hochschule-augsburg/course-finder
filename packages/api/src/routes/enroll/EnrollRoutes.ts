@@ -6,6 +6,9 @@ import { z } from 'zod'
 import { prisma } from '../../prisma/prisma'
 import { router, studentOnlyProcedure } from '../trpc'
 
+const pointsZodType = z.number().int().gte(0).lte(1000)
+const creditsZodType = z.number().int().gte(0).lte(1000)
+
 const enrollProcedure = studentOnlyProcedure
   .input(z.object({ phaseId: z.number() }))
   .use(async (opts) => {
@@ -25,13 +28,33 @@ export const enrollRouter = router({
   bulk: enrollProcedure
     .input(
       z.object({
+        creditsNeeded: creditsZodType,
         data: z.array(
-          z.object({ moduleCode: z.string(), points: z.number().int().safe() }),
+          z.object({
+            moduleCode: z.string(),
+            points: pointsZodType,
+          }),
         ),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
+      if (
+        (
+          await prisma.offeredCourse.findMany({
+            where: {
+              for: { has: ctx.user.Student.fieldOfStudy },
+              moduleCode: { in: input.data.map((e) => e.moduleCode) },
+              phaseId: ctx.phase.id,
+            },
+          })
+        ).length !== input.data.length
+      ) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'modules not offered for you',
+        })
+      }
       await prisma.studentPhase.delete({
         where: {
           username_phaseId: {
@@ -46,12 +69,12 @@ export const enrollRouter = router({
           StudentChoice: {
             createMany: {
               data: input.data.map((e) => ({
-                lastChange: new Date(),
                 moduleCode: e.moduleCode,
                 points: e.points,
               })),
             },
           },
+          creditsNeeded: input.creditsNeeded,
           phaseId: ctx.phase.id,
           username: ctx.user.username,
         },
@@ -72,8 +95,6 @@ export const enrollRouter = router({
           },
         },
       })
-
-      return getStudentChoices(ctx.phase.id, ctx.user.username)
     }),
   list: enrollProcedure
     .input(z.object({ phaseId: z.number() }))
@@ -83,14 +104,38 @@ export const enrollRouter = router({
   upsert: enrollProcedure
     .input(
       z.object({
+        creditsNeeded: creditsZodType.optional(),
         moduleCode: z.string(),
         points: z.number().int().safe(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
+      if (
+        !(await prisma.offeredCourse.findUnique({
+          where: {
+            for: { has: ctx.user.Student.fieldOfStudy },
+            phaseId_moduleCode: {
+              moduleCode: input.moduleCode,
+              phaseId: ctx.phase.id,
+            },
+          },
+        }))
+      ) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'module not offered for you',
+        })
+      }
       await prisma.studentPhase.upsert({
         create: {
+          StudentChoice: {
+            create: {
+              moduleCode: input.moduleCode,
+              points: input.points,
+            },
+          },
+          creditsNeeded: input.creditsNeeded ?? 0,
           phaseId: input.phaseId,
           username: ctx.user.Student.username,
         },
@@ -98,12 +143,10 @@ export const enrollRouter = router({
           StudentChoice: {
             upsert: {
               create: {
-                lastChange: new Date(),
                 moduleCode: input.moduleCode,
                 points: input.points,
               },
               update: {
-                lastChange: new Date(),
                 points: input.points,
               },
               where: {
@@ -115,6 +158,7 @@ export const enrollRouter = router({
               },
             },
           },
+          creditsNeeded: input.creditsNeeded,
         },
         where: {
           username_phaseId: {
@@ -123,7 +167,6 @@ export const enrollRouter = router({
           },
         },
       })
-      return getStudentChoices(ctx.phase.id, ctx.user.username)
     }),
 })
 
@@ -144,7 +187,9 @@ async function getStudentChoices(phaseId: number, username: string) {
   return (
     (
       await prisma.studentPhase.findUnique({
-        include: { StudentChoice: true },
+        select: {
+          StudentChoice: { select: { moduleCode: true, points: true } },
+        },
         where: {
           username_phaseId: {
             phaseId,

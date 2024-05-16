@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import type {
-  Faculty,
   Enrollphase as Phase,
-  Prof,
   Student,
   StudentChoice,
   User,
 } from '@prisma/client'
 
+/**
+ * None should be undefined it just help programming
+ */
 export type I18nJson = {
   de?: string
   en?: string
@@ -18,10 +19,10 @@ export type EnrollPhase = Phase
 
 export type EnrolledCourse = StudentChoice
 
+export type { Course, OfferedCourse } from '@prisma/client'
+
 export type ClientUser = { auth: { twoFA?: boolean } } & Omit<User, 'auth'>
 export type ClientUserExtended = {
-  Faculty: Faculty | null
-  Prof?: Prof | null
   Student?: Student | null
 } & ClientUser
 
@@ -36,8 +37,18 @@ export type CourseAppointmentsJson<T> =
       type: 'weekly'
     }
   | {
+      /**
+       * exact dates and time
+       */
       dates: TimeInterval<T>[]
-      type: 'block' | 'irregular'
+      type: 'irregular'
+    }
+  | {
+      /**
+       * ignore time
+       */
+      dates: TimeInterval<T>[]
+      type: 'block'
     }
 declare global {
   namespace PrismaJson {
@@ -49,34 +60,6 @@ declare global {
         }
       | { method: 'local'; password: string; salt: string }
     )
-    // TODO
-    type ExamType = {
-      additionalInfo?: string
-      content: Array<
-        {
-          helpers: {
-            specs: string
-            type: 'book' | 'calculator' | 'cheatsheet' | 'open-book'
-          }
-          percentage: number
-        } & (
-          | {
-              minutes: number
-              type: 'written'
-            }
-          | {
-              specs: string
-              type: 'seminar-paper'
-            }
-          | {
-              type: 'oral'
-            }
-          | { specs: string; type: 'presentation' }
-          | { specs: string; type: 'project' }
-        )
-      >
-      for: string
-    }
   }
 }
 

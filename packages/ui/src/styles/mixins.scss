@@ -1,0 +1,10 @@
+@mixin indicator {
+  $size: 0.6rem;
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+  background-color: rgb(var(--v-theme-primary));
+  position: absolute;
+  top: 0;
+  right: 0;
+}
