@@ -42,6 +42,7 @@ export const useCoursesStore = defineStore('courses', () => {
   void update()
 
   return {
+    $reset,
     currentPhase,
     filteredSubjects,
     init: update,
@@ -98,5 +99,11 @@ export const useCoursesStore = defineStore('courses', () => {
       }
       return a.moduleCode.localeCompare(b.moduleCode)
     })
+  }
+
+  function $reset() {
+    subjects.value = []
+    filteredSubjects.value = []
+    currentPhase.value = undefined
   }
 })

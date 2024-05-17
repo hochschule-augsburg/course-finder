@@ -18,6 +18,7 @@ router.beforeEach(async (to, from) => {
   if (from.path.startsWith('/admin')) {
     const courseStore = useCoursesStore()
     courseStore.$reset()
+    await courseStore.init()
   }
 })
 

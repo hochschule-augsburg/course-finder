@@ -7,7 +7,7 @@ import {
   fieldsOfStudy,
   fieldsOfStudyAbbrMap,
 } from '@/helper/fieldsOfStudy'
-import { ref, watchEffect } from 'vue'
+import { ref, toRaw, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -44,12 +44,12 @@ const formData = ref<
 >()
 
 watchEffect(() => {
-  if (!props.offeredCourse) {
+  if (!props.offeredCourse || !props.visible) {
     formData.value = undefined
     return
   }
   formData.value = {
-    ...props.offeredCourse,
+    ...structuredClone(toRaw(props.offeredCourse)),
     appointments: {
       dates: props.offeredCourse?.appointments.dates.map((e) => ({
         from: e.from.toISOString(),

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
-import { ref, watchEffect } from 'vue'
+import { ref, toRaw, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -29,9 +29,9 @@ const formData = ref<
 >()
 
 watchEffect(() => {
-  if (props.selectedSubject) {
+  if (props.selectedSubject && props.visible) {
     formData.value = {
-      ...props.selectedSubject,
+      ...structuredClone(toRaw(props.selectedSubject)),
       lecturers: props.selectedSubject.lecturers.join(', '),
       varyingCP: varyingCPToString(props.selectedSubject.varyingCP),
     }
