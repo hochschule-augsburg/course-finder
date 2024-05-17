@@ -2,6 +2,7 @@
 import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
 
 import { trpc } from '@/api/trpc'
+import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { assign } from 'lodash-es'
 import { onBeforeMount, ref } from 'vue'
@@ -73,15 +74,7 @@ onBeforeMount(() => {
             }}
           </td>
           <td>
-            {{
-              course.for.map((e) =>
-                e
-                  .replace('(', '')
-                  .split(' ')
-                  .map((e) => e[0])
-                  .join(''),
-              )
-            }}
+            {{ course.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e).join(', ') }}
           </td>
           <td>
             {{ course.minParticipants }}
@@ -90,12 +83,17 @@ onBeforeMount(() => {
             {{ course.maxParticipants }}
           </td>
           <td>
-            <div v-if="course.extraInfo" icon>
-              <VIcon>mdi-information</VIcon>
-              <VTooltip activator="parent" location="left">
-                {{ course.extraInfo }}
-              </VTooltip>
-            </div>
+            <VTooltip
+              v-if="course.extraInfo"
+              activator="parent"
+              location="left"
+              max-width="400"
+            >
+              <template #activator>
+                <VBtn v-ripple="false" icon="mdi-information" variant="text" />
+              </template>
+              {{ course.extraInfo }}
+            </VTooltip>
           </td>
           <td>
             <VBtn class="float-right" @click="openEditDialog(course)">

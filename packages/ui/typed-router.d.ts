@@ -22,5 +22,6 @@ declare module 'vue-router/auto-routes' {
     '/admin/': RouteRecordInfo<'/admin/', '/admin', Record<never, never>, Record<never, never>>,
     '/admin/phase-[phaseId]/': RouteRecordInfo<'/admin/phase-[phaseId]/', '/admin/phase-:phaseId', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
     '/admin/phase-[phaseId]/edit': RouteRecordInfo<'/admin/phase-[phaseId]/edit', '/admin/phase-:phaseId/edit', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
+    '/admin/phases': RouteRecordInfo<'/admin/phases', '/admin/phases', Record<never, never>, Record<never, never>>,
   }
 }

@@ -2,6 +2,11 @@
 import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
 import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTypes'
 
+import {
+  abbrFieldsOfStudyMap,
+  fieldsOfStudy,
+  fieldsOfStudyAbbrMap,
+} from '@/helper/fieldsOfStudy'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -12,9 +17,11 @@ import {
   VDialog,
   VDivider,
   VIcon,
+  VListItem,
   VRadio,
   VRadioGroup,
   VRow,
+  VSelect,
   VTextField,
   VTextarea,
 } from 'vuetify/components'
@@ -30,9 +37,9 @@ const emits = defineEmits<{
 }>()
 
 const formData = ref<
-  { appointments: CourseAppointmentsJson<string>; for: string } & Omit<
+  { appointments: CourseAppointmentsJson<string> } & Omit<
     AdminOfferedCourse,
-    'appointments' | 'for'
+    'appointments'
   >
 >()
 
@@ -50,8 +57,7 @@ watchEffect(() => {
       })),
       type: props.offeredCourse?.appointments.type,
     },
-    //TODO change back to list
-    for: props.offeredCourse?.for.join(','),
+    for: props.offeredCourse.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e),
   }
 })
 
@@ -70,7 +76,7 @@ function submit() {
         to: new Date(e.to),
       })),
     },
-    for: formData.value.for.split(','),
+    for: formData.value.for.map((e) => abbrFieldsOfStudyMap[e] ?? e),
   })
 }
 
@@ -167,12 +173,21 @@ function removeDate() {
             <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
           </VCol>
           <VCol cols="12" sm="6">
-            <VTextField
+            <VSelect
               v-model="formData.for"
-              :hint="t('fields-of-study-hint')"
+              :items="fieldsOfStudy.map((e) => e[0])"
               :label="t('for-fields-of-study')"
+              chips
+              multiple
               required
-            />
+            >
+              <template #item="{ props: itemProps, item }">
+                <VListItem
+                  v-bind="itemProps"
+                  :subtitle="fieldsOfStudyAbbrMap[item.title]"
+                />
+              </template>
+            </VSelect>
           </VCol>
           <VCol>
             <VRadioGroup v-model="formData.appointments.type" inline>
