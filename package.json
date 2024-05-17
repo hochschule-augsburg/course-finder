@@ -3,6 +3,7 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^20.12.11",
+    "@types/node-schedule": "^2.1.7",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -31,6 +32,7 @@
   "type": "module",
   "version": "0.0.0",
   "dependencies": {
-    "@trpc/server": "^10.45.2"
+    "@trpc/server": "^10.45.2",
+    "node-schedule": "^2.1.1"
   }
 }
