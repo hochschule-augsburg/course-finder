@@ -164,7 +164,7 @@ export const enrollRouter = router({
     list: adminProcedure.query(async () => {
       return await prisma.enrollphase.findMany({
         orderBy: {
-          start: 'desc',
+          start: 'asc',
         },
       })
     }),

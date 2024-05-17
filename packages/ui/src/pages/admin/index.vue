@@ -27,8 +27,11 @@ const adminStore = useAdminCoursesStore()
           />
         </VBtn>
       </VCol>
-      <VCol align-self="center" cols="3">
+      <VCol cols="2">
         <VBtn text="Create enrollment phase" to="admin/phase-new/edit" />
+      </VCol>
+      <VCol cols="1">
+        <VBtn text="Old phases" to="admin/phases" />
       </VCol>
     </VRow>
     <VRow justify="center">
