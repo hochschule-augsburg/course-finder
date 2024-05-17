@@ -21,12 +21,12 @@ export class PhaseService {
 
   /**
    * Creates a new enrollment phase.
+   *
    * @param start - The start date of the enrollment phase.
    * @param end - The end date of the enrollment phase.
-   * @param title - The title of the enrollment phase in internationalized JSON format.
-   * @param description - The description of the enrollment phase in internationalized JSON format.
+   * @param title - The title of the enrollment phase in multiple languages.
+   * @param description - The description of the enrollment phase in multiple languages.
    * @returns A Promise that resolves to the created enrollment phase.
-   * @throws If there is an error while creating the phase.
    */
   async createPhase(
     start: Date,

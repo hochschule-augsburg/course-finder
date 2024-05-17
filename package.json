@@ -2,7 +2,7 @@
   "author": "",
   "description": "",
   "devDependencies": {
-    "@types/node": "^20.12.11",
+    "@types/node": "^20.12.12",
     "@types/node-schedule": "^2.1.7",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "eslint": "^8.57.0",
@@ -14,8 +14,8 @@
     "eslint-plugin-typescript-sort-keys": "^3.2.0",
     "eslint-plugin-unused-imports": "^3.2.0",
     "eslint-plugin-vitest": "^0.4.1",
-    "typescript-eslint": "^7.8.0",
-    "vitest": "^1.5.3"
+    "typescript-eslint": "^7.9.0",
+    "vitest": "^1.6.0"
   },
   "keywords": [],
   "license": "MIT",
