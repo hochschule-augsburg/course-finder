@@ -117,8 +117,8 @@ const infoDialogVisible = ref(false)
 <i18n lang="yaml">
 en:
   help: Help
-  change-lang: Select language
-  change-theme: Select Mode
+  change-lang: Select Language
+  change-theme: Select Theme
   login: Login
   logout: Logout
   admin: Admin
@@ -126,7 +126,7 @@ en:
 de:
   help: Hilfe
   change-lang: Sprache wählen
-  change-theme: Modus wählen
+  change-theme: Theme wählen
   login: Login
   logout: Logout
   admin: Admin

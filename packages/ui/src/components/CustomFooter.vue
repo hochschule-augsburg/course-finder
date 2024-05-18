@@ -6,11 +6,11 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <VFooter class="custom-footer" color="rgb(var(--v-theme-secondary))">
+  <VFooter class="custom-footer" color="secondary">
     <VRow justify="center" no-gutters>
       <VBtn
         class="mx-2"
-        color="black"
+        color="primary"
         href="https://www.tha.de/Service/Impressum.html"
         rounded="xl"
         target="_blank"

@@ -20,7 +20,7 @@ const infoDialogVisible = ref(false)
 <template>
   <div class="d-flex justify-space-between align-center w-100">
     <RouterLink to="/">
-      <VToolbarTitle :text="t('global.title')" class="ps-5" />
+      <VToolbarTitle :text="t('global.title')" class="ps-5" to="/" />
     </RouterLink>
 
     <div class="d-flex flex-row pr-4">
@@ -31,7 +31,7 @@ const infoDialogVisible = ref(false)
         icon
       >
         <VIcon>mdi-shield-crown-outline</VIcon>
-        <VTooltip activator="parent" location="start" open-delay="500">
+        <VTooltip activator="parent" location="bottom" open-delay="500">
           {{ t('admin') }}
         </VTooltip>
       </VBtn>
@@ -40,7 +40,7 @@ const infoDialogVisible = ref(false)
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
             <VIcon>mdi-theme-light-dark</VIcon>
-            <VTooltip activator="parent" location="start" open-delay="500">
+            <VTooltip activator="parent" location="bottom" open-delay="500">
               {{ t('change-theme') }}
             </VTooltip>
           </VBtn>
@@ -55,7 +55,7 @@ const infoDialogVisible = ref(false)
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
             <VIcon>mdi-earth</VIcon>
-            <VTooltip activator="parent" location="start" open-delay="500">
+            <VTooltip activator="parent" location="bottom" open-delay="500">
               {{ t('change-lang') }}
             </VTooltip>
           </VBtn>
@@ -65,24 +65,29 @@ const infoDialogVisible = ref(false)
 
       <VBtn icon @click="infoDialogVisible = true">
         <VIcon>mdi-help-circle-outline</VIcon>
-        <VTooltip activator="parent" location="start" open-delay="500">
+        <VTooltip activator="parent" location="bottom" open-delay="500">
           {{ t('help') }}
         </VTooltip>
       </VBtn>
       <InfoDialog v-model="infoDialogVisible" />
 
       <div v-if="userStore.user" class="align-self-center">
-        <VBtn :text="userStore.user?.name" class="pr-1 pl-2" />
+        <VBtn
+          :ripple="false"
+          :text="userStore.user?.name"
+          class="pr-1 pl-2"
+          prepend-icon="mdi-account-circle"
+        />
         <VBtn icon @click="userStore.logout">
           <VIcon>mdi-logout-variant</VIcon>
-          <VTooltip activator="parent" location="start" open-delay="500">
+          <VTooltip activator="parent" location="bottom" open-delay="500">
             {{ t('logout') }}
           </VTooltip>
         </VBtn>
       </div>
       <VBtn v-else icon>
         <VIcon>mdi-login-variant</VIcon>
-        <VTooltip activator="parent" location="start" open-delay="500">
+        <VTooltip activator="parent" location="bottom" open-delay="500">
           {{ t('login') }}
         </VTooltip>
         <VMenu :close-on-content-click="false" activator="parent">
@@ -98,8 +103,8 @@ const infoDialogVisible = ref(false)
 <i18n lang="yaml">
 en:
   help: Help
-  change-lang: Select language
-  change-theme: Select Mode
+  change-lang: Select Language
+  change-theme: Select Theme
   login: Login
   logout: Logout
   admin: Admin
@@ -107,7 +112,7 @@ en:
 de:
   help: Hilfe
   change-lang: Sprache wählen
-  change-theme: Modus wählen
+  change-theme: Theme wählen
   login: Login
   logout: Logout
   admin: Admin
