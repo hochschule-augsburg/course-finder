@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server'
+import { sumBy } from 'lodash-es'
 import { z } from 'zod'
 
 import {
@@ -168,5 +169,40 @@ export const enrollRouter = router({
         },
       })
     }),
+  },
+  statistics: {
+    courseEnrollments: adminProcedure
+      .input(z.object({ phaseId: z.number() }))
+      .query(async ({ input }) => {
+        return (
+          await prisma.offeredCourse.findMany({
+            select: {
+              StudentChoice: { select: { points: true } },
+              moduleCode: true,
+            },
+            where: { phaseId: input.phaseId },
+          })
+        ).map((course) => ({
+          avgPoints:
+            sumBy(course.StudentChoice, (choice) => choice.points) /
+              course.StudentChoice.length || 0,
+          moduleCode: course.moduleCode,
+          studentCount: course.StudentChoice.length,
+        }))
+      }),
+    phase: adminProcedure
+      .input(z.object({ phaseId: z.number() }))
+      .query(async ({ input }) => {
+        return {
+          studentCount:
+            (
+              await prisma.studentChoice.groupBy({
+                _count: { username: true },
+                by: ['username'],
+                where: { phaseId: input.phaseId },
+              })
+            ).at(0)?._count?.username || 0,
+        }
+      }),
   },
 })

@@ -1,49 +1,46 @@
 <script lang="ts" setup>
-import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
-
 import { trpc } from '@/api/trpc'
 import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { assign } from 'lodash-es'
-import { onBeforeMount, ref } from 'vue'
+import { sortBy } from 'lodash-es'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VIcon, VTable, VTooltip } from 'vuetify/components'
+import { VTable } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
 
 const { locale, t } = useI18n()
 
-const editableCourse = ref<AdminOfferedCourse>()
-const showEditDialog = ref(false)
-
-function openEditDialog(course: AdminOfferedCourse) {
-  editableCourse.value = course
-  showEditDialog.value = true
-}
-
-async function submitEdit(formData: AdminOfferedCourse | undefined) {
-  if (!formData) {
-    //TODO delete
-    showEditDialog.value = false
-    return
-  }
-  await trpc.admin.enroll.offeredCourse.update.mutate({
-    ...formData,
-    phaseId: props.phaseId,
-  })
-  assign(
-    adminCoursesStore.phaseOfferedCourses[props.phaseId].find(
-      (e) => e.moduleCode === formData.moduleCode,
-    ),
-    formData,
-  )
-  showEditDialog.value = false
-}
-
 const adminCoursesStore = useAdminCoursesStore()
-onBeforeMount(() => {
-  void adminCoursesStore.fetchOfferedCourses(props.phaseId)
-})
+const courseStats = ref<
+  Record<string, { avgPoints: number; studentCount: number } | undefined>
+>({})
+
+const sortedCourses = computed(() =>
+  sortBy(
+    adminCoursesStore.phaseOfferedCourses[props.phaseId]?.map((course) => ({
+      ...course,
+      ...courseStats.value[course.moduleCode],
+    })),
+    (e) => e.studentCount,
+  ),
+)
+
+watch(
+  () => props.phaseId,
+  async () => {
+    await adminCoursesStore.fetchOfferedCourses(props.phaseId)
+    void fetchCourseStats(props.phaseId)
+  },
+  { immediate: true },
+)
+
+async function fetchCourseStats(phaseId: number) {
+  const result = await trpc.admin.enroll.statistics.courseEnrollments.query({
+    phaseId,
+  })
+  courseStats.value = Object.fromEntries(result.map((e) => [e.moduleCode, e]))
+}
 </script>
 
 <template>
@@ -56,15 +53,12 @@ onBeforeMount(() => {
           <th>Studiengänge</th>
           <th>min</th>
           <th>max</th>
-          <th>info</th>
-          <th />
+          <th>Anzahl</th>
+          <th><span class="text-h6">⌀</span> Punkte</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="course in adminCoursesStore.phaseOfferedCourses[phaseId]"
-          :key="course.moduleCode"
-        >
+        <tr v-for="course in sortedCourses" :key="course.moduleCode">
           <td>{{ course.moduleCode }}</td>
           <td>
             {{
@@ -82,32 +76,10 @@ onBeforeMount(() => {
           <td>
             {{ course.maxParticipants }}
           </td>
-          <td>
-            <VTooltip
-              v-if="course.extraInfo"
-              activator="parent"
-              location="left"
-              max-width="400"
-            >
-              <template #activator>
-                <VBtn v-ripple="false" icon="mdi-information" variant="text" />
-              </template>
-              {{ course.extraInfo }}
-            </VTooltip>
-          </td>
-          <td>
-            <VBtn class="float-right" @click="openEditDialog(course)">
-              <VIcon size="25">mdi-pencil</VIcon>
-            </VBtn>
-          </td>
+          <td>{{ course.studentCount }}</td>
+          <td>{{ course.avgPoints }}</td>
         </tr>
       </tbody>
     </VTable>
-    <EditOfferedCourse
-      :offered-course="editableCourse"
-      :visible="showEditDialog"
-      @cancel="showEditDialog = false"
-      @submit="submitEdit"
-    />
   </div>
 </template>

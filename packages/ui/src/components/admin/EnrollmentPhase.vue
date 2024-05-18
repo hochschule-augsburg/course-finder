@@ -62,9 +62,9 @@ function updateRemainingTime() {
 <template>
   <div>
     <div v-if="phase" class="current-phase">
-      <h2>
+      <h3>
         {{ locale === 'en' ? phase.title.en : phase.title.de }}
-      </h2>
+      </h3>
       <strong>{{ t('start') }}:</strong>
       {{ phase.startFormatted }}
       <br />

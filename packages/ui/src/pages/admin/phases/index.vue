@@ -1,13 +1,8 @@
 <script lang="ts" setup>
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { computed } from 'vue'
 import { VBtn, VContainer, VRow } from 'vuetify/components'
 
 const adminCoursesStore = useAdminCoursesStore()
-
-const passedPhases = computed(() => {
-  return adminCoursesStore.phases.filter((phase) => phase.end < new Date())
-})
 </script>
 
 <template>
@@ -15,14 +10,18 @@ const passedPhases = computed(() => {
     <h1>Passed Phases</h1>
     <VContainer>
       <VRow justify="center">
-        <VCol v-for="subject in passedPhases" :key="subject.id" cols="auto">
+        <VCol
+          v-for="phase in adminCoursesStore.phases"
+          :key="phase.id"
+          cols="auto"
+        >
           <VBtn
-            :to="`/admin/phase-${subject.id}`"
+            :to="`phases/${phase.id}`"
             height="150"
             style="text-align: left; text-transform: none; font-weight: normal"
             width="350"
           >
-            <EnrollmentPhase :phase-id="subject.id" />
+            <EnrollmentPhase :phase-id="phase.id" />
           </VBtn>
         </VCol>
       </VRow>
