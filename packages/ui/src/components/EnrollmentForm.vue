@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Subject } from '@/stores/CoursesStore'
+import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
 import { ref } from 'vue'
@@ -7,16 +7,18 @@ import { useI18n } from 'vue-i18n'
 import {
   VBtn,
   VDialog,
+  VDivider,
   VForm,
+  VIcon,
   VRow,
   VSheet,
-  VSpacer,
   VTextField,
 } from 'vuetify/components'
 
 const { locale } = useI18n()
 const { t } = useI18n()
 
+const coursesStore = useCoursesStore()
 const enrollmentStore = useEnrollmentStore()
 
 const visible = defineModel<boolean>('visible')
@@ -103,9 +105,6 @@ async function validate() {
 
   try {
     await enrollmentStore.enroll(creditsNeeded.value ?? 0)
-    // enrollmentStore.enrolledSubjects.forEach(
-    //   (s) => (s.autoFillOption = 'undefined'),
-    // )
   } catch (error) {
     console.log(error)
   } finally {
@@ -113,10 +112,9 @@ async function validate() {
   }
 
   visible.value = false
-}
-
-function reset() {
-  form.value?.reset()
+  // Dialog prevents scrolling
+  setTimeout(() => window.scrollTo(0, 0), 1)
+  coursesStore.sortSubjects()
 }
 </script>
 
@@ -137,26 +135,35 @@ function reset() {
           v-model.number="creditsNeeded"
           :label="t('credits-wanted')"
           :rules="integerInputRules"
+          class="mb-3"
           color="rgb(var(--v-theme-primary))"
           required
         />
-        <VDivider :thickness="2" class="mt-0 mb-4" />
+        <VDivider :thickness="2" class="mt-0 mb-6" />
         <VTextField
           v-for="subject in enrollmentStore.enrolledSubjects"
           v-model.number="subject.points"
-          :append-inner-icon="autoFillOptions[subject.autoFillOption]"
           :key="subject.moduleCode"
           :label="locale === 'de' ? subject.title.de : subject.title.en"
           :rules="integerInputRules"
+          class="mb-3"
           color="rgb(var(--v-theme-primary))"
           required
-          @click:append-inner.stop="
-            subject.autoFillOption = getNextAutoFillOption(
-              subject.autoFillOption,
-            )
-          "
-        />
-        <VRow align="center" class="mb-5 px-3">
+        >
+          <template #append-inner>
+            <VIcon
+              tabindex="-1"
+              @click.stop="
+                subject.autoFillOption = getNextAutoFillOption(
+                  subject.autoFillOption,
+                )
+              "
+            >
+              {{ autoFillOptions[subject.autoFillOption] }}
+            </VIcon>
+          </template>
+        </VTextField>
+        <VRow align="center" class="mb-6 px-3">
           <div
             v-for="(icon, option) in autoFillOptions"
             :key="option"
@@ -168,14 +175,7 @@ function reset() {
             {{ option }}
           </div>
         </VRow>
-        <VRow align="center" class="mt-2 mb-1 px-3">
-          <VBtn size="x-small" icon @click="reset">
-            <VIcon>mdi-restore</VIcon>
-            <VTooltip activator="parent" location="bottom" open-delay="500">
-              {{ t('reset') }}
-            </VTooltip>
-          </VBtn>
-          <VSpacer />
+        <VRow align="center" class="mt-2 mb-1 px-3" justify="end">
           <VBtn :text="t('autofill')" class="mr-3" @click="autoFill" />
           <VBtn :loading="loading" :text="t('register')" @click="validate" />
         </VRow>
@@ -192,7 +192,6 @@ de:
   credits-wanted: Bestrebte Credit Points
   points-sum-100: Insgesamt 100 Punkte vergeben!
   select-autofill: Autofill Option ungültig
-  reset: Zurücksetzen
   autofill: Autofill
 en:
   register: Register
@@ -201,6 +200,5 @@ en:
   credits-wanted: Credits wanted
   points-sum-100: allocate 100 points in total!
   select-autofill: Invalid autofill option
-  reset: Reset
   autofill: Autofill
 </i18n>

@@ -31,12 +31,12 @@
 
 .v-card:hover .v-badge__badge {
     background-color: rgb(var(--v-theme-primary));
-    color: white;
+    color: rgb(var(--v-theme-on-primary));
 }
 
 .v-expansion-panel:hover .v-badge__badge {
     background-color: rgb(var(--v-theme-primary));
-    color: white;
+    color: rgb(var(--v-theme-on-primary));
 }
 
 a {

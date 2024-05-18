@@ -45,6 +45,7 @@ export const useCoursesStore = defineStore('courses', () => {
     currentPhase,
     filteredSubjects,
     init: update,
+    sortSubjects,
     subjects,
   }
 
@@ -76,6 +77,10 @@ export const useCoursesStore = defineStore('courses', () => {
     filteredSubjects.value = [...subjects.value]
     filteredSubjects.value = filtersStore.applyFilters(filteredSubjects.value)
     filteredSubjects.value = filtersStore.searchSubjects(filteredSubjects.value)
+    sortSubjects()
+  }
+
+  function sortSubjects() {
     filteredSubjects.value.sort((a, b) => {
       const enrolledSubjectA = enrollmentStore.enrolledSubjects.find(
         (s) => s.moduleCode === a.moduleCode,

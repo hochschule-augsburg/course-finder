@@ -29,6 +29,7 @@
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "superjson": "^2.2.1",
+    "v-onboarding": "^2.8.2",
     "vue": "^3.4.25",
     "vue-i18n": "9",
     "vue-pdf-embed": "^2.0.3",
