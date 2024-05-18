@@ -3,7 +3,7 @@ import { startPhaseSchedulingFromDatabase } from './scheduling/scheduleControlle
 import { createServer } from './server/server'
 
 // Start the server
-const server = await createServer(serverConfig)
+const server = await createServer()
 await prisma.$connect()
 
 // Start the registration cycle

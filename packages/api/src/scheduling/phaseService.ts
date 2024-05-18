@@ -1,24 +1,8 @@
-/* eslint-disable perfectionist/sort-interfaces */
-/* eslint-disable perfectionist/sort-objects */
-import { PrismaClient } from '@prisma/client'
-
 import type { EnrollPhase, I18nJson } from '../prisma/PrismaTypes'
 
-interface Phase {
-  id: number
-  start: Date
-  end: Date
-  title: I18nJson
-  description: I18nJson
-}
+import { prisma } from '../prisma/prisma'
 
 export class PhaseService {
-  private prisma: PrismaClient
-
-  constructor() {
-    this.prisma = new PrismaClient()
-  }
-
   /**
    * Creates a new enrollment phase.
    *
@@ -34,12 +18,12 @@ export class PhaseService {
     title: I18nJson,
     description: I18nJson,
   ): Promise<EnrollPhase> {
-    const createdPhase = await this.prisma.enrollphase.create({
+    const createdPhase = await prisma.enrollphase.create({
       data: {
-        start,
-        end,
-        title,
         description,
+        end,
+        start,
+        title,
       },
     })
     return createdPhase
@@ -53,7 +37,7 @@ export class PhaseService {
    */
   async deletePhase(phaseId: number): Promise<void> {
     try {
-      await this.prisma.enrollphase.delete({
+      await prisma.enrollphase.delete({
         where: { id: phaseId },
       })
       console.log(`Phase with ID ${phaseId} deleted successfully.`)
@@ -67,14 +51,15 @@ export class PhaseService {
    * Retrieves all phases from the database.
    * @returns A promise that resolves to an array of Phase objects.
    */
-  async getAllPhases(): Promise<Phase[]> {
-    const phases = await this.prisma.enrollphase.findMany()
+  async getAllPhases(): Promise<EnrollPhase[]> {
+    const phases = await prisma.enrollphase.findMany()
     return phases.map((phase) => ({
-      id: phase.id,
-      start: phase.start,
-      end: phase.end,
-      title: phase.title,
       description: phase.description,
+      end: phase.end,
+      id: phase.id,
+      phase: phase.phase,
+      start: phase.start,
+      title: phase.title,
     }))
   }
 
@@ -97,14 +82,14 @@ export class PhaseService {
     description: I18nJson,
   ): Promise<EnrollPhase> {
     try {
-      const updatedPhase = await this.prisma.enrollphase.update({
-        where: { id: phaseId },
+      const updatedPhase = await prisma.enrollphase.update({
         data: {
-          start,
-          end,
-          title,
           description,
+          end,
+          start,
+          title,
         },
+        where: { id: phaseId },
       })
       return updatedPhase
     } catch (error) {

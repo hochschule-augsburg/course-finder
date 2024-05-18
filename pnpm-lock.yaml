@@ -127,6 +127,9 @@ importers:
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
+      '@types/node-schedule':
+        specifier: ^2.1.7
+        version: 2.1.7
       '@types/pg':
         specifier: ^8.11.5
         version: 8.11.6
@@ -165,7 +168,7 @@ importers:
         version: 7.4.47
       '@trpc/client':
         specifier: next
-        version: 11.0.0-rc.364(@trpc/server@10.45.2)
+        version: 11.0.0-rc.364(@trpc/server@11.0.0-rc.364)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -5067,10 +5070,6 @@ snapshots:
       shiki: 1.4.0
 
   '@sinclair/typebox@0.27.8': {}
-
-  '@trpc/client@11.0.0-rc.364(@trpc/server@10.45.2)':
-    dependencies:
-      '@trpc/server': 10.45.2
 
   '@trpc/client@11.0.0-rc.364(@trpc/server@11.0.0-rc.364)':
     dependencies:

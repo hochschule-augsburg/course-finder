@@ -81,14 +81,14 @@ model Enrollphase {
   description    Json
   offeredCourses OfferedCourse[]
   studentPhases  StudentPhase[]
-  phase          Phase
+  phase          Phase           @default(REGISTRATION)
 }
 
 enum Phase {
   REGISTRATION
   EMAILNOTIFICATION
   DRAWING
-  FINISHED 
+  FINISHED
 }
 
 model OfferedCourse {

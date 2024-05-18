@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-object-types */
 import schedule from 'node-schedule'
 
 import type { I18nJson } from '../prisma/PrismaTypes'
@@ -15,11 +14,11 @@ export async function startPhaseSchedulingFromDatabase() {
 
 // diese Funktion überprüft, ob eine Phase aktiviert ist
 function schedulePhase(phase: {
+  description: I18nJson
+  end: Date
   id: number
   start: Date
-  end: Date
   title: I18nJson
-  description: I18nJson
 }) {
   const phaseStartTime = phase.start
   if (phaseStartTime !== undefined || phaseStartTime !== null) {
@@ -30,11 +29,11 @@ function schedulePhase(phase: {
 }
 
 async function monitorRegistrationCycle(phase: {
+  description: I18nJson
+  end: Date
   id: number
   start: Date
-  end: Date
   title: I18nJson
-  description: I18nJson
 }) {
   const now = new Date()
   const phaseStartTime = new Date(phase.start)
