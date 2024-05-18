@@ -44,7 +44,7 @@ async function copyLinkToClipboard() {
           </span>
           <VSpacer />
           <VBtn
-            class="flex-shrink-0"
+            class="copy-link-button flex-shrink-0"
             color="primary"
             variant="text"
             icon
@@ -58,6 +58,7 @@ async function copyLinkToClipboard() {
               v-model="showLinkCopied"
               activator="parent"
               color="secondary"
+              content-class="subject-dialog-copy-snackbar-content"
               location="bottom left"
               rounded="pill"
               timeout="500"
@@ -83,6 +84,13 @@ async function copyLinkToClipboard() {
     </VCard>
   </VDialog>
 </template>
+
+<!-- eslint-disable-next-line vue/enforce-style-attribute -->
+<style lang="scss">
+.subject-dialog-copy-snackbar-content {
+  min-width: 1rem;
+}
+</style>
 
 <i18n lang="yaml">
 en:

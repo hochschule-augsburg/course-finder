@@ -15,7 +15,11 @@ router.beforeEach(async (to) => {
   }
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
+  // pushing a hash to the URL should not scroll to the top
+  if (from.path === to.path) {
+    return
+  }
   document.documentElement.scrollTop = 0
 })
 
