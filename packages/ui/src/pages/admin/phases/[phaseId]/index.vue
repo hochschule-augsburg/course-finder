@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
 
 const route = useRoute()
 const phaseId = Number(route.params.phaseId)
-
-const tab = ref<'assignments' | 'courses'>('courses')
 </script>
 
 <template>
@@ -34,10 +31,12 @@ const tab = ref<'assignments' | 'courses'>('courses')
               <VCol cols="6">
                 <VBtn>Close</VBtn>
               </VCol>
-              <!-- <VCol cols="6">
-                <VBtn>Button 4</VBtn>
-              </VCol> -->
             </VRow>
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol>
+            <AssignmentView :phase-id />
           </VCol>
         </VRow>
       </VContainer>
