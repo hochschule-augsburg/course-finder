@@ -1,30 +1,32 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/CoursesStore'
 
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import {
   VBtn,
   VCard,
-  VCardActions,
-  VCardText,
   VCardTitle,
   VDialog,
+  VIcon,
+  VSnackbar,
   VSpacer,
+  VTooltip,
 } from 'vuetify/components'
-
-import { alertService } from '../AlertService'
 
 defineProps<{
   subject?: Subject
 }>()
 const showSubjectDialog = defineModel<boolean>('visible')
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const route = useRoute()
+
+const showLinkCopied = ref(false)
 
 async function copyLinkToClipboard() {
   await navigator.clipboard.writeText(`${window.origin}${route.fullPath}`)
-  alertService.show({ color: 'neutral', text: 'Link copied to clipboard' })
+  showLinkCopied.value = true
 }
 </script>
 
@@ -43,15 +45,32 @@ async function copyLinkToClipboard() {
           <VSpacer />
           <VBtn
             class="flex-shrink-0"
-            icon="mdi-link"
+            color="primary"
             variant="text"
+            icon
             @click="copyLinkToClipboard"
-          />
+          >
+            <VIcon> mdi-link </VIcon>
+            <VTooltip activator="parent" location="bottom right">
+              {{ t('copy-link') }}
+            </VTooltip>
+            <VSnackbar
+              v-model="showLinkCopied"
+              activator="parent"
+              color="secondary"
+              location="bottom left"
+              rounded="pill"
+              timeout="500"
+            >
+              {{ t('link-copied') }}
+            </VSnackbar>
+          </VBtn>
         </div>
       </VCardTitle>
       <VCardText class="pa-0 pb-3 px-3">
         <SubjectDetails :subject="subject" />
       </VCardText>
+
       <VCardActions class="mx-4">
         <VSpacer />
         <VBtn
@@ -67,7 +86,9 @@ async function copyLinkToClipboard() {
 
 <i18n lang="yaml">
 en:
-  link_copied: Link copied to clipboard
+  copy-link: Copy link
+  link-copied: Link copied to clipboard
 de:
-  link_copied: Link kopiert
+  copy-link: Link kopieren
+  link-copied: Link kopiert
 </i18n>
