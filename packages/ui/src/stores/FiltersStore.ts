@@ -54,10 +54,10 @@ export const useFiltersStore = defineStore('filters', () => {
           return false
         }),
       hidden: hideNonStudentFilters,
-      name: 'Veranstaltungsart',
+      name: 'filter.type-of-event',
       options: [
-        { option: 'wöchentlich', selected: false },
-        { option: 'Blockveranstaltung', selected: false },
+        { option: 'filter.weekly', selected: false }, // Updated to use i18n key
+        { option: 'filter.block-event', selected: false }, // Updated to use i18n key
       ],
     },
     {
@@ -89,16 +89,15 @@ export const useFiltersStore = defineStore('filters', () => {
           return false
         }),
       hidden: hideNonStudentFilters,
-      name: 'Wochentag',
-      // TODO: use i18n (index instead of names)
+      name: 'filter.weekday',
       options: [
-        { option: 'Montag', selected: false },
-        { option: 'Dienstag', selected: false },
-        { option: 'Mittwoch', selected: false },
-        { option: 'Donnerstag', selected: false },
-        { option: 'Freitag', selected: false },
-        { option: 'Samstag', selected: false },
-        { option: 'Sonntag', selected: false },
+        { option: 'filter.monday', selected: false },
+        { option: 'filter.tuesday', selected: false },
+        { option: 'filter.wednesday', selected: false },
+        { option: 'filter.thursday', selected: false },
+        { option: 'filter.friday', selected: false },
+        { option: 'filter.saturday', selected: false },
+        { option: 'filter.sunday', selected: false },
       ],
     },
   ])
@@ -111,7 +110,7 @@ export const useFiltersStore = defineStore('filters', () => {
         ),
       max: 20,
       min: 0,
-      name: 'SWS',
+      name: 'filter.semester-hours',
       range: [0, 20],
     },
     {
@@ -121,7 +120,7 @@ export const useFiltersStore = defineStore('filters', () => {
         ),
       max: 20,
       min: 0,
-      name: 'CP',
+      name: 'filter.credit-points',
       range: [0, 20],
     },
     {
@@ -134,7 +133,7 @@ export const useFiltersStore = defineStore('filters', () => {
       hidden: hideNonStudentFilters,
       max: 100,
       min: 0,
-      name: 'Teilnehmer',
+      name: 'filter.participants',
       range: [0, 100],
     },
   ])

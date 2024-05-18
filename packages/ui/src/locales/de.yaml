@@ -10,3 +10,20 @@ global:
   back: Zurück
 
   search: Suchen
+
+filter:
+  title: Filter
+  type-of-event: Veranstaltungsart
+  weekly: wöchentlich
+  block-event: Blockveranstaltung
+  weekday: Wochentag
+  monday: Montag
+  tuesday: Dienstag
+  wednesday: Mittwoch
+  thursday: Donnerstag
+  friday: Freitag
+  saturday: Samstag
+  sunday: Sonntag
+  semester-hours: SWS
+  credit-points: CP
+  participants: Teilnehmer

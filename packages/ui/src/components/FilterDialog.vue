@@ -29,12 +29,12 @@ function resetFilters() {
 
 <template>
   <VDialog v-model:model-value="showFilterDialog" max-width="500">
-    <VCard prepend-icon="mdi-filter" title="Filter">
+    <VCard :title="t('filter.title')" prepend-icon="mdi-filter">
       <VCardText>
         <template v-for="rangeFilter in rangeFilters" :key="rangeFilter.name">
           <template v-if="!rangeFilter.hidden">
             <h2 class="text-h6 mb-2">
-              {{ rangeFilter.name }}
+              {{ t(rangeFilter.name) }}
             </h2>
             <VRangeSlider
               v-model:model-value="rangeFilter.range"
@@ -54,7 +54,7 @@ function resetFilters() {
         >
           <template v-if="!optionsFilter.hidden">
             <h2 class="text-h6 mb-2">
-              {{ optionsFilter.name }}
+              {{ t(optionsFilter.name) }}
             </h2>
 
             <VChipGroup class="mb-4" column multiple>
@@ -64,7 +64,7 @@ function resetFilters() {
                 :key="option.option"
                 @click="option.selected = !option.selected"
               >
-                {{ option.option }}
+                {{ t(option.option) }}
               </VChip>
             </VChipGroup>
           </template>
