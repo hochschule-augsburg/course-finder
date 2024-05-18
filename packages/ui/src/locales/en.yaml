@@ -8,3 +8,5 @@ global:
   reset: Reset
   confirm-action: Confirm action
   back: Back
+
+  search: Search

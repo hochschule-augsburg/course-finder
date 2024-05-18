@@ -4,6 +4,7 @@ import type { Subject } from '@/stores/CoursesStore'
 import { trpc } from '@/api/trpc'
 import { useAsyncState } from '@vueuse/core'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import VuePdfEmbed from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/style/annotationLayer.css'
 import 'vue-pdf-embed/dist/style/index.css'
@@ -20,6 +21,8 @@ import {
 const props = defineProps<{
   subject: Subject
 }>()
+
+const { locale, t } = useI18n()
 
 const { state: pdfSource } = useAsyncState(
   async () =>
@@ -47,7 +50,7 @@ const fullscreen = ref(false)
         >
           <div class="mb-1 d-flex align-end">
             <VIcon class="mr-3" size="32">mdi-lectern</VIcon>
-            <h4>Dozenten</h4>
+            <h4>{{ t('lecturers') }}</h4>
           </div>
           <div>
             <p class="mb-4 px-3">
@@ -56,16 +59,16 @@ const fullscreen = ref(false)
           </div>
           <div class="mb-1 d-flex align-end">
             <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
-            <h4>Arbeitsaufwand</h4>
+            <h4>{{ t('workload') }}</h4>
           </div>
           <div class="mb-4 px-3 d-flex flex-column">
-            <p>{{ subject.semesterHours }} SWS</p>
-            <p>{{ subject.creditPoints }} CPs</p>
+            <p>{{ subject.semesterHours }} {{ t('semester-hours') }}</p>
+            <p>{{ subject.creditPoints }} {{ t('credit-points') }}</p>
           </div>
           <template v-if="subject.offeredCourse">
             <div class="mb-1 d-flex align-end">
               <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
-              <h4>Teilnehmer</h4>
+              <h4>{{ t('participants') }}</h4>
             </div>
             <p class="mb-4 px-3">
               {{
@@ -77,7 +80,7 @@ const fullscreen = ref(false)
 
             <div class="mb-1 d-flex align-end">
               <VIcon class="mr-3" size="32">mdi-calendar</VIcon>
-              <h4>Termine</h4>
+              <h4>{{ t('appointments') }}</h4>
             </div>
             <p
               v-if="subject.offeredCourse.appointments.type === 'weekly'"
@@ -87,13 +90,13 @@ const fullscreen = ref(false)
                 v-for="date in subject.offeredCourse.appointments.dates"
               >
                 {{
-                  date.from.toLocaleDateString([], {
+                  date.from.toLocaleDateString(locale, {
                     weekday: 'long',
                     hour: 'numeric',
                     minute: '2-digit',
                   }) +
                   ' - ' +
-                  date.to.toLocaleTimeString([], {
+                  date.to.toLocaleTimeString(locale, {
                     hour: 'numeric',
                     minute: '2-digit',
                   })
@@ -110,13 +113,13 @@ const fullscreen = ref(false)
                 :key="subject.moduleCode + 'block' + i"
               >
                 {{
-                  date.from.toLocaleDateString([], {
+                  date.from.toLocaleDateString(locale, {
                     day: '2-digit',
                     month: '2-digit',
                     year: '2-digit',
                   }) +
                   ' - ' +
-                  date.to.toLocaleDateString([], {
+                  date.to.toLocaleDateString(locale, {
                     day: '2-digit',
                     month: '2-digit',
                     year: '2-digit',
@@ -136,16 +139,18 @@ const fullscreen = ref(false)
                 :key="subject.moduleCode + 'irregular' + i"
               >
                 {{
-                  date.from.toLocaleDateString([], {
+                  date.from.toLocaleString(locale, {
+                    weekday: 'short',
                     day: '2-digit',
                     month: '2-digit',
                     year: '2-digit',
+                    hour: 'numeric',
+                    minute: '2-digit',
                   }) +
                   ' - ' +
-                  date.to.toLocaleDateString([], {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: '2-digit',
+                  date.to.toLocaleTimeString(locale, {
+                    hour: 'numeric',
+                    minute: '2-digit',
                   })
                 }}
               </p>
@@ -154,7 +159,7 @@ const fullscreen = ref(false)
 
           <div class="mb-1 d-flex align-end">
             <VIcon class="mr-3" size="32">mdi-alert-circle</VIcon>
-            <h4>Hinweis</h4>
+            <h4>{{ t('note') }}</h4>
           </div>
           <p v-if="subject.extraInfo" class="mb-4 px-3 d-flex flex-column">
             {{ subject.extraInfo }}
@@ -231,3 +236,23 @@ const fullscreen = ref(false)
   width: 100vw;
 }
 </style>
+
+<i18n lang="yaml">
+en:
+  lecturers: Lecturers
+  workload: Workload
+  semester-hours: SWS
+  credit-points: CPs
+  participants: Participants
+  appointments: Appointments
+  note: Note
+
+de:
+  lecturers: Dozenten
+  workload: Arbeitsaufwand
+  semester-hours: SWS
+  credit-points: CPs
+  participants: Teilnehmer
+  appointments: Termine
+  note: Hinweis
+</i18n>

@@ -16,6 +16,7 @@ defineProps<{
       @click="changeTheme('auto')"
     />
     <VDivider />
+    <!-- Intentionally no i18n -->
     <VListItem
       :active="selectedTheme === 'light'"
       prepend-icon="mdi-white-balance-sunny"

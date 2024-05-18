@@ -27,11 +27,11 @@ function getRangeChipLabel(filter: RangeFilter) {
   <div class="my-4">
     <VTextField
       v-model:model-value="search"
+      :label="$t('global.search')"
       :on-click:clear="filtersStore.resetSearch"
       bg-color="rgb(var(--v-theme-secondary))"
       class="mx-3"
       color="rgb(var(--v-theme-primary))"
-      label="Search"
       prepend-inner-icon="mdi-magnify"
       type="text"
       clearable
