@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
 import { useFiltersStore } from '@/stores/FiltersStore'
+import { startOfWeek } from 'date-fns'
+import { range } from 'lodash-es'
 import { storeToRefs } from 'pinia'
-import { defineModel } from 'vue'
+import { computed, defineModel } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -19,7 +22,13 @@ import {
 const showFilterDialog = defineModel<boolean>()
 const filtersStore = useFiltersStore()
 const { optionsFilters, rangeFilters } = storeToRefs(useFiltersStore())
-const { t } = useI18n()
+const { locale, t } = useI18n()
+
+const date = new Date()
+
+const weekStartIndex = computed<number>(() =>
+  startOfWeek(date, { locale: getDateFnsLocale(locale.value) }).getDay(),
+)
 
 function resetFilters() {
   filtersStore.resetFilters()
@@ -58,7 +67,24 @@ function resetFilters() {
             </h2>
 
             <VChipGroup class="mb-4" column multiple>
+              <template v-if="optionsFilter.name === 'filter.weekday'">
+                <VChip
+                  v-for="i in range(weekStartIndex, weekStartIndex + 7)"
+                  :class="
+                    optionsFilter.options[i % 7].selected ? 'text-primary' : ''
+                  "
+                  :key="optionsFilter.options[i % 7].option"
+                  @click="
+                    optionsFilter.options[i % 7].selected =
+                      !optionsFilter.options[i % 7].selected
+                  "
+                >
+                  {{ t(optionsFilter.options[i % 7].option) }}
+                </VChip>
+              </template>
+
               <VChip
+                v-else
                 v-for="option in optionsFilter.options"
                 :class="option.selected ? 'text-primary' : ''"
                 :key="option.option"
