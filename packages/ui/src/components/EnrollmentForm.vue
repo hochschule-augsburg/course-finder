@@ -4,7 +4,7 @@ import type { EnrolledCourse } from '@/stores/EnrollmentStore'
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
-import { ref, toRaw, watch } from 'vue'
+import { computed, ref, toRaw, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDisplay } from 'vuetify'
 import {
@@ -15,6 +15,7 @@ import {
   VIcon,
   VRow,
   VSheet,
+  VSpacer,
   VTextField,
   VTooltip,
 } from 'vuetify/components'
@@ -33,6 +34,17 @@ const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 const creditsNeeded = ref<number | undefined>(undefined)
+
+const isFormUntouched = computed(
+  () =>
+    formData.value.filter(
+      (e) =>
+        e.points !==
+        enrollmentStore.enrolledSubjects.find(
+          (original) => original.moduleCode === e.moduleCode,
+        )?.points,
+    ).length === 0 && creditsNeeded.value === enrollmentStore.creditsNeeded,
+)
 
 watch(visible, () => {
   if (visible.value) {
@@ -129,7 +141,11 @@ async function validate() {
 </script>
 
 <template>
-  <VDialog v-model:model-value="visible" max-width="500" persistent>
+  <VDialog
+    v-model:model-value="visible"
+    :persistent="!isFormUntouched"
+    max-width="500"
+  >
     <SubjectDialog
       v-model:visible="showSubjectDialog"
       :subject="selectedSubject"
@@ -192,7 +208,13 @@ async function validate() {
             {{ t(option) }}
           </div>
         </VRow>
-        <VRow align="center" class="mt-2 mb-1 px-3" justify="end">
+        <VRow align="center" class="mt-2 mb-1 px-3">
+          <VBtn
+            :text="t('global.cancel')"
+            class="mr-3"
+            @click="visible = false"
+          />
+          <VSpacer />
           <VBtn :text="t('autofill')" class="mr-3" @click="autoFill" />
           <VBtn :loading="loading" :text="t('register')" @click="validate" />
         </VRow>
