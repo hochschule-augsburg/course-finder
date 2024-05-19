@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { trpc } from '@/api/trpc'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import { computedAsync } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import {
@@ -13,15 +13,16 @@ import {
   VRow,
 } from 'vuetify/components'
 const { t } = useI18n()
-const adminStore = useAdminCoursesStore()
+const adminCourses = useAdminCoursesStore()
+const adminStats = useAdminStatsStore()
 
-const courseStats = computedAsync(() =>
-  adminStore.currentPhase
-    ? trpc.admin.enroll.statistics.phase.query({
-        phaseId: adminStore.currentPhase.id,
-      })
-    : undefined,
-)
+const phaseStats = computedAsync(async () => {
+  if (!adminCourses.currentPhase) {
+    return
+  }
+  await adminStats.fetchPhase(adminCourses.currentPhase?.id)
+  return adminStats.phase[adminCourses.currentPhase?.id]
+})
 </script>
 
 <template>
@@ -36,12 +37,12 @@ const courseStats = computedAsync(() =>
       <VCol cols="12" md="4" sm="6">
         <VCard
           :title="t('current-phase')"
-          :to="`admin/phases/${adminStore.currentPhase?.id}`"
+          :to="`admin/phases/${adminCourses.currentPhase?.id}`"
           density="compact"
         >
           <VCardText>
             <EnrollmentPhase
-              :phase-id="adminStore.currentPhase?.id"
+              :phase-id="adminCourses.currentPhase?.id"
               class="pa-4"
             />
           </VCardText>
@@ -52,7 +53,7 @@ const courseStats = computedAsync(() =>
         <VCard :title="t('statistics')" class="h-100" link>
           <VCardText>
             <p class="text-center text-weight-bold" style="font-size: 4rem">
-              {{ courseStats?.studentCount ?? 0 }}
+              {{ phaseStats?.studentCount ?? 0 }}
             </p>
           </VCardText>
           <VCardSubtitle>{{ t('registered-students') }}</VCardSubtitle>
@@ -80,8 +81,8 @@ const courseStats = computedAsync(() =>
       </VCol>
       <VCol cols="36">
         <OfferedCoursesTable
-          v-if="adminStore.currentPhase"
-          :phase-id="adminStore.currentPhase?.id"
+          v-if="adminCourses.currentPhase"
+          :phase-id="adminCourses.currentPhase?.id"
         />
       </VCol>
     </VRow>

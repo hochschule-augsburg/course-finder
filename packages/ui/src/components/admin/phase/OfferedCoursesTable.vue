@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { trpc } from '@/api/trpc'
 import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { computed, ref, watch } from 'vue'
+import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VTable } from 'vuetify/components'
 
@@ -11,14 +11,12 @@ const props = defineProps<{ phaseId: number }>()
 const { locale, t } = useI18n()
 
 const adminCoursesStore = useAdminCoursesStore()
-const courseStats = ref<
-  Record<string, { avgPoints: number; studentCount: number } | undefined>
->({})
+const adminStats = useAdminStatsStore()
 
 const sortedCourses = computed(() =>
   adminCoursesStore.phaseOfferedCourses[props.phaseId]?.map((course) => ({
     ...course,
-    ...courseStats.value[course.moduleCode],
+    ...adminStats.course[props.phaseId]?.[course.moduleCode],
   })),
 )
 
@@ -26,17 +24,10 @@ watch(
   () => props.phaseId,
   async () => {
     await adminCoursesStore.fetchOfferedCourses(props.phaseId)
-    void fetchCourseStats(props.phaseId)
+    void adminStats.fetchCourse(props.phaseId)
   },
   { immediate: true },
 )
-
-async function fetchCourseStats(phaseId: number) {
-  const result = await trpc.admin.enroll.statistics.courseEnrollments.query({
-    phaseId,
-  })
-  courseStats.value = Object.fromEntries(result.map((e) => [e.moduleCode, e]))
-}
 </script>
 
 <template>
@@ -44,13 +35,13 @@ async function fetchCourseStats(phaseId: number) {
     <VTable>
       <thead>
         <tr>
-          <th>Module code</th>
-          <th>Title</th>
-          <th>Studiengänge</th>
-          <th>min</th>
-          <th>max</th>
-          <th>Anzahl</th>
-          <th><span class="text-h6">⌀</span> Punkte</th>
+          <th>{{ t('module-code') }}</th>
+          <th>{{ t('title') }}</th>
+          <th>{{ t('fields-of-study') }}</th>
+          <th>{{ t('min') }}</th>
+          <th>{{ t('max') }}</th>
+          <th>{{ t('count') }}</th>
+          <th><span class="text-h6">⌀</span> {{ t('points') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -66,12 +57,8 @@ async function fetchCourseStats(phaseId: number) {
           <td>
             {{ course.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e).join(', ') }}
           </td>
-          <td>
-            {{ course.minParticipants }}
-          </td>
-          <td>
-            {{ course.maxParticipants }}
-          </td>
+          <td>{{ course.minParticipants }}</td>
+          <td>{{ course.maxParticipants }}</td>
           <td>{{ course.studentCount }}</td>
           <td>{{ course.avgPoints }}</td>
         </tr>
@@ -79,3 +66,22 @@ async function fetchCourseStats(phaseId: number) {
     </VTable>
   </div>
 </template>
+
+<i18n lang="yaml">
+en:
+  module-code: Module code
+  title: Title
+  fields-of-study: Fields of study
+  min: Min
+  max: Max
+  count: Count
+  points: Points
+de:
+  module-code: Modulcode
+  title: Titel
+  fields-of-study: Studiengänge
+  min: Min
+  max: Max
+  count: Anzahl
+  points: Punkte
+</i18n>

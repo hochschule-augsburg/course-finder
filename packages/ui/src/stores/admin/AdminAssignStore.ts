@@ -1,23 +1,8 @@
-import type {
-  Course as ApiCourse,
-  EnrollPhase,
-  I18nJson,
-  OfferedCourse,
-} from '@workspace/api/src/prisma/PrismaTypes'
-
 import { trpc } from '@/api/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export type Course = Omit<ApiCourse, 'pdf'>
-
-export type Phase = EnrollPhase
-
-export type AdminOfferedCourse = {
-  Course: { lecturers: string[]; title: I18nJson }
-} & OfferedCourse
-
-export const useAdminAssignStore = defineStore('admin-assig.lon', () => {
+export const useAdminAssignStore = defineStore('admin-assign', () => {
   //   const coursesStore = useAdminCoursesStore()
   const assignments = ref<
     Record<

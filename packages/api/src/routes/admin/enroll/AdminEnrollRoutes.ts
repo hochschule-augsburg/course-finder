@@ -249,7 +249,7 @@ export const enrollRouter = router({
     courseEnrollments: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .query(async ({ input }) => {
-        return (
+        const arrayStats = (
           await prisma.offeredCourse.findMany({
             select: {
               StudentChoice: { select: { points: true } },
@@ -264,19 +264,21 @@ export const enrollRouter = router({
           moduleCode: course.moduleCode,
           studentCount: course.StudentChoice.length,
         }))
+
+        return Object.fromEntries(
+          arrayStats.map((course) => [course.moduleCode, course]),
+        )
       }),
     phase: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .query(async ({ input }) => {
         return {
-          studentCount:
-            (
-              await prisma.studentChoice.groupBy({
-                _count: { username: true },
-                by: ['username'],
-                where: { phaseId: input.phaseId },
-              })
-            ).at(0)?._count?.username || 0,
+          studentCount: (
+            await prisma.studentChoice.findMany({
+              distinct: ['username'],
+              where: { phaseId: input.phaseId },
+            })
+          ).length,
         }
       }),
   },
