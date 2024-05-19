@@ -37,6 +37,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   const coursesStore = useCoursesStore()
 
   const enrolledSubjects = ref<EnrolledCourse[]>([])
+  const creditsNeeded = ref(0)
 
   watch(
     () => coursesStore.currentPhase,
@@ -46,27 +47,30 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     { immediate: true },
   )
 
-  return { addSubject, enroll, enrolledSubjects, removeSubject }
+  return { addSubject, creditsNeeded, enroll, enrolledSubjects, removeSubject }
 
   async function update() {
     if (!coursesStore.currentPhase) {
       enrolledSubjects.value = []
       return
     }
-    enrolledSubjects.value = (
-      await trpc.enroll.list.query({
-        phaseId: coursesStore.currentPhase.id,
-      })
-    ).map(extendEnrolled)
+    const result = await trpc.enroll.list.query({
+      phaseId: coursesStore.currentPhase.id,
+    })
+
+    enrolledSubjects.value = result.choices.map(extendEnrolled)
+    creditsNeeded.value = result.creditsNeeded
   }
 
-  function enroll(creditsNeeded: number) {
+  async function enroll(data: EnrolledCourse[], inputCredits: number) {
     if (coursesStore.currentPhase) {
-      return trpc.enroll.bulk.mutate({
-        creditsNeeded: creditsNeeded,
-        data: enrolledSubjects.value,
+      const result = await trpc.enroll.bulk.mutate({
+        creditsNeeded: inputCredits,
+        data,
         phaseId: coursesStore.currentPhase.id,
       })
+      enrolledSubjects.value = result.choices.map(extendEnrolled)
+      creditsNeeded.value = result.creditsNeeded
     }
   }
 
@@ -146,7 +150,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     }
     return {
       ...enrolled,
-      autoFillOption: 'prio',
+      autoFillOption: enrolled.points > 1 ? 'prio' : 'fallback',
       title: course.title,
     }
   }

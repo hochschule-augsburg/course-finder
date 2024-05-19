@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import type { EnrolledCourse } from '@/stores/EnrollmentStore'
+
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { sumBy } from 'lodash-es'
-import { ref } from 'vue'
+import { ref, toRaw, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDisplay } from 'vuetify'
 import {
   VBtn,
   VDialog,
@@ -13,21 +16,30 @@ import {
   VRow,
   VSheet,
   VTextField,
+  VTooltip,
 } from 'vuetify/components'
 
-const { locale } = useI18n()
-const { t } = useI18n()
+const { locale, t } = useI18n()
+const { mobile } = useDisplay()
 
 const coursesStore = useCoursesStore()
 const enrollmentStore = useEnrollmentStore()
 
 const visible = defineModel<boolean>('visible')
 
-const form = ref<VForm | undefined>(undefined)
+const form = ref<VForm | null>()
+const formData = ref<EnrolledCourse[]>([])
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 const creditsNeeded = ref<number | undefined>(undefined)
+
+watch(visible, () => {
+  if (visible.value) {
+    formData.value = structuredClone(toRaw(enrollmentStore.enrolledSubjects))
+    creditsNeeded.value = enrollmentStore.creditsNeeded
+  }
+})
 
 const autoFillOptions = {
   fallback: 'mdi-alpha-f-circle',
@@ -41,9 +53,9 @@ function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
 async function autoFill() {
   await form.value?.validate()
 
-  if (enrollmentStore.enrolledSubjects.some((s) => !s.autoFillOption)) {
+  if (formData.value.some((s) => !s.autoFillOption)) {
     form.value?.items.slice(1).forEach((item, index) => {
-      if (!enrollmentStore.enrolledSubjects[index].autoFillOption) {
+      if (!formData.value[index].autoFillOption) {
         item.errorMessages.push(t('select-autofill'))
       }
     })
@@ -52,12 +64,10 @@ async function autoFill() {
 
   let remPoints = MAX_POINTS
 
-  const fallbackSubjects = enrollmentStore.enrolledSubjects.filter(
+  const fallbackSubjects = formData.value.filter(
     (s) => s.autoFillOption === 'fallback',
   )
-  const prioSubjects = enrollmentStore.enrolledSubjects.filter(
-    (s) => s.autoFillOption === 'prio',
-  )
+  const prioSubjects = formData.value.filter((s) => s.autoFillOption === 'prio')
 
   fallbackSubjects.forEach((s) => {
     if (remPoints > 0) {
@@ -92,8 +102,8 @@ async function validate() {
   }
 
   if (
-    enrollmentStore.enrolledSubjects.length > 0 && // make it possible to reset enrollment
-    sumBy(enrollmentStore.enrolledSubjects, 'points') !== MAX_POINTS
+    formData.value.length > 0 && // make it possible to reset enrollment
+    sumBy(formData.value, 'points') !== MAX_POINTS
   ) {
     form.value?.items
       .slice(1)
@@ -104,7 +114,7 @@ async function validate() {
   loading.value = true
 
   try {
-    await enrollmentStore.enroll(creditsNeeded.value ?? 0)
+    await enrollmentStore.enroll(formData.value, creditsNeeded.value ?? 0)
   } catch (error) {
     console.log(error)
   } finally {
@@ -140,30 +150,37 @@ async function validate() {
           required
         />
         <VDivider :thickness="2" class="mt-0 mb-6" />
-        <VTextField
-          v-for="subject in enrollmentStore.enrolledSubjects"
-          v-model.number="subject.points"
-          :key="subject.moduleCode"
-          :label="locale === 'de' ? subject.title.de : subject.title.en"
-          :rules="integerInputRules"
-          class="mb-3"
-          color="rgb(var(--v-theme-primary))"
-          required
-        >
-          <template #append-inner>
-            <VIcon
-              tabindex="-1"
-              @click.stop="
-                subject.autoFillOption = getNextAutoFillOption(
-                  subject.autoFillOption,
-                )
-              "
-            >
-              {{ autoFillOptions[subject.autoFillOption] }}
-            </VIcon>
-          </template>
-        </VTextField>
-        <VRow align="center" class="mb-6 px-3">
+        <template v-for="subject in formData" :key="subject.moduleCode">
+          <VTextField
+            v-model.number="subject.points"
+            :label="locale === 'de' ? subject.title.de : subject.title.en"
+            class="mb-3"
+            color="primary"
+            required
+          >
+            <template #append>
+              <VBtn
+                density="compact"
+                tabindex="-1"
+                flat
+                icon
+                @click="
+                  () => {
+                    subject.autoFillOption = getNextAutoFillOption(
+                      subject.autoFillOption,
+                    )
+                  }
+                "
+              >
+                <VIcon>{{ autoFillOptions[subject.autoFillOption] }}</VIcon>
+                <VTooltip activator="parent" location="top right" offset="2">
+                  {{ t(subject.autoFillOption) }}
+                </VTooltip>
+              </VBtn>
+            </template>
+          </VTextField>
+        </template>
+        <VRow v-if="mobile" align="center" class="mb-6 px-3">
           <div
             v-for="(icon, option) in autoFillOptions"
             :key="option"
@@ -172,7 +189,7 @@ async function validate() {
             <VIcon size="small">
               {{ icon }}
             </VIcon>
-            {{ option }}
+            {{ t(option) }}
           </div>
         </VRow>
         <VRow align="center" class="mt-2 mb-1 px-3" justify="end">
@@ -193,6 +210,8 @@ de:
   points-sum-100: Insgesamt 100 Punkte vergeben!
   select-autofill: Autofill Option ungültig
   autofill: Autofill
+  prio: Priorität
+  fallback: Fallback
 en:
   register: Register
   field-required: This field is required!
@@ -201,4 +220,6 @@ en:
   points-sum-100: allocate 100 points in total!
   select-autofill: Invalid autofill option
   autofill: Autofill
+  prio: Priority
+  fallback: Fallback
 </i18n>

@@ -184,19 +184,20 @@ function checkIfPhaseIsOpen(phase: Enrollphase) {
 }
 
 async function getStudentChoices(phaseId: number, username: string) {
-  return (
-    (
-      await prisma.studentPhase.findUnique({
-        select: {
-          StudentChoice: { select: { moduleCode: true, points: true } },
-        },
-        where: {
-          username_phaseId: {
-            phaseId,
-            username,
-          },
-        },
-      })
-    )?.StudentChoice ?? []
-  )
+  const results = await prisma.studentPhase.findUnique({
+    select: {
+      StudentChoice: { select: { moduleCode: true, points: true } },
+      creditsNeeded: true,
+    },
+    where: {
+      username_phaseId: {
+        phaseId,
+        username,
+      },
+    },
+  })
+  return {
+    choices: results?.StudentChoice ?? [],
+    creditsNeeded: results?.creditsNeeded ?? 0,
+  }
 }
