@@ -28,16 +28,16 @@ const courseStats = computedAsync(() =>
   <VContainer>
     <VRow>
       <VCol>
-        <h1>Dashboard</h1>
+        <h1>{{ t('dashboard') }}</h1>
       </VCol>
     </VRow>
 
     <VRow justify="center">
       <VCol cols="12" md="4" sm="6">
         <VCard
+          :title="t('current-phase')"
           :to="`admin/phases/${adminStore.currentPhase?.id}`"
           density="compact"
-          title="Current Phase"
         >
           <VCardText>
             <EnrollmentPhase
@@ -49,30 +49,34 @@ const courseStats = computedAsync(() =>
       </VCol>
 
       <VCol cols="10" md="3" sm="6">
-        <VCard class="h-100" title="Statistik" link>
+        <VCard :title="t('statistics')" class="h-100" link>
           <VCardText>
             <p class="text-center text-weight-bold" style="font-size: 4rem">
               {{ courseStats?.studentCount ?? 0 }}
             </p>
           </VCardText>
-          <VCardSubtitle> Angemeldete Studierende </VCardSubtitle>
+          <VCardSubtitle>{{ t('registered-students') }}</VCardSubtitle>
         </VCard>
       </VCol>
       <!-- Assign Students Button -->
       <VCol cols="12" md="3">
         <VRow>
           <VCol cols="12">
-            <VBtn color="success" to="admin/courses" block>All Courses</VBtn>
+            <VBtn color="success" to="admin/courses" block>
+              {{ t('all-courses') }}
+            </VBtn>
           </VCol>
           <VCol cols="12">
-            <VBtn color="info" to="admin/phases" block>All Phases</VBtn>
+            <VBtn color="info" to="admin/phases" block>
+              {{ t('all-phases') }}
+            </VBtn>
           </VCol>
         </VRow>
       </VCol>
     </VRow>
     <VRow>
       <VCol cols="12">
-        <h2>Angebotene Kurse</h2>
+        <h2>{{ t('available-courses') }}</h2>
       </VCol>
       <VCol cols="36">
         <OfferedCoursesTable
@@ -86,9 +90,19 @@ const courseStats = computedAsync(() =>
 
 <i18n lang="yaml">
 en:
-  title: Administration
-  available-courses: Available courses
+  dashboard: Dashboard
+  current-phase: Current Phase
+  statistics: Statistics
+  registered-students: Registered Students
+  all-courses: All Courses
+  all-phases: All Phases
+  available-courses: Available Courses
 de:
-  title: Verwaltung
+  dashboard: Übersicht
+  current-phase: Aktuelle Phase
+  statistics: Statistik
+  registered-students: Angemeldete Studierende
+  all-courses: Alle Kurse
+  all-phases: Alle Phasen
   available-courses: Verfügbare Kurse
 </i18n>

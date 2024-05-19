@@ -13,7 +13,7 @@ import {
 } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
-const { locale, t } = useI18n()
+const { t } = useI18n()
 
 const assignStore = useAdminAssignStore()
 
@@ -33,12 +33,12 @@ onBeforeMount(async () => {
         :key="i"
         :value="i"
       >
-        Versuch {{ i }}
+        {{ t('iteration') }} {{ i }}
       </VTab>
       <VSpacer />
-      <VBtn flat> publish </VBtn>
+      <VBtn flat>{{ t('publish') }}</VBtn>
       <VBtn color="success" flat @click="assignStore.newAssignment(phaseId)">
-        new assignment
+        {{ t('new-assignment') }}
       </VBtn>
     </VTabs>
 
@@ -59,7 +59,7 @@ onBeforeMount(async () => {
           <tbody>
             <tr v-for="course in assignment" :key="course.moduleCode">
               <td>{{ course.moduleCode }}</td>
-              <td />
+              <!-- <td>{{ course.title }}</td> -->
               <td>{{ course.count }}</td>
             </tr>
           </tbody>
@@ -68,3 +68,21 @@ onBeforeMount(async () => {
     </VTabsWindow>
   </div>
 </template>
+
+<i18n lang="yaml">
+en:
+  iteration: Iteration
+  publish: Publish
+  new-assignment: New Assignment
+  module-code: Module Code
+  title: Title
+  count: Count
+
+de:
+  iteration: Iteration
+  publish: Veröffentlichen
+  new-assignment: Neue Aufgabe
+  module-code: Modulcode
+  title: Titel
+  count: Anzahl
+</i18n>
