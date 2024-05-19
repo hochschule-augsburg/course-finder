@@ -24,11 +24,6 @@ const phaseId = Number(route.params.phaseId)
                 <VBtn :to="`${phaseId}/edit`">Edit</VBtn>
               </VCol>
               <VCol cols="6">
-                <VBtn>New Assignment</VBtn>
-              </VCol>
-            </VRow>
-            <VRow>
-              <VCol cols="6">
                 <VBtn>Close</VBtn>
               </VCol>
             </VRow>

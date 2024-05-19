@@ -1,37 +1,71 @@
 <script lang="ts" setup>
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { onBeforeMount } from 'vue'
+import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
+import { onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VTable } from 'vuetify/components'
+import {
+  VBtn,
+  VTab,
+  VTable,
+  VTabs,
+  VTabsWindow,
+  VTabsWindowItem,
+} from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
 const { locale, t } = useI18n()
 
-const adminCoursesStore = useAdminCoursesStore()
+const assignStore = useAdminAssignStore()
 
-onBeforeMount(() => {
-  void adminCoursesStore.fetchAssignments(props.phaseId)
+const tryNo = ref(0)
+
+onBeforeMount(async () => {
+  await assignStore.fetchAssignments(props.phaseId)
+  console.log(assignStore.assignments)
 })
 </script>
 
 <template>
-  <VTable>
-    <thead>
-      <tr>
-        <th>{{ t('module-code') }}</th>
-        <th>{{ t('title') }}</th>
-        <th>{{ t('count') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="course in adminCoursesStore.assignments[props.phaseId]"
-        :key="course.moduleCode"
+  <div>
+    <VTabs v-model="tryNo" class="position-relative">
+      <VTab
+        v-for="(assignment, i) in assignStore.assignments[props.phaseId]"
+        :key="i"
+        :value="i"
       >
-        <td>{{ course.moduleCode }}</td>
-        <td>{{ locale === 'en' ? course.title?.en : course.title?.de }}</td>
-        <td>{{ course.count }}</td>
-      </tr>
-    </tbody>
-  </VTable>
+        {{ i }}
+      </VTab>
+      <VBtn
+        class="position-absolute right-0 mr-5"
+        flat
+        @click="assignStore.newAssignment(phaseId)"
+      >
+        new assignment
+      </VBtn>
+    </VTabs>
+
+    <VTabsWindow v-model="tryNo">
+      <VTabsWindowItem
+        v-for="(assignment, i) in assignStore.assignments[props.phaseId]"
+        :key="i"
+        :value="i"
+      >
+        <VTable>
+          <thead>
+            <tr>
+              <th>{{ t('module-code') }}</th>
+              <th>{{ t('title') }}</th>
+              <th>{{ t('count') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="course in assignment" :key="course.moduleCode">
+              <td>{{ course.moduleCode }}</td>
+              <td />
+              <td>{{ course.count }}</td>
+            </tr>
+          </tbody>
+        </VTable>
+      </VTabsWindowItem>
+    </VTabsWindow>
+  </div>
 </template>

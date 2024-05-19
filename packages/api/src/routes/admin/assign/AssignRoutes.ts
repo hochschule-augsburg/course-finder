@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { differenceBy } from 'lodash-es'
+import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
 import { assign } from '../../../domain/assign/AssignmentAlgorithm'
@@ -17,13 +17,15 @@ export const assignRouter = router({
         throw new TRPCError({ code: 'NOT_FOUND', message: 'Invalid Phase' })
       }
       const results = await assign(currentPhase.id)
-      const { tryNo } = (await prisma.phaseAssignment.findFirst({
+      let { tryNo } = (await prisma.phaseAssignment.findFirst({
         orderBy: { tryNo: 'desc' },
         select: { tryNo: true },
         where: { phaseId: currentPhase.id },
-      })) ?? { tryNo: 0 }
+      })) ?? { tryNo: -1 }
 
-      prisma.phaseAssignment.createMany({
+      tryNo++
+
+      await prisma.phaseAssignment.createMany({
         data: Object.entries(results).flatMap(([student, moduleCodes]) =>
           moduleCodes.map((moduleCode) => ({
             moduleCode,
@@ -34,39 +36,65 @@ export const assignRouter = router({
         ),
       })
 
-      const courses: Record<string, string[]> = {}
+      const courses: Record<string, { count: number }> = {}
 
-      Object.entries(results).forEach(([student, moduleCodes]) => {
+      Object.entries(results).forEach(([_student, moduleCodes]) => {
         moduleCodes.forEach((moduleCode) => {
           if (!courses[moduleCode]) {
-            courses[moduleCode] = []
+            courses[moduleCode] = { count: 0 }
           }
-          courses[moduleCode].push(student)
+          courses[moduleCode].count++
         })
       })
 
-      return courses
+      return {
+        result: sortBy(
+          Object.entries(courses).map(([moduleCode, { count }]) => ({
+            count,
+            moduleCode,
+          })),
+          'count',
+        ).reverse(),
+        tryNo,
+      }
     }),
   list: adminProcedure
     .input(z.object({ phaseId: z.number() }))
-    .query(async ({ input }) => {
-      const [allCourses, assignedCourses] = await Promise.all([
-        prisma.offeredCourse.findMany({
-          select: { moduleCode: true },
+    .query(
+      async ({
+        input,
+      }): Promise<{ count: number; moduleCode: string; tryNo: number }[][]> => {
+        const assignments = await prisma.phaseAssignment.groupBy({
+          _count: { moduleCode: true },
+          by: ['tryNo', 'moduleCode'],
+          orderBy: { tryNo: 'asc' },
           where: { phaseId: input.phaseId },
-        }),
-        prisma.phaseAssignment.groupBy({
-          _count: { username: true },
-          by: ['moduleCode'],
-          where: { phaseId: input.phaseId },
-        }),
-      ])
-      return [
-        ...assignedCourses,
-        ...differenceBy(allCourses, assignedCourses, 'moduleCode').map((e) => ({
-          _count: { username: 0 },
-          moduleCode: e.moduleCode,
-        })),
-      ].map((e) => ({ count: e._count.username, moduleCode: e.moduleCode }))
-    }),
+        })
+
+        return Object.values(
+          groupBy(
+            assignments.map((e) => ({
+              count: e._count.moduleCode,
+              moduleCode: e.moduleCode,
+              tryNo: e.tryNo,
+            })),
+            'tryNo',
+          ),
+        )
+        // const assigned = await prisma.phaseAssignment.findMany({
+        //   select: {
+        //     moduleCode: true,
+        //     tryNo: true,
+        //   },
+        //   where: { phaseId: input.phaseId },
+        // })
+        // Object.fromEntries(
+        //   Object.entries(groupBy(assigned, 'tryNo')).map(
+        //     ([tryNo, assignments]) => {
+        //       return [tryNo, groupBy(assignments, 'moduleCode')]
+        //     },
+        //   ),
+        // )
+      },
+    ),
 })

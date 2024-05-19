@@ -23,16 +23,6 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const courses = ref<Course[]>([])
   const phases = ref<Phase[]>([])
   const phaseOfferedCourses = ref<Record<number, AdminOfferedCourse[]>>({})
-  const assignments = ref<
-    Record<
-      number,
-      Array<{
-        count: number
-        moduleCode: string
-        title?: I18nJson
-      }>
-    >
-  >({})
 
   const currentPhase = computed(() => {
     return phases.value.find((e) =>
@@ -43,10 +33,8 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
     )
   })
   return {
-    assignments,
     courses,
     currentPhase,
-    fetchAssignments,
     fetchOfferedCourses,
     isInit: useAsyncState(async () => {
       await init()
@@ -75,17 +63,6 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
     ).map(extendOfferedCourse)
   }
 
-  async function fetchAssignments(phaseId: number) {
-    if (assignments.value[phaseId]) {
-      return
-    }
-    assignments.value[phaseId] = (
-      await trpc.admin.assign.list.query({
-        phaseId,
-      })
-    ).map(extendAssignment)
-  }
-
   function extendOfferedCourse<
     T extends { Course: object; moduleCode: string },
   >(offeredCourse: T): { Course: { lecturers: string[] } } & T {
@@ -98,16 +75,6 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
         ...offeredCourse.Course,
         lecturers: course?.lecturers ?? [],
       },
-    }
-  }
-
-  function extendAssignment(assignment: { count: number; moduleCode: string }) {
-    const course = courses.value.find(
-      (e) => e.moduleCode === assignment.moduleCode,
-    )
-    return {
-      ...assignment,
-      title: course?.title,
     }
   }
 })
