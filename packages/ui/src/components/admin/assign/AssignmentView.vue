@@ -21,7 +21,6 @@ const tryNo = ref(0)
 
 onBeforeMount(async () => {
   await assignStore.fetchAssignments(props.phaseId)
-  console.log(assignStore.assignments)
 })
 </script>
 
@@ -81,7 +80,7 @@ en:
 de:
   iteration: Iteration
   publish: Veröffentlichen
-  new-assignment: Neue Aufgabe
+  new-assignment: Neue Auslosung
   module-code: Modulcode
   title: Titel
   count: Anzahl
