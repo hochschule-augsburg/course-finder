@@ -31,7 +31,7 @@ const infoDialogVisible = ref(false)
         icon
       >
         <VIcon>mdi-shield-crown-outline</VIcon>
-        <VTooltip activator="parent" location="bottom" open-delay="500">
+        <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('admin') }}
         </VTooltip>
       </VBtn>
@@ -40,7 +40,7 @@ const infoDialogVisible = ref(false)
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
             <VIcon>mdi-theme-light-dark</VIcon>
-            <VTooltip activator="parent" location="bottom" open-delay="500">
+            <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-theme') }}
             </VTooltip>
           </VBtn>
@@ -55,7 +55,7 @@ const infoDialogVisible = ref(false)
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
             <VIcon>mdi-earth</VIcon>
-            <VTooltip activator="parent" location="bottom" open-delay="500">
+            <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-lang') }}
             </VTooltip>
           </VBtn>
@@ -65,7 +65,7 @@ const infoDialogVisible = ref(false)
 
       <VBtn icon @click="infoDialogVisible = true">
         <VIcon>mdi-help-circle-outline</VIcon>
-        <VTooltip activator="parent" location="bottom" open-delay="500">
+        <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('help') }}
         </VTooltip>
       </VBtn>
@@ -80,14 +80,14 @@ const infoDialogVisible = ref(false)
         />
         <VBtn icon @click="userStore.logout">
           <VIcon>mdi-logout-variant</VIcon>
-          <VTooltip activator="parent" location="bottom" open-delay="500">
+          <VTooltip activator="parent" location="left" open-delay="500">
             {{ t('logout') }}
           </VTooltip>
         </VBtn>
       </div>
       <VBtn v-else icon>
         <VIcon>mdi-login-variant</VIcon>
-        <VTooltip activator="parent" location="bottom" open-delay="500">
+        <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('login') }}
         </VTooltip>
         <VMenu :close-on-content-click="false" activator="parent">

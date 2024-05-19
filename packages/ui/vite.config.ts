@@ -19,6 +19,7 @@ export default defineConfig({
     holdUntilCrawlEnd: false,
     include: [
       'date-fns',
+      'date-fns/locale',
       '@vueuse/core',
       'vue-pdf-embed',
       'lodash-es',
