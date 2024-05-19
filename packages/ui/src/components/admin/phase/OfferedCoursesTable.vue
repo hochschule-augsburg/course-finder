@@ -2,7 +2,6 @@
 import { trpc } from '@/api/trpc'
 import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { sortBy } from 'lodash-es'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VTable } from 'vuetify/components'
@@ -17,13 +16,10 @@ const courseStats = ref<
 >({})
 
 const sortedCourses = computed(() =>
-  sortBy(
-    adminCoursesStore.phaseOfferedCourses[props.phaseId]?.map((course) => ({
-      ...course,
-      ...courseStats.value[course.moduleCode],
-    })),
-    (e) => e.studentCount,
-  ),
+  adminCoursesStore.phaseOfferedCourses[props.phaseId]?.map((course) => ({
+    ...course,
+    ...courseStats.value[course.moduleCode],
+  })),
 )
 
 watch(

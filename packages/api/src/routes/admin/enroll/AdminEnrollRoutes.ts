@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { sumBy } from 'lodash-es'
+import { groupBy, sumBy } from 'lodash-es'
 import { z } from 'zod'
 
 import {
@@ -18,6 +18,14 @@ const offeredCourseSpec = z.object({
   minParticipants: z.number(),
   moduleCode: z.string(),
   moodleCourse: nullString,
+})
+
+const phaseSpec = z.object({
+  description: i18nInput,
+  end: z.date(),
+  offeredCourses: z.array(offeredCourseSpec),
+  start: z.date(),
+  title: i18nInput,
 })
 
 export const enrollRouter = router({
@@ -78,47 +86,37 @@ export const enrollRouter = router({
       }),
   },
   phase: {
-    create: adminProcedure
-      .input(
-        z.object({
-          description: i18nInput,
-          end: z.date(),
-          offeredCourses: z.array(offeredCourseSpec),
-          start: z.date(),
-          title: i18nInput,
-        }),
-      )
-      .mutation(({ input }) => {
-        return prisma.enrollphase.create({
-          data: {
-            description: {
-              de: input.description.de ?? input.description.en,
-              en: input.description.en ?? input.description.de,
-            },
-            end: input.end,
-            offeredCourses: {
-              create: input.offeredCourses.map((course) => ({
-                Course: {
-                  connect: {
-                    moduleCode: course.moduleCode,
-                  },
-                },
-                appointments: course.appointments,
-                extraInfo: course.extraInfo,
-                for: { set: course.for },
-                maxParticipants: course.maxParticipants,
-                minParticipants: course.minParticipants,
-                moodleCourse: course.moodleCourse,
-              })),
-            },
-            start: input.start,
-            title: {
-              de: input.title.de ?? input.title.en,
-              en: input.title.en ?? input.title.de,
-            },
+    create: adminProcedure.input(phaseSpec).mutation(({ input }) => {
+      return prisma.enrollphase.create({
+        data: {
+          description: {
+            de: input.description.de ?? input.description.en,
+            en: input.description.en ?? input.description.de,
           },
-        })
-      }),
+          end: input.end,
+          offeredCourses: {
+            create: input.offeredCourses.map((course) => ({
+              Course: {
+                connect: {
+                  moduleCode: course.moduleCode,
+                },
+              },
+              appointments: course.appointments,
+              extraInfo: course.extraInfo,
+              for: { set: course.for },
+              maxParticipants: course.maxParticipants,
+              minParticipants: course.minParticipants,
+              moodleCourse: course.moodleCourse,
+            })),
+          },
+          start: input.start,
+          title: {
+            de: input.title.de ?? input.title.en,
+            en: input.title.en ?? input.title.de,
+          },
+        },
+      })
+    }),
     get: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .query(async ({ input }) => {
@@ -169,6 +167,83 @@ export const enrollRouter = router({
         },
       })
     }),
+    update: adminProcedure
+      .input(phaseSpec.extend({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const originalOfferedCourses = await prisma.offeredCourse.findMany({
+          where: { phaseId: input.id },
+        })
+
+        const deleted = originalOfferedCourses.filter(
+          (course) =>
+            !input.offeredCourses.some(
+              (newCourse) => newCourse.moduleCode === course.moduleCode,
+            ),
+        )
+        const { newCourses, updated } = groupBy(
+          input.offeredCourses,
+          (course) =>
+            originalOfferedCourses.find(
+              (oldCourse) => oldCourse.moduleCode === course.moduleCode,
+            )
+              ? 'updated'
+              : 'newCourses',
+        )
+
+        await Promise.all([
+          prisma.offeredCourse.deleteMany({
+            where: {
+              moduleCode: { in: deleted.map((c) => c.moduleCode) },
+              phaseId: input.id,
+            },
+          }),
+          prisma.offeredCourse.createMany({
+            data:
+              newCourses?.map((course) => ({
+                Course: {
+                  connect: {
+                    moduleCode: course.moduleCode,
+                  },
+                },
+                appointments: course.appointments,
+                extraInfo: course.extraInfo,
+                for: { set: course.for },
+                maxParticipants: course.maxParticipants,
+                minParticipants: course.minParticipants,
+                moduleCode: course.moduleCode,
+                moodleCourse: course.moodleCourse,
+                phaseId: input.id,
+              })) ?? [],
+          }),
+          ...updated.map((course) =>
+            prisma.offeredCourse.update({
+              data: {
+                appointments: course.appointments,
+                extraInfo: course.extraInfo,
+                for: { set: course.for },
+                maxParticipants: course.maxParticipants,
+                minParticipants: course.minParticipants,
+                moodleCourse: course.moodleCourse,
+              },
+              where: {
+                phaseId_moduleCode: {
+                  moduleCode: course.moduleCode,
+                  phaseId: input.id,
+                },
+              },
+            }),
+          ),
+          prisma.enrollphase.update({
+            data: {
+              description: input.description,
+              end: input.end,
+              start: input.start,
+              title: input.title,
+            },
+            where: { id: input.id },
+          }),
+        ])
+      }),
   },
   statistics: {
     courseEnrollments: adminProcedure

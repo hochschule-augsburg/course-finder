@@ -32,7 +32,7 @@ onBeforeMount(async () => {
         :key="i"
         :value="i"
       >
-        {{ i }}
+        Versuch {{ i }}
       </VTab>
       <VBtn
         class="position-absolute right-0 mr-5"

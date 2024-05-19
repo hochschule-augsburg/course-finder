@@ -6,5 +6,5 @@ const phaseId = Number(route.params.phaseId)
 </script>
 
 <template>
-  <AdminCreateEnroll :phase-id />
+  <AdminCreateEnroll :phase-id="phaseId ? phaseId : undefined" />
 </template>

@@ -7,7 +7,8 @@ import {
   fieldsOfStudy,
   fieldsOfStudyAbbrMap,
 } from '@/helper/fieldsOfStudy'
-import { ref, toRaw, watchEffect } from 'vue'
+import { cloneDeep } from 'lodash-es'
+import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -49,7 +50,7 @@ watchEffect(() => {
     return
   }
   formData.value = {
-    ...structuredClone(toRaw(props.offeredCourse)),
+    ...cloneDeep(props.offeredCourse),
     appointments: {
       dates: props.offeredCourse?.appointments.dates.map((e) => ({
         from: e.from.toISOString(),
@@ -116,7 +117,7 @@ function removeDate() {
         <VRow dense>
           <VCol cols="12" sm="6">
             <VTextField
-              v-model="formData.minParticipants"
+              v-model.number="formData.minParticipants"
               :label="t('minimum-participants')"
               type="number"
               required
@@ -124,7 +125,7 @@ function removeDate() {
           </VCol>
           <VCol cols="12" sm="6">
             <VTextField
-              v-model="formData.maxParticipants"
+              v-model.number="formData.maxParticipants"
               :label="t('maximum-participants')"
               type="number"
               required
@@ -175,7 +176,7 @@ function removeDate() {
           <VCol cols="12" sm="6">
             <VSelect
               v-model="formData.for"
-              :items="fieldsOfStudy.map((e) => e[0])"
+              :items="fieldsOfStudy.map((e) => e[1])"
               :label="t('for-fields-of-study')"
               chips
               multiple
@@ -184,7 +185,7 @@ function removeDate() {
               <template #item="{ props: itemProps, item }">
                 <VListItem
                   v-bind="itemProps"
-                  :subtitle="fieldsOfStudyAbbrMap[item.title]"
+                  :subtitle="abbrFieldsOfStudyMap[item.title]"
                 />
               </template>
             </VSelect>
