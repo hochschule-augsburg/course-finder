@@ -31,6 +31,11 @@ const phaseId = Number(route.params.phaseId)
         </VRow>
         <VRow>
           <VCol>
+            <h2>Assignments</h2>
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol>
             <AssignmentView :phase-id />
           </VCol>
         </VRow>

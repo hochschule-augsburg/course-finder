@@ -4,6 +4,7 @@ import { onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
+  VSpacer,
   VTab,
   VTable,
   VTabs,
@@ -34,11 +35,9 @@ onBeforeMount(async () => {
       >
         Versuch {{ i }}
       </VTab>
-      <VBtn
-        class="position-absolute right-0 mr-5"
-        flat
-        @click="assignStore.newAssignment(phaseId)"
-      >
+      <VSpacer />
+      <VBtn flat> publish </VBtn>
+      <VBtn color="success" flat @click="assignStore.newAssignment(phaseId)">
         new assignment
       </VBtn>
     </VTabs>

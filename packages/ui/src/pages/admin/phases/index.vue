@@ -7,7 +7,7 @@ const adminCoursesStore = useAdminCoursesStore()
 
 <template>
   <div class="mx-10">
-    <h1>Passed Phases</h1>
+    <h1>Enrollment Phases</h1>
     <VContainer>
       <VRow justify="center">
         <VCol
