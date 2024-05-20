@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
+import { mdiPencil } from '@mdi/js'
 import { ref, toRaw, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -114,7 +115,7 @@ function deleteSubject() {
             : selectedSubject?.title.de,
         ])
       "
-      prepend-icon="mdi-pencil"
+      :prepend-icon="mdiPencil"
     >
       <template v-if="!selectedSubject?.moduleCode" #title>
         <div class="d-flex align-center" style="width: 30%">

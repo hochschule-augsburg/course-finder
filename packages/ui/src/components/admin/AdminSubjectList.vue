@@ -3,6 +3,7 @@ import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
+import { mdiInvoiceTextPlus, mdiPencil } from '@mdi/js'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -92,7 +93,7 @@ async function updateSubject(subject: Course) {
           <th>SWS</th>
           <th>
             <VBtn @click="openNewDialog">
-              {{ t('new') }} &nbsp; <VIcon>mdi-invoice-text-plus</VIcon>
+              {{ t('new') }} &nbsp; <VIcon :icon="mdiInvoiceTextPlus" />
             </VBtn>
           </th>
         </tr>
@@ -106,7 +107,7 @@ async function updateSubject(subject: Course) {
           <td>{{ subject.semesterHours }}</td>
           <td>
             <VBtn @click="openEditDialog(subject)">
-              <VIcon size="25">mdi-pencil</VIcon>
+              <VIcon :icon="mdiPencil" size="25" />
             </VBtn>
           </td>
         </tr>

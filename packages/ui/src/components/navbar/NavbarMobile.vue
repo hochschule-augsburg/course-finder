@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
+import {
+  mdiEarth,
+  mdiHelpCircleOutline,
+  mdiLoginVariant,
+  mdiLogoutVariant,
+  mdiMenu,
+  mdiShieldCrownOutline,
+  mdiThemeLightDark,
+} from '@mdi/js'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -31,14 +40,14 @@ const infoDialogVisible = ref(false)
 
     <VMenu transition="slide-y-transition">
       <template #activator="{ props }">
-        <VBtn class="mr-1" icon="mdi-menu" size="large" v-bind="props" />
+        <VBtn :icon="mdiMenu" class="mr-1" size="large" v-bind="props" />
       </template>
 
       <VList>
         <VListItem
           v-if="userStore.user?.type === 'Admin'"
+          :prepend-icon="mdiShieldCrownOutline"
           :title="t('admin')"
-          prepend-icon="mdi-shield-crown-outline"
           to="/admin"
         />
 
@@ -48,9 +57,9 @@ const infoDialogVisible = ref(false)
           <template #activator="{ props }">
             <VListItem
               v-bind="props"
+              :prepend-icon="mdiThemeLightDark"
               :title="t('change-theme')"
               class="justify-start"
-              prepend-icon="mdi-theme-light-dark"
             />
           </template>
           <ThemeOptionsList
@@ -65,8 +74,8 @@ const infoDialogVisible = ref(false)
           <template #activator="{ props }">
             <VListItem
               v-bind="props"
+              :prepend-icon="mdiEarth"
               :title="t('change-lang')"
-              prepend-icon="mdi-earth"
             />
           </template>
           <LocaleOptionsList :change-locale="changeLocale" />
@@ -78,8 +87,8 @@ const infoDialogVisible = ref(false)
           <template #activator="{ props }">
             <VListItem
               v-bind="props"
+              :prepend-icon="mdiHelpCircleOutline"
               :title="t('help')"
-              prepend-icon="mdi-help-circle-outline"
               @click="infoDialogVisible = true"
             />
           </template>
@@ -90,9 +99,9 @@ const infoDialogVisible = ref(false)
 
         <VListItem
           v-if="userStore.user"
+          :prepend-icon="mdiLogoutVariant"
           :subtitle="userStore.user.name"
           :title="t('logout')"
-          prepend-icon="mdi-logout-variant"
           @click="userStore.logout"
         />
         <VMenu
@@ -103,8 +112,8 @@ const infoDialogVisible = ref(false)
           <template #activator="{ props }">
             <VListItem
               v-bind="props"
+              :prepend-icon="mdiLoginVariant"
               :title="t('login')"
-              prepend-icon="mdi-login-variant"
             />
           </template>
           <LoginDialog />

@@ -2,6 +2,14 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { trpc } from '@/trpc'
+import {
+  mdiAccountMultiple,
+  mdiAlertCircle,
+  mdiCalendar,
+  mdiFullscreen,
+  mdiFullscreenExit,
+  mdiLectern,
+} from '@mdi/js'
 import { useAsyncState } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -46,7 +54,7 @@ const fullscreen = ref(false)
           rounded="lg"
         >
           <div class="mb-1 d-flex align-end">
-            <VIcon class="mr-3" size="32">mdi-lectern</VIcon>
+            <VIcon :icon="mdiLectern" class="mr-3" size="32" />
             <h4>{{ t('lecturers') }}</h4>
           </div>
           <div>
@@ -55,7 +63,7 @@ const fullscreen = ref(false)
             </p>
           </div>
           <div class="mb-1 d-flex align-end">
-            <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
+            <VIcon :icon="mdiAccountMultiple" class="mr-3" size="32" />
             <h4>{{ t('workload') }}</h4>
           </div>
           <div class="mb-4 px-3 d-flex flex-column">
@@ -64,7 +72,7 @@ const fullscreen = ref(false)
           </div>
           <template v-if="subject.offeredCourse">
             <div class="mb-1 d-flex align-end">
-              <VIcon class="mr-3" size="32">mdi-account-multiple</VIcon>
+              <VIcon :icom="mdiAccountMultiple" class="mr-3" size="32" />
               <h4>{{ t('participants') }}</h4>
             </div>
             <p class="mb-4 px-3">
@@ -76,7 +84,7 @@ const fullscreen = ref(false)
             </p>
 
             <div class="mb-1 d-flex align-end">
-              <VIcon class="mr-3" size="32">mdi-calendar</VIcon>
+              <VIcon :icon="mdiCalendar" class="mr-3" size="32" />
               <h4>{{ t('appointments') }}</h4>
             </div>
             <p
@@ -155,7 +163,7 @@ const fullscreen = ref(false)
           </template>
 
           <div class="mb-1 d-flex align-end">
-            <VIcon class="mr-3" size="32">mdi-alert-circle</VIcon>
+            <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
             <h4>{{ t('note') }}</h4>
           </div>
           <p v-if="subject.extraInfo" class="mb-4 px-3 d-flex flex-column">
@@ -172,8 +180,8 @@ const fullscreen = ref(false)
 
       <VCarouselItem v-if="subject.infoUrl || pdfSource">
         <VBtn
+          :icon="mdiFullscreen"
           class="floating"
-          icon="mdi-fullscreen"
           @click="fullscreen = true"
         />
         <VuePdfEmbed
@@ -195,8 +203,8 @@ const fullscreen = ref(false)
     </VCarousel>
     <VDialog v-model:model-value="fullscreen" fullscreen>
       <VBtn
+        :icon="mdiFullscreenExit"
         class="floating"
-        icon="mdi-fullscreen-exit"
         @click="fullscreen = false"
       />
       <VuePdfEmbed

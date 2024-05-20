@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
+import {
+  mdiAccountCircle,
+  mdiEarth,
+  mdiHelpCircleOutline,
+  mdiLoginVariant,
+  mdiLogoutVariant,
+  mdiShieldCrownOutline,
+  mdiThemeLightDark,
+} from '@mdi/js'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn, VIcon, VMenu, VToolbarTitle, VTooltip } from 'vuetify/components'
@@ -30,7 +39,7 @@ const infoDialogVisible = ref(false)
         to="/admin"
         icon
       >
-        <VIcon>mdi-shield-crown-outline</VIcon>
+        <VIcon :icon="mdiShieldCrownOutline" />
         <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('admin') }}
         </VTooltip>
@@ -39,7 +48,7 @@ const infoDialogVisible = ref(false)
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
-            <VIcon>mdi-theme-light-dark</VIcon>
+            <VIcon :icon="mdiThemeLightDark" />
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-theme') }}
             </VTooltip>
@@ -54,7 +63,7 @@ const infoDialogVisible = ref(false)
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
-            <VIcon>mdi-earth</VIcon>
+            <VIcon :icon="mdiEarth" />
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-lang') }}
             </VTooltip>
@@ -64,7 +73,7 @@ const infoDialogVisible = ref(false)
       </VMenu>
 
       <VBtn icon @click="infoDialogVisible = true">
-        <VIcon>mdi-help-circle-outline</VIcon>
+        <VIcon :icon="mdiHelpCircleOutline" />
         <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('help') }}
         </VTooltip>
@@ -73,20 +82,20 @@ const infoDialogVisible = ref(false)
 
       <div v-if="userStore.user" class="align-self-center">
         <VBtn
+          :prepend-icon="mdiAccountCircle"
           :ripple="false"
           :text="userStore.user?.name"
           class="pr-1 pl-2"
-          prepend-icon="mdi-account-circle"
         />
         <VBtn icon @click="userStore.logout">
-          <VIcon>mdi-logout-variant</VIcon>
+          <VIcon :icon="mdiLogoutVariant" />
           <VTooltip activator="parent" location="left" open-delay="500">
             {{ t('logout') }}
           </VTooltip>
         </VBtn>
       </div>
       <VBtn v-else icon>
-        <VIcon>mdi-login-variant</VIcon>
+        <VIcon :icon="mdiLoginVariant" />
         <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('login') }}
         </VTooltip>

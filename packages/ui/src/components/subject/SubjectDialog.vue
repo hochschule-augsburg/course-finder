@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/CoursesStore'
 
+import { mdiLink } from '@mdi/js'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -50,7 +51,7 @@ async function copyLinkToClipboard() {
             icon
             @click="copyLinkToClipboard"
           >
-            <VIcon> mdi-link </VIcon>
+            <VIcon :icon="mdiLink" />
             <VTooltip activator="parent" location="bottom right">
               {{ t('copy-link') }}
             </VTooltip>

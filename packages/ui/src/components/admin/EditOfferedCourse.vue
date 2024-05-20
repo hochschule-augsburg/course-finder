@@ -7,6 +7,7 @@ import {
   fieldsOfStudy,
   fieldsOfStudyAbbrMap,
 } from '@/helper/fieldsOfStudy'
+import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
 import { cloneDeep } from 'lodash-es'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -111,7 +112,7 @@ function removeDate() {
             : offeredCourse?.Course.title.de,
         ])
       "
-      prepend-icon="mdi-pencil"
+      :prepend-icon="mdiPencil"
     >
       <VCardText>
         <VRow dense>
@@ -164,14 +165,14 @@ function removeDate() {
             </VRadioGroup>
           </VCol>
           <VCol cols="12">
-            <VIcon>mdi-calendar</VIcon>
+            <VIcon :icon="mdiCalendar" />
             <strong>{{ t('appointments') }}</strong>
             <div
               v-for="(interval, index) in formData.appointments.dates"
               :key="index"
             >
               <div class="dateId-box" style="display: flex">
-                <VIcon @click="removeDate"> mdi-trash-can-outline </VIcon>
+                <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
               </div>
               <VRow>
                 <VCol cols="12" sm="6">

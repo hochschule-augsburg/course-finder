@@ -2,6 +2,7 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useCourseEnroll } from '@/stores/EnrollmentStore'
+import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
 import { VBadge, VIcon } from 'vuetify/components'
 
@@ -36,9 +37,9 @@ async function handleUpdateEnroll() {
 <template>
   <div v-ripple class="pa-2" @click.stop="handleUpdateEnroll">
     <VBadge v-if="enrolled" :content="enrolled.points">
-      <VIcon icon="mdi-checkbox-marked" size="large" />
+      <VIcon :icon="mdiCheckboxMarked" size="large" />
     </VBadge>
-    <VIcon v-else icon="mdi-checkbox-blank-outline" size="large" />
+    <VIcon v-else :icon="mdiCheckboxBlankOutline" size="large" />
   </div>
 </template>
 

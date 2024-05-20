@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
 import { useFiltersStore } from '@/stores/FiltersStore'
+import { mdiFilter } from '@mdi/js'
 import { startOfWeek } from 'date-fns'
 import { range } from 'lodash-es'
 import { storeToRefs } from 'pinia'
@@ -38,7 +39,7 @@ function resetFilters() {
 
 <template>
   <VDialog v-model:model-value="showFilterDialog" max-width="500">
-    <VCard :title="t('filter.title')" prepend-icon="mdi-filter">
+    <VCard :prepend-icon="mdiFilter" :title="t('filter.title')">
       <VCardText>
         <template v-for="rangeFilter in rangeFilters" :key="rangeFilter.name">
           <template v-if="!rangeFilter.hidden">

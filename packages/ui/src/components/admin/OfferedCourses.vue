@@ -3,6 +3,7 @@ import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -131,8 +132,8 @@ const searchOffered = ref('')
         <VTextField
           v-model="searchCourses"
           :label="t('global.search')"
+          :prepend-inner-icon="mdiMagnify"
           placeholder="t('global.search')"
-          prepend-inner-icon="mdi-magnify"
         />
         <div class="off-course">
           <Draggable
@@ -193,12 +194,11 @@ const searchOffered = ref('')
                         : element.Course.title.en
                     }}
                     <VIcon
+                      :icon="mdiPencil"
                       class="pencil-icon"
                       size="20"
                       @click="editOfferedCourse = index"
-                    >
-                      mdi-pencil
-                    </VIcon>
+                    />
                   </VCardTitle>
                   <VCardText>
                     <div>

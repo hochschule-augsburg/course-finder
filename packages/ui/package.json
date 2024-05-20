@@ -18,7 +18,7 @@
     "stylelint:fix": "stylelint **/*.{scss} --fix"
   },
   "dependencies": {
-    "@mdi/font": "7.4.47",
+    "@mdi/js": "^7.4.47",
     "@trpc/client": "next",
     "@types/lodash-es": "^4.17.12",
     "@vitejs/plugin-vue-jsx": "^3.1.0",

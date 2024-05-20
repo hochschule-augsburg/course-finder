@@ -2,6 +2,7 @@
 import type { RangeFilter } from '@/stores/FiltersStore'
 
 import { useFiltersStore } from '@/stores/FiltersStore'
+import { mdiFilter, mdiMagnify } from '@mdi/js'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -31,10 +32,10 @@ function getRangeChipLabel(filter: RangeFilter) {
       v-model:model-value="search"
       :label="t('global.search')"
       :on-click:clear="filtersStore.resetSearch"
+      :prepend-inner-icon="mdiMagnify"
       bg-color="secondary"
       class="mx-3"
       color="primary"
-      prepend-inner-icon="mdi-magnify"
       type="text"
       clearable
       hide-details
@@ -61,7 +62,7 @@ function getRangeChipLabel(filter: RangeFilter) {
         {{ t(option.option) }}
       </VChip>
       <VChip @click="showFilterDialog = true">
-        <VIcon icon="mdi-filter" />
+        <VIcon :icon="mdiFilter" />
       </VChip>
     </VChipGroup>
 

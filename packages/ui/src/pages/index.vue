@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
@@ -32,14 +33,14 @@ const enrollFormVisible = ref(false)
         class="px-3 d-flex justify-end"
         mandatory
       >
-        <VBtn icon="mdi-format-list-bulleted" text="list" value="list" />
-        <VBtn icon="mdi-dots-grid" text="grid" value="grid" />
+        <VBtn :icon="mdiFormatListBulleted" text="list" value="list" />
+        <VBtn :icon="mdiDotsGrid" text="grid" value="grid" />
       </VBtnToggle>
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
       <div v-if="enrollmentStore.enrolledSubjects.length > 0" class="floating">
         <VBtn icon @click="enrollFormVisible = true">
-          <VIcon>mdi-pen-lock</VIcon>
+          <VIcon :icon="mdiPenLock" />
           <VTooltip activator="parent" location="top"> Einschreiben </VTooltip>
         </VBtn>
         <div v-if="pendingEnroll" class="pending-indicator" />

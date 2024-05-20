@@ -3,6 +3,7 @@ import type { EnrolledCourse } from '@/stores/EnrollmentStore'
 
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { mdiAlphaFCircle, mdiAlphaPCircle } from '@mdi/js'
 import { sumBy } from 'lodash-es'
 import { computed, ref, toRaw, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -54,8 +55,8 @@ watch(visible, () => {
 })
 
 const autoFillOptions = {
-  fallback: 'mdi-alpha-f-circle',
-  prio: 'mdi-alpha-p-circle',
+  fallback: mdiAlphaFCircle,
+  prio: mdiAlphaPCircle,
 }
 
 function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
@@ -188,7 +189,7 @@ async function validate() {
                   }
                 "
               >
-                <VIcon>{{ autoFillOptions[subject.autoFillOption] }}</VIcon>
+                <VIcon :icon="autoFillOptions[subject.autoFillOption]" />
                 <VTooltip activator="parent" location="top right" offset="2">
                   {{ t(subject.autoFillOption) }}
                 </VTooltip>
@@ -202,9 +203,7 @@ async function validate() {
             :key="option"
             class="pr-2"
           >
-            <VIcon size="small">
-              {{ icon }}
-            </VIcon>
+            <VIcon :icon size="small" />
             {{ t(option) }}
           </div>
         </VRow>
