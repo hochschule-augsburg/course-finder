@@ -15,6 +15,7 @@ import {
   VDivider,
   VIcon,
   VRow,
+  VTextField,
 } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
@@ -96,6 +97,29 @@ function convertToCourse(offeredCourse: OfferedCourseData): Course | undefined {
 function displayFieldsOfStudy(fields: string[]) {
   return fields.map((e: string): string => fieldsOfStudyAbbrMap[e]).join(', ')
 }
+
+function filterCourse(course: Course) {
+  console.log(course)
+  return (
+    !!course.title.de
+      ?.toLowerCase()
+      .includes(searchCourses.value.toLowerCase()) ||
+    !!course.title.en?.toLowerCase().includes(searchCourses.value.toLowerCase())
+  )
+}
+const searchCourses = ref('')
+
+function filterOffered(course: OfferedCourseData) {
+  return (
+    !!course.Course.title.de
+      ?.toLowerCase()
+      .includes(searchOffered.value.toLowerCase()) ||
+    !!course.Course.title.en
+      ?.toLowerCase()
+      .includes(searchOffered.value.toLowerCase())
+  )
+}
+const searchOffered = ref('')
 </script>
 
 <template>
@@ -104,6 +128,12 @@ function displayFieldsOfStudy(fields: string[]) {
       <VCol cols="12" md="6">
         {{ t('available-courses') }}
         <VDivider opacity="0" thickness="15px" />
+        <VTextField
+          v-model="searchCourses"
+          :label="t('global.search')"
+          placeholder="t('global.search')"
+          prepend-inner-icon="mdi-magnify"
+        />
         <div class="off-course">
           <Draggable
             :clone="convertToOfferedCourseData"
@@ -115,7 +145,7 @@ function displayFieldsOfStudy(fields: string[]) {
             force-fallback
           >
             <template #item="{ element }">
-              <div class="list-group-item">
+              <div v-if="filterCourse(element)" class="list-group-item">
                 <VCard
                   :title="locale === 'de' ? element.title.de : element.title.en"
                   class="hoverable-card"
@@ -133,6 +163,12 @@ function displayFieldsOfStudy(fields: string[]) {
       <VCol cols="12" md="6">
         {{ t('offered-courses') }}
         <VDivider opacity="0" thickness="15px" />
+        <VTextField
+          v-model="searchOffered"
+          :label="t('global.search')"
+          placeholder="t('global.search')"
+          prepend-inner-icon="mdi-magnify"
+        />
         <div class="off-course">
           <Draggable
             :clone="convertToCourse"
@@ -143,7 +179,7 @@ function displayFieldsOfStudy(fields: string[]) {
             item-key="moduleCode"
           >
             <template #item="{ element, index }">
-              <div class="list-group-item">
+              <div v-if="filterOffered(element)" class="list-group-item">
                 <VCard
                   class="hoverable-card"
                   color="rgb(var(--v-theme-secondary))"
