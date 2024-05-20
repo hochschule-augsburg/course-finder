@@ -5,7 +5,7 @@ import type {
   OfferedCourse,
 } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { useAsyncState } from '@vueuse/core'
 import { isWithinInterval } from 'date-fns'
 import { defineStore } from 'pinia'

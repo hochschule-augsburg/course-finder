@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
-import { trpc } from '@/api/trpc'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'

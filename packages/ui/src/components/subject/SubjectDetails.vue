@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/CoursesStore'
 
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { useAsyncState } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'

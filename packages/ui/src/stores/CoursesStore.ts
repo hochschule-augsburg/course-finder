@@ -1,7 +1,7 @@
 import type { EnrollPhase } from '@workspace/api/src/prisma/PrismaTypes'
 import type { CourseExtended } from '@workspace/api/src/routes/course/CourseRoutes'
 
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { debounce } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'

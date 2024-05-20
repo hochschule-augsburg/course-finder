@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Phase } from '@/stores/admin/AdminCoursesStore'
 
-import { trpc } from '@/api/trpc'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 import { isWithinInterval } from 'date-fns'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref } from 'vue'

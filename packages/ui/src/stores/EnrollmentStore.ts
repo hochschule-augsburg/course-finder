@@ -1,4 +1,4 @@
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 
