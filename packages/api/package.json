@@ -26,7 +26,7 @@
     "@fastify/cors": "^9.0.1",
     "@fastify/session": "^10.7.2",
     "@prisma/adapter-pg": "^5.13.0",
-    "@prisma/client": "5.13.0",
+    "@prisma/client": "5.14.0",
     "prisma": "^5.13.0",
     "prisma-json-types-generator": "^3.0.4",
     "@trpc/server": "next",
