@@ -37,12 +37,7 @@ const fullscreen = ref(false)
 
 <template>
   <div>
-    <VCarousel
-      :show-arrows="false"
-      color="#000000"
-      height="68vh"
-      hide-delimiter-background
-    >
+    <VCarousel :show-arrows="false" height="68vh" hide-delimiter-background>
       <VCarouselItem>
         <VSheet
           class="px-4 py-6 overflow-y-auto"
