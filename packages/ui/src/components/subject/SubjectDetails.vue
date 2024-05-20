@@ -72,7 +72,7 @@ const fullscreen = ref(false)
           </div>
           <template v-if="subject.offeredCourse">
             <div class="mb-1 d-flex align-end">
-              <VIcon :icom="mdiAccountMultiple" class="mr-3" size="32" />
+              <VIcon :icon="mdiAccountMultiple" class="mr-3" size="32" />
               <h4>{{ t('participants') }}</h4>
             </div>
             <p class="mb-4 px-3">

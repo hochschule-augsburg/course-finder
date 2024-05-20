@@ -4,7 +4,7 @@ import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
+import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
 defineOptions({
   name: 'CourseEnrollmentOverview',
@@ -39,21 +39,20 @@ const enrollFormVisible = ref(false)
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
       <div v-if="enrollmentStore.enrolledSubjects.length > 0" class="floating">
-        <VBtn icon @click="enrollFormVisible = true">
-          <VIcon :icon="mdiPenLock" />
-          <VTooltip activator="parent" location="top"> Einschreiben </VTooltip>
-        </VBtn>
-        <div v-if="pendingEnroll" class="pending-indicator" />
+        <VBadge :model-value="pendingEnroll" color="primary" dot>
+          <VBtn icon @click="enrollFormVisible = true">
+            <VIcon :icon="mdiPenLock" />
+            <VTooltip activator="parent" location="top">
+              Einschreiben
+            </VTooltip>
+          </VBtn>
+        </VBadge>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/mixins';
-.pending-indicator {
-  @include indicator;
-}
 .floating {
   position: fixed;
   z-index: 1;
