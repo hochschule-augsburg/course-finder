@@ -83,8 +83,6 @@ function convertToOfferedCourseData(course: Course) {
       maxParticipants: null,
       minParticipants: 0,
     }
-    console.log('inside convert to offered')
-    console.log(offeredCoursesArray.value)
     return convertedItem
   } else if (removeStoreData !== undefined) {
     return removeStoreData
@@ -97,8 +95,6 @@ function convertToCourse(offeredCourse: OfferedCourseData) {
   )
   if (convertedItem !== undefined) {
     handlePuttingBackLogic(convertedItem)
-    console.log('inside convert to course')
-    console.log(offeredCoursesArray.value)
     return convertedItem
   }
   console.log('no matching course object found')

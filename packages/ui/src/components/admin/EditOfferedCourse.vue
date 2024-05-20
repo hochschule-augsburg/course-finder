@@ -139,6 +139,30 @@ function removeDate() {
               required
             />
           </VCol>
+          <VCol cols="12" sm="6">
+            <VSelect
+              v-model="formData.for"
+              :items="fieldsOfStudy.map((e) => e[1])"
+              :label="t('for-fields-of-study')"
+              chips
+              multiple
+              required
+            >
+              <template #item="{ props: itemProps, item }">
+                <VListItem
+                  v-bind="itemProps"
+                  :subtitle="abbrFieldsOfStudyMap[item.title]"
+                />
+              </template>
+            </VSelect>
+          </VCol>
+          <VCol>
+            <VRadioGroup v-model="formData.appointments.type" inline>
+              <VRadio :label="t('weekly')" value="weekly" />
+              <VRadio :label="t('block')" value="block" />
+              <VRadio :label="t('irregular')" value="irregular" />
+            </VRadioGroup>
+          </VCol>
           <VCol cols="12">
             <VIcon>mdi-calendar</VIcon>
             <strong>{{ t('appointments') }}</strong>
@@ -172,30 +196,6 @@ function removeDate() {
             </div>
             <br />
             <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
-          </VCol>
-          <VCol cols="12" sm="6">
-            <VSelect
-              v-model="formData.for"
-              :items="fieldsOfStudy.map((e) => e[1])"
-              :label="t('for-fields-of-study')"
-              chips
-              multiple
-              required
-            >
-              <template #item="{ props: itemProps, item }">
-                <VListItem
-                  v-bind="itemProps"
-                  :subtitle="abbrFieldsOfStudyMap[item.title]"
-                />
-              </template>
-            </VSelect>
-          </VCol>
-          <VCol>
-            <VRadioGroup v-model="formData.appointments.type" inline>
-              <VRadio :label="t('weekly')" value="weekly" />
-              <VRadio :label="t('block')" value="block" />
-              <VRadio :label="t('irregular')" value="irregular" />
-            </VRadioGroup>
           </VCol>
           <VCol cols="12">
             <VTextarea
