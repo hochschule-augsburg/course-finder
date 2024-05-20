@@ -100,21 +100,15 @@ function convertToCourse(offeredCourse: OfferedCourseData) {
   console.log('no matching course object found')
 }
 
-function getTypeI18n(type: string) {
-  if (locale.value === 'de') {
-    switch (type) {
-      case 'weekly': {
-        return 'Wöchentlich'
-      }
-      case 'block': {
-        return 'Blockveranstaltung'
-      }
-      default: {
-        return 'Irregular'
-      }
-    }
+function getTypeKey(type: string) {
+  switch (type) {
+    case 'weekly':
+      return 'types.weekly'
+    case 'block':
+      return 'types.block'
+    default:
+      return 'types.irregular'
   }
-  return type
 }
 </script>
 
@@ -187,7 +181,7 @@ function getTypeI18n(type: string) {
                   <VCardText>
                     <div>
                       {{ t('type') }}:
-                      {{ getTypeI18n(element.appointments.type) }}
+                      {{ t(getTypeKey(element.appointments.type)) }}
                     </div>
                     <div
                       v-for="(timespan, appointIndex) in element.appointments
@@ -245,6 +239,10 @@ en:
   available-courses: Available courses
   offered-courses: Offered courses
   type: Type
+  types:
+    weekly: Weekly
+    block: Block Event
+    irregular: Irregular
   from: From
   to: To
   min-participants: Min participants
@@ -254,6 +252,10 @@ de:
   available-courses: Verfügbare Kurse
   offered-courses: Angebote Kurse
   type: Typ
+  types:
+    weekly: Wöchentlich
+    block: Blockveranstaltung
+    irregular: Unregelmäßig
   from: Von
   to: Bis
   min-participants: Mindestteilnehmer
