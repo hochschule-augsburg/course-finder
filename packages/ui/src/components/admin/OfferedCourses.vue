@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
+import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { merge } from 'lodash-es'
+import { assign } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
@@ -24,10 +25,10 @@ const coursesStore = useAdminCoursesStore()
 const { locale, t } = useI18n()
 
 const tableOne: Course[] = reactive([...coursesStore.courses])
+const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
 
-/*Following code handles the logic for drag and drop */
 function handlePuttingBackLogic(subject: Course) {
   //Retrieve the data from the shared object
   const offeredCourseData = offeredCoursesArray.value.filter(
@@ -61,16 +62,6 @@ function handlePuttingInAgainLogic(
   return retrievedObject
 }
 
-function getDisplayDate(date: Date) {
-  return date.toLocaleString('en-GB').replaceAll('/', '.')
-}
-
-const editOfferedCourse = ref<number>(-1)
-
-function getModuleCode(item: OfferedCourseData) {
-  return item.moduleCode
-}
-
 function convertToOfferedCourseData(course: Course): OfferedCourseData {
   const removeStoreData = handlePuttingInAgainLogic(course)
   if (removeStoreData === undefined) {
@@ -91,7 +82,7 @@ function convertToOfferedCourseData(course: Course): OfferedCourseData {
   return removeStoreData
 }
 
-function convertToCourse(offeredCourse: OfferedCourseData) {
+function convertToCourse(offeredCourse: OfferedCourseData): Course | undefined {
   const convertedItem = coursesStore.courses.find(
     (item) => item.moduleCode === offeredCourse.moduleCode,
   )
@@ -102,15 +93,8 @@ function convertToCourse(offeredCourse: OfferedCourseData) {
   console.log('no matching course object found')
 }
 
-function getTypeKey(type: string) {
-  switch (type) {
-    case 'weekly':
-      return 'types.weekly'
-    case 'block':
-      return 'types.block'
-    default:
-      return 'types.irregular'
-  }
+function displayFieldsOfStudy(fields: string[]) {
+  return fields.map((e: string): string => fieldsOfStudyAbbrMap[e]).join(', ')
 }
 </script>
 
@@ -152,11 +136,11 @@ function getTypeKey(type: string) {
         <div class="off-course">
           <Draggable
             :clone="convertToCourse"
-            :item-key="getModuleCode"
             :list="offeredCoursesArray"
             class="list-group"
             ghost-class="ghost"
             group="courses"
+            item-key="moduleCode"
           >
             <template #item="{ element, index }">
               <div class="list-group-item">
@@ -183,7 +167,7 @@ function getTypeKey(type: string) {
                   <VCardText>
                     <div>
                       {{ t('type') }}:
-                      {{ t(getTypeKey(element.appointments.type)) }}
+                      {{ t(`types.${element.appointments.type}`) }}
                     </div>
                     <div
                       v-for="(timespan, appointIndex) in element.appointments
@@ -192,9 +176,28 @@ function getTypeKey(type: string) {
                     >
                       <div>
                         <strong>{{ t('from') }}:</strong>
-                        {{ getDisplayDate(timespan.from) }}
+                        {{
+                          //TODO
+                          timespan.from.toLocaleString(locale, {
+                            weekday: 'short',
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
                         <strong>{{ t('to') }}:</strong>
-                        {{ getDisplayDate(timespan.to) }}
+                        {{
+                          timespan.to.toLocaleString(locale, {
+                            weekday: 'short',
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
                       </div>
                     </div>
                     <div>
@@ -203,6 +206,10 @@ function getTypeKey(type: string) {
                         {{ t('max-participants') }}:
                         {{ element.maxParticipants }}
                       </template>
+                    </div>
+                    <div v-if="element.for?.length">
+                      {{ t('for-fields-of-study') }}:
+                      {{ displayFieldsOfStudy(element.for) }}
                     </div>
                     <div v-if="element.extraInfo">
                       {{ t('extra-info') }}: {{ element.extraInfo }}
@@ -225,7 +232,7 @@ function getTypeKey(type: string) {
           if (!result) {
             return
           }
-          offeredCoursesArray[editOfferedCourse ?? -1] = merge(
+          offeredCoursesArray[editOfferedCourse ?? -1] = assign(
             offeredCoursesArray.at(editOfferedCourse),
             result,
           )
@@ -249,6 +256,7 @@ en:
   to: To
   min-participants: Min participants
   max-participants: Max participants
+  for-fields-of-study: For fields of study
   extra-info: Extra information
 de:
   available-courses: Verfügbare Kurse
@@ -262,6 +270,7 @@ de:
   to: Bis
   min-participants: Mindestteilnehmer
   max-participants: Maximale Teilnehmer
+  for-fields-of-study: Für Studienfelder
   extra-info: Zusätzliche Informationen
 </i18n>
 
