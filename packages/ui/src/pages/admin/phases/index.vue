@@ -1,7 +1,14 @@
 <script lang="ts" setup>
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useI18n } from 'vue-i18n'
-import { VCard, VCardText, VCol, VContainer, VRow } from 'vuetify/components'
+import {
+  VBtn,
+  VCard,
+  VCardText,
+  VCol,
+  VContainer,
+  VRow,
+} from 'vuetify/components'
 
 const { t } = useI18n()
 
@@ -10,7 +17,19 @@ const adminCoursesStore = useAdminCoursesStore()
 
 <template>
   <div class="mx-10">
-    <h1>{{ t('enrollment-phases') }}</h1>
+    <VContainer>
+      <VRow justify="center">
+        <VCol>
+          <h1>{{ t('enrollment-phases') }}</h1>
+        </VCol>
+        <VCol cols="8" />
+        <VCol>
+          <VBtn class="mr-8" color="primary" to="phases/new/edit">
+            {{ t('add') }}
+          </VBtn>
+        </VCol>
+      </VRow>
+    </VContainer>
     <VContainer>
       <VRow justify="center">
         <VCol

@@ -2,6 +2,7 @@
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { merge } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
@@ -42,7 +43,9 @@ function handlePuttingBackLogic(subject: Course) {
   })
 }
 
-function handlePuttingInAgainLogic(subject: Course) {
+function handlePuttingInAgainLogic(
+  subject: Course,
+): OfferedCourseData | undefined {
   //Try to retrieve data from remove store
   const offeredCourseData = removeStore.value.filter(
     (data) => data.moduleCode === subject.moduleCode,
@@ -53,7 +56,7 @@ function handlePuttingInAgainLogic(subject: Course) {
   )
   //Return retrieved object
   const retrievedObject = offeredCourseData.find(
-    (data) => data.Course.moduleCode === subject.moduleCode,
+    (data) => data.moduleCode === subject.moduleCode,
   )
   return retrievedObject
 }
@@ -65,16 +68,15 @@ function getDisplayDate(date: Date) {
 const editOfferedCourse = ref<number>(-1)
 
 function getModuleCode(item: OfferedCourseData) {
-  return item.Course.moduleCode
+  return item.moduleCode
 }
 
-function convertToOfferedCourseData(course: Course) {
+function convertToOfferedCourseData(course: Course): OfferedCourseData {
   const removeStoreData = handlePuttingInAgainLogic(course)
   if (removeStoreData === undefined) {
-    const convertedItem = {
+    return {
       Course: {
         lecturers: course.lecturers,
-        moduleCode: course.moduleCode,
         title: course.title,
       },
       appointments: { dates: [], type: 'weekly' },
@@ -82,16 +84,16 @@ function convertToOfferedCourseData(course: Course) {
       for: [],
       maxParticipants: null,
       minParticipants: 0,
+      moduleCode: course.moduleCode,
+      moodleCourse: null,
     }
-    return convertedItem
-  } else if (removeStoreData !== undefined) {
-    return removeStoreData
   }
+  return removeStoreData
 }
 
 function convertToCourse(offeredCourse: OfferedCourseData) {
   const convertedItem = coursesStore.courses.find(
-    (item) => item.moduleCode === offeredCourse.Course.moduleCode,
+    (item) => item.moduleCode === offeredCourse.moduleCode,
   )
   if (convertedItem !== undefined) {
     handlePuttingBackLogic(convertedItem)
