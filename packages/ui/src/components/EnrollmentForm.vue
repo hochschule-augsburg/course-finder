@@ -152,7 +152,7 @@ async function validate() {
     />
     <VSheet
       class="pa-5"
-      color="rgb(var(--v-theme-secondary))"
+      color="secondary"
       max-width="var(--dialog-max-width)"
       rounded="lg"
     >
@@ -162,7 +162,7 @@ async function validate() {
           :label="t('credits-wanted')"
           :rules="integerInputRules"
           class="mb-3"
-          color="rgb(var(--v-theme-primary))"
+          color="primary"
           required
         />
         <VDivider :thickness="2" class="mt-0 mb-6" />

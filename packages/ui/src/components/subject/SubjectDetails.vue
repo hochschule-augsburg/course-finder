@@ -41,7 +41,7 @@ const fullscreen = ref(false)
       <VCarouselItem>
         <VSheet
           class="px-4 py-6 overflow-y-auto"
-          color="rgb(var(--v-theme-secondary))"
+          color="secondary"
           height="100%"
           rounded="lg"
         >

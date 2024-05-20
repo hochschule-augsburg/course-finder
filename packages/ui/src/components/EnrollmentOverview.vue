@@ -11,7 +11,7 @@ const { locale } = useI18n()
   <VSheet
     v-if="coursesStore.currentPhase"
     class="mx-2 mb-9 px-4 py-3"
-    color="rgb(var(--v-theme-secondary))"
+    color="secondary"
     rounded="lg"
   >
     <h2>

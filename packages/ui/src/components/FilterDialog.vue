@@ -50,7 +50,7 @@ function resetFilters() {
               :max="rangeFilter.max"
               :min="rangeFilter.min"
               class="mt-2 mx-3"
-              color="rgb(var(--v-theme-primary))"
+              color="primary"
               step="1"
               strict
               thumb-label

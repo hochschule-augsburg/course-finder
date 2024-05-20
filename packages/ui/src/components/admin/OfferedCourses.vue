@@ -149,7 +149,7 @@ const searchOffered = ref('')
                 <VCard
                   :title="locale === 'de' ? element.title.de : element.title.en"
                   class="hoverable-card"
-                  color="rgb(var(--v-theme-secondary))"
+                  color="secondary"
                   height="50"
                   rounded="0"
                   hover
@@ -182,7 +182,7 @@ const searchOffered = ref('')
               <div v-if="filterOffered(element)" class="list-group-item">
                 <VCard
                   class="hoverable-card"
-                  color="rgb(var(--v-theme-secondary))"
+                  color="secondary"
                   rounded="0"
                   hover
                 >

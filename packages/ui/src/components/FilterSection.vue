@@ -31,9 +31,9 @@ function getRangeChipLabel(filter: RangeFilter) {
       v-model:model-value="search"
       :label="t('global.search')"
       :on-click:clear="filtersStore.resetSearch"
-      bg-color="rgb(var(--v-theme-secondary))"
+      bg-color="secondary"
       class="mx-3"
-      color="rgb(var(--v-theme-primary))"
+      color="primary"
       prepend-inner-icon="mdi-magnify"
       type="text"
       clearable
