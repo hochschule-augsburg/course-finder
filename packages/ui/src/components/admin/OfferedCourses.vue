@@ -5,7 +5,15 @@ import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
-import { VCol, VDivider, VRow } from 'vuetify/components'
+import {
+  VCard,
+  VCardText,
+  VCardTitle,
+  VCol,
+  VDivider,
+  VIcon,
+  VRow,
+} from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 
@@ -95,6 +103,23 @@ function convertToCourse(offeredCourse: OfferedCourseData) {
   }
   console.log('no matching course object found')
 }
+
+function getTypeI18n(type: string) {
+  if (locale.value === 'de') {
+    switch (type) {
+      case 'weekly': {
+        return 'Wöchentlich'
+      }
+      case 'block': {
+        return 'Blockveranstaltung'
+      }
+      default: {
+        return 'Irregular'
+      }
+    }
+  }
+  return type
+}
 </script>
 
 <template>
@@ -107,13 +132,23 @@ function convertToCourse(offeredCourse: OfferedCourseData) {
           <Draggable
             :clone="convertToOfferedCourseData"
             :list="tableOne"
-            class="list-group"
+            class="list-group draggable-container"
+            ghost-class="ghost"
             group="courses"
             item-key="moduleCode"
+            force-fallback
           >
             <template #item="{ element }">
               <div class="list-group-item">
-                {{ element.title.en }}
+                <VCard
+                  :title="locale === 'de' ? element.title.de : element.title.en"
+                  class="hoverable-card"
+                  color="rgb(var(--v-theme-secondary))"
+                  height="50"
+                  rounded="0"
+                  hover
+                />
+                <VDivider opacity="0" thickness="15px" />
               </div>
             </template>
           </Draggable>
@@ -128,48 +163,61 @@ function convertToCourse(offeredCourse: OfferedCourseData) {
             :item-key="getModuleCode"
             :list="offeredCoursesArray"
             class="list-group"
+            ghost-class="ghost"
             group="courses"
           >
             <template #item="{ element, index }">
               <div class="list-group-item">
-                <div>
-                  <!--TODO: STYLING-->
-                  {{
-                    locale === 'en'
-                      ? element.Course.title.en
-                      : element.Course.title.de
-                  }}
-                  <VIcon
-                    class="pencil-icon"
-                    size="20"
-                    @click="editOfferedCourse = index"
-                  >
-                    mdi-pencil
-                  </VIcon>
-                  <div>{{ t('type') }}: {{ element.appointments.type }}</div>
-                  <div
-                    v-for="(timespan, appointIndex) in element.appointments
-                      .dates"
-                    :key="appointIndex"
-                  >
+                <VCard
+                  class="hoverable-card"
+                  color="rgb(var(--v-theme-secondary))"
+                  rounded="0"
+                  hover
+                >
+                  <VCardTitle>
+                    {{
+                      locale === 'de'
+                        ? element.Course.title.de
+                        : element.Course.title.en
+                    }}
+                    <VIcon
+                      class="pencil-icon"
+                      size="20"
+                      @click="editOfferedCourse = index"
+                    >
+                      mdi-pencil
+                    </VIcon>
+                  </VCardTitle>
+                  <VCardText>
                     <div>
-                      <strong>{{ t('from') }}:</strong>
-                      {{ getDisplayDate(timespan.from) }}
-                      <strong>{{ t('to') }}:</strong>
-                      {{ getDisplayDate(timespan.to) }}
+                      {{ t('type') }}:
+                      {{ getTypeI18n(element.appointments.type) }}
                     </div>
-                  </div>
-                  <div>
-                    {{ t('min-participants') }}: {{ element.minParticipants }}
-                    <template v-if="element.maxParticipants">
-                      {{ t('max-participants') }}:
-                      {{ element.maxParticipants }}
-                    </template>
-                  </div>
-                  <div v-if="element.extraInfo">
-                    {{ t('extra-info') }}: {{ element.extraInfo }}
-                  </div>
-                </div>
+                    <div
+                      v-for="(timespan, appointIndex) in element.appointments
+                        .dates"
+                      :key="appointIndex"
+                    >
+                      <div>
+                        <strong>{{ t('from') }}:</strong>
+                        {{ getDisplayDate(timespan.from) }}
+                        <strong>{{ t('to') }}:</strong>
+                        {{ getDisplayDate(timespan.to) }}
+                      </div>
+                    </div>
+                    <div>
+                      {{ t('min-participants') }}: {{ element.minParticipants }}
+                      <template v-if="element.maxParticipants">
+                        {{ t('max-participants') }}:
+                        {{ element.maxParticipants }}
+                      </template>
+                    </div>
+                    <div v-if="element.extraInfo">
+                      {{ t('extra-info') }}: {{ element.extraInfo }}
+                    </div>
+                  </VCardText>
+                </VCard>
+                <VDivider opacity="0" thickness="15px" />
               </div>
             </template>
           </Draggable>
@@ -224,24 +272,6 @@ $borderColor: #ff266d;
 $itemColor: #000000;
 $paddingValue: 1%;
 
-.drop-zone {
-  width: 50%;
-  background-color: $backgroundColor;
-  padding: $paddingValue;
-  min-height: 10%;
-  max-height: 70em;
-  overflow-y: auto;
-}
-
-.drag-el {
-  background-color: $itemBackgroundColor;
-  border-color: $borderColor;
-  border-radius: $paddingValue;
-  border-style: solid;
-  color: $itemColor;
-  padding: $paddingValue;
-}
-
 .pencil-icon {
   cursor: pointer;
 }
@@ -250,18 +280,18 @@ $paddingValue: 1%;
   padding-top: $paddingValue;
 }
 
-.left-column {
-  float: left;
-  width: 50%;
-}
-
-.right-column {
-  float: right;
-  width: 50%;
-}
-
 .off-course {
   max-height: 40em;
   overflow-y: auto;
+}
+
+.draggable-item:hover {
+  cursor: pointer;
+  background-color: $backgroundColor;
+}
+
+.ghost {
+  opacity: 0.5;
+  color: $borderColor;
 }
 </style>
