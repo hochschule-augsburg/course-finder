@@ -1,0 +1,67 @@
+import {
+  testConstructTxtText,
+  testGetStudentEmails,
+} from '../../../src/routes/admin/assign/AssignRoutes'
+import { prismaMock } from '../../setup/prisma'
+
+const assignmentResults: Record<string, string[]> = {
+  stud1: ['course a', 'course b'],
+  stud2: ['course a', 'course c'],
+  stud3: ['course b', 'course c'],
+}
+
+const userMock = [
+  {
+    auth: {
+      method: 'local' as const,
+      password: 'stud1',
+      salt: 'salt',
+    },
+    email: 'stud1@example.com',
+    name: 'stud 1',
+    type: 'Student',
+    username: 'stud1',
+  },
+  {
+    auth: {
+      method: 'local' as const,
+      password: 'stud2',
+      salt: 'salt',
+    },
+    email: 'stud2@example.com',
+    name: 'stud 2',
+    type: 'Student',
+    username: 'stud2',
+  },
+  {
+    auth: {
+      method: 'local' as const,
+      password: 'stud3',
+      salt: 'salt',
+    },
+    email: 'stud3@example.com',
+    name: 'stud 3',
+    type: 'Student',
+    username: 'stud3',
+  },
+]
+
+describe('testGetStudentEmails', () => {
+  it('collects students that signed up for wpfs and returns their emails', async () => {
+    prismaMock.user.findMany.mockResolvedValue(userMock)
+    const emails =
+      await testGetStudentEmails.getStudentEmails(assignmentResults)
+    expect(emails).toContain('stud1@example.com')
+    expect(emails).toContain('stud2@example.com')
+    expect(emails).toContain('stud3@example.com')
+    assert(emails.length === 3)
+  })
+})
+
+describe('testConstructTxtText', () => {
+  it('creates a list of every unique modulecode and student-modules allocation', () => {
+    expect(testConstructTxtText.constructTxtText(assignmentResults)).toBe(
+      'Stattfindende Module\n\ncourse a\ncourse b\ncourse c\n\nStudent-Modulcode Zuweisungen\n\nstud1: course a, course b, \nstud2: course a, course c, \nstud3: course b, course c, \n',
+    )
+  })
+})
