@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/CoursesStore'
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
+import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { mdiMagnify, mdiPencil } from '@mdi/js'
+import { assign } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VIcon } from 'vuetify/components'
+import Draggable from 'vuedraggable'
+import {
+  VCard,
+  VCardText,
+  VCardTitle,
+  VCol,
+  VDivider,
+  VIcon,
+  VRow,
+  VTextField,
+} from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 
@@ -14,72 +26,19 @@ const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 const coursesStore = useAdminCoursesStore()
 const { locale, t } = useI18n()
 
-/*Following code handles the logic for drag and drop */
 const tableOne: Course[] = reactive([...coursesStore.courses])
-
-function startDrag(event: DragEvent, moduleCode: string, table: string): void {
-  if (event.dataTransfer) {
-    event.dataTransfer.dropEffect = 'move'
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('itemID', moduleCode)
-    event.dataTransfer.setData('tableID', table)
-  }
-}
-
-function onDrop(event: DragEvent, droppedTable: string): void {
-  const itemID = event.dataTransfer?.getData('itemID')
-  const tableID = event.dataTransfer?.getData('tableID')
-
-  const indexInTableOne = tableOne.findIndex(
-    (item) => item.moduleCode === itemID,
-  )
-  const indexInTableTwo = offeredCoursesArray.value.findIndex(
-    (item) => item.Course.moduleCode === itemID,
-  )
-  console.log(itemID, tableID, droppedTable, indexInTableOne, indexInTableTwo)
-
-  if (indexInTableOne >= 0 && tableID !== droppedTable) {
-    const foundSubject = tableOne.find((item) => item.moduleCode === itemID)
-    if (foundSubject !== undefined) {
-      offeredCoursesArray.value.push({
-        Course: foundSubject,
-        appointments: { dates: [], type: 'weekly' },
-        extraInfo: null,
-        for: [],
-        maxParticipants: null,
-        minParticipants: 0,
-      })
-      tableOne.splice(indexInTableOne, 1)
-      handlePuttingInAgainLogic(foundSubject)
-    }
-    //TODO: Remove subject from offeredCourseArray if its there
-  } else if (indexInTableTwo >= 0 && tableID !== droppedTable) {
-    const foundSubject = coursesStore.courses.find(
-      (item) => item.moduleCode === itemID,
-    )
-    if (foundSubject !== undefined) {
-      tableOne.push(foundSubject)
-      offeredCoursesArray.value.splice(indexInTableTwo, 1)
-      handlePuttingBackLogic(foundSubject)
-    }
-  }
-}
+const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
 
-function handlePuttingBackLogic(subject: Subject) {
-  console.log(subject)
+function handlePuttingBackLogic(subject: Course) {
   //Retrieve the data from the shared object
   const offeredCourseData = offeredCoursesArray.value.filter(
-    (course) => course.Course.moduleCode === subject.moduleCode,
-  )
-  //Remove the data from the shared object
-  offeredCoursesArray.value = offeredCoursesArray.value.filter(
-    (course) => course.Course.moduleCode !== subject.moduleCode,
+    (course) => course.moduleCode === subject.moduleCode,
   )
   //Remove old data in case it is already in removeStore
   removeStore.value = removeStore.value.filter(
-    (data) => data.Course.moduleCode !== subject.moduleCode,
+    (data) => data.moduleCode !== subject.moduleCode,
   )
   //Put retrieved data in removeStore
   offeredCourseData.forEach(function (data) {
@@ -87,122 +46,232 @@ function handlePuttingBackLogic(subject: Subject) {
   })
 }
 
-function handlePuttingInAgainLogic(subject: Subject) {
+function handlePuttingInAgainLogic(
+  subject: Course,
+): OfferedCourseData | undefined {
   //Try to retrieve data from remove store
   const offeredCourseData = removeStore.value.filter(
-    (data) => data.Course.moduleCode === subject.moduleCode,
+    (data) => data.moduleCode === subject.moduleCode,
   )
   //Remove data from remove store
   removeStore.value = removeStore.value.filter(
-    (data) => data.Course.moduleCode !== subject.moduleCode,
+    (data) => data.moduleCode !== subject.moduleCode,
   )
-  //Putting back data in shared object if it is there
-  if (offeredCourseData !== undefined) {
-    offeredCourseData.forEach(function (data) {
-      offeredCoursesArray.value.push(data)
-    })
+  //Return retrieved object
+  const retrievedObject = offeredCourseData.find(
+    (data) => data.moduleCode === subject.moduleCode,
+  )
+  return retrievedObject
+}
+
+function convertToOfferedCourseData(course: Course): OfferedCourseData {
+  const removeStoreData = handlePuttingInAgainLogic(course)
+  if (removeStoreData === undefined) {
+    return {
+      Course: {
+        lecturers: course.lecturers,
+        title: course.title,
+      },
+      appointments: { dates: [], type: 'weekly' },
+      extraInfo: null,
+      for: [],
+      maxParticipants: null,
+      minParticipants: 0,
+      moduleCode: course.moduleCode,
+      moodleCourse: null,
+    }
   }
+  return removeStoreData
 }
 
-function getDisplayDate(date: Date) {
-  return date.toLocaleString('en-GB').replaceAll('/', '.')
+function convertToCourse(offeredCourse: OfferedCourseData): Course | undefined {
+  const convertedItem = coursesStore.courses.find(
+    (item) => item.moduleCode === offeredCourse.moduleCode,
+  )
+  if (convertedItem !== undefined) {
+    handlePuttingBackLogic(convertedItem)
+    return convertedItem
+  }
+  console.log('no matching course object found')
 }
 
-const editOfferedCourse = ref<number>(-1)
+function displayFieldsOfStudy(fields: string[]) {
+  return fields.map((e: string): string => fieldsOfStudyAbbrMap[e]).join(', ')
+}
+
+function filterCourse(course: Course) {
+  console.log(course)
+  return (
+    !!course.title.de
+      ?.toLowerCase()
+      .includes(searchCourses.value.toLowerCase()) ||
+    !!course.title.en?.toLowerCase().includes(searchCourses.value.toLowerCase())
+  )
+}
+const searchCourses = ref('')
+
+function filterOffered(course: OfferedCourseData) {
+  return (
+    !!course.Course.title.de
+      ?.toLowerCase()
+      .includes(searchOffered.value.toLowerCase()) ||
+    !!course.Course.title.en
+      ?.toLowerCase()
+      .includes(searchOffered.value.toLowerCase())
+  )
+}
+const searchOffered = ref('')
 </script>
 
 <template>
   <div>
-    <!-- TODO reactivity-->
-    <div style="display: flex">
-      <div
-        class="drop-zone"
-        @dragenter.prevent
-        @dragover.prevent
-        @drop="onDrop($event, 'table1')"
-      >
-        <div>{{ t('available-courses') }}</div>
-        <div class="left-column">
-          <div
-            v-for="subject in tableOne.slice(0, Math.ceil(tableOne.length / 2))"
-            :key="subject.moduleCode"
-            class="drag-el"
-            draggable="true"
-            @dragstart="startDrag($event, subject.moduleCode, 'table1')"
+    <VRow>
+      <VCol cols="12" md="6">
+        {{ t('available-courses') }}
+        <VDivider opacity="0" thickness="15px" />
+        <VTextField
+          v-model="searchCourses"
+          :label="t('global.search')"
+          :prepend-inner-icon="mdiMagnify"
+          placeholder="t('global.search')"
+        />
+        <div class="off-course">
+          <Draggable
+            :clone="convertToOfferedCourseData"
+            :list="tableOne"
+            class="list-group draggable-container"
+            ghost-class="ghost"
+            group="courses"
+            item-key="moduleCode"
+            force-fallback
           >
-            {{ locale === 'en' ? subject.title.en : subject.title.de }}
-          </div>
-        </div>
-
-        <div class="right-column">
-          <div
-            v-for="subject in tableOne.slice(Math.ceil(tableOne.length / 2))"
-            :key="subject.moduleCode"
-            class="drag-el"
-            draggable="true"
-            @dragstart="startDrag($event, subject.moduleCode, 'table1')"
-          >
-            {{ locale === 'en' ? subject.title.en : subject.title.de }}
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="drop-zone"
-        @dragenter.prevent
-        @dragover.prevent
-        @drop="onDrop($event, 'table2')"
-      >
-        <div>{{ t('offered-courses') }}</div>
-        <div
-          v-for="(subject, index) in offeredCoursesArray"
-          :key="subject.Course.moduleCode"
-          class="drag-el"
-          draggable="true"
-          @dragstart="startDrag($event, subject.Course.moduleCode, 'table2')"
-        >
-          {{
-            locale === 'en' ? subject.Course.title.en : subject.Course.title.de
-          }}
-          <VIcon
-            class="pencil-icon"
-            size="20"
-            @click="editOfferedCourse = index"
-          >
-            mdi-pencil
-          </VIcon>
-          <div>{{ t('type') }}: {{ subject.appointments.type }}</div>
-          <div
-            v-for="(timespan, appointIndex) in subject.appointments.dates"
-            :key="appointIndex"
-          >
-            <div>
-              <strong>{{ t('from') }}:</strong>
-              {{ getDisplayDate(timespan.from) }}
-              <strong>{{ t('to') }}:</strong>
-              {{ getDisplayDate(timespan.to) }}
-            </div>
-          </div>
-          <div>
-            {{ t('min-participants') }}: {{ subject.minParticipants }}
-            <template v-if="subject.maxParticipants">
-              {{ t('max-participants') }}:
-              {{ subject.maxParticipants }}
+            <template #item="{ element }">
+              <div v-if="filterCourse(element)" class="list-group-item">
+                <VCard
+                  :title="locale === 'de' ? element.title.de : element.title.en"
+                  class="hoverable-card"
+                  color="secondary"
+                  height="50"
+                  rounded="0"
+                  hover
+                />
+                <VDivider opacity="0" thickness="15px" />
+              </div>
             </template>
-          </div>
-          <div v-if="subject.extraInfo">
-            {{ t('extra-info') }}: {{ subject.extraInfo }}
-          </div>
+          </Draggable>
         </div>
-      </div>
-    </div>
+      </VCol>
+      <VCol cols="12" md="6">
+        {{ t('offered-courses') }}
+        <VDivider opacity="0" thickness="15px" />
+        <VTextField
+          v-model="searchOffered"
+          :label="t('global.search')"
+          placeholder="t('global.search')"
+          prepend-inner-icon="mdi-magnify"
+        />
+        <div class="off-course">
+          <Draggable
+            :clone="convertToCourse"
+            :list="offeredCoursesArray"
+            class="list-group"
+            ghost-class="ghost"
+            group="courses"
+            item-key="moduleCode"
+          >
+            <template #item="{ element, index }">
+              <div v-if="filterOffered(element)" class="list-group-item">
+                <VCard
+                  class="hoverable-card"
+                  color="secondary"
+                  rounded="0"
+                  hover
+                >
+                  <VCardTitle>
+                    {{
+                      locale === 'de'
+                        ? element.Course.title.de
+                        : element.Course.title.en
+                    }}
+                    <VIcon
+                      :icon="mdiPencil"
+                      class="pencil-icon"
+                      size="20"
+                      @click="editOfferedCourse = index"
+                    />
+                  </VCardTitle>
+                  <VCardText>
+                    <div>
+                      {{ t('type') }}:
+                      {{ t(`types.${element.appointments.type}`) }}
+                    </div>
+                    <div
+                      v-for="(timespan, appointIndex) in element.appointments
+                        .dates"
+                      :key="appointIndex"
+                    >
+                      <div>
+                        <strong>{{ t('from') }}:</strong>
+                        {{
+                          //TODO
+                          timespan.from.toLocaleString(locale, {
+                            weekday: 'short',
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
+                        <strong>{{ t('to') }}:</strong>
+                        {{
+                          timespan.to.toLocaleString(locale, {
+                            weekday: 'short',
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
+                      </div>
+                    </div>
+                    <div>
+                      {{ t('min-participants') }}: {{ element.minParticipants }}
+                      <template v-if="element.maxParticipants">
+                        {{ t('max-participants') }}:
+                        {{ element.maxParticipants }}
+                      </template>
+                    </div>
+                    <div v-if="element.for?.length">
+                      {{ t('for-fields-of-study') }}:
+                      {{ displayFieldsOfStudy(element.for) }}
+                    </div>
+                    <div v-if="element.extraInfo">
+                      {{ t('extra-info') }}: {{ element.extraInfo }}
+                    </div>
+                  </VCardText>
+                </VCard>
+                <VDivider opacity="0" thickness="15px" />
+              </div>
+            </template>
+          </Draggable>
+        </div>
+      </VCol>
+    </VRow>
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
-      @abort="editOfferedCourse = -1"
+      @cancel="editOfferedCourse = -1"
       @submit="
         (result) => {
-          offeredCoursesArray[editOfferedCourse ?? -1] = result
+          if (!result) {
+            return
+          }
+          offeredCoursesArray[editOfferedCourse ?? -1] = assign(
+            offeredCoursesArray.at(editOfferedCourse),
+            result,
+          )
           editOfferedCourse = -1
         }
       "
@@ -215,19 +284,29 @@ en:
   available-courses: Available courses
   offered-courses: Offered courses
   type: Type
+  types:
+    weekly: Weekly
+    block: Block Event
+    irregular: Irregular
   from: From
   to: To
   min-participants: Min participants
   max-participants: Max participants
+  for-fields-of-study: For fields of study
   extra-info: Extra information
 de:
   available-courses: Verfügbare Kurse
   offered-courses: Angebote Kurse
   type: Typ
+  types:
+    weekly: Wöchentlich
+    block: Blockveranstaltung
+    irregular: Unregelmäßig
   from: Von
   to: Bis
   min-participants: Mindestteilnehmer
   max-participants: Maximale Teilnehmer
+  for-fields-of-study: Für Studienfelder
   extra-info: Zusätzliche Informationen
 </i18n>
 
@@ -238,24 +317,6 @@ $borderColor: #ff266d;
 $itemColor: #000000;
 $paddingValue: 1%;
 
-.drop-zone {
-  width: 50%;
-  background-color: $backgroundColor;
-  padding: $paddingValue;
-  min-height: 10%;
-  max-height: 70em;
-  overflow-y: auto;
-}
-
-.drag-el {
-  background-color: $itemBackgroundColor;
-  border-color: $borderColor;
-  border-radius: $paddingValue;
-  border-style: solid;
-  color: $itemColor;
-  padding: $paddingValue;
-}
-
 .pencil-icon {
   cursor: pointer;
 }
@@ -264,13 +325,18 @@ $paddingValue: 1%;
   padding-top: $paddingValue;
 }
 
-.left-column {
-  float: left;
-  width: 50%;
+.off-course {
+  max-height: 40em;
+  overflow-y: auto;
 }
 
-.right-column {
-  float: right;
-  width: 50%;
+.draggable-item:hover {
+  cursor: pointer;
+  background-color: $backgroundColor;
+}
+
+.ghost {
+  opacity: 0.5;
+  color: $borderColor;
 }
 </style>

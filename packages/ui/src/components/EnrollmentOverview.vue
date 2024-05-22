@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { useCoursesStore } from '@/stores/CoursesStore'
-import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { useI18n } from 'vue-i18n'
-const enrollmentStore = useEnrollmentStore()
+import { VSheet } from 'vuetify/components'
+
 const coursesStore = useCoursesStore()
 const { locale } = useI18n()
 </script>
 
 <template>
-  <div v-if="coursesStore.currentPhase" class="mx-2">
+  <VSheet
+    v-if="coursesStore.currentPhase"
+    class="mx-2 mb-9 px-4 py-3"
+    color="secondary"
+    rounded="lg"
+  >
     <h2>
       {{
         locale === 'de'
@@ -28,10 +33,5 @@ const { locale } = useI18n()
           : coursesStore.currentPhase.description.en
       }}
     </p>
-    <div class="ml-3">
-      <li v-for="s in enrollmentStore.enrolledSubjects" :key="s.moduleCode">
-        {{ `${locale === 'de' ? s.title?.de : s.title?.en} (${s.points})` }}
-      </li>
-    </div>
-  </div>
+  </VSheet>
 </template>

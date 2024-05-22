@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
-import { trpc } from '@/api/trpc'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
+import { mdiInvoiceTextPlus, mdiPencil } from '@mdi/js'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -41,8 +42,21 @@ function openEditDialog(subject: Course) {
   showModalForm.value = true
 }
 
-async function processSubject(subject: Course) {
-  await dialogAction?.(subject)
+async function processSubject(subject: Course | undefined) {
+  if (!subject) {
+    showModalForm.value = false
+    await trpc.admin.courses.delete.mutate({
+      moduleCode: selectedSubject.value.moduleCode,
+    })
+    adminStore.courses.splice(
+      adminStore.courses.findIndex(
+        (e) => e.moduleCode === selectedSubject.value.moduleCode,
+      ),
+      1,
+    )
+  } else {
+    await dialogAction?.(subject)
+  }
   showModalForm.value = false
 }
 
@@ -79,7 +93,7 @@ async function updateSubject(subject: Course) {
           <th>SWS</th>
           <th>
             <VBtn @click="openNewDialog">
-              {{ t('new') }} &nbsp; <VIcon>mdi-invoice-text-plus</VIcon>
+              {{ t('new') }} &nbsp; <VIcon :icon="mdiInvoiceTextPlus" />
             </VBtn>
           </th>
         </tr>
@@ -88,12 +102,12 @@ async function updateSubject(subject: Course) {
         <tr v-for="subject in adminStore.courses" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
           <td>{{ locale === 'en' ? subject.title.en : subject.title.de }}</td>
-          <td>{{ subject.lecturers.toString() }}</td>
+          <td>{{ subject.lecturers.join(', ') }}</td>
           <td>{{ subject.creditPoints }}</td>
           <td>{{ subject.semesterHours }}</td>
           <td>
             <VBtn @click="openEditDialog(subject)">
-              <VIcon size="25">mdi-pencil</VIcon>
+              <VIcon :icon="mdiPencil" size="25" />
             </VBtn>
           </td>
         </tr>

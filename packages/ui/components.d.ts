@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AdminCreateEnroll: typeof import('./src/components/admin/AdminCreateEnroll.vue')['default']
     AdminSubjectList: typeof import('./src/components/admin/AdminSubjectList.vue')['default']
+    AssignmentView: typeof import('./src/components/admin/assign/AssignmentView.vue')['default']
     CourseDialog: typeof import('./src/components/admin/CourseDialog.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/navbar/CustomNavbar.vue')['default']
@@ -25,6 +26,7 @@ declare module 'vue' {
     NavbarDesktop: typeof import('./src/components/navbar/NavbarDesktop.vue')['default']
     NavbarMobile: typeof import('./src/components/navbar/NavbarMobile.vue')['default']
     OfferedCourses: typeof import('./src/components/admin/OfferedCourses.vue')['default']
+    OfferedCoursesTable: typeof import('./src/components/admin/phase/OfferedCoursesTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubjectDetails: typeof import('./src/components/subject/SubjectDetails.vue')['default']

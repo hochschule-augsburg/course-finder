@@ -137,10 +137,12 @@ model StudentChoice {
 }
 
 model PhaseAssignment {
-  id            Int           @id @default(autoincrement())
+  tryNo         Int
   phaseId       Int
   username      String
   StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
   offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode])
   moduleCode    String
+
+  @@id([phaseId, tryNo, username, moduleCode])
 }

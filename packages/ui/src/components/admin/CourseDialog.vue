@@ -1,19 +1,27 @@
 <script lang="ts" setup>
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
-import { ref, watchEffect } from 'vue'
+import { mdiPencil } from '@mdi/js'
+import { ref, toRaw, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
   VCard,
   VCardText,
+  VCol,
   VDialog,
   VDivider,
+  VRow,
+  VSpacer,
+  VSwitch,
   VTextField,
+  VTextarea,
 } from 'vuetify/components'
 
+import { dialogService } from '../DialogService'
+
 const props = defineProps<{ selectedSubject?: Course; visible: boolean }>()
-const emit = defineEmits<{ cancel: []; submit: [Course] }>()
+const emit = defineEmits<{ cancel: []; submit: [Course | undefined] }>()
 const formData = ref<
   { lecturers: string; varyingCP: string } & Omit<
     Course,
@@ -22,9 +30,9 @@ const formData = ref<
 >()
 
 watchEffect(() => {
-  if (props.selectedSubject) {
+  if (props.selectedSubject && props.visible) {
     formData.value = {
-      ...props.selectedSubject,
+      ...structuredClone(toRaw(props.selectedSubject)),
       lecturers: props.selectedSubject.lecturers.join(', '),
       varyingCP: varyingCPToString(props.selectedSubject.varyingCP),
     }
@@ -78,6 +86,15 @@ function submit() {
     varyingCP: parseVaryingCP(formData.value.varyingCP),
   })
 }
+
+function deleteSubject() {
+  dialogService.showDialog({
+    onCancel: () => {},
+    onConfirm: () => emit('submit', undefined),
+    text: t('really-want-to-delete'),
+    title: t('global.confirm'),
+  })
+}
 </script>
 
 <template>
@@ -98,7 +115,7 @@ function submit() {
             : selectedSubject?.title.de,
         ])
       "
-      prepend-icon="mdi-pencil"
+      :prepend-icon="mdiPencil"
     >
       <template v-if="!selectedSubject?.moduleCode" #title>
         <div class="d-flex align-center" style="width: 30%">
@@ -180,10 +197,21 @@ function submit() {
       <VDivider />
       <template #actions>
         <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
+        <VSpacer />
+        <VSwitch
+          v-model="formData.published"
+          color="primary"
+          label="published"
+          hide-details
+        />
+        <VBtn
+          v-if="selectedSubject?.moduleCode"
+          :text="t('global.delete')"
+          @click="deleteSubject"
+        />
         <VBtn
           :disabled="!formData.moduleCode"
           :text="t('global.save')"
-          class="ms-auto"
           @click="submit"
         />
       </template>
@@ -205,6 +233,7 @@ en:
   extra-info: Extra Information
   hint:
     comma: List separated by commas
+  really-want-to-delete: Do you really want to delete this course?
 de:
   title: 'Bearbeiten - {0}'
   title-en: Titel (Englisch)
@@ -218,4 +247,5 @@ de:
   extra-info: Zusätzliche Informationen
   hint:
     comma: Liste mit Kommas getrennt
+  really-want-to-delete: Möchten Sie diesen Kurs wirklich löschen?
 </i18n>

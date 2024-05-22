@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDisplay, useTheme } from 'vuetify'
+import { useDisplay, useLocale, useTheme } from 'vuetify'
+import { VAppBar } from 'vuetify/components'
 
 export type ThemeOptions = 'auto' | 'dark' | 'light'
 export type LocaleOptions = 'de' | 'en'
@@ -9,7 +10,10 @@ export type LocaleOptions = 'de' | 'en'
 const { mobile } = useDisplay()
 
 const { locale } = useI18n()
+const { current: vuetifyLocale } = useLocale()
 const theme = useTheme()
+
+const supportedLocales: Record<string, string> = { de: 'de', en: 'en' }
 
 const selectedTheme = ref<ThemeOptions>('auto')
 
@@ -29,7 +33,7 @@ function getPreferredColorScheme() {
 function changeTheme(newTheme: ThemeOptions) {
   selectedTheme.value = newTheme
   theme.global.name.value = themes[newTheme]
-  localStorage.setItem('theme', themes[newTheme])
+  localStorage.setItem('theme', newTheme)
 }
 
 function changeLocale(newLocale: LocaleOptions) {
@@ -37,13 +41,19 @@ function changeLocale(newLocale: LocaleOptions) {
   window.localStorage.setItem('locale', newLocale)
 }
 
+watch(locale, () => {
+  vuetifyLocale.value = locale.value
+})
+
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const savedTheme = localStorage.getItem('theme') as ThemeOptions
   const savedLocale = window.localStorage.getItem('locale')
   const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 
   if (savedTheme) {
-    theme.global.name.value = savedTheme
+    selectedTheme.value = savedTheme
+    theme.global.name.value = themes[savedTheme]
   } else {
     theme.global.name.value = themes['auto']
   }
@@ -51,7 +61,7 @@ onMounted(() => {
   if (savedLocale) {
     locale.value = savedLocale
   } else {
-    locale.value = navigator.language
+    locale.value = supportedLocales[navigator.language] ?? 'en'
   }
 
   darkModePreference.addEventListener('change', (e) => {
@@ -80,10 +90,3 @@ onMounted(() => {
     </template>
   </VAppBar>
 </template>
-
-<style scoped lang="scss">
-.toolbar-link {
-  color: rgb(var(--v-theme-primary));
-  text-decoration: none;
-}
-</style>

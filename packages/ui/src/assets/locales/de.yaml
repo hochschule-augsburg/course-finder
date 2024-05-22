@@ -1,0 +1,31 @@
+global:
+  unknown-error: Unbekannter Fehler
+  confirm: Bestätigen
+  cancel: Abbrechen
+  save: Speichern
+  delete: Löschen
+  edit: Bearbeiten
+  close: Schließen
+  reset: Zurücksetzen
+  confirm-action: Aktion bestätigen
+  back: Zurück
+  search: Suchen
+  title: CourseFinder
+
+filter:
+  title: Filter
+  type-of-event: Veranstaltungsart
+  weekly: wöchentlich
+  block-event: Blockveranstaltung
+  weekday: Wochentag
+  monday: Montag
+  tuesday: Dienstag
+  wednesday: Mittwoch
+  thursday: Donnerstag
+  friday: Freitag
+  saturday: Samstag
+  sunday: Sonntag
+  semester-hours: SWS
+  credit-points: CP
+  participants: Teilnehmer
+  irregular: Irregulär

@@ -13,24 +13,23 @@ import {
 import EnrollCheckbox from './EnrollCheckbox.vue'
 defineProps<{ subject: Subject }>()
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 </script>
 
 <template>
   <div>
-    <VExpansionPanelTitle
-      class="hoverable-panel"
-      color="rgb(var(--v-theme-secondary))"
-    >
+    <VExpansionPanelTitle color="secondary">
       <EnrollCheckbox v-if="subject.offeredCourse" :subject class="checkbox" />
-      <VContainer class="ma-0">
+      <VContainer class="ma-0 ml-2">
         <VRow no-gutters>
           <VCol cols="5">
             <strong class="v-card-title pl-0">
               {{ locale === 'de' ? subject.title.de : subject.title.en }}
             </strong>
           </VCol>
-          <VCol cols="3"> {{ subject.semesterHours }} SWS </VCol>
+          <VCol cols="3">
+            {{ subject.semesterHours }} {{ t('semester-hours') }}
+          </VCol>
           <template v-if="subject.offeredCourse">
             <VCol
               v-if="subject.offeredCourse.appointments.type === 'weekly'"
@@ -42,7 +41,7 @@ const { locale } = useI18n()
               >
                 <span>
                   {{
-                    date.from.toLocaleDateString([], {
+                    date.from.toLocaleDateString(locale, {
                       weekday: 'long',
                     })
                   }}
@@ -53,16 +52,18 @@ const { locale } = useI18n()
             <VCol
               v-else-if="subject.offeredCourse.appointments.type === 'block'"
             >
-              Blockveranstaltung
+              {{ t('block-course') }}
             </VCol>
-            <VCol v-else> Irregulär </VCol>
+            <VCol v-else> {{ t('irregular') }} </VCol>
           </template>
         </VRow>
         <VRow no-gutters>
           <VCol class="v-card-subtitle" cols="5">
             {{ subject.lecturers.join(', ') }}
           </VCol>
-          <VCol cols="3"> {{ subject.creditPoints }} CP </VCol>
+          <VCol cols="3">
+            {{ subject.creditPoints }} {{ t('credit-points') }}
+          </VCol>
           <template v-if="subject.offeredCourse">
             <VCol
               v-if="subject.offeredCourse.appointments.type === 'weekly'"
@@ -74,12 +75,12 @@ const { locale } = useI18n()
               >
                 <span>
                   {{
-                    date.from.toLocaleTimeString([], {
+                    date.from.toLocaleTimeString(locale, {
                       hour: 'numeric',
                       minute: '2-digit',
                     }) +
                     ' - ' +
-                    date.from.toLocaleTimeString([], {
+                    date.to.toLocaleTimeString(locale, {
                       hour: 'numeric',
                       minute: '2-digit',
                     })
@@ -101,7 +102,21 @@ const { locale } = useI18n()
 <style scoped lang="scss">
 .checkbox {
   position: absolute;
-  top: var(--element-spacing-xs);
+  top: var(--element-spacing-s);
   left: var(--element-spacing-xs);
 }
 </style>
+
+<i18n lang="yaml">
+en:
+  semester-hours: SWS
+  credit-points: CP
+  block-course: Block Course
+  irregular: Irregular
+
+de:
+  semester-hours: SWS
+  credit-points: CP
+  block-course: Blockveranstaltung
+  irregular: Irregulär
+</i18n>

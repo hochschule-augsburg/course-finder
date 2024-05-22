@@ -1,22 +1,22 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { VBtn, VFooter, VRow } from 'vuetify/components'
+
+const { t } = useI18n()
 </script>
 
 <template>
-  <VFooter
-    class="bg-grey-lighten-1 custom-footer"
-    color="rgb(var(--v-theme-secondary))"
-  >
+  <VFooter class="custom-footer" color="secondary">
     <VRow justify="center" no-gutters>
       <VBtn
         class="mx-2"
-        color="black"
+        color="primary"
         href="https://www.tha.de/Service/Impressum.html"
         rounded="xl"
         target="_blank"
         variant="text"
       >
-        Impressum
+        {{ t('imprint') }}
       </VBtn>
     </VRow>
   </VFooter>
@@ -27,3 +27,10 @@ import { VBtn, VFooter, VRow } from 'vuetify/components'
   max-height: 3rem;
 }
 </style>
+
+<i18n lang="yaml">
+en:
+  imprint: imprint
+de:
+  imprint: Impressum
+</i18n>

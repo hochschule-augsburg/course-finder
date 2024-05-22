@@ -1,8 +1,8 @@
+import { maxBy, minBy } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
 
-import type { Subject } from './CoursesStore'
-
+import { type Subject, useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'
 
 export type Options = {
@@ -30,6 +30,7 @@ export type RangeFilter = {
 
 export const useFiltersStore = defineStore('filters', () => {
   const userStore = useUserStore()
+  const coursesStore = useCoursesStore()
   const search = ref<string>('')
   const hideNonStudentFilters = computed(
     () => userStore.user?.type !== 'Student',
@@ -37,47 +38,50 @@ export const useFiltersStore = defineStore('filters', () => {
   const optionsFilters: OptionsFilter[] = reactive([
     {
       filterFn: (subjects: Subject[], options: Options[]) =>
-        subjects.filter((s) => {
-          if (!s.offeredCourse) {
+        subjects.filter((e) => {
+          if (!e.offeredCourse) {
             return true
           }
           if (
-            !!(
-              s.offeredCourse.appointments.type === 'weekly' &&
-              options[0].selected
-            ) ||
-            (s.offeredCourse.appointments.type === 'block' &&
-              options[1].selected)
+            (e.offeredCourse.appointments.type === 'weekly' &&
+              options[0].selected) ||
+            (e.offeredCourse.appointments.type === 'block' &&
+              options[1].selected) ||
+            (e.offeredCourse.appointments.type === 'irregular' &&
+              options[2].selected)
           ) {
             return true
           }
           return false
         }),
       hidden: hideNonStudentFilters,
-      name: 'Veranstaltungsart',
+      name: 'filter.type-of-event',
       options: [
-        { option: 'wöchentlich', selected: false },
-        { option: 'Blockveranstaltung', selected: false },
+        { option: 'filter.weekly', selected: false }, // Updated to use i18n key
+        { option: 'filter.block-event', selected: false }, // Updated to use i18n key
+        { option: 'filter.irregular', selected: false }, // Updated to use i18n key
       ],
     },
     {
       filterFn: (subjects, options) =>
-        subjects.filter((s) => {
-          if (!s.offeredCourse) {
+        subjects.filter((subject) => {
+          if (!subject.offeredCourse) {
             return true
           }
-          if (s.offeredCourse.appointments.type === 'weekly') {
-            return s.offeredCourse.appointments.dates.some(
-              (d) => options[d.from.getDay()].selected,
-            )
+          if (subject.offeredCourse.appointments.type === 'weekly') {
+            return subject.offeredCourse.appointments.dates.some((date) => {
+              return options[date.from.getDay()].selected
+            })
           }
           if (
-            ['block', 'irregular'].includes(s.offeredCourse.appointments.type)
+            ['block', 'irregular'].includes(
+              subject.offeredCourse.appointments.type,
+            )
           ) {
-            return s.offeredCourse.appointments.dates.some((m) => {
+            return subject.offeredCourse.appointments.dates.some((meeting) => {
               // getDay() => 0 = Sunday
-              const start = m.from.getDay() - 1
-              const end = m.to.getDay() - 1
+              const start = meeting.from.getDay()
+              const end = meeting.to.getDay()
               for (let i = start; i <= end; i++) {
                 if (options[i].selected) {
                   return true
@@ -89,16 +93,15 @@ export const useFiltersStore = defineStore('filters', () => {
           return false
         }),
       hidden: hideNonStudentFilters,
-      name: 'Wochentag',
-      // TODO: use i18n (index instead of names)
+      name: 'filter.weekday',
       options: [
-        { option: 'Montag', selected: false },
-        { option: 'Dienstag', selected: false },
-        { option: 'Mittwoch', selected: false },
-        { option: 'Donnerstag', selected: false },
-        { option: 'Freitag', selected: false },
-        { option: 'Samstag', selected: false },
-        { option: 'Sonntag', selected: false },
+        { option: 'filter.sunday', selected: false },
+        { option: 'filter.monday', selected: false },
+        { option: 'filter.tuesday', selected: false },
+        { option: 'filter.wednesday', selected: false },
+        { option: 'filter.thursday', selected: false },
+        { option: 'filter.friday', selected: false },
+        { option: 'filter.saturday', selected: false },
       ],
     },
   ])
@@ -107,11 +110,13 @@ export const useFiltersStore = defineStore('filters', () => {
     {
       filterFn: (subjects: Subject[], range: [min: number, max: number]) =>
         subjects.filter(
-          (s) => s.semesterHours >= range[0] && s.semesterHours <= range[1],
+          (subject) =>
+            subject.semesterHours >= range[0] &&
+            subject.semesterHours <= range[1],
         ),
       max: 20,
       min: 0,
-      name: 'SWS',
+      name: 'filter.semester-hours',
       range: [0, 20],
     },
     {
@@ -121,20 +126,20 @@ export const useFiltersStore = defineStore('filters', () => {
         ),
       max: 20,
       min: 0,
-      name: 'CP',
+      name: 'filter.credit-points',
       range: [0, 20],
     },
     {
       filterFn: (subjects: Subject[], range: [min: number, max: number]) =>
         subjects.filter(
-          (s) =>
-            (s.offeredCourse?.minParticipants ?? 0) >= range[0] &&
-            (s.offeredCourse?.maxParticipants ?? 100) <= range[1],
+          (subject) =>
+            (subject.offeredCourse?.minParticipants ?? 0) >= range[0] &&
+            (subject.offeredCourse?.maxParticipants ?? 100) <= range[1],
         ),
       hidden: hideNonStudentFilters,
       max: 100,
       min: 0,
-      name: 'Teilnehmer',
+      name: 'filter.participants',
       range: [0, 100],
     },
   ])
@@ -149,13 +154,14 @@ export const useFiltersStore = defineStore('filters', () => {
 
   const activeOptions = computed(() => {
     const activeOptions: Options[] = []
-    activeOptionsFilters.value.forEach((oF) => {
-      activeOptions.push(...oF.options.filter((o) => o.selected))
+    activeOptionsFilters.value.forEach((filter) => {
+      activeOptions.push(...filter.options.filter((o) => o.selected))
     })
     return activeOptions
   })
 
   watch(() => userStore.user, resetFilters)
+  watch(() => coursesStore.subjects, updateFilters)
 
   return {
     activeOptions,
@@ -188,19 +194,19 @@ export const useFiltersStore = defineStore('filters', () => {
       return subjects
     }
     return subjects.filter(
-      (s) =>
-        !!s.title.de?.toLowerCase().includes(searchString) ||
-        !!s.title.en?.toLowerCase().includes(searchString) ||
-        s.lecturers.some((e) => e.toLowerCase().includes(searchString)),
+      (subject) =>
+        !!subject.title.de?.toLowerCase().includes(searchString) ||
+        !!subject.title.en?.toLowerCase().includes(searchString) ||
+        subject.lecturers.some((e) => e.toLowerCase().includes(searchString)),
     )
   }
 
-  function resetRange(f: RangeFilter) {
-    if (f.min !== null && f.max !== null) {
-      f.range[0] = f.min
-      f.range[1] = f.max
+  function resetRange(filter: RangeFilter) {
+    if (filter.min !== null && filter.max !== null) {
+      filter.range[0] = filter.min
+      filter.range[1] = filter.max
     }
-    return f
+    return filter
   }
 
   function resetFilters() {
@@ -213,15 +219,15 @@ export const useFiltersStore = defineStore('filters', () => {
   }
 
   function resetFilter(name: string) {
-    rangeFilters.forEach((f) => {
-      if (f.name === name) {
-        f = resetRange(f)
+    rangeFilters.forEach((filter) => {
+      if (filter.name === name) {
+        filter = resetRange(filter)
       }
     })
-    optionsFilters.forEach((f) => {
-      f.options.forEach((o) => {
-        if (o.option === name) {
-          o.selected = false
+    optionsFilters.forEach((filter) => {
+      filter.options.forEach((option) => {
+        if (option.option === name) {
+          option.selected = false
         }
       })
     })
@@ -229,5 +235,37 @@ export const useFiltersStore = defineStore('filters', () => {
 
   function resetSearch() {
     search.value = ''
+  }
+
+  function updateFilterRange(
+    filterName: string,
+    subjects: Subject[],
+    property: 'creditPoints' | 'semesterHours',
+  ) {
+    const filter = rangeFilters.find((f) => f.name === filterName)
+    if (filter) {
+      filter.range[0] = minBy(subjects, property)?.[property] ?? 0
+      filter.range[1] = maxBy(subjects, property)?.[property] ?? 0
+      filter.min = filter.range[0]
+      filter.max = filter.range[1]
+    }
+  }
+
+  function updateFilters() {
+    if (coursesStore.subjects) {
+      const tlnmFilter = rangeFilters.find((f) => f.name === 'Teilnehmer')
+      if (tlnmFilter) {
+        tlnmFilter.range[0] =
+          maxBy(coursesStore.subjects, 'offeredCourse.minParticipants')
+            ?.offeredCourse?.minParticipants ?? 0
+        tlnmFilter.range[1] =
+          maxBy(coursesStore.subjects, 'offeredCourse.maxParticipants')
+            ?.offeredCourse?.maxParticipants ?? 0
+        tlnmFilter.min = tlnmFilter.range[0]
+        tlnmFilter.max = tlnmFilter.range[1]
+      }
+      updateFilterRange('CP', coursesStore.subjects, 'creditPoints')
+      updateFilterRange('SWS', coursesStore.subjects, 'semesterHours')
+    }
   }
 })

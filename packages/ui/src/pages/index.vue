@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
+import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
 defineOptions({
   name: 'CourseEnrollmentOverview',
@@ -22,40 +23,36 @@ const enrollFormVisible = ref(false)
 </script>
 
 <template>
-  <div class="container">
+  <div class="h-100">
     <EnrollmentOverview />
     <EnrollmentForm v-model:visible="enrollFormVisible" />
-    <div>
+    <div class="pt-1">
       <FilterSection />
       <VBtnToggle
         v-model="subjectView"
         class="px-3 d-flex justify-end"
         mandatory
       >
-        <VBtn icon="mdi-format-list-bulleted" text="list" value="list" />
-        <VBtn icon="mdi-dots-grid" text="grid" value="grid" />
+        <VBtn :icon="mdiFormatListBulleted" text="list" value="list" />
+        <VBtn :icon="mdiDotsGrid" text="grid" value="grid" />
       </VBtnToggle>
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
       <div v-if="enrollmentStore.enrolledSubjects.length > 0" class="floating">
-        <VBtn icon @click="enrollFormVisible = true">
-          <VIcon>mdi-pen-lock</VIcon>
-          <VTooltip activator="parent" location="top"> Einschreiben </VTooltip>
-        </VBtn>
-        <div v-if="pendingEnroll" class="pending-indicator" />
+        <VBadge :model-value="pendingEnroll" color="primary" dot>
+          <VBtn icon @click="enrollFormVisible = true">
+            <VIcon :icon="mdiPenLock" />
+            <VTooltip activator="parent" location="top">
+              Einschreiben
+            </VTooltip>
+          </VBtn>
+        </VBadge>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/mixins';
-.pending-indicator {
-  @include indicator;
-}
-.container {
-  height: 100%;
-}
 .floating {
   position: fixed;
   z-index: 1;

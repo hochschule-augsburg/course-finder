@@ -1,6 +1,6 @@
 import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router/auto'

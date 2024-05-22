@@ -2,8 +2,9 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useCourseEnroll } from '@/stores/EnrollmentStore'
+import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
-import { VIcon } from 'vuetify/components'
+import { VBadge, VIcon } from 'vuetify/components'
 
 import { dialogService } from '../DialogService'
 
@@ -34,14 +35,11 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
-  <div v-ripple class="enroll-checkbox pa-2" @click="handleUpdateEnroll">
-    <VIcon
-      v-if="enrolled?.points"
-      icon="mdi-pencil-box-multiple"
-      size="large"
-    />
-    <VIcon v-else-if="enrolled" icon="mdi-pencil-box" size="large" />
-    <VIcon v-else icon="mdi-checkbox-blank-outline" size="large" />
+  <div v-ripple class="pa-2" @click.stop="handleUpdateEnroll">
+    <VBadge v-if="enrolled" :content="enrolled.points">
+      <VIcon :icon="mdiCheckboxMarked" size="large" />
+    </VBadge>
+    <VIcon v-else :icon="mdiCheckboxBlankOutline" size="large" />
   </div>
 </template>
 

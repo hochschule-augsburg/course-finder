@@ -1,4 +1,14 @@
 <script lang="ts" setup>
+import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
+import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTypes'
+
+import {
+  abbrFieldsOfStudyMap,
+  fieldsOfStudy,
+  fieldsOfStudyAbbrMap,
+} from '@/helper/fieldsOfStudy'
+import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
+import { cloneDeep } from 'lodash-es'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -9,27 +19,48 @@ import {
   VDialog,
   VDivider,
   VIcon,
+  VListItem,
   VRadio,
   VRadioGroup,
   VRow,
+  VSelect,
   VTextField,
+  VTextarea,
 } from 'vuetify/components'
 
-import type { OfferedCourseData } from './types'
-
 const props = defineProps<{
-  offeredCourse?: OfferedCourseData
+  enableDelete?: boolean
+  offeredCourse?: AdminOfferedCourse
   visible?: boolean
 }>()
 const emits = defineEmits<{
-  abort: []
-  submit: [FormData: OfferedCourseData]
+  cancel: []
+  submit: [FormData: AdminOfferedCourse | undefined]
 }>()
 
-const formData = ref<OfferedCourseData>()
+const formData = ref<
+  { appointments: CourseAppointmentsJson<string> } & Omit<
+    AdminOfferedCourse,
+    'appointments'
+  >
+>()
 
 watchEffect(() => {
-  formData.value = Object.assign({}, props.offeredCourse)
+  if (!props.offeredCourse || !props.visible) {
+    formData.value = undefined
+    return
+  }
+  formData.value = {
+    ...cloneDeep(props.offeredCourse),
+    appointments: {
+      dates: props.offeredCourse?.appointments.dates.map((e) => ({
+        from: e.from.toISOString(),
+        to: e.to.toISOString(),
+      })),
+      type: props.offeredCourse?.appointments.type,
+    },
+    for: props.offeredCourse.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e),
+  }
 })
 
 const { locale, t } = useI18n()
@@ -38,14 +69,24 @@ function submit() {
   if (!formData.value) {
     return
   }
-  emits('submit', formData.value)
+  emits('submit', {
+    ...formData.value,
+    appointments: {
+      ...formData.value.appointments,
+      dates: formData.value.appointments.dates.map((e) => ({
+        from: new Date(e.from),
+        to: new Date(e.to),
+      })),
+    },
+    for: formData.value.for.map((e) => abbrFieldsOfStudyMap[e] ?? e),
+  })
 }
 
 function addDate() {
   const last = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
   formData.value?.appointments.dates.push({
-    from: last,
-    to: last,
+    from: last.toString(),
+    to: last.toString(),
   })
 }
 
@@ -60,7 +101,7 @@ function removeDate() {
     max-width="1000"
     min-width="auto"
     transition="false"
-    @update:model-value="$emit('abort')"
+    @update:model-value="$emit('cancel')"
   >
     <VCard
       v-if="formData"
@@ -71,13 +112,13 @@ function removeDate() {
             : offeredCourse?.Course.title.de,
         ])
       "
-      prepend-icon="mdi-pencil"
+      :prepend-icon="mdiPencil"
     >
       <VCardText>
         <VRow dense>
           <VCol cols="12" sm="6">
             <VTextField
-              v-model="formData.minParticipants"
+              v-model.number="formData.minParticipants"
               :label="t('minimum-participants')"
               type="number"
               required
@@ -85,7 +126,7 @@ function removeDate() {
           </VCol>
           <VCol cols="12" sm="6">
             <VTextField
-              v-model="formData.maxParticipants"
+              v-model.number="formData.maxParticipants"
               :label="t('maximum-participants')"
               type="number"
               required
@@ -99,15 +140,39 @@ function removeDate() {
               required
             />
           </VCol>
+          <VCol cols="12" sm="6">
+            <VSelect
+              v-model="formData.for"
+              :items="fieldsOfStudy.map((e) => e[1])"
+              :label="t('for-fields-of-study')"
+              chips
+              multiple
+              required
+            >
+              <template #item="{ props: itemProps, item }">
+                <VListItem
+                  v-bind="itemProps"
+                  :subtitle="abbrFieldsOfStudyMap[item.title]"
+                />
+              </template>
+            </VSelect>
+          </VCol>
+          <VCol>
+            <VRadioGroup v-model="formData.appointments.type" inline>
+              <VRadio :label="t('weekly')" value="weekly" />
+              <VRadio :label="t('block')" value="block" />
+              <VRadio :label="t('irregular')" value="irregular" />
+            </VRadioGroup>
+          </VCol>
           <VCol cols="12">
-            <VIcon>mdi-calendar</VIcon>
+            <VIcon :icon="mdiCalendar" />
             <strong>{{ t('appointments') }}</strong>
             <div
               v-for="(interval, index) in formData.appointments.dates"
               :key="index"
             >
               <div class="dateId-box" style="display: flex">
-                <VIcon @click="removeDate"> mdi-trash-can-outline </VIcon>
+                <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
               </div>
               <VRow>
                 <VCol cols="12" sm="6">
@@ -133,21 +198,6 @@ function removeDate() {
             <br />
             <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
           </VCol>
-          <VCol cols="12" sm="6">
-            <VTextField
-              v-model="formData.for"
-              :hint="t('fields-of-study-hint')"
-              :label="t('for-fields-of-study')"
-              required
-            />
-          </VCol>
-          <VCol>
-            <VRadioGroup v-model="formData.appointments.type" inline>
-              <VRadio :label="t('weekly')" value="weekly" />
-              <VRadio :label="t('block')" value="block" />
-              <VRadio :label="t('irregular')" value="irregular" />
-            </VRadioGroup>
-          </VCol>
           <VCol cols="12">
             <VTextarea
               v-model="formData.extraInfo"
@@ -162,8 +212,18 @@ function removeDate() {
       </VCardText>
       <VDivider />
       <template #actions>
-        <VBtn :text="t('global.cancel')" @click="$emit('abort')" />
-        <VBtn :text="t('global.save')" class="ms-auto" @click="submit" />
+        <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
+        <VSpacer />
+        <VBtn
+          v-if="enableDelete"
+          :text="t('global.delete')"
+          @click="$emit('submit', undefined)"
+        />
+        <VBtn
+          :disabled="!formData.moduleCode"
+          :text="t('global.save')"
+          @click="submit"
+        />
       </template>
     </VCard>
   </VDialog>

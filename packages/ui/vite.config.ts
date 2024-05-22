@@ -18,6 +18,8 @@ export default defineConfig({
   optimizeDeps: {
     holdUntilCrawlEnd: false,
     include: [
+      'date-fns',
+      'date-fns/locale',
       '@vueuse/core',
       'vue-pdf-embed',
       'lodash-es',
@@ -39,7 +41,7 @@ export default defineConfig({
     VueI18nPlugin({
       include: resolve(
         dirname(fileURLToPath(import.meta.url)),
-        './src/locales/**',
+        './src/assets/locales/**',
       ),
     }),
     ViteFonts({

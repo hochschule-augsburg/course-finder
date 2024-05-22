@@ -1,4 +1,4 @@
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 
@@ -7,12 +7,13 @@ import type { Subject } from './CoursesStore'
 import { useCoursesStore } from './CoursesStore'
 
 export type EnrolledCourse = {
+  autoFillOption: 'fallback' | 'prio'
   moduleCode: string
   points: number
   title: { de?: string; en?: string }
 }
 
-export const MAX_POINTS = 1000
+export const MAX_POINTS = 100
 
 export function useCourseEnroll(subject: Subject) {
   const enrollmentStore = useEnrollmentStore()
@@ -36,6 +37,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
   const coursesStore = useCoursesStore()
 
   const enrolledSubjects = ref<EnrolledCourse[]>([])
+  const creditsNeeded = ref(0)
 
   watch(
     () => coursesStore.currentPhase,
@@ -45,26 +47,30 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     { immediate: true },
   )
 
-  return { addSubject, enroll, enrolledSubjects, removeSubject }
+  return { addSubject, creditsNeeded, enroll, enrolledSubjects, removeSubject }
 
   async function update() {
     if (!coursesStore.currentPhase) {
+      enrolledSubjects.value = []
       return
     }
-    enrolledSubjects.value = (
-      await trpc.enroll.list.query({
-        phaseId: coursesStore.currentPhase.id,
-      })
-    ).map(extendEnrolled)
+    const result = await trpc.enroll.list.query({
+      phaseId: coursesStore.currentPhase.id,
+    })
+
+    enrolledSubjects.value = result.choices.map(extendEnrolled)
+    creditsNeeded.value = result.creditsNeeded
   }
 
-  function enroll(creditsNeeded: number) {
+  async function enroll(data: EnrolledCourse[], inputCredits: number) {
     if (coursesStore.currentPhase) {
-      return trpc.enroll.bulk.mutate({
-        creditsNeeded: creditsNeeded,
-        data: enrolledSubjects.value,
+      const result = await trpc.enroll.bulk.mutate({
+        creditsNeeded: inputCredits,
+        data,
         phaseId: coursesStore.currentPhase.id,
       })
+      enrolledSubjects.value = result.choices.map(extendEnrolled)
+      creditsNeeded.value = result.creditsNeeded
     }
   }
 
@@ -91,13 +97,45 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
         (e) => e.moduleCode === moduleCode,
       )
 
+      const remPoints = enrolledSubjects.value[index].points
       enrolledSubjects.value.splice(index, 1)
+
+      await splitRemPoints(remPoints)
 
       await trpc.enroll.delete.mutate({
         moduleCode,
         phaseId: coursesStore.currentPhase.id,
       })
     }
+  }
+
+  function splitRemPoints(remPoints: number) {
+    const extraPoints = Math.floor(remPoints / enrolledSubjects.value.length)
+
+    enrolledSubjects.value.forEach((s) => {
+      s.points += extraPoints
+      remPoints -= extraPoints
+    })
+
+    enrolledSubjects.value.forEach((s) => {
+      if (remPoints > 0) {
+        s.points++
+        remPoints--
+      }
+    })
+
+    return Promise.all(
+      enrolledSubjects.value.map(
+        (s) =>
+          coursesStore.currentPhase?.id &&
+          trpc.enroll.upsert.mutate({
+            creditsNeeded: undefined,
+            moduleCode: s.moduleCode,
+            phaseId: coursesStore.currentPhase.id,
+            points: s.points,
+          }),
+      ),
+    )
   }
 
   function extendEnrolled(enrolled: {
@@ -112,6 +150,7 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     }
     return {
       ...enrolled,
+      autoFillOption: enrolled.points > 1 ? 'prio' : 'fallback',
       title: course.title,
     }
   }

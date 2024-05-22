@@ -1,15 +1,40 @@
 <script setup lang="ts">
-import { trpc } from '@/api/trpc'
+import type { Phase } from '@/stores/admin/AdminCoursesStore'
+
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 import { isWithinInterval } from 'date-fns'
+import { cloneDeep } from 'lodash-es'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VCol, VSelect } from 'vuetify/components'
+import { useRouter } from 'vue-router'
+import {
+  VBtn,
+  VCol,
+  VContainer,
+  VForm,
+  VRow,
+  VSelect,
+  VTextField,
+  VTextarea,
+} from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
 
+const props = defineProps<{ phaseId?: number }>()
+
 const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
+const router = useRouter()
+
+const formData = ref<
+  { end: string; id?: number; start: string } & Omit<
+    Phase,
+    'end' | 'id' | 'start'
+  >
+>()
+
+void initFormData()
 
 const oldPhasesSelect = computed(() =>
   adminCoursesStore.phases
@@ -43,42 +68,118 @@ function clearSelection() {
 
 const sharedObject = ref<OfferedCourseData[]>([])
 
-const formData = ref({
-  description: { de: '', en: '' }, // [I18n]
-  end: new Date().toISOString(),
-  start: new Date().toISOString(),
-  title: { de: '', en: '' }, // [I18n]
-})
+async function submit() {
+  if (props.phaseId) {
+    await updateEnrollment()
+  } else {
+    await createEnrollment()
+  }
+  router.back()
+}
 
-async function createEnrollment() {
+async function updateEnrollment() {
+  if (!formData.value || !props.phaseId) {
+    return
+  }
   try {
-    await trpc.admin.enroll.phase.create.mutate({
+    await trpc.admin.enroll.phase.update.mutate({
       description: {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
       end: new Date(formData.value.end),
-      offeredCourses: sharedObject.value.map((e) => ({
-        ...e,
-        moduleCode: e.Course.moduleCode,
-      })),
+      id: props.phaseId,
+      offeredCourses: sharedObject.value,
       start: new Date(formData.value.start),
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
+    Object.assign(
+      adminCoursesStore.phases.find((e) => e.id === props.phaseId) ?? {},
+      {
+        description: {
+          de: formData.value.description.de,
+          en: formData.value.description.en,
+        },
+        end: new Date(formData.value.end),
+        id: props.phaseId,
+        start: new Date(formData.value.start),
+        title: { de: formData.value.title.de, en: formData.value.title.en },
+      },
+    )
+    adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
+    console.log('Success updating enroll phase')
+  } catch (e) {
+    console.log('Error updating enroll phase')
+  }
+  sharedObject.value = []
+}
+
+async function createEnrollment() {
+  if (!formData.value) {
+    return
+  }
+  try {
+    const newPhase = await trpc.admin.enroll.phase.create.mutate({
+      description: {
+        de: formData.value.description.de,
+        en: formData.value.description.en,
+      },
+      end: new Date(formData.value.end),
+      offeredCourses: sharedObject.value,
+      start: new Date(formData.value.start),
+      title: { de: formData.value.title.de, en: formData.value.title.en },
+    })
+    adminCoursesStore.phases.push({
+      description: {
+        de: formData.value.description.de,
+        en: formData.value.description.en,
+      },
+      end: new Date(formData.value.end),
+      id: 0,
+      start: new Date(formData.value.start),
+      title: { de: formData.value.title.de, en: formData.value.title.en },
+    })
+    adminCoursesStore.phaseOfferedCourses[newPhase.id] = sharedObject.value
     console.log('Success creating enroll phase')
   } catch (e) {
     console.log('Error creating enroll phase')
   }
   sharedObject.value = []
 }
+
+async function initFormData() {
+  if (props.phaseId) {
+    await adminCoursesStore.fetchOfferedCourses(props.phaseId)
+    const phase = adminCoursesStore.phases.find((e) => e.id === props.phaseId)
+    if (!phase) {
+      return
+    }
+    sharedObject.value = cloneDeep(
+      adminCoursesStore.phaseOfferedCourses[props.phaseId],
+    )
+    formData.value = {
+      ...cloneDeep(phase),
+      end: phase.end.toISOString(),
+      start: phase.start.toISOString(),
+    }
+
+    return
+  }
+  formData.value = {
+    description: { de: '', en: '' },
+    end: '',
+    start: '',
+    title: { de: '', en: '' },
+  }
+}
 </script>
 
 <template>
   <VForm>
-    <VContainer>
+    <VContainer v-if="formData">
       <VRow justify="center">
         <VCol cols="12" sm="5">
-          <h1>{{ t('create-enrollment') }}</h1>
+          <h1>{{ t(phaseId ? 'edit-enrollment' : 'create-enrollment') }}</h1>
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
@@ -163,9 +264,9 @@ async function createEnrollment() {
       <VRow justify="center">
         <VCol cols="12" sm="5">
           <VBtn
-            :text="t('create-enrollment')"
+            :text="t(phaseId ? 'global.save' : 'create-enrollment')"
             justify="center"
-            @click="createEnrollment"
+            @click="submit"
           />
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
@@ -177,6 +278,7 @@ async function createEnrollment() {
 <i18n lang="yaml">
 en:
   create-enrollment: Create enrollment
+  edit-enrollment: Edit enrollment phase
   start-date: Start date
   end-date: End date
   title-en: Title (en)
@@ -188,6 +290,7 @@ en:
   clear: Clear Selection
 de:
   create-enrollment: Anmeldung erstellen
+  edit-enrollment: Anmeldephase bearbeiten
   start-date: Startdatum
   end-date: Enddatum
   title-en: Titel (en)

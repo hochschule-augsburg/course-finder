@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useIntervalFn } from '@vueuse/core'
-import { formatDuration, intervalToDuration, isWithinInterval } from 'date-fns'
+import { formatDuration, intervalToDuration } from 'date-fns'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
+
+const props = defineProps<{
+  phaseId?: number
+}>()
+
 const phase = computed(() => {
-  const phase = adminCoursesStore.phases.find((e) =>
-    isWithinInterval(new Date(), {
-      end: new Date(e.end),
-      start: new Date(e.start),
-    }),
-  )
+  const phase = adminCoursesStore.phases.find((e) => e.id === props.phaseId)
   if (phase) {
     return {
       ...phase,
@@ -38,12 +39,21 @@ useIntervalFn(updateRemainingTime, 10000)
 
 function updateRemainingTime() {
   if (phase.value) {
+    const now = new Date()
+    if (phase.value.end.getTime() < now.getTime()) {
+      remainingTime.value = undefined
+      return
+    }
     const duration = intervalToDuration({
       end: new Date(phase.value.end),
-      start: new Date(),
+      start: now,
     })
+    // date-fns does not do weeks here
+    duration.weeks = Math.floor((duration.days ?? 0) / 7)
+    duration.days = (duration.days ?? 0) % 7
     remainingTime.value = formatDuration(duration, {
-      format: ['months', 'days', 'hours', 'minutes'],
+      format: ['months', 'weeks', 'days', 'hours', 'minutes'],
+      locale: getDateFnsLocale(locale.value),
     })
   }
 }
@@ -51,34 +61,38 @@ function updateRemainingTime() {
 
 <template>
   <div>
-    <h1>{{ t('title') }}</h1>
     <div v-if="phase" class="current-phase">
-      <h2>
-        {{ t('phase') }}:
+      <h3>
         {{ locale === 'en' ? phase.title.en : phase.title.de }}
-      </h2>
-      {{ t('start') }}:
+      </h3>
+      <strong>{{ t('start') }}:</strong>
       {{ phase.startFormatted }}
       <br />
-      {{ t('end') }}:
+      <strong>{{ t('end') }}:</strong>
       {{ phase.endFormatted }}
       <br />
       <template v-if="remainingTime">
-        {{ t('remaining-time') }}: {{ remainingTime }}
+        <strong>{{ t('remaining-time') }}:</strong>
+        {{ remainingTime }}
       </template>
     </div>
   </div>
 </template>
 
+<style scoped lang="scss">
+.current-phase {
+  hyphens: auto;
+  white-space: wrap;
+}
+</style>
+
 <i18n lang="yaml">
 en:
-  title: Administration
   phase: Current phase
   start: Start
   end: End
   remaining-time: Remaining Time
 de:
-  title: Verwaltung
   phase: Aktuelle Phase
   start: Start
   end: Ende

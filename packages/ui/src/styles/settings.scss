@@ -9,35 +9,3 @@
 
 // Import Vuetify settings
 @use 'vuetify/settings' with ($color-pack: false);
-
-:root {
-  --dialog-max-width: 32rem;
-  --floating-margin: 1.5rem;
-  --element-spacing-xs: 0.125rem;
-}
-
-// custom styles
-.hoverable-card:hover .v-card-title {
-  color: rgb(var(--v-theme-primary));
-}
-
-.hoverable-panel:hover .title-ellipsis {
-  color: rgb(var(--v-theme-primary));
-}
-
-.v-icon:hover {
-  color: rgb(var(--v-theme-primary));
-}
-
-.v-btn:hover {
-  color: rgb(var(--v-theme-primary));
-}
-.toolbar-link {
-    text-decoration: none;
-    color: rgb(var(--v-theme-primary));
-  }
-  
-
-.v-list-item:hover {
-  color: rgb(var(--v-theme-primary));
-}

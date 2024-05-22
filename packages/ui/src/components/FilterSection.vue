@@ -2,10 +2,13 @@
 import type { RangeFilter } from '@/stores/FiltersStore'
 
 import { useFiltersStore } from '@/stores/FiltersStore'
+import { mdiFilter, mdiMagnify } from '@mdi/js'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { VChip, VChipGroup, VIcon, VTextField } from 'vuetify/components'
 
+const { t } = useI18n()
 const { search } = storeToRefs(useFiltersStore())
 const filtersStore = useFiltersStore()
 const showFilterDialog = ref(false)
@@ -14,25 +17,25 @@ function getRangeChipLabel(filter: RangeFilter) {
   const lowChanged = filter.range[0] !== filter.min
   const highChanged = filter.range[1] !== filter.max
   if (lowChanged && highChanged) {
-    return `${filter.range[0]} < ${filter.name} < ${filter.range[1]}`
+    return `${filter.range[0]} < ${t(filter.name)} < ${filter.range[1]}`
   } else if (lowChanged) {
-    return `${filter.name} > ${filter.range[0]}`
+    return `${t(filter.name)} > ${filter.range[0]}`
   } else if (highChanged) {
-    return `${filter.name} < ${filter.range[1]}`
+    return `${t(filter.name)} < ${filter.range[1]}`
   }
 }
 </script>
 
 <template>
-  <div class="my-4">
+  <div>
     <VTextField
       v-model:model-value="search"
+      :label="t('global.search')"
       :on-click:clear="filtersStore.resetSearch"
-      bg-color="rgb(var(--v-theme-secondary))"
+      :prepend-inner-icon="mdiMagnify"
+      bg-color="secondary"
       class="mx-3"
-      color="rgb(var(--v-theme-primary))"
-      label="Search"
-      prepend-inner-icon="mdi-magnify"
+      color="primary"
       type="text"
       clearable
       hide-details
@@ -56,10 +59,10 @@ function getRangeChipLabel(filter: RangeFilter) {
         closable
         @click:close="() => filtersStore.resetFilter(option.option)"
       >
-        {{ option.option }}
+        {{ t(option.option) }}
       </VChip>
       <VChip @click="showFilterDialog = true">
-        <VIcon icon="mdi-filter" />
+        <VIcon :icon="mdiFilter" />
       </VChip>
     </VChipGroup>
 

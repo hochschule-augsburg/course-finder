@@ -8,7 +8,7 @@ import EnrollCheckbox from './EnrollCheckbox.vue'
 
 defineProps<{ subject: Subject }>()
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const dev = import.meta.env.DEV
 </script>
@@ -17,14 +17,13 @@ const dev = import.meta.env.DEV
   <VCard
     :subtitle="subject.lecturers.join(', ')"
     :title="locale === 'de' ? subject.title.de : subject.title.en"
-    class="hoverable-card"
-    color="rgb(var(--v-theme-secondary))"
+    color="secondary"
     height="200"
     width="300"
     hover
   >
     <template v-if="subject.offeredCourse" #append>
-      <EnrollCheckbox :subject />
+      <EnrollCheckbox :subject="subject" />
     </template>
     <VCardText>
       <span v-if="dev" class="font-italic font-weight-thin">{{
@@ -33,10 +32,12 @@ const dev = import.meta.env.DEV
       <VRow align="end" justify="end" style="height: 7rem">
         <VCol cols="auto" style="text-align: end">
           <p>
-            <strong>{{ subject.creditPoints }} CP</strong>
+            <strong>{{ subject.creditPoints }} {{ t('credit-points') }}</strong>
           </p>
           <p>
-            <strong>{{ subject.semesterHours }} SWS</strong>
+            <strong
+              >{{ subject.semesterHours }} {{ t('semester-hours') }}</strong
+            >
           </p>
           <template v-if="subject.offeredCourse">
             <p v-if="subject.offeredCourse.appointments.type === 'weekly'">
@@ -45,13 +46,13 @@ const dev = import.meta.env.DEV
                 :key="i"
               >
                 {{
-                  date.from.toLocaleDateString([], {
+                  date.from.toLocaleDateString(locale, {
                     weekday: 'long',
                     hour: 'numeric',
                     minute: '2-digit',
                   }) +
                   ' - ' +
-                  date.to.toLocaleTimeString([], {
+                  date.to.toLocaleTimeString(locale, {
                     hour: 'numeric',
                     minute: '2-digit',
                   })
@@ -59,12 +60,26 @@ const dev = import.meta.env.DEV
               </template>
             </p>
             <p v-else-if="subject.offeredCourse.appointments.type === 'block'">
-              Blockveranstaltung
+              {{ t('block-course') }}
             </p>
-            <p v-else>Irregulär</p>
+            <p v-else>{{ t('irregular') }}</p>
           </template>
         </VCol>
       </VRow>
     </VCardText>
   </VCard>
 </template>
+
+<i18n lang="yaml">
+en:
+  semester-hours: SWS
+  credit-points: CP
+  block-course: Block Course
+  irregular: Irregular
+
+de:
+  semester-hours: SWS
+  credit-points: CP
+  block-course: Blockveranstaltung
+  irregular: Irregulär
+</i18n>

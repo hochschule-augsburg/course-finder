@@ -1,28 +1,46 @@
 import type {
   Course as ApiCourse,
   EnrollPhase,
+  I18nJson,
+  OfferedCourse,
 } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { trpc } from '@/api/trpc'
+import { trpc } from '@/trpc'
 import { useAsyncState } from '@vueuse/core'
+import { isWithinInterval } from 'date-fns'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export type Course = Omit<ApiCourse, 'pdf'>
 
 export type Phase = EnrollPhase
 
+export type AdminOfferedCourse = {
+  Course: { lecturers: string[]; title: I18nJson }
+} & OfferedCourse
+
 export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const courses = ref<Course[]>([])
-
   const phases = ref<Phase[]>([])
+  const phaseOfferedCourses = ref<Record<number, AdminOfferedCourse[]>>({})
 
+  const currentPhase = computed(() => {
+    return phases.value.find((e) =>
+      isWithinInterval(new Date(), {
+        end: new Date(e.end),
+        start: new Date(e.start),
+      }),
+    )
+  })
   return {
     courses,
+    currentPhase,
+    fetchOfferedCourses,
     isInit: useAsyncState(async () => {
       await init()
       return true
     }, false).state,
+    phaseOfferedCourses,
     phases,
   }
 
@@ -32,5 +50,31 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
       (async () =>
         (phases.value = await trpc.admin.enroll.phase.list.query()))(),
     ])
+  }
+
+  async function fetchOfferedCourses(phaseId: number) {
+    if (phaseOfferedCourses.value[phaseId]) {
+      return
+    }
+    phaseOfferedCourses.value[phaseId] = (
+      await trpc.admin.enroll.offeredCourse.list.query({
+        phaseId,
+      })
+    ).map(extendOfferedCourse)
+  }
+
+  function extendOfferedCourse<
+    T extends { Course: object; moduleCode: string },
+  >(offeredCourse: T): { Course: { lecturers: string[] } } & T {
+    const course = courses.value.find(
+      (e) => e.moduleCode === offeredCourse.moduleCode,
+    )
+    return {
+      ...offeredCourse,
+      Course: {
+        ...offeredCourse.Course,
+        lecturers: course?.lecturers ?? [],
+      },
+    }
   }
 })

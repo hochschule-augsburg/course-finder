@@ -1,0 +1,49 @@
+:root {
+  --dialog-max-width: 32rem;
+  --floating-margin: 1.5rem;
+  --element-spacing-xs: 0.125rem;
+  --element-spacing-s: 0.5rem;
+}
+
+.v-card:hover .v-card-title {
+  color: rgb(var(--v-theme-primary));
+}
+
+.v-card:hover .v-card-item__prepend {
+  color: rgb(var(--v-theme-primary));
+}
+
+.v-expansion-panel:hover .v-card-title {
+  color: rgb(var(--v-theme-primary));
+}
+
+.v-icon:hover {
+  color: rgb(var(--v-theme-primary));
+}
+
+.v-btn:hover {
+  color: rgb(var(--v-theme-primary));
+}
+
+.v-list-item:hover {
+  color: rgb(var(--v-theme-primary));
+}
+
+.v-card:hover .v-badge__badge {
+  background-color: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+}
+
+.v-expansion-panel:hover .v-badge__badge {
+  background-color: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+}
+
+.v-carousel__controls {
+  color: rgb(var(--v-theme-on-surface)) !important;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(var(--v-theme-primary));
+}
