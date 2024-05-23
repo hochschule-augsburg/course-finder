@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
+import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import { computed, watch } from 'vue'

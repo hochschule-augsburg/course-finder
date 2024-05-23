@@ -6,7 +6,7 @@ import {
   abbrFieldsOfStudyMap,
   fieldsOfStudy,
   fieldsOfStudyAbbrMap,
-} from '@/helper/fieldsOfStudy'
+} from '@/helper/enums/fieldsOfStudy'
 import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
 import { cloneDeep } from 'lodash-es'
 import { ref, watchEffect } from 'vue'

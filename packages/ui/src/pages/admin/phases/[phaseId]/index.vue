@@ -1,12 +1,36 @@
 <script lang="ts" setup>
+import { phaseStates as orgPhaseStates } from '@/helper/enums/phaseStates'
+import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
+import { VBtn, VCol, VContainer, VRow, VSelect } from 'vuetify/components'
 
 const { t } = useI18n()
+const coursesStore = useAdminCoursesStore()
+const assignmentStore = useAdminAssignStore()
 
 const route = useRoute()
 const phaseId = Number(route.params.phaseId)
+
+const phaseState = computed(() => {
+  const state = coursesStore.phases.find((e) => e.id === phaseId)?.state
+  return {
+    modelValue: state,
+    text: orgPhaseStates.find((e) => e.value === state)?.text,
+  }
+})
+const phaseStates = computed(() => {
+  let states = orgPhaseStates.slice()
+  if (!assignmentStore.assignments[phaseId]?.length) {
+    states = states.filter((e) => e.value !== 'FINISHED')
+  }
+  if (phaseState.value.modelValue !== 'NOT_STARTED') {
+    states = states.filter((e) => e.value !== 'NOT_STARTED')
+  }
+  return states
+})
 </script>
 
 <template>
@@ -23,11 +47,29 @@ const phaseId = Number(route.params.phaseId)
           </VCol>
           <VCol cols="12" md="6">
             <VRow>
-              <VCol cols="6">
+              <VCol cols="4">
                 <VBtn :to="`${phaseId}/edit`">{{ t('edit') }}</VBtn>
               </VCol>
-              <VCol cols="6">
-                <VBtn>{{ t('close') }}</VBtn>
+              <VCol cols="8">
+                <VSelect
+                  :item-title="(e) => t(`phase-states.${e.text}`)"
+                  :item-value="(e) => e.value"
+                  :items="phaseStates"
+                  :model-value="phaseState.modelValue"
+                  @update:model-value="
+                    (value) => coursesStore.updatePhaseState(phaseId, value)
+                  "
+                >
+                  <template #item="{ props: itemProps, item }">
+                    <VListItem
+                      v-bind="itemProps"
+                      :subtitle="t(`phase-states.long.${item.raw.text}`)"
+                    />
+                  </template>
+                  <template #label>
+                    {{ t(`phase-states.long.${phaseState.text}`) }}
+                  </template>
+                </VSelect>
               </VCol>
             </VRow>
           </VCol>

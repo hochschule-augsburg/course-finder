@@ -42,6 +42,7 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
     }, false).state,
     phaseOfferedCourses,
     phases,
+    updatePhaseState,
   }
 
   async function init() {
@@ -50,6 +51,18 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
       (async () =>
         (phases.value = await trpc.admin.enroll.phase.list.query()))(),
     ])
+  }
+
+  async function updatePhaseState(phaseId: number, state?: Phase['state']) {
+    const phase = phases.value.find((e) => e.id === phaseId)
+    if (!phase || !state) {
+      throw new Error('Phase not found')
+    }
+    await trpc.admin.enroll.phase.update.mutate({
+      id: phaseId,
+      state: state,
+    })
+    phase.state = state
   }
 
   async function fetchOfferedCourses(phaseId: number) {

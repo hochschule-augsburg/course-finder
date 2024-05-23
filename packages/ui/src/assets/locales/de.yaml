@@ -29,3 +29,16 @@ filter:
   credit-points: CP
   participants: Teilnehmer
   irregular: Irregulär
+
+phase-states:
+  not-started: Nicht gestartet
+  open: Offen
+  closed: Geschlossen
+  drawing: Ziehung
+  finished: Beendet
+  long:
+    not-started: Die Phase wird in Kürze automatisch starten.
+    open: Anmeldungen werden akzeptiert.
+    closed: Temporär werden keine Anmeldungen akzeptiert.
+    drawing: Ziehung läuft.
+    finished: Die Anmeldephase ist beendet. Ergebnisse sind verfügbar.

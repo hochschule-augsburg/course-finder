@@ -1,10 +1,17 @@
 <script setup lang="ts">
+import { phaseStates } from '@/helper/enums/phaseStates'
 import { useCoursesStore } from '@/stores/CoursesStore'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSheet } from 'vuetify/components'
 
 const coursesStore = useCoursesStore()
 const { locale } = useI18n()
+
+const stateText = computed(
+  () =>
+    phaseStates.find((e) => e.value === coursesStore.currentPhase?.state)?.text,
+)
 </script>
 
 <template>
@@ -32,6 +39,9 @@ const { locale } = useI18n()
           ? coursesStore.currentPhase.description.de
           : coursesStore.currentPhase.description.en
       }}
+    </p>
+    <p>
+      {{ $t(`phase-states.long.${stateText}`) }}
     </p>
   </VSheet>
 </template>
