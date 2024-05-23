@@ -72,15 +72,26 @@ model Course {
 }
 
 model Enrollphase {
-  id             Int             @id @default(autoincrement())
-  start          DateTime
-  end            DateTime
+  id                  Int             @id @default(autoincrement())
+  start               DateTime
+  end                 DateTime
   /// [I18n]
-  title          Json
+  title               Json
   /// [I18n]
-  description    Json
-  offeredCourses OfferedCourse[]
-  studentPhases  StudentPhase[]
+  description         Json
+  offeredCourses      OfferedCourse[]
+  studentPhases       StudentPhase[]
+  state               PhaseState      @default(NOT_STARTED)
+  /// time when the email is being sent if time is in the past no mail is sent
+  emailNotificationAt DateTime        @default(dbgenerated("'epoch'"))
+}
+
+enum PhaseState {
+  NOT_STARTED
+  OPEN
+  CLOSED
+  DRAWING
+  FINISHED
 }
 
 model OfferedCourse {

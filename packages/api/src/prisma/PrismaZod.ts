@@ -22,3 +22,14 @@ export const nullString = z
   .optional()
 
 export const i18nInput = z.object({ de: nullString, en: nullString })
+
+export const offeredCourseSpec = z.object({
+  appointments: jsonAppointmentsSpec,
+  externalRegistration: z.boolean().optional(),
+  extraInfo: nullString,
+  for: z.array(z.string()),
+  maxParticipants: z.number().nullable().optional(),
+  minParticipants: z.number(),
+  moduleCode: z.string(),
+  moodleCourse: nullString,
+})

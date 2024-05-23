@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Course } from '@/stores/admin/AdminCoursesStore'
 
-import { fieldsOfStudyAbbrMap } from '@/helper/fieldsOfStudy'
+import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
@@ -167,8 +167,8 @@ const searchOffered = ref('')
         <VTextField
           v-model="searchOffered"
           :label="t('global.search')"
+          :prepend-inner-icon="mdiMagnify"
           placeholder="t('global.search')"
-          prepend-inner-icon="mdi-magnify"
         />
         <div class="off-course">
           <Draggable

@@ -29,3 +29,16 @@ filter:
   credit-points: credit points
   participants: participants
   irregular: irregular
+
+phase-states:
+  not-started: Not started
+  open: Open
+  closed: Closed
+  drawing: Drawing
+  finished: Finished
+  long:
+    not-started: The phase will automatically start soon.
+    open: Registrations are being accepted.
+    closed: Temporally no registrations are accepted.
+    drawing: Drawing in progress.
+    finished: The enrollment phase is finished. Results are available.

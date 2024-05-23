@@ -12,8 +12,8 @@
     "eslint-plugin-typescript-sort-keys": "^3.2.0",
     "eslint-plugin-unused-imports": "^3.2.0",
     "eslint-plugin-vitest": "^0.4.1",
-    "typescript-eslint": "^7.8.0",
-    "vitest": "^1.5.3"
+    "typescript-eslint": "^7.9.0",
+    "vitest": "^1.6.0"
   },
   "keywords": [],
   "license": "MIT",
@@ -28,5 +28,9 @@
     "stylelint:fix": "pnpm --stream --parallel -r run stylelint:fix"
   },
   "type": "module",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "@trpc/server": "^10.45.2",
+    "node-schedule": "^2.1.1"
+  }
 }
