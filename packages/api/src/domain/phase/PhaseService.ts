@@ -21,7 +21,7 @@ export const phaseSpec = z.object({
   end: z.date(),
   offeredCourses: z.array(offeredCourseSpec),
   start: z.date(),
-  state: zodEnumFromObjKeys(PhaseState),
+  state: zodEnumFromObjKeys(PhaseState).optional(),
   title: i18nInput,
 })
 
@@ -40,6 +40,7 @@ async function createPhase(data: phaseSpecType): Promise<Enrollphase> {
         de: data.description.de ?? data.description.en,
         en: data.description.en ?? data.description.de,
       },
+      emailNotificationAt: data.emailNotificationAt,
       end: data.end,
       offeredCourses: {
         create: data.offeredCourses.map((course) => ({
@@ -78,87 +79,27 @@ async function updatePhase(
   phaseId: number,
   data: Partial<phaseSpecType>,
 ): Promise<Enrollphase> {
-  const originalOfferedCourses = await prisma.offeredCourse.findMany({
-    where: { phaseId },
-  })
   const originalPhase = await prisma.enrollphase.findUnique({
     where: { id: phaseId },
   })
 
-  const deleted = originalOfferedCourses.filter(
-    (course) =>
-      !data.offeredCourses?.some(
-        (newCourse) => newCourse.moduleCode === course.moduleCode,
-      ),
-  )
-  const { newCourses, updatedCourses } = groupBy(
-    data.offeredCourses,
-    (course) =>
-      originalOfferedCourses.find(
-        (oldCourse) => oldCourse.moduleCode === course.moduleCode,
-      )
-        ? 'updatedCourses'
-        : 'newCourses',
-  )
-
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const updatedPhase = (
-    await Promise.all([
-      prisma.offeredCourse.deleteMany({
-        where: {
-          moduleCode: { in: deleted.map((c) => c.moduleCode) },
-          phaseId,
-        },
-      }),
-      prisma.offeredCourse.createMany({
-        data:
-          newCourses?.map((course) => ({
-            Course: {
-              connect: {
-                moduleCode: course.moduleCode,
-              },
-            },
-            appointments: course.appointments,
-            extraInfo: course.extraInfo,
-            for: { set: course.for },
-            maxParticipants: course.maxParticipants,
-            minParticipants: course.minParticipants,
-            moduleCode: course.moduleCode,
-            moodleCourse: course.moodleCourse,
-            phaseId,
-          })) ?? [],
-      }),
-      ...(updatedCourses?.map((course) =>
-        prisma.offeredCourse.update({
-          data: {
-            appointments: course.appointments,
-            externalRegistration: course.externalRegistration,
-            extraInfo: course.extraInfo,
-            for: { set: course.for },
-            maxParticipants: course.maxParticipants,
-            minParticipants: course.minParticipants,
-            moodleCourse: course.moodleCourse,
-          },
-          where: {
-            phaseId_moduleCode: {
-              moduleCode: course.moduleCode,
-              phaseId,
-            },
-          },
-        }),
-      ) ?? []),
-      prisma.enrollphase.update({
-        data: {
-          description: data.description,
-          end: data.end,
-          start: data.start,
-          state: data.state,
-          title: data.title,
-        },
-        where: { id: phaseId },
-      }),
-    ])
-  ).at(-1) as Enrollphase
+  const updateOfferedCoursesPromise = data.offeredCourses
+    ? await updateOfferedCourses(phaseId, data.offeredCourses)
+    : []
+  const [updatedPhase] = await Promise.all([
+    prisma.enrollphase.update({
+      data: {
+        description: data.description,
+        emailNotificationAt: data.emailNotificationAt,
+        end: data.end,
+        start: data.start,
+        state: data.state,
+        title: data.title,
+      },
+      where: { id: phaseId },
+    }),
+    ...updateOfferedCoursesPromise,
+  ])
 
   if (
     originalPhase?.start.getTime() !== updatedPhase.start.getTime() ||
@@ -183,4 +124,70 @@ function zodEnumFromObjKeys<K extends string>(
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const [firstKey, ...otherKeys] = Object.keys(obj) as K[]
   return z.enum([firstKey, ...otherKeys])
+}
+
+async function updateOfferedCourses(
+  phaseId: number,
+  data: phaseSpecType['offeredCourses'],
+): Promise<Promise<unknown>[]> {
+  const originalOfferedCourses = await prisma.offeredCourse.findMany({
+    where: { phaseId },
+  })
+  const deleted = originalOfferedCourses.filter(
+    (course) =>
+      !data.some((newCourse) => newCourse.moduleCode === course.moduleCode),
+  )
+  const { newCourses, updatedCourses } = groupBy(data, (course) =>
+    originalOfferedCourses.find(
+      (oldCourse) => oldCourse.moduleCode === course.moduleCode,
+    )
+      ? 'updatedCourses'
+      : 'newCourses',
+  )
+
+  return [
+    prisma.offeredCourse.deleteMany({
+      where: {
+        moduleCode: { in: deleted.map((c) => c.moduleCode) },
+        phaseId,
+      },
+    }),
+    prisma.offeredCourse.createMany({
+      data:
+        newCourses?.map((course) => ({
+          Course: {
+            connect: {
+              moduleCode: course.moduleCode,
+            },
+          },
+          appointments: course.appointments,
+          extraInfo: course.extraInfo,
+          for: { set: course.for },
+          maxParticipants: course.maxParticipants,
+          minParticipants: course.minParticipants,
+          moduleCode: course.moduleCode,
+          moodleCourse: course.moodleCourse,
+          phaseId,
+        })) ?? [],
+    }),
+    ...(updatedCourses?.map((course) =>
+      prisma.offeredCourse.update({
+        data: {
+          appointments: course.appointments,
+          externalRegistration: course.externalRegistration,
+          extraInfo: course.extraInfo,
+          for: { set: course.for },
+          maxParticipants: course.maxParticipants,
+          minParticipants: course.minParticipants,
+          moodleCourse: course.moodleCourse,
+        },
+        where: {
+          phaseId_moduleCode: {
+            moduleCode: course.moduleCode,
+            phaseId,
+          },
+        },
+      }),
+    ) ?? []),
+  ]
 }

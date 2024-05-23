@@ -17,6 +17,7 @@ export function cancelPhase(phaseId: number) {
 export function reschedulePhase(phase: Enrollphase) {
   if (phaseJobs[phase.id]) {
     phaseJobs[phase.id]?.forEach((job) => job.cancel())
+    delete phaseJobs[phase.id]
   }
   schedulePhase(phase)
 }
@@ -26,12 +27,22 @@ export function schedulePhase(phase: Enrollphase) {
     throw new Error(`Phase ${phase.id} is already scheduled`)
   }
   phaseJobs[phase.id] = [
-    scheduleJob(`phase-${phase.id}:open-registration`, phase.start, () => {
-      prisma.enrollphase.update({
-        data: { state: PhaseState.OPEN },
-        where: { id: phase.id },
-      })
-    }),
+    scheduleJob(
+      `phase-${phase.id}:open-registration`,
+      phase.start,
+      async () => {
+        const phaseCurrently = await prisma.enrollphase.findUnique({
+          select: { state: true },
+          where: { id: phase.id },
+        })
+        if (phaseCurrently?.state === 'NOT_STARTED') {
+          prisma.enrollphase.update({
+            data: { state: PhaseState.OPEN },
+            where: { id: phase.id },
+          })
+        }
+      },
+    ),
     scheduleJob(
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
@@ -39,11 +50,17 @@ export function schedulePhase(phase: Enrollphase) {
         // sendMailFactory()
       },
     ),
-    scheduleJob(`phase-${phase.id}:set-drawing`, phase.end, () => {
-      prisma.enrollphase.update({
-        data: { state: PhaseState.DRAWING },
+    scheduleJob(`phase-${phase.id}:set-drawing`, phase.end, async () => {
+      const phaseCurrently = await prisma.enrollphase.findUnique({
+        select: { state: true },
         where: { id: phase.id },
       })
+      if (phaseCurrently?.state === 'OPEN') {
+        prisma.enrollphase.update({
+          data: { state: PhaseState.DRAWING },
+          where: { id: phase.id },
+        })
+      }
     }),
-  ]
+  ].filter((job) => job !== null)
 }

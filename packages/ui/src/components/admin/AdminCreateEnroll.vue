@@ -28,16 +28,18 @@ const adminCoursesStore = useAdminCoursesStore()
 const router = useRouter()
 
 const formData = ref<
-  { end: string; id?: number; start: string } & Omit<
-    Phase,
-    'end' | 'id' | 'start'
-  >
+  {
+    emailNotificationAt: string
+    end: string
+    id?: number
+    start: string
+  } & Omit<Phase, 'emailNotificationAt' | 'end' | 'id' | 'start' | 'state'>
 >()
 
 void initFormData()
 
 const oldPhasesSelect = computed(() =>
-  adminCoursesStore.phases
+  Object.values(adminCoursesStore.phases)
     .filter(
       (e) =>
         !isWithinInterval(new Date(), {
@@ -87,25 +89,24 @@ async function updateEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
+      emailNotificationAt: new Date(formData.value.emailNotificationAt),
       end: new Date(formData.value.end),
       id: props.phaseId,
       offeredCourses: sharedObject.value,
       start: new Date(formData.value.start),
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
-    Object.assign(
-      adminCoursesStore.phases.find((e) => e.id === props.phaseId) ?? {},
-      {
-        description: {
-          de: formData.value.description.de,
-          en: formData.value.description.en,
-        },
-        end: new Date(formData.value.end),
-        id: props.phaseId,
-        start: new Date(formData.value.start),
-        title: { de: formData.value.title.de, en: formData.value.title.en },
+    Object.assign(adminCoursesStore.phases[props.phaseId], {
+      description: {
+        de: formData.value.description.de,
+        en: formData.value.description.en,
       },
-    )
+      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      end: new Date(formData.value.end),
+      id: props.phaseId,
+      start: new Date(formData.value.start),
+      title: { de: formData.value.title.de, en: formData.value.title.en },
+    })
     adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
     console.log('Success updating enroll phase')
   } catch (e) {
@@ -124,21 +125,24 @@ async function createEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
+      emailNotificationAt: new Date(formData.value.emailNotificationAt),
       end: new Date(formData.value.end),
       offeredCourses: sharedObject.value,
       start: new Date(formData.value.start),
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
-    adminCoursesStore.phases.push({
+    adminCoursesStore.phases[newPhase.id] = {
       description: {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
+      emailNotificationAt: new Date(formData.value.emailNotificationAt),
       end: new Date(formData.value.end),
       id: 0,
       start: new Date(formData.value.start),
+      state: 'NOT_STARTED',
       title: { de: formData.value.title.de, en: formData.value.title.en },
-    })
+    }
     adminCoursesStore.phaseOfferedCourses[newPhase.id] = sharedObject.value
     console.log('Success creating enroll phase')
   } catch (e) {
@@ -150,7 +154,7 @@ async function createEnrollment() {
 async function initFormData() {
   if (props.phaseId) {
     await adminCoursesStore.fetchOfferedCourses(props.phaseId)
-    const phase = adminCoursesStore.phases.find((e) => e.id === props.phaseId)
+    const phase = adminCoursesStore.phases[props.phaseId]
     if (!phase) {
       return
     }
@@ -159,6 +163,7 @@ async function initFormData() {
     )
     formData.value = {
       ...cloneDeep(phase),
+      emailNotificationAt: phase.emailNotificationAt.toISOString(),
       end: phase.end.toISOString(),
       start: phase.start.toISOString(),
     }
@@ -167,6 +172,7 @@ async function initFormData() {
   }
   formData.value = {
     description: { de: '', en: '' },
+    emailNotificationAt: '',
     end: '',
     start: '',
     title: { de: '', en: '' },
@@ -184,7 +190,7 @@ async function initFormData() {
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
       <VRow justify="center">
-        <VCol cols="12" sm="5">
+        <VCol cols="10" sm="3">
           <VTextField
             v-model="formData.start"
             :label="t('start-date')"
@@ -192,10 +198,18 @@ async function initFormData() {
             required
           />
         </VCol>
-        <VCol cols="12" sm="5">
+        <VCol cols="10" sm="3">
           <VTextField
             v-model="formData.end"
             :label="t('end-date')"
+            type="datetime-local"
+            required
+          />
+        </VCol>
+        <VCol cols="10" sm="3">
+          <VTextField
+            v-model="formData.emailNotificationAt"
+            :label="t('sent-email-notification-at')"
             type="datetime-local"
             required
           />
@@ -281,6 +295,7 @@ en:
   edit-enrollment: Edit enrollment phase
   start-date: Start date
   end-date: End date
+  sent-email-notification-at: Sent email notification at
   title-en: Title (en)
   title-de: Title (de)
   description-en: Description (en)
@@ -293,6 +308,7 @@ de:
   edit-enrollment: Anmeldephase bearbeiten
   start-date: Startdatum
   end-date: Enddatum
+  sent-email-notification-at: E-Mail-Benachrichtigung senden am
   title-en: Titel (en)
   title-de: Titel (de)
   description-en: Beschreibung (en)

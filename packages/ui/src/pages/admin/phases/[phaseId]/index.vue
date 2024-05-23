@@ -15,7 +15,7 @@ const route = useRoute()
 const phaseId = Number(route.params.phaseId)
 
 const phaseState = computed(() => {
-  const state = coursesStore.phases.find((e) => e.id === phaseId)?.state
+  const state = coursesStore.phases[phaseId]?.state
   return {
     modelValue: state,
     text: orgPhaseStates.find((e) => e.value === state)?.text,

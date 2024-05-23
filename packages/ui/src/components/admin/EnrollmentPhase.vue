@@ -14,7 +14,7 @@ const props = defineProps<{
 }>()
 
 const phase = computed(() => {
-  const phase = adminCoursesStore.phases.find((e) => e.id === props.phaseId)
+  const phase = adminCoursesStore.phases[props.phaseId ?? -1]
   if (phase) {
     return {
       ...phase,

@@ -21,11 +21,11 @@ export type AdminOfferedCourse = {
 
 export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const courses = ref<Course[]>([])
-  const phases = ref<Phase[]>([])
+  const phases = ref<Record<number, Phase>>({})
   const phaseOfferedCourses = ref<Record<number, AdminOfferedCourse[]>>({})
 
   const currentPhase = computed(() => {
-    return phases.value.find((e) =>
+    return Object.values(phases.value).find((e) =>
       isWithinInterval(new Date(), {
         end: new Date(e.end),
         start: new Date(e.start),
@@ -54,7 +54,7 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
   }
 
   async function updatePhaseState(phaseId: number, state?: Phase['state']) {
-    const phase = phases.value.find((e) => e.id === phaseId)
+    const phase = phases.value[phaseId]
     if (!phase || !state) {
       throw new Error('Phase not found')
     }

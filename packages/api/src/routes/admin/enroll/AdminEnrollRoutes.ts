@@ -118,11 +118,15 @@ export const enrollRouter = router({
       return (await prisma.enrollphase.findFirst({})) ?? undefined
     }),
     list: adminProcedure.query(async () => {
-      return await prisma.enrollphase.findMany({
-        orderBy: {
-          start: 'asc',
-        },
-      })
+      return Object.fromEntries(
+        (
+          await prisma.enrollphase.findMany({
+            orderBy: {
+              start: 'asc',
+            },
+          })
+        ).map((phase) => [phase.id, phase]),
+      )
     }),
     update: adminProcedure
       .input(phaseSpec.partial().extend({ id: z.number() }))

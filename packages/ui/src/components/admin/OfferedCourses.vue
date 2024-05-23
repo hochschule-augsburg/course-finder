@@ -167,8 +167,8 @@ const searchOffered = ref('')
         <VTextField
           v-model="searchOffered"
           :label="t('global.search')"
+          :prepend-inner-icon="mdiMagnify"
           placeholder="t('global.search')"
-          prepend-inner-icon="mdi-magnify"
         />
         <div class="off-course">
           <Draggable
