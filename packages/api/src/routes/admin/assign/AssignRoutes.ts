@@ -117,7 +117,7 @@ async function emailToStudents(results: Record<string, string[]>) {
   const emails = await getStudentEmails(results)
   // send emails to students
   // emails.forEach((e) =>
-  //   sendEmail(
+  //   await sendEmail(
   //     e,
   //     'Wahlpflichtfächer',
   //     'Ihre Wahlpflichfächer sind unter [website] einsehbar.\n\nYour optional subjects (WPFs) are ready. You can view them at [website].',
@@ -134,7 +134,7 @@ async function emailToStudents(results: Record<string, string[]>) {
 function emailToBeuurle(results: Record<string, string[]>) {
   const txtText = constructTxtText(results)
   // email schicken, .txt anhaengen (claudia.baeurle@tha.de)
-  // sendEmail(
+  // await sendEmail(
   //   'claudia.baeurle@tha.de',
   //   'Wahlpflichtfächer',
   //   'Die Wahlpflichtfächer wurden ausgelost. Die Ergebnisse sind auf [website] und im Anhang einsehbar.',

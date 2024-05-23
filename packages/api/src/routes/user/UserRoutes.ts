@@ -45,7 +45,7 @@ export const authRouter = router({
           ctx.req.session.twoFA = { expires, otp, username: input.username }
           await Promise.all([
             ctx.req.session.save(),
-            sendEmail(
+            await sendEmail(
               result.user.email,
               'Your two-factor authentication code',
               otp,
