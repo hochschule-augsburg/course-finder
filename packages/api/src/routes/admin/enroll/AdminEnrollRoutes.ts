@@ -12,6 +12,7 @@ import { adminProcedure, router } from '../../trpc'
 
 const offeredCourseSpec = z.object({
   appointments: jsonAppointmentsSpec,
+  externalRegistration: z.boolean().optional(),
   extraInfo: nullString,
   for: z.array(z.string()),
   maxParticipants: z.number().nullable().optional(),
@@ -55,7 +56,7 @@ export const enrollRouter = router({
         return (
           await prisma.offeredCourse.findMany({
             include: { Course: { select: { moduleCode: true, title: true } } },
-            orderBy: { moduleCode: 'asc' },
+            orderBy: [{ externalRegistration: 'asc' }, { moduleCode: 'asc' }],
             where: { phaseId: input.phaseId },
           })
         ).map((course) => ({
@@ -128,6 +129,7 @@ export const enrollRouter = router({
                   select: { lecturers: true, title: true },
                 },
                 appointments: true,
+                externalRegistration: true,
                 extraInfo: true,
                 for: true,
                 maxParticipants: true,
@@ -219,6 +221,7 @@ export const enrollRouter = router({
             prisma.offeredCourse.update({
               data: {
                 appointments: course.appointments,
+                externalRegistration: course.externalRegistration,
                 extraInfo: course.extraInfo,
                 for: { set: course.for },
                 maxParticipants: course.maxParticipants,

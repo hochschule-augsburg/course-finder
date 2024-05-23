@@ -6,6 +6,7 @@ export const data: OfferedCourse[] = [
       dates: [{ from: '2024-04-02T08:00:00', to: '2024-04-02T13:10:00' }],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Übungsgruppen mehrere Termine - siehe Stundenplan',
     for: [
       'Wirtschaftsinformatik (Bachelor)',
@@ -28,6 +29,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Übungsgruppen mehrere Termine - siehe Stundenplan',
     for: [
       'Informatik (Bachelor)',
@@ -50,6 +52,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Übungsgruppen mehrere Termine - siehe Stundenplan',
     for: ['Technische Informatik (Bachelor)'],
     maxParticipants: 10,
@@ -68,6 +71,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo:
       'IA3-Studierende dürfen dieses Fach belegen. Die Anmeldung erfolgt über die Fakultät für Gestaltung.',
     for: [
@@ -92,6 +96,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -115,6 +120,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -150,6 +156,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'irregular',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -173,6 +180,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo:
       'IA-Studierende dürfen dieses Fach belegen. Die Anmeldung erfolgt über die Fakultät für Gestaltung.',
     for: [
@@ -201,6 +209,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Das Modul wird in englischer Sprache unterrichtet.',
     for: [
       'Informatik (Bachelor)',
@@ -227,6 +236,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -254,6 +264,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -281,6 +292,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -308,6 +320,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -335,6 +348,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -348,8 +362,7 @@ export const data: OfferedCourse[] = [
     ],
     maxParticipants: 36,
     minParticipants: 0,
-    // TODO
-    moduleCode: 'NODEJS4.WP',
+    moduleCode: '__SES4.WP',
     moodleCourse: null,
     phaseId: 1,
   },
@@ -363,6 +376,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'irregular',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -390,6 +404,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'irregular',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -417,6 +432,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -444,6 +460,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -471,6 +488,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -498,6 +516,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -525,6 +544,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -552,6 +572,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -575,6 +596,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -598,6 +620,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -621,6 +644,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -644,6 +668,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo:
       'Das Modul wird in englischer Sprache unterrichtet, wenn erforderlich auch in deutscher Sprache.',
     for: [
@@ -655,6 +680,56 @@ export const data: OfferedCourse[] = [
     maxParticipants: 30,
     minParticipants: 0,
     moduleCode: 'DASC4.WP',
+    moodleCourse: null,
+    phaseId: 1,
+  },
+  // Moodle
+  {
+    appointments: {
+      dates: [
+        {
+          from: '2024-04-03T14:00:00',
+          to: '2024-04-03T17:10:00',
+        },
+      ],
+      type: 'weekly',
+    },
+    externalRegistration: true,
+    extraInfo:
+      'Pflichtfach für den Studiengang Data Science / Anmeldung über moodle, da die erste Vorlesung am 20.03.2024 beginnt',
+    for: [
+      'Informatik (Bachelor)',
+      'Wirtschaftsinformatik (Bachelor)',
+      'Technische Informatik (Bachelor)',
+      'International Information Systems (Bachelor)',
+    ],
+    maxParticipants: null,
+    minParticipants: 0,
+    moduleCode: 'OPPYTH4.WP',
+    moodleCourse: null,
+    phaseId: 1,
+  },
+  {
+    appointments: {
+      dates: [
+        {
+          from: '2024-04-03T14:00:00',
+          to: '2024-04-03T17:10:00',
+        },
+      ],
+      type: 'weekly',
+    },
+    externalRegistration: true,
+    extraInfo: 'Anmeldung direkt über Herrn Prof. Dr. Kiefer (30 Plätze)',
+    for: [
+      'Informatik (Bachelor)',
+      'Wirtschaftsinformatik (Bachelor)',
+      'Technische Informatik (Bachelor)',
+      'International Information Systems (Bachelor)',
+    ],
+    maxParticipants: 30,
+    minParticipants: 0,
+    moduleCode: 'FSD4.WP',
     moodleCourse: null,
     phaseId: 1,
   },

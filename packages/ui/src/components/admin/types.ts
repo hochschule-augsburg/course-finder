@@ -6,6 +6,7 @@ import type {
 export type OfferedCourseData = {
   Course: { lecturers: string[]; title: I18nJson }
   appointments: CourseAppointmentsJson<Date>
+  externalRegistration: boolean
   extraInfo: null | string
   for: string[]
   maxParticipants: null | number

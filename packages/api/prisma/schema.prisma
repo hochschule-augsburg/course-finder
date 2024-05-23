@@ -100,13 +100,14 @@ model OfferedCourse {
   maxParticipants Int?
   StudentChoice   StudentChoice[]
 
-  extraInfo       String?
-  moodleCourse    String?
+  extraInfo            String?
+  moodleCourse         String?
+  externalRegistration Boolean           @default(false)
   /// Array of fields of study
-  for             String[]
+  for                  String[]
   /// [CourseAppointments]
-  appointments    Json
-  PhaseAssignment PhaseAssignment[]
+  appointments         Json
+  PhaseAssignment      PhaseAssignment[]
 
   @@id([phaseId, moduleCode])
 }

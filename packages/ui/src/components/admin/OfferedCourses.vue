@@ -73,6 +73,7 @@ function convertToOfferedCourseData(course: Course): OfferedCourseData {
         title: course.title,
       },
       appointments: { dates: [], type: 'weekly' },
+      externalRegistration: false,
       extraInfo: null,
       for: [],
       maxParticipants: null,
@@ -100,7 +101,6 @@ function displayFieldsOfStudy(fields: string[]) {
 }
 
 function filterCourse(course: Course) {
-  console.log(course)
   return (
     !!course.title.de
       ?.toLowerCase()
@@ -250,6 +250,9 @@ const searchOffered = ref('')
                     <div v-if="element.extraInfo">
                       {{ t('extra-info') }}: {{ element.extraInfo }}
                     </div>
+                    <div v-if="element.externalRegistration">
+                      {{ t('external-registration') }}
+                    </div>
                   </VCardText>
                 </VCard>
                 <VDivider opacity="0" thickness="15px" />
@@ -294,6 +297,7 @@ en:
   max-participants: Max participants
   for-fields-of-study: For fields of study
   extra-info: Extra information
+  external-registration: External registration
 de:
   available-courses: Verfügbare Kurse
   offered-courses: Angebote Kurse
@@ -308,6 +312,7 @@ de:
   max-participants: Maximale Teilnehmer
   for-fields-of-study: Für Studienfelder
   extra-info: Zusätzliche Informationen
+  external-registration: Externe Anmeldung
 </i18n>
 
 <style scoped lang="scss">

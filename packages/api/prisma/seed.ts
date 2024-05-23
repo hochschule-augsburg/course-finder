@@ -201,6 +201,61 @@ async function main() {
     }),
   )
 
+  // Not in Modulhandbuch
+  await prisma.course.create({
+    data: {
+      Faculty: { connect: { name: 'Informatik' } },
+      creditPoints: 5,
+      lecturers: ['Prof. Dr. Christoph Buck'],
+      moduleCode: '__SES4.WP',
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      semesterHours: 4,
+      title: { de: 'Social Entrepreneurship', en: 'Social Entrepreneurship' },
+    },
+  })
+  await prisma.course.create({
+    data: {
+      Faculty: { connect: { name: 'Informatik' } },
+      creditPoints: 2,
+      lecturers: ['Helia Hollmann', 'Philipp Schurk'],
+      moduleCode: '__ISB.WP',
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      semesterHours: 2,
+      title: {
+        de: 'Industrial Security Basics',
+        en: 'Industrial Security Basics',
+      },
+    },
+  })
+  await prisma.course.create({
+    data: {
+      Faculty: { connect: { name: 'Informatik' } },
+      creditPoints: 5,
+      lecturers: ['Helia Hollmann'],
+      moduleCode: '__CAS.WP',
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      semesterHours: 4,
+      title: {
+        de: 'Cryptography and Security',
+        en: 'Cryptography and Security',
+      },
+    },
+  })
+  await prisma.course.create({
+    data: {
+      Faculty: { connect: { name: 'Informatik' } },
+      creditPoints: 5,
+      lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
+      moduleCode: '__PRT.WP',
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      semesterHours: 4,
+      title: {
+        de: 'Projekttechniken',
+        en: 'Project Techniques',
+      },
+    },
+  })
+
   await prisma.course.createMany({
     data: coursesData.map((e) => ({
       ...e,
