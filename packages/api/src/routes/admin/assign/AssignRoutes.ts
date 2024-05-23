@@ -3,6 +3,7 @@ import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
 import { assign } from '../../../domain/assign/AssignmentAlgorithm'
+import { phaseService } from '../../../domain/phase/PhaseService'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
 
@@ -81,20 +82,12 @@ export const assignRouter = router({
             'tryNo',
           ),
         )
-        // const assigned = await prisma.phaseAssignment.findMany({
-        //   select: {
-        //     moduleCode: true,
-        //     tryNo: true,
-        //   },
-        //   where: { phaseId: input.phaseId },
-        // })
-        // Object.fromEntries(
-        //   Object.entries(groupBy(assigned, 'tryNo')).map(
-        //     ([tryNo, assignments]) => {
-        //       return [tryNo, groupBy(assignments, 'moduleCode')]
-        //     },
-        //   ),
-        // )
       },
     ),
+  publish: adminProcedure
+    .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
+    .mutation(async ({ input }) => {
+      await phaseService.updatePhase(input.phaseId, { state: 'FINISHED' })
+      // TODO send emails
+    }),
 })

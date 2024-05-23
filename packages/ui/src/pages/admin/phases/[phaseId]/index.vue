@@ -23,7 +23,10 @@ const phaseState = computed(() => {
 })
 const phaseStates = computed(() => {
   let states = orgPhaseStates.slice()
-  if (!assignmentStore.assignments[phaseId]?.length) {
+  if (
+    !assignmentStore.assignments[phaseId]?.length &&
+    phaseState.value.modelValue !== 'FINISHED'
+  ) {
     states = states.filter((e) => e.value !== 'FINISHED')
   }
   if (phaseState.value.modelValue !== 'NOT_STARTED') {
@@ -55,6 +58,7 @@ const phaseStates = computed(() => {
                   :item-title="(e) => t(`phase-states.${e.text}`)"
                   :item-value="(e) => e.value"
                   :items="phaseStates"
+                  :label="t('phase-state')"
                   :model-value="phaseState.modelValue"
                   @update:model-value="
                     (value) => coursesStore.updatePhaseState(phaseId, value)
@@ -66,8 +70,10 @@ const phaseStates = computed(() => {
                       :subtitle="t(`phase-states.long.${item.raw.text}`)"
                     />
                   </template>
-                  <template #label>
-                    {{ t(`phase-states.long.${phaseState.text}`) }}
+                  <template #loader>
+                    <span class="text-caption">{{
+                      t(`phase-states.long.${phaseState.text}`)
+                    }}</span>
                   </template>
                 </VSelect>
               </VCol>
@@ -98,10 +104,12 @@ en:
   close: Close
   assignments: Assignments
   phase-not-found: Phase not found
+  phase-state: Phase State
 
 de:
   edit: Bearbeiten
   close: Schließen
   assignments: Zuordnungen
   phase-not-found: Phase nicht gefunden
+  phase-state: Zustand
 </i18n>

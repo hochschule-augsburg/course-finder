@@ -2,8 +2,10 @@ import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+import { useAdminCoursesStore } from './AdminCoursesStore'
+
 export const useAdminAssignStore = defineStore('admin-assign', () => {
-  //   const coursesStore = useAdminCoursesStore()
+  const coursesStore = useAdminCoursesStore()
   const assignments = ref<
     Record<
       number,
@@ -21,6 +23,7 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
     assignments,
     fetchAssignments,
     newAssignment,
+    publish,
   }
 
   async function init() {}
@@ -32,6 +35,14 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
     assignments.value[phaseId] = await trpc.admin.assign.list.query({
       phaseId,
     })
+  }
+
+  async function publish(phaseId: number, tryNo: number) {
+    await trpc.admin.assign.publish.mutate({
+      phaseId,
+      tryNo,
+    })
+    coursesStore.phases[phaseId].state = 'FINISHED'
   }
 
   async function newAssignment(phaseId: number) {

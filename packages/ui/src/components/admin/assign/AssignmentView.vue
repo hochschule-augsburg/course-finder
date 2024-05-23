@@ -1,27 +1,57 @@
 <script lang="ts" setup>
 import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
-import { onBeforeMount, ref } from 'vue'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
+import { computed, onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
+  VSnackbar,
   VSpacer,
   VTab,
   VTable,
   VTabs,
   VTabsWindow,
   VTabsWindowItem,
+  VTooltip,
 } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
 const { t } = useI18n()
 
 const assignStore = useAdminAssignStore()
+const coursesStore = useAdminCoursesStore()
+const statsStore = useAdminStatsStore()
+
+const drawingObstacle = computed(() => {
+  if (coursesStore.phases[props.phaseId]?.state !== 'DRAWING') {
+    return 'not-in-drawing'
+  }
+  if (!statsStore.phase[props.phaseId]?.studentCount) {
+    return 'not-enough-students'
+  }
+  return ''
+})
 
 const tryNo = ref(0)
+const publishing = ref(false)
+const published = ref(false)
 
 onBeforeMount(async () => {
   await assignStore.fetchAssignments(props.phaseId)
 })
+
+async function publish() {
+  publishing.value = true
+  try {
+    await assignStore.publish(props.phaseId, tryNo.value)
+    published.value = true
+  } catch (e) {
+    console.error(e)
+  } finally {
+    publishing.value = false
+  }
+}
 </script>
 
 <template>
@@ -35,15 +65,34 @@ onBeforeMount(async () => {
         {{ t('iteration') }} {{ i }}
       </VTab>
       <VSpacer />
-      <VBtn flat>{{ t('publish') }}</VBtn>
-      <VBtn color="success" flat @click="assignStore.newAssignment(phaseId)">
-        {{ t('new-assignment') }}
+      <VBtn
+        v-if="assignStore.assignments[phaseId]?.length"
+        class="mr-4"
+        flat
+        @click="publish"
+      >
+        {{ t('publish', [tryNo]) }}
       </VBtn>
+      <VTooltip :disabled="!drawingObstacle" location="top">
+        <template #activator="{ props: tipProps }">
+          <div v-bind="tipProps">
+            <VBtn
+              :disabled="!!drawingObstacle"
+              color="success"
+              flat
+              @click="assignStore.newAssignment(phaseId)"
+            >
+              {{ t('new-assignment') }}
+            </VBtn>
+          </div>
+        </template>
+        {{ t(`obstacles.${drawingObstacle}`) }}
+      </VTooltip>
     </VTabs>
 
     <VTabsWindow v-model="tryNo">
       <VTabsWindowItem
-        v-for="(assignment, i) in assignStore.assignments[props.phaseId]"
+        v-for="(assignment, i) in assignStore.assignments[phaseId]"
         :key="i"
         :value="i"
       >
@@ -65,23 +114,40 @@ onBeforeMount(async () => {
         </VTable>
       </VTabsWindowItem>
     </VTabsWindow>
+    <VSnackbar
+      v-model="published"
+      :timeout="1000"
+      color="secondary"
+      location="bottom left"
+      rounded="pill"
+    >
+      {{ t('published', [tryNo]) }}
+    </VSnackbar>
   </div>
 </template>
 
 <i18n lang="yaml">
 en:
   iteration: Iteration
-  publish: Publish
+  publish: Publish iteration {0}
   new-assignment: New Assignment
   module-code: Module Code
   title: Title
   count: Count
+  published: Published iteration {0}
+  obstacles:
+    not-in-drawing: Not in drawing state
+    not-enough-students: Not enough students
 
 de:
   iteration: Iteration
-  publish: Veröffentlichen
+  publish: Iteration {0} veröffentlichen
   new-assignment: Neue Auslosung
   module-code: Modulcode
   title: Titel
   count: Anzahl
+  published: Iteration {0} Veröffentlicht
+  obstacles:
+    not-in-drawing: Nicht im Auslosungsstatus
+    not-enough-students: Nicht genügend Studierende
 </i18n>
