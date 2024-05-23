@@ -3,12 +3,14 @@ import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 import { mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
 import {
+  VBtn,
   VCard,
   VCardText,
   VCardTitle,
@@ -20,7 +22,7 @@ import {
 } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
-
+const adminStore = useAdminCoursesStore()
 const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 
 const coursesStore = useAdminCoursesStore()
@@ -30,6 +32,56 @@ const tableOne: Course[] = reactive([...coursesStore.courses])
 const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
+
+const selectedSubject = ref<Course>(adminStore.courses[0])
+const showModalForm = ref(false)
+
+function openNewDialog() {
+  selectedSubject.value = {
+    creditPoints: 0,
+    editorUsername: null,
+    extraInfo: null,
+    facultyName: null,
+    infoUrl: null,
+    lecturers: [],
+    moduleCode: '',
+    published: false,
+    semesterHours: 0,
+    title: { de: '', en: '' },
+    varyingCP: {},
+  }
+  showModalForm.value = true
+}
+
+async function createSubject(subject: Course | undefined) {
+  if (!subject) {
+    return
+  }
+  try {
+    subject.published = false
+    const result = await trpc.admin.courses.create.mutate(subject)
+    adminStore.courses.push(result)
+    // Perf is okay
+    adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
+    offeredCoursesArray.value.push({
+      Course: {
+        lecturers: subject.lecturers,
+        title: subject.title,
+      },
+      appointments: { dates: [], type: 'weekly' },
+      externalRegistration: false,
+      extraInfo: null,
+      for: [],
+      maxParticipants: null,
+      minParticipants: 0,
+      moduleCode: subject.moduleCode,
+      moodleCourse: null,
+    })
+    showModalForm.value = false
+  } catch (e) {
+    console.log('Error creating Subject')
+  }
+}
 
 function handlePuttingBackLogic(subject: Course) {
   //Retrieve the data from the shared object
@@ -162,11 +214,12 @@ const searchOffered = ref('')
       </VCol>
       <VCol cols="12" md="6">
         <h3>{{ t('offered-courses') }}</h3>
+        <VBtn @click="openNewDialog"> Create new offered course </VBtn>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchOffered"
           :label="t('global.search')"
-          prepend-inner-icon="mdi-magnify"
+          :prepend-inner-icon="mdiMagnify"
         />
         <div class="off-course">
           <Draggable
@@ -260,6 +313,12 @@ const searchOffered = ref('')
         </div>
       </VCol>
     </VRow>
+    <CourseDialog
+      :selected-subject="selectedSubject"
+      :visible="showModalForm"
+      @cancel="showModalForm = false"
+      @submit="createSubject"
+    />
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
