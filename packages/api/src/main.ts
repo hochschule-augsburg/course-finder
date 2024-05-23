@@ -1,5 +1,5 @@
+import { startPhaseSchedulingFromDatabase } from './domain/phase/PhaseService'
 import { prisma } from './prisma/prisma'
-import { startPhaseSchedulingFromDatabase } from './scheduling/scheduleController'
 import { createServer } from './server/server'
 
 // Start the server

@@ -93,6 +93,10 @@ async function main() {
         de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
         en: 'Registration for the elective courses for the summer semester 2023',
       },
+      emailNotificationAt: getHalfTime(
+        new Date('2023-09-29'),
+        new Date('2023-10-06'),
+      ),
       end: new Date('2023-10-06'),
       id: 1,
       start: new Date('2023-09-29'),
@@ -109,6 +113,10 @@ async function main() {
         de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
         en: 'Registration for the elective courses for the summer semester 2023',
       },
+      emailNotificationAt: getHalfTime(
+        new Date('2024-03-03'),
+        new Date('2024-03-18'),
+      ),
       end: new Date('2024-03-18'),
       id: 2,
       start: new Date('2024-03-03'),
@@ -283,4 +291,8 @@ function hashPassword(password: string, salt: string) {
     .createHash('sha256')
     .update(password + salt)
     .digest('hex')
+}
+
+function getHalfTime(date1: Date, date2: Date) {
+  return new Date((date1.getTime() + date2.getTime()) / 2)
 }
