@@ -127,13 +127,12 @@ const searchOffered = ref('')
   <div>
     <VRow>
       <VCol cols="12" md="6">
-        {{ t('available-courses') }}
+        <h3>{{ t('available-courses') }}</h3>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchCourses"
           :label="t('global.search')"
           :prepend-inner-icon="mdiMagnify"
-          placeholder="t('global.search')"
         />
         <div class="off-course">
           <Draggable
@@ -162,13 +161,12 @@ const searchOffered = ref('')
         </div>
       </VCol>
       <VCol cols="12" md="6">
-        {{ t('offered-courses') }}
+        <h3>{{ t('offered-courses') }}</h3>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchOffered"
           :label="t('global.search')"
-          :prepend-inner-icon="mdiMagnify"
-          placeholder="t('global.search')"
+          prepend-inner-icon="mdi-magnify"
         />
         <div class="off-course">
           <Draggable
