@@ -24,6 +24,7 @@ import {
   VRadioGroup,
   VRow,
   VSelect,
+  VSwitch,
   VTextField,
   VTextarea,
 } from 'vuetify/components'
@@ -132,12 +133,18 @@ function removeDate() {
               required
             />
           </VCol>
-          <VCol cols="12">
+          <VCol cols="6">
             <VTextField
               v-model="formData.moodleCourse"
               :label="t('moodle-course-link')"
               type="url"
               required
+            />
+          </VCol>
+          <VCol cols="6">
+            <VSwitch
+              v-model="formData.externalRegistration"
+              :label="t('external-registration')"
             />
           </VCol>
           <VCol cols="12" sm="6">
@@ -246,6 +253,7 @@ en:
   irregular: irregular
   extra-information: Extra information
   multiple-elements-separation: '*separate multiple elements with comma'
+  external-registration: External registration
 de:
   title: 'Bearbeiten - {0}'
   minimum-participants: Mindestteilnehmer
@@ -262,4 +270,5 @@ de:
   irregular: Unregelmäßig
   extra-information: Zusätzliche Informationen
   multiple-elements-separation: '*Trennen Sie mehrere Elemente mit Kommas'
+  external-registration: Externe Anmeldung
 </i18n>

@@ -76,8 +76,8 @@ export const useCoursesStore = defineStore('courses', () => {
 
   function filterSubjects() {
     filteredSubjects.value = [...subjects.value]
-    filteredSubjects.value = filtersStore.applyFilters(filteredSubjects.value)
     filteredSubjects.value = filtersStore.searchSubjects(filteredSubjects.value)
+    filteredSubjects.value = filtersStore.applyFilters(filteredSubjects.value)
     sortSubjects()
   }
 
@@ -97,7 +97,11 @@ export const useCoursesStore = defineStore('courses', () => {
       } else if (enrolledSubjectB) {
         return 1
       }
-      return a.moduleCode.localeCompare(b.moduleCode)
+      return (
+        a.moduleCode.localeCompare(b.moduleCode) -
+        (a.offeredCourse?.externalRegistration ? 0 : 2) +
+        (b.offeredCourse?.externalRegistration ? 0 : 2)
+      )
     })
   }
 

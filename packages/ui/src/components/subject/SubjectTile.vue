@@ -1,8 +1,16 @@
 <script lang="ts" setup>
 import type { Subject } from '@/stores/CoursesStore'
 
+import { mdiAlphaEBox } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
-import { VCard, VCardText, VCol, VRow } from 'vuetify/components'
+import {
+  VCard,
+  VCardText,
+  VCol,
+  VIcon,
+  VRow,
+  VTooltip,
+} from 'vuetify/components'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
 
@@ -23,7 +31,16 @@ const dev = import.meta.env.DEV
     hover
   >
     <template v-if="subject.offeredCourse" #append>
-      <EnrollCheckbox :subject="subject" />
+      <EnrollCheckbox
+        v-if="!subject.offeredCourse.externalRegistration"
+        :subject="subject"
+      />
+      <VTooltip v-else location="top">
+        <template #activator="{ props }">
+          <VIcon :icon="mdiAlphaEBox" size="large" v-bind="props" />
+        </template>
+        {{ t('external-registration') }}
+      </VTooltip>
     </template>
     <VCardText>
       <span v-if="dev" class="font-italic font-weight-thin">{{
@@ -76,10 +93,12 @@ en:
   credit-points: CP
   block-course: Block Course
   irregular: Irregular
+  external-registration: External Registration
 
 de:
   semester-hours: SWS
   credit-points: CP
   block-course: Blockveranstaltung
   irregular: Irregulär
+  external-registration: Externe Anmeldung
 </i18n>

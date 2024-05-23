@@ -57,8 +57,13 @@ watch(
           <td>
             {{ course.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e).join(', ') }}
           </td>
-          <td>{{ course.minParticipants }}</td>
-          <td>{{ course.maxParticipants }}</td>
+          <template v-if="!course.externalRegistration">
+            <td>{{ course.minParticipants }}</td>
+            <td>{{ course.maxParticipants }}</td>
+          </template>
+          <template v-else>
+            <td colspan="2">{{ t('external-registration') }}</td>
+          </template>
           <td>{{ course.studentCount }}</td>
           <td>{{ course.avgPoints }}</td>
         </tr>
@@ -76,6 +81,7 @@ en:
   max: Max
   count: Count
   points: Points
+  external-registration: External registration
 de:
   module-code: Modulcode
   title: Titel
@@ -84,4 +90,5 @@ de:
   max: Max
   count: Anzahl
   points: Punkte
+  external-registration: Externe Anmeldung
 </i18n>

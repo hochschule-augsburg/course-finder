@@ -43,6 +43,7 @@ export const enrollRouter = router({
         (
           await prisma.offeredCourse.findMany({
             where: {
+              externalRegistration: false,
               for: { has: ctx.user.Student.fieldOfStudy },
               moduleCode: { in: input.data.map((e) => e.moduleCode) },
               phaseId: ctx.phase.id,
@@ -114,6 +115,7 @@ export const enrollRouter = router({
       if (
         !(await prisma.offeredCourse.findUnique({
           where: {
+            externalRegistration: false,
             for: { has: ctx.user.Student.fieldOfStudy },
             phaseId_moduleCode: {
               moduleCode: input.moduleCode,
