@@ -8,6 +8,7 @@ export const data: OfferedCourse[] = [
       dates: [{ from: '2024-04-02T08:00:00', to: '2024-04-02T13:10:00' }],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo:
       'max. 59 Teilnehmer / es ist kein größerer Raum verfügbar zu dieser Zeit',
     for: [
@@ -32,6 +33,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -41,7 +43,7 @@ export const data: OfferedCourse[] = [
     ],
     maxParticipants: 40,
     minParticipants: 0,
-    moduleCode: 'SLP.WP', // TODO MISSING SMART DECISION',
+    moduleCode: 'SDMDT4.WP',
     moodleCourse: null,
     phaseId: 2,
   },
@@ -55,6 +57,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -78,6 +81,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'weitere Teilnehmer aus Data Science',
     for: [
       'Informatik (Bachelor)',
@@ -101,6 +105,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -124,6 +129,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -147,6 +153,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'findet online statt - Beginn 04.04.2024',
     for: [
       'Informatik (Bachelor)',
@@ -190,6 +197,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'irregular',
     },
+    externalRegistration: false,
     extraInfo: 'Ein weitere Termin wird noch vereinbart',
     for: [
       'Informatik (Bachelor)',
@@ -213,6 +221,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -236,6 +245,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'M2.02 und zoom',
     for: [
       'Informatik (Bachelor)',
@@ -259,6 +269,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Am Ende des Semesters',
     for: [
       'Informatik (Bachelor)',
@@ -304,6 +315,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'irregular',
     },
+    externalRegistration: false,
     extraInfo: '21. Juni Exkursion',
     for: [
       'Informatik (Bachelor)',
@@ -313,8 +325,7 @@ export const data: OfferedCourse[] = [
     ],
     maxParticipants: 5,
     minParticipants: 0,
-    // TODO
-    moduleCode: 'NODEJS4.WP',
+    moduleCode: '__ISB.WP',
     moodleCourse: null,
     phaseId: 2,
   },
@@ -328,6 +339,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'findet für IA6 (Gestaltung) statt',
     for: [
       'Informatik (Bachelor)',
@@ -355,6 +367,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -382,6 +395,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'weitere Teilnehmer aus anderen Fakultäten',
     for: [
       'Informatik (Bachelor)',
@@ -409,6 +423,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -426,9 +441,10 @@ export const data: OfferedCourse[] = [
     moodleCourse: null,
     phaseId: 2,
   },
-  // TODO
+  // TODO entweder oder
   {
     appointments: { dates: [], type: 'irregular' },
+    externalRegistration: false,
     extraInfo: 'Entweder ECommerce oder Digital Business Leadership Skills',
     for: [
       'Informatik (Bachelor)',
@@ -456,6 +472,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'im SoSe 2024 keine Teilnehmer über die Fakultät für Gestaltung',
     for: [
       'Informatik (Bachelor)',
@@ -483,6 +500,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'irregular',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -510,6 +528,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -537,6 +556,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Vorlesung in Englisch',
     for: [
       'Informatik (Bachelor)',
@@ -564,6 +584,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -591,6 +612,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -619,6 +641,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -646,6 +669,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -673,6 +697,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: '20 Extra Plätze für die Fakultät Gestaltung',
     for: [
       'Informatik (Bachelor)',
@@ -700,6 +725,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -727,6 +753,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Informatik (Bachelor)',
@@ -754,6 +781,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Pflichtfach für den Studiengang Data Science',
     for: [
       'Informatik (Bachelor)',
@@ -781,6 +809,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'weitere Teilnehmer über die Fakultät für Gestaltung',
     for: [
       'Informatik (Bachelor)',
@@ -808,6 +837,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -831,6 +861,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo:
       '30 Teilnehmer hochschulübergreifend (Unis Hohenheim und Bayreuth), 10 Plätze für die Fakultät für Informatik Augsburg',
     for: [
@@ -855,6 +886,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo:
       'Interessenten können sich direkt per E-Mail an Helia.Hollmann@hs-augsburg.de wenden',
     for: [
@@ -865,7 +897,7 @@ export const data: OfferedCourse[] = [
     ],
     maxParticipants: 10,
     minParticipants: 0,
-    moduleCode: 'PROG.2', // TODO Cryptography
+    moduleCode: '__CAS.WP',
     moodleCourse: null,
     phaseId: 2,
   },
@@ -879,6 +911,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -901,11 +934,12 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: null,
     for: ['Applied Research (Master)'],
     maxParticipants: null,
     minParticipants: 0,
-    moduleCode: 'HIP.WP', // TODO Projekttechniken
+    moduleCode: '__PRT.WP',
     moodleCourse: null,
     phaseId: 2,
   },
@@ -919,6 +953,7 @@ export const data: OfferedCourse[] = [
       ],
       type: 'weekly',
     },
+    externalRegistration: false,
     extraInfo: 'Plus weitere Teilnehmer von IMS',
     for: [
       'Applied Research (Master)',
