@@ -22,13 +22,3 @@ export async function sendEmail(
   })
   return info
 }
-
-// const info = await sendEmail(
-//   'nicolas.bota@tha.de',
-//   'head of my test',
-//   'body of my test',
-//   'testAttachment.txt',
-//   'test attachment content',
-// )
-
-// console.log(info)

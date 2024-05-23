@@ -4,10 +4,10 @@ import {
 } from '../../../src/routes/admin/assign/AssignRoutes'
 import { prismaMock } from '../../setup/prisma'
 
-const assignmentResults: Record<string, string[]> = {
-  stud1: ['course a', 'course b'],
-  stud2: ['course a', 'course c'],
-  stud3: ['course b', 'course c'],
+const assignmentResults = {
+  stud1: [{ moduleCode: 'course a' }, { moduleCode: 'course b' }],
+  stud2: [{ moduleCode: 'course a' }, { moduleCode: 'course c' }],
+  stud3: [{ moduleCode: 'course b' }, { moduleCode: 'course c' }],
 }
 
 const userMock = [

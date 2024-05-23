@@ -2,7 +2,10 @@ import { TRPCError } from '@trpc/server'
 import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
+import type { I18nJson } from '../../../prisma/PrismaTypes'
+
 import { assign } from '../../../domain/assign/AssignmentAlgorithm'
+import { sendEmail } from '../../../domain/mail/Mail'
 import { phaseService } from '../../../domain/phase/PhaseService'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
@@ -89,66 +92,79 @@ export const assignRouter = router({
     .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
     .mutation(async ({ input }) => {
       await phaseService.updatePhase(input.phaseId, { state: 'FINISHED' })
-      // TODO send emails
-    }),
-  sendMails: adminProcedure
-    .input(z.object({ phaseId: z.number() }))
-    .query(async ({ input }) => {
-      const assignments = await prisma.phaseAssignment.findMany({
-        where: { phaseId: input.phaseId },
+      const results = await prisma.phaseAssignment.findMany({
+        select: { moduleCode: true, username: true },
+        where: { phaseId: input.phaseId, tryNo: input.tryNo },
       })
-      const results: Record<string, string[]> = {}
-      const byUsername = Object.fromEntries(
-        Object.entries(groupBy(assignments, (a) => a.username)),
-      )
-      Object.keys(byUsername).forEach((key) => {
-        const modCodes: string[] = []
-        byUsername[key].forEach((element) => {
-          modCodes.push(element.moduleCode)
-        })
-        results[key] = modCodes
-      })
-      emailToStudents(results)
-      emailToBeuurle(results)
+      const groupedResults = groupBy(results, 'username')
+      emailToAdmin(groupedResults)
+      emailToStudents(input.phaseId, groupedResults)
     }),
 })
 
-async function emailToStudents(results: Record<string, string[]>) {
+async function emailToStudents(
+  phaseId: number,
+  results: Record<string, { moduleCode: string }[]>,
+) {
   const emails = await getStudentEmails(results)
+  const phase = await prisma.enrollphase.findUnique({ where: { id: phaseId } })
+  if (!phase) {
+    throw new Error(`Phase with id ${phaseId} not found`)
+  }
+  const courses = await prisma.course.findMany({
+    select: { lecturers: true, moduleCode: true, title: true },
+  })
+
+  const formatedResults = Object.fromEntries(
+    Object.entries(results).map(([student, modules]) => [
+      student,
+      modules
+        .map((e) => {
+          const course = courses.find((c) => c.moduleCode === e.moduleCode)
+          if (!course) {
+            throw new Error(`Course with moduleCode ${e.moduleCode} not found`)
+          }
+          return `\t- ${mergeLocales(course?.title)} - ${course.lecturers.join(', ')}`
+        })
+        .join('\n'),
+    ]),
+  )
+
+  const title = mergeLocales(phase?.title)
   // send emails to students
-  // emails.forEach((e) =>
-  //   await sendEmail(
-  //     e,
-  //     'Wahlpflichtfächer',
-  //     'Ihre Wahlpflichfächer sind unter [website] einsehbar.\n\nYour optional subjects (WPFs) are ready. You can view them at [website].',
-  //     undefined,
-  //     undefined,
-  //   ),
-  // )
-  console.log(
-    'No e-mails were sent to students, code is commented out (AdminRoutes.ts).\n',
-    emails,
+  emails.forEach((e) =>
+    sendEmail(
+      e,
+      `${title} - Results/Ergebnisse`,
+      `The results of the ${title} have been published.\
+      ${formatedResults}
+      \n\n
+      Die Ergebnisse der ${title} wurden veröffentlicht.
+      Sie können die Ergebnisse auf der Website einsehen.
+      ${formatedResults}`,
+      undefined,
+      undefined,
+    ),
   )
 }
 
-function emailToBeuurle(results: Record<string, string[]>) {
+async function emailToAdmin(results: Record<string, { moduleCode: string }[]>) {
+  const mail = await prisma.user.findFirst({ where: { type: 'Admin' } })
+  if (!mail) {
+    throw new Error('No admin found')
+  }
   const txtText = constructTxtText(results)
-  // email schicken, .txt anhaengen (claudia.baeurle@tha.de)
-  // await sendEmail(
-  //   'claudia.baeurle@tha.de',
-  //   'Wahlpflichtfächer',
-  //   'Die Wahlpflichtfächer wurden ausgelost. Die Ergebnisse sind auf [website] und im Anhang einsehbar.',
-  //   'wpf-ergebnisse.txt',
-  //   txtText,
-  // )
-  console.log(
-    'No e-mail was sent to claudia.baeurle, code is commented out (AdminRoutes.ts).\n',
+  await sendEmail(
+    mail?.email,
+    'Wahlpflichtfächer',
+    'Die Wahlpflichtfächer wurden ausgelost.',
+    'wpf-ergebnisse.txt',
     txtText,
   )
 }
 
 async function getStudentEmails(
-  results: Record<string, string[]>,
+  results: Record<string, unknown>,
 ): Promise<string[]> {
   // pull students from db
   const studentUsers = await prisma.user.findMany({
@@ -177,12 +193,14 @@ async function getStudentEmails(
   return emails
 }
 
-function constructTxtText(results: Record<string, string[]>): string {
+function constructTxtText(
+  results: Record<string, { moduleCode: string }[]>,
+): string {
   let txtText = ''
   // List of modules (A-Z)
   let uniqueModuleCodes: string[] = []
   Object.values(results).forEach((stringArray) =>
-    stringArray.forEach((s) => uniqueModuleCodes.push(s)),
+    stringArray.forEach((s) => uniqueModuleCodes.push(s.moduleCode)),
   )
   uniqueModuleCodes = Array.from(new Set(uniqueModuleCodes)).sort()
   txtText += 'Stattfindende Module\n\n'
@@ -193,10 +211,14 @@ function constructTxtText(results: Record<string, string[]>): string {
     .sort()
     .forEach((key) => {
       txtText += key + ': '
-      results[key].forEach((s) => (txtText += s + ', '))
+      results[key].forEach((s) => (txtText += s.moduleCode + ', '))
       txtText += '\n'
     })
   return txtText
+}
+
+function mergeLocales(i18n: I18nJson) {
+  return i18n.de && i18n.en ? `${i18n.de} / ${i18n.en}` : i18n.de || i18n.en
 }
 
 // for testing functions that are otherwise not exported
