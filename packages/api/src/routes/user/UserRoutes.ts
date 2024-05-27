@@ -1,11 +1,11 @@
 import { TRPCError } from '@trpc/server'
 import { randomBytes } from 'crypto'
-import sendmail from 'sendmail'
 import { TOTP } from 'totp-generator'
 import { z } from 'zod'
 
 import type { ClientUserExtended } from '../../prisma/PrismaTypes'
 
+import { sendEmail } from '../../domain/mail/Mail'
 import { authenticate } from '../../domain/user/UserService'
 import { prisma } from '../../prisma/prisma'
 import { publicProcedure, router } from '../trpc'
@@ -45,7 +45,13 @@ export const authRouter = router({
           ctx.req.session.twoFA = { expires, otp, username: input.username }
           await Promise.all([
             ctx.req.session.save(),
-            sendEmail(result.user.email, otp),
+            await sendEmail(
+              result.user.email,
+              'Your two-factor authentication code',
+              otp,
+              undefined,
+              undefined,
+            ),
           ])
           return 'two-fa-required'
         }
@@ -101,21 +107,4 @@ function generateBase32Key() {
   return Array.from(randomBytes(20))
     .map((byte): string => charset.charAt(byte % charset.length))
     .join('')
-}
-
-function sendEmail(to: string, text: string) {
-  return new Promise((resolve) =>
-    sendmail({
-      smtpHost: 'smtp.hs-augsburg.de',
-      smtpPort: 25,
-    })(
-      {
-        from: 'subject-enroll@hs-augsburg.de',
-        subject: 'Your two-factor authentication code',
-        text,
-        to,
-      },
-      resolve,
-    ),
-  )
 }
