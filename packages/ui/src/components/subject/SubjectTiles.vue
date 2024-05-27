@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useSubjectChunks } from '@/composables/subjectChunks'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -8,6 +9,7 @@ const route = useRoute()
 const router = useRouter()
 
 const coursesStore = useCoursesStore()
+const { subjects } = useSubjectChunks()
 const selectedModuleCode = ref<string | undefined>(
   route.fullPath?.split('#')[1],
 )
@@ -33,11 +35,7 @@ watch(selectedModuleCode, () => {
     />
     <VContainer>
       <VRow justify="center">
-        <VCol
-          v-for="subject in coursesStore.filteredSubjects"
-          :key="subject.moduleCode"
-          cols="auto"
-        >
+        <VCol v-for="subject in subjects" :key="subject.moduleCode" cols="auto">
           <SubjectTile
             :subject
             @click="selectedModuleCode = subject.moduleCode"
