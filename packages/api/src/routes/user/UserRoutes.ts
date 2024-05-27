@@ -49,8 +49,6 @@ export const authRouter = router({
               result.user.email,
               'Your two-factor authentication code',
               otp,
-              undefined,
-              undefined,
             ),
           ])
           return 'two-fa-required'
