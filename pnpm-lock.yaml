@@ -12302,6 +12302,13 @@ snapshots:
 
   long-timeout@0.1.1: {}
 
+  /long-timeout@0.1.1:
+    resolution:
+      {
+        integrity: sha512-BFRuQUqc7x2NWxfJBCyUrN8iYUYznzL9JROmRz1gZ6KlOIgmoD+njPVbb+VNn2nGMKggMsK79iUNErillsrx7w==,
+      }
+    dev: false
+
   /loupe@2.3.7:
     resolution:
       {
