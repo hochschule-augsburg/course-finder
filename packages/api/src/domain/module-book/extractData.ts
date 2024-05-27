@@ -2,25 +2,14 @@ import type { Course } from '@prisma/client'
 
 import { splitModuleBook } from './split'
 
-function nc(searchRes: RegExpMatchArray | null): string {
-  if (searchRes) {
-    return searchRes[1]
-      .trim()
-      .replace('•', '\t•')
-      .replace('–', '\t\t–')
-      .replace('Fakultät für ', '')
-      .replace('Faculty of Computer Science', 'Informatik')
-  }
-  return ''
-}
-
 export async function parseCourses(pdf: Buffer) {
   const moduleMap = await splitModuleBook(pdf)
   console.log('extracting data')
 
-  return Object.entries(moduleMap).map(([moduleCode, data]) => {
+  const result = moduleMap.map(([moduleCode, data]) => {
     return extractData(moduleCode, data)
   })
+  return result
 }
 
 function extractData(
@@ -57,4 +46,16 @@ function extractData(
     },
     varyingCP: null,
   }
+}
+
+function nc(searchRes: RegExpMatchArray | null): string {
+  if (searchRes) {
+    return searchRes[1]
+      .trim()
+      .replace('•', '\t•')
+      .replace('–', '\t\t–')
+      .replace('Fakultät für ', '')
+      .replace('Faculty of Computer Science', 'Informatik')
+  }
+  return ''
 }

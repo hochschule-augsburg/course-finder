@@ -7,8 +7,8 @@
     "prisma/"
   ],
   "scripts": {
-    "dev:inspect": "docker start postgres-sub-enroll & tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
-    "dev": "docker start postgres-sub-enroll & tsx watch --clear-screen=false src/main.ts | pino-pretty",
+    "dev:inspect": "docker start postgres-docker & tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
+    "dev": "docker start postgres-docker & tsx watch --clear-screen=false src/main.ts | pino-pretty",
     "build": "tsc --noEmit && pnpm run bundle",
     "bundle": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
     "start": "env NODE_ENV=production node dist/main.js",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
     "@fastify/cors": "^9.0.1",
+    "@fastify/multipart": "^8.2.0",
     "@fastify/session": "^10.7.2",
     "@prisma/adapter-pg": "^5.13.0",
     "@prisma/client": "5.14.0",
