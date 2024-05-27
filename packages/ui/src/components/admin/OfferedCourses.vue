@@ -4,13 +4,12 @@ import type { Course } from '@/stores/admin/AdminCoursesStore'
 import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
-import { mdiMagnify, mdiPencil } from '@mdi/js'
+import { mdiInvoiceTextPlus, mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
 import {
-  VBtn,
   VCard,
   VCardText,
   VCardTitle,
@@ -35,6 +34,7 @@ const removeStore = ref<OfferedCourseData[]>([])
 
 const selectedSubject = ref<Course>(adminStore.courses[0])
 const showModalForm = ref(false)
+const onTheFly = ref(true)
 
 function openNewDialog() {
   selectedSubject.value = {
@@ -58,7 +58,6 @@ async function createSubject(subject: Course | undefined) {
     return
   }
   try {
-    subject.published = false
     const result = await trpc.admin.courses.create.mutate(subject)
     adminStore.courses.push(result)
     // Perf is okay
@@ -189,6 +188,7 @@ const searchOffered = ref('')
         <div class="off-course">
           <Draggable
             :clone="convertToOfferedCourseData"
+            :empty-insert-threshold="100"
             :list="tableOne"
             class="list-group draggable-container"
             ghost-class="ghost"
@@ -213,8 +213,15 @@ const searchOffered = ref('')
         </div>
       </VCol>
       <VCol cols="12" md="6">
-        <h3>{{ t('offered-courses') }}</h3>
-        <VBtn @click="openNewDialog"> Create new offered course </VBtn>
+        <h3>
+          {{ t('offered-courses') }}
+          <VIcon
+            v-tooltip="t('on-the-fly')"
+            :icon="mdiInvoiceTextPlus"
+            size="25"
+            @click="openNewDialog"
+          />
+        </h3>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchOffered"
@@ -224,11 +231,13 @@ const searchOffered = ref('')
         <div class="off-course">
           <Draggable
             :clone="convertToCourse"
+            :empty-insert-threshold="100"
             :list="offeredCoursesArray"
             class="list-group"
             ghost-class="ghost"
             group="courses"
             item-key="moduleCode"
+            force-fallback
           >
             <template #item="{ element, index }">
               <div v-if="filterOffered(element)" class="list-group-item">
@@ -314,6 +323,7 @@ const searchOffered = ref('')
       </VCol>
     </VRow>
     <CourseDialog
+      :on-the-fly="onTheFly"
       :selected-subject="selectedSubject"
       :visible="showModalForm"
       @cancel="showModalForm = false"
@@ -341,6 +351,7 @@ const searchOffered = ref('')
 
 <i18n lang="yaml">
 en:
+  on-the-fly: Create new offered course
   available-courses: Available courses
   offered-courses: Offered courses
   type: Type
@@ -356,6 +367,7 @@ en:
   extra-info: Extra information
   external-registration: External registration
 de:
+  on-the-fly: Neues Angebot erstellen
   available-courses: Verfügbare Kurse
   offered-courses: Angebote Kurse
   type: Typ
