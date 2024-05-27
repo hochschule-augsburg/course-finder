@@ -132,12 +132,12 @@ async function emailToStudents(
 
   const title = mergeLocales(phase?.title)
   // send emails to students
-  emails.forEach((e) =>
+  Object.entries(emails).forEach(([username, email]) =>
     sendEmail(
-      e,
+      email,
       `${title} - Results/Ergebnisse`,
       `The results of the ${title} have been published.\
-      ${formatedResults}
+      ${formatedResults[username]}
       \n\n
       Die Ergebnisse der ${title} wurden veröffentlicht.
       Sie können die Ergebnisse auf der Website einsehen.
@@ -165,32 +165,24 @@ async function emailToAdmin(results: Record<string, { moduleCode: string }[]>) {
 
 async function getStudentEmails(
   results: Record<string, unknown>,
-): Promise<string[]> {
-  // pull students from db
+): Promise<Record<string, string>> {
   const studentUsers = await prisma.user.findMany({
     where: {
       type: 'Student',
     },
   })
-  const emails: string[] = []
-  Object.keys(results).forEach((entry) => {
-    // find email of username
-    const student = studentUsers.find((s) => s.username === entry)
-    const email = student?.email
-    // error handling
-    if (email !== undefined) emails.push(email)
-    // error: username could not be found
-    else if (student === undefined)
-      console.log(
-        `Error when sending E-mail to student [${entry}]. Student could not be found.`,
-      )
-    // error: students email is undefined
-    else if (email === undefined)
-      console.log(
-        `Error when sending E-mail to student [${entry}]. E-mail of student is undefined.`,
-      )
-  })
-  return emails
+  return Object.fromEntries(
+    Object.keys(results).map((entry) => {
+      const student = studentUsers.find((s) => s.username === entry)
+      const email = student?.email
+
+      if (!email) {
+        throw new Error(`Student with username ${entry} not found`)
+      }
+
+      return [entry, email]
+    }),
+  )
 }
 
 function constructTxtText(
