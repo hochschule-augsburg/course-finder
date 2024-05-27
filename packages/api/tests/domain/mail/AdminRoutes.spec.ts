@@ -49,8 +49,9 @@ const userMock = [
 describe('testGetStudentEmails', () => {
   it('collects students that signed up for wpfs and returns their emails', async () => {
     prismaMock.user.findMany.mockResolvedValue(userMock)
-    const emails =
-      await testGetStudentEmails.getStudentEmails(assignmentResults)
+    const emails = Object.values(
+      await testGetStudentEmails.getStudentEmails(assignmentResults),
+    )
     expect(emails).toContain('stud1@example.com')
     expect(emails).toContain('stud2@example.com')
     expect(emails).toContain('stud3@example.com')
