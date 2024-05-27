@@ -79,6 +79,7 @@ model Enrollphase {
   title               Json
   /// [I18n]
   description         Json
+  createdAt           DateTime        @default(now())
   offeredCourses      OfferedCourse[]
   studentPhases       StudentPhase[]
   state               PhaseState      @default(NOT_STARTED)
