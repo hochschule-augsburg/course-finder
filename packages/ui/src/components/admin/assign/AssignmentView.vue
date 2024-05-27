@@ -39,6 +39,7 @@ const published = ref(false)
 
 onBeforeMount(async () => {
   await assignStore.fetchAssignments(props.phaseId)
+  void statsStore.fetchPhase(props.phaseId)
 })
 
 async function publish() {

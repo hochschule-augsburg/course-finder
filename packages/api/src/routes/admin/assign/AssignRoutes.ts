@@ -136,14 +136,16 @@ async function emailToStudents(
     sendEmail(
       email,
       `${title} - Results/Ergebnisse`,
-      `The results of the ${title} have been published.\
-      ${formatedResults[username]}
-      \n\n
-      Die Ergebnisse der ${title} wurden veröffentlicht.
-      Sie können die Ergebnisse auf der Website einsehen.
-      ${formatedResults}`,
-      undefined,
-      undefined,
+      `\
+Die Ergebnisse der ${title} wurden veröffentlicht.
+${formatedResults[username]}
+Sie können die Ergebnisse auch auf der Website einsehen.
+--
+\n\n
+The results of the ${title} have been published.
+${formatedResults[username]}
+Sie können die Ergebnisse auch auf der Website einsehen.\
+      `,
     ),
   )
 }
@@ -158,8 +160,7 @@ async function emailToAdmin(results: Record<string, { moduleCode: string }[]>) {
     mail?.email,
     'Wahlpflichtfächer',
     'Die Wahlpflichtfächer wurden ausgelost.',
-    'wpf-ergebnisse.txt',
-    txtText,
+    [{ content: txtText, filename: 'results.txt' }],
   )
 }
 

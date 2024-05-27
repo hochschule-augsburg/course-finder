@@ -1,3 +1,5 @@
+import type { Attachment } from 'nodemailer/lib/mailer'
+
 import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
@@ -10,11 +12,10 @@ export async function sendEmail(
   to: string | string[],
   subject: string,
   text: string,
-  attachmentName?: string,
-  attachmentContent?: string,
+  attachments?: Attachment[],
 ) {
   const info = await transporter.sendMail({
-    attachments: [{ content: attachmentContent, filename: attachmentName }],
+    attachments,
     from: 'subject-enroll@hs-augsburg.de',
     subject,
     text,
