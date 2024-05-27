@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@trpc/server':
-        specifier: ^10.45.2
-        version: 10.45.2
+        specifier: ^11.0.0-rc.377
+        version: 11.0.0-rc.377
       node-schedule:
         specifier: ^2.1.1
         version: 2.1.1
@@ -40,11 +40,11 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
       eslint-plugin-unused-imports:
-        specifier: ^3.2.0
-        version: 3.2.0(@typescript-eslint/eslint-plugin@7.9.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
+        specifier: ^4.0.0
+        version: 4.0.0(eslint@8.57.0)
       eslint-plugin-vitest:
         specifier: ^0.4.1
-        version: 0.4.1(@typescript-eslint/eslint-plugin@7.9.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)(jsdom@24.0.0(canvas@2.11.2))(sass@1.76.0))
+        version: 0.4.1(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)(jsdom@24.0.0)(sass@1.76.0))
       typescript-eslint:
         specifier: ^7.9.0
         version: 7.9.0(eslint@8.57.0)(typescript@5.4.5)
@@ -159,7 +159,7 @@ importers:
         version: 7.4.47
       '@trpc/client':
         specifier: next
-        version: 11.0.0-rc.364(@trpc/server@11.0.0-rc.364)
+        version: 11.0.0-rc.364(@trpc/server@11.0.0-rc.377)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -1142,11 +1142,11 @@ packages:
     peerDependencies:
       '@trpc/server': 11.0.0-rc.364+d95fb467b
 
-  '@trpc/server@10.45.2':
-    resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
-
   '@trpc/server@11.0.0-rc.364':
     resolution: {integrity: sha512-sGlrb2jSCiU74TrJ+N+WxIcJIUDyo0WOy0y30vIArw6oHFXjeithgxjvIu+PbN+VWt/Gt4ee8kVhnmxCW4X/Qw==}
+
+  '@trpc/server@11.0.0-rc.377':
+    resolution: {integrity: sha512-Fzgvf6N03mZRA9F2uR8S20a36ferWD28uJ4OSP1Es+iEGGnvxmoLm31ECIDJcp7qffR/zEA1CLiKgylLaR4z8w==}
 
   '@types/asn1@0.2.4':
     resolution: {integrity: sha512-V91DSJ2l0h0gRhVP4oBfBzRBN9lAbPUkGDMCnwedqPKX2d84aAMc9CulOvxdw1f7DfEYx99afab+Rsm3e52jhA==}
@@ -2146,12 +2146,12 @@ packages:
       eslint: ^7 || ^8
       typescript: ^3 || ^4 || ^5
 
-  eslint-plugin-unused-imports@3.2.0:
-    resolution: {integrity: sha512-6uXyn6xdINEpxE1MtDjxQsyXB37lfyO2yKGVVgtD7WEWQGORSOZjgrD6hBhvGv4/SO+TOlS+UnC6JppRqbuwGQ==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+  eslint-plugin-unused-imports@4.0.0:
+    resolution: {integrity: sha512-mzM+y2B7XYpQryVa1usT+Y/BdNAtAZiXzwpSyDCboFoJN/LZRN67TNvQxKtuTK/Aplya3sLNQforiubzPPaIcQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      '@typescript-eslint/eslint-plugin': 6 - 7
-      eslint: '8'
+      '@typescript-eslint/eslint-plugin': '8'
+      eslint: '9'
     peerDependenciesMeta:
       '@typescript-eslint/eslint-plugin':
         optional: true
@@ -5046,9 +5046,13 @@ snapshots:
     dependencies:
       '@trpc/server': 11.0.0-rc.364
 
-  '@trpc/server@10.45.2': {}
+  '@trpc/client@11.0.0-rc.364(@trpc/server@11.0.0-rc.377)':
+    dependencies:
+      '@trpc/server': 11.0.0-rc.377
 
   '@trpc/server@11.0.0-rc.364': {}
+
+  '@trpc/server@11.0.0-rc.377': {}
 
   '@types/asn1@0.2.4':
     dependencies:
@@ -6270,19 +6274,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-unused-imports@3.2.0(@typescript-eslint/eslint-plugin@7.9.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0):
+  eslint-plugin-unused-imports@4.0.0(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       eslint-rule-composer: 0.3.0
-    optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 7.9.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
 
-  eslint-plugin-vitest@0.4.1(@typescript-eslint/eslint-plugin@7.9.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)(jsdom@24.0.0(canvas@2.11.2))(sass@1.76.0)):
+  eslint-plugin-vitest@0.4.1(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)(jsdom@24.0.0)(sass@1.76.0)):
     dependencies:
       '@typescript-eslint/utils': 7.9.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
     optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 7.9.0(@typescript-eslint/parser@7.9.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
       vitest: 1.6.0(@types/node@20.12.12)(jsdom@24.0.0(canvas@2.11.2))(sass@1.76.0)
     transitivePeerDependencies:
       - supports-color
