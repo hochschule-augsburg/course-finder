@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-
+import cron from 'node-cron';
 const prisma = new PrismaClient();
 
 export async function deleteOldStudentData() {
@@ -19,4 +19,12 @@ export async function deleteOldStudentData() {
   } catch (error) {
     console.error('Error deleting old student records:', error);
   }
+}
+
+export async function startCronJob() {
+  cron.schedule('0 0 1 */6 *', () => {
+    console.log('Running scheduled job to delete old student data');
+    deleteOldStudentData();
+  });
+  console.log('Scheduler is set up to run every 6 months.');
 }
