@@ -22,6 +22,8 @@ import {
 } from 'vuetify/components'
 
 import { ModalDialog } from './components/DialogService'
+import { useCoursesStore } from './stores/CoursesStore'
+import { useEnrollmentStore } from './stores/EnrollmentStore'
 import { useUserStore } from './stores/UserStore'
 
 useUserStore()
@@ -31,8 +33,15 @@ const onboardingStep = useLocalStorage('onboardingStep', 0)
 const onboardingWrapper = ref(null)
 const { goToStep } = useVOnboarding(onboardingWrapper)
 
+const coursesStore = useCoursesStore()
+const enrollmentStore = useEnrollmentStore()
+
 function afterStep(options?: onAfterStepOptions) {
   onboardingStep.value = options ? options.index + 1 : 0
+}
+
+async function selectSubject() {
+  await enrollmentStore.addSubject(coursesStore.filteredSubjects[0].moduleCode)
 }
 
 const steps = ref(
@@ -52,7 +61,10 @@ const steps = ref(
       description: t('tour.desc.' + selector.slice(1)),
       title: t('tour.title.' + selector.slice(1)),
     },
-    on: { afterStep },
+    on: {
+      afterStep,
+      beforeStep: selector === '#enroll-button' ? selectSubject : () => {},
+    },
   })),
 )
 
