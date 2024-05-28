@@ -83,7 +83,7 @@ model Enrollphase {
   studentPhases       StudentPhase[]
   state               PhaseState      @default(NOT_STARTED)
   /// time when the email is being sent if time is in the past no mail is sent
-  emailNotificationAt DateTime        @default(dbgenerated("'epoch'"))
+  emailNotificationAt DateTime        @default(dbgenerated("(NOW() - '30 days'::interval)"))
 }
 
 enum PhaseState {
