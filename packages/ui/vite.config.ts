@@ -44,16 +44,6 @@ export default defineConfig({
         './src/assets/locales/**',
       ),
     }),
-    ViteFonts({
-      google: {
-        families: [
-          {
-            name: 'Roboto',
-            styles: 'wght@100;300;400;500;700;900',
-          },
-        ],
-      },
-    }),
     VueDevTools(),
   ],
   resolve: {
