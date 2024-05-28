@@ -15,10 +15,10 @@ const enrollmentStore = useEnrollmentStore()
 const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
 )
-const subjectView = useLocalStorage(
-  'subjectView',
-  useDisplay().mobile.value ? 'grid' : 'list',
-)
+const { mobile } = useDisplay()
+const subjectView = mobile.value
+  ? 'grid'
+  : useLocalStorage('subjectView', mobile.value ? 'grid' : 'list')
 const enrollFormVisible = ref(false)
 </script>
 
@@ -30,6 +30,7 @@ const enrollFormVisible = ref(false)
       <FilterSection />
       <VBtnToggle
         v-model="subjectView"
+        :disabled="mobile"
         class="px-3 d-flex justify-end"
         id="subject-view-toggle"
         mandatory
