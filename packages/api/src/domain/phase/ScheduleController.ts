@@ -4,6 +4,7 @@ import { type Enrollphase, PhaseState } from '@prisma/client'
 import { scheduleJob } from 'node-schedule'
 
 import { prisma } from '../../prisma/prisma'
+import { sendEmail } from '../mail/Mail'
 
 const phaseJobs: Record<number, Job[] | undefined> = {}
 
@@ -47,7 +48,39 @@ export function schedulePhase(phase: Enrollphase) {
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
       () => {
-        // sendMailFactory()
+        if (
+          !process.env.MAIL_DISTRIBUTORS?.split(' ') ||
+          !process.env.PRODUCTION_URL
+        ) {
+          throw new Error(
+            'MAIL_DISTRIBUTORS and PRODUCTION_URL has to be set for email notification to work',
+          )
+        }
+        sendEmail(
+          process.env.MAIL_DISTRIBUTORS.split(' '),
+          'Die WPF Anmeldephase endet bald | WPF registrations will soon be closing',
+          `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleDateString(
+            'de-DE',
+            {
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              month: 'long',
+              weekday: 'long',
+              year: 'numeric',
+            },
+          )}.\nDie Anmeldung erfolgt über folgender Seite:\n${process.env.PRODUCTION_URL}\n\nRegistrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
+            'en-US',
+            {
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              month: 'long',
+              weekday: 'long',
+              year: 'numeric',
+            },
+          )}.\nRegistrations can be made on the following website:\n${process.env.PRODUCTION_URL}`,
+        )
       },
     ),
     scheduleJob(`phase-${phase.id}:set-drawing`, phase.end, async () => {

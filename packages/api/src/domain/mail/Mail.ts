@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer'
 const transporter = nodemailer.createTransport({
   host: 'smtp.hs-augsburg.de',
   port: 25,
-  secure: false, // will still use STARTTLS if the server supports it
+  secure: false, // will still use STARTTLS if the host supports it
 })
 
 export async function sendEmail(
@@ -16,7 +16,7 @@ export async function sendEmail(
 ) {
   const info = await transporter.sendMail({
     attachments,
-    from: 'subject-enroll@hs-augsburg.de',
+    from: 'subject-enroll@tha.de',
     subject,
     text,
     to,
