@@ -42,3 +42,24 @@ phase-states:
     closed: Temporally no registrations are accepted.
     drawing: Drawing in progress.
     finished: The enrollment phase is finished. Results are available.
+
+tour:
+  prev: Back
+  next: Next
+  finish: Finish
+  title:
+    enrollment-overview: Overview
+    filter-section: Filters
+    subject-view-toggle: Different views
+    subject-element: Courses
+    enroll-checkbox: Selection
+    enroll-button: Enrollment
+    nav-bar: Options
+  desc:
+    enrollment-overview: Here is an overview of the current enrollment phase.
+    filter-section: Here you can filter the courses.
+    subject-view-toggle: You can switch between list view and grid view.
+    subject-element: Each element represents a course. Click to see more details.
+    enroll-checkbox: Click here to select a course.
+    enroll-button: Click here to prioritize and enroll in the selected courses.
+    nav-bar: Here you have various options such as changing the language and theme, and logging in or out. If you need help, click on the help icon.

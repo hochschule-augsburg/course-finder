@@ -31,6 +31,7 @@ const enrollFormVisible = ref(false)
       <VBtnToggle
         v-model="subjectView"
         class="px-3 d-flex justify-end"
+        id="subject-view-toggle"
         mandatory
       >
         <VBtn :icon="mdiFormatListBulleted" text="list" value="list" />
@@ -38,7 +39,11 @@ const enrollFormVisible = ref(false)
       </VBtnToggle>
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
-      <div v-if="enrollmentStore.enrolledSubjects.length > 0" class="floating">
+      <div
+        v-if="enrollmentStore.enrolledSubjects.length > 0"
+        class="floating"
+        id="enroll-button"
+      >
         <VBadge :model-value="pendingEnroll" color="primary" dot>
           <VBtn icon @click="enrollFormVisible = true">
             <VIcon :icon="mdiPenLock" />

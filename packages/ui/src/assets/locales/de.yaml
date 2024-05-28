@@ -42,3 +42,24 @@ phase-states:
     closed: Temporär werden keine Anmeldungen akzeptiert.
     drawing: Ziehung läuft.
     finished: Die Anmeldephase ist beendet. Ergebnisse sind verfügbar.
+
+tour:
+  prev: Zurück
+  next: Weiter
+  finish: Fertig
+  title:
+    enrollment-overview: Übersicht
+    filter-section: Filter
+    subject-view-toggle: Unterschiedliche Ansichten
+    subject-element: Kurse
+    enroll-checkbox: Auswahl
+    enroll-button: Einschreibung
+    nav-bar: Optionen
+  desc:
+    enrollment-overview: Hier ist eine Übersicht über die aktuelle Einschreibephase.
+    filter-section: Hier können Sie die Kurse filtern.
+    subject-view-toggle: Sie können zwischen Listen- und Rasteransicht wechseln.
+    subject-element: Jedes Element repräsentiert einen Kurs. Klicken Sie, um weitere Details zu sehen.
+    enroll-checkbox: Klicken Sie hier, um einen Kurs auszuwählen.
+    enroll-button: Klicken Sie hier, um die ausgewählten Kurse zu priorisieren und sich einzuschreiben.
+    nav-bar: Hier haben Sie verschiedene Optionen wie das Ändern der Sprache und des Themes sowie das Ein- oder Ausloggen. Wenn Sie Hilfe benötigen, klicken Sie auf das Hilfesymbol.

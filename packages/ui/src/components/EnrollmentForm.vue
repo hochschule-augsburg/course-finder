@@ -145,6 +145,7 @@ async function validate() {
   <VDialog
     v-model:model-value="visible"
     :persistent="!isFormUntouched"
+    id="enroll-form"
     max-width="500"
   >
     <SubjectDialog

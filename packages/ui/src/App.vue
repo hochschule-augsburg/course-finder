@@ -2,11 +2,24 @@
 import type { onAfterStepOptions } from 'v-onboarding'
 
 import { useLocalStorage } from '@vueuse/core'
-import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
+import {
+  VOnboardingStep,
+  VOnboardingWrapper,
+  useVOnboarding,
+} from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
 import { onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VApp, VMain } from 'vuetify/components'
+import {
+  VApp,
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardText,
+  VCardTitle,
+  VMain,
+  VSpacer,
+} from 'vuetify/components'
 
 import { ModalDialog } from './components/DialogService'
 import { useUserStore } from './stores/UserStore'
@@ -18,27 +31,35 @@ const onboardingStep = useLocalStorage('onboardingStep', 0)
 const onboardingWrapper = ref(null)
 const { goToStep } = useVOnboarding(onboardingWrapper)
 
-const steps = [
-  {
+function afterStep(options?: onAfterStepOptions) {
+  onboardingStep.value = options ? options.index + 1 : 0
+}
+
+const steps = ref(
+  [
+    '#enrollment-overview',
+    '#filter-section',
+    '#subject-view-toggle',
+    '.subject-element',
+    '.enroll-checkbox',
+    '#enroll-button',
+    '#nav-bar',
+  ].map((selector) => ({
     attachTo: {
-      element: 'i',
+      element: selector,
     },
     content: {
-      description: t('tour.description'),
-      title: t('tour.welcome'),
+      description: t('tour.desc.' + selector.slice(1)),
+      title: t('tour.title.' + selector.slice(1)),
     },
-    on: {
-      afterStep: (options?: onAfterStepOptions) => {
-        onboardingStep.value = options ? options.index + 1 : 0
-      },
-    },
-  },
-]
+    on: { afterStep },
+  })),
+)
 
 provide('startOnboarding', () => goToStep(0))
 
 onMounted(() => {
-  if (onboardingStep.value === steps.length) {
+  if (onboardingStep.value === steps.value.length) {
     return
   }
   goToStep(onboardingStep.value)
@@ -47,7 +68,30 @@ onMounted(() => {
 
 <template>
   <VApp>
-    <VOnboardingWrapper :steps ref="onboardingWrapper" />
+    <VOnboardingWrapper :steps ref="onboardingWrapper">
+      <template #default="{ previous, next, step, isFirst, isLast }">
+        <VOnboardingStep>
+          <VCard v-if="step.content" max-width="300">
+            <VCardTitle v-if="step.content.title">
+              {{ step.content.title }}
+            </VCardTitle>
+
+            <VCardText v-if="step.content.description">
+              <p>{{ step.content.description }}</p>
+            </VCardText>
+
+            <VCardActions>
+              <VBtn v-if="!isFirst" :text="t('tour.prev')" @click="previous" />
+              <VSpacer />
+              <VBtn
+                :text="isLast ? t('tour.finish') : t('tour.next')"
+                @click="next"
+              />
+            </VCardActions>
+          </VCard>
+        </VOnboardingStep>
+      </template>
+    </VOnboardingWrapper>
     <CustomNavbar />
     <VMain class="my-4 mx-2">
       <ModalDialog />

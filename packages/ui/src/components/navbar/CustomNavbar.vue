@@ -73,7 +73,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <VAppBar>
+  <VAppBar id="nav-bar">
     <template v-if="mobile">
       <NavbarMobile
         :change-locale="changeLocale"
