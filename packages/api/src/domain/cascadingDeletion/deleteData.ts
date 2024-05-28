@@ -1,30 +1,19 @@
 import { PrismaClient } from '@prisma/client';
-import cron from 'node-cron';
 const prisma = new PrismaClient();
 
-export async function deleteOldStudentData() {
-  const oneAndHalfYearsAgo = new Date();
-  oneAndHalfYearsAgo.setMonth(oneAndHalfYearsAgo.getMonth() - 18); // 1.5 years ago
-
+export async function deleteOldData(cutoffDate: Date): Promise<void> {
   try {
-    const result = await prisma.student.deleteMany({
+    const deletedCount = await prisma.student.deleteMany({
       where: {
         createdAt: {
-          lt: oneAndHalfYearsAgo,
+          lt: cutoffDate,
         },
       },
     });
-
-    console.log(`Deleted ${result.count} old student records.`);
+    console.log(`Deleted ${deletedCount.count} students who were enrolled before ${cutoffDate}`);
   } catch (error) {
-    console.error('Error deleting old student records:', error);
+    console.error(`Failed to delete old data: ${(error as Error).message}`);
+    throw new Error(`Failed to delete old data: ${(error as Error).message}`);
   }
 }
 
-export async function startCronJob() {
-  cron.schedule('0 0 1 */6 *', () => {
-    console.log('Running scheduled job to delete old student data');
-    deleteOldStudentData();
-  });
-  console.log('Scheduler is set up to run every 6 months.');
-}

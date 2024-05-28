@@ -25,17 +25,21 @@ model User {
   auth     Json
   type     String
   Course   Course[]
+
+  createdAt DateTime @default(now())
 }
 
 model Student {
   username     String         @id
-  User         User           @relation(fields: [username], references: [username])
+  User         User           @relation(fields: [username], references: [username], onDelete: Cascade)
   fieldOfStudy String
   term         Int?
   regNumber    String?
   StudentPhase StudentPhase[]
-  Faculty      Faculty        @relation(fields: [facultyName], references: [name])
+  Faculty      Faculty        @relation(fields: [facultyName], references: [name], onDelete: Cascade)
   facultyName  String
+
+  createdAt DateTime @default(now())
 }
 
 model Faculty {
@@ -96,9 +100,9 @@ enum PhaseState {
 }
 
 model OfferedCourse {
-  Phase           Enrollphase     @relation(fields: [phaseId], references: [id])
+  Phase           Enrollphase     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId         Int
-  Course          Course          @relation(fields: [moduleCode], references: [moduleCode])
+  Course          Course          @relation(fields: [moduleCode], references: [moduleCode], onDelete: Cascade)
   moduleCode      String
   minParticipants Int             @default(0)
   maxParticipants Int?
@@ -117,9 +121,9 @@ model OfferedCourse {
 }
 
 model StudentPhase {
-  Student       Student         @relation(fields: [username], references: [username])
+  Student       Student         @relation(fields: [username], references: [username], onDelete: Cascade)
   username      String
-  Phase         Enrollphase     @relation(fields: [phaseId], references: [id])
+  Phase         Enrollphase     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId       Int
   StudentChoice StudentChoice[]
 
@@ -145,7 +149,7 @@ model PhaseAssignment {
   tryNo         Int
   phaseId       Int
   username      String
-  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId])
+  StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId], onDelete: Cascade)
   offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode])
   moduleCode    String
 
