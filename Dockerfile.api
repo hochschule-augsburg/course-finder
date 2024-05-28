@@ -14,7 +14,7 @@ FROM base AS api
 COPY --from=build /prod/api /prod/api
 WORKDIR /prod/api
 EXPOSE 2022
-RUN apt install -y pdftk
+RUN apt update && apt install -y pdftk
 # strangly this is not done by the build script
 RUN pnpm run db:generate
 CMD [ "pnpm", "start" ]
