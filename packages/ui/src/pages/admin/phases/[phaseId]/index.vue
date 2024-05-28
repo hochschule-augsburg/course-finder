@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { phaseStates as orgPhaseStates } from '@/helper/enums/phaseStates'
-import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -16,7 +15,6 @@ import {
 
 const { t } = useI18n()
 const coursesStore = useAdminCoursesStore()
-const assignmentStore = useAdminAssignStore()
 
 const route = useRoute()
 const phaseId = Number(route.params.phaseId)
@@ -30,13 +28,13 @@ const phaseState = computed(() => {
 })
 const phaseStates = computed(() => {
   let states = orgPhaseStates.slice()
-  if (
-    !assignmentStore.assignments[phaseId]?.length &&
-    phaseState.value.modelValue !== 'FINISHED'
-  ) {
+  if (phaseState.value.modelValue !== 'FINISHED') {
     states = states.filter((e) => e.value !== 'FINISHED')
   }
-  if (phaseState.value.modelValue !== 'NOT_STARTED') {
+  if (
+    phaseState.value.modelValue !== 'NOT_STARTED' ||
+    coursesStore.phases[phaseId].start.getTime() < Date.now()
+  ) {
     states = states.filter((e) => e.value !== 'NOT_STARTED')
   }
   return states
