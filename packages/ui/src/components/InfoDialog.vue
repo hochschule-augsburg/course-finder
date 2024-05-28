@@ -44,7 +44,8 @@ const { t } = useI18n()
         <VSpacer />
         <VBtn
           :text="t('info-close')"
-          variant="text"
+          color="primary"
+          variant="tonal"
           @click="showInfoDialog = false"
         />
       </VCardActions>

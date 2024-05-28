@@ -215,9 +215,20 @@ async function validate() {
           </div>
         </VRow>
         <VRow align="center" class="mt-2 mb-1 px-3">
-          <VBtn :text="t('autofill')" class="mr-3" @click="autoFill" />
+          <VBtn
+            :text="t('autofill')"
+            class="mr-3"
+            variant="plain"
+            @click="autoFill"
+          />
           <VSpacer />
-          <VBtn :loading="loading" :text="t('register')" @click="validate" />
+          <VBtn
+            :loading="loading"
+            :text="t('register')"
+            color="primary"
+            variant="tonal"
+            @click="validate"
+          />
         </VRow>
       </VForm>
     </VSheet>

@@ -120,6 +120,7 @@ function validUsername(input: string) {
         :disabled="!isValid"
         :loading="pending"
         color="primary"
+        variant="tonal"
         @click="!twoFANeeded ? login() : twoFALogin()"
       >
         {{ t('login') }}

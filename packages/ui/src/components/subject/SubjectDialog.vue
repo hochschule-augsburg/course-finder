@@ -76,8 +76,8 @@ async function copyLinkToClipboard() {
       <VCardActions class="mx-4">
         <VSpacer />
         <VBtn
+          :text="t('global.close')"
           color="primary"
-          text="Close"
           variant="tonal"
           @click="showSubjectDialog = false"
         />

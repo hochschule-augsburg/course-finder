@@ -81,10 +81,17 @@ onMounted(() => {
             </VCardText>
 
             <VCardActions>
-              <VBtn v-if="!isFirst" :text="t('tour.prev')" @click="previous" />
+              <VBtn
+                v-if="!isFirst"
+                :text="t('tour.prev')"
+                variant="plain"
+                @click="previous"
+              />
               <VSpacer />
               <VBtn
                 :text="isLast ? t('tour.finish') : t('tour.next')"
+                color="primary"
+                variant="tonal"
                 @click="next"
               />
             </VCardActions>
