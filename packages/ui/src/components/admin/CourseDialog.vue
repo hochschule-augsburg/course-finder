@@ -123,12 +123,7 @@ function deleteSubject() {
     >
       <template v-if="!selectedSubject?.moduleCode" #title>
         <div class="d-flex align-center" style="width: 35%">
-          <div v-if="props.onTheFly">
-            <span>{{ t('createOnTheFly') }} &nbsp;</span>
-          </div>
-          <div v-else>
-            <span>{{ t('title') }} &nbsp;</span>
-          </div>
+          <span>{{ t('createOnTheFly') }} &nbsp;</span>
           <VTextField
             v-model="formData.moduleCode"
             :label="t('module-code')"
