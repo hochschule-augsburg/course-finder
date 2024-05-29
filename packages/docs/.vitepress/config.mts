@@ -23,7 +23,13 @@ export default defineConfig({
             items: [
               { text: 'Student', link: '/student' },
               { text: 'Admin', link: '/admin' },
-              { text: 'Dev', link: '/dev' },
+              {
+                text: 'Dev',
+                items: [
+                  { text: 'Backend', link: '/backend' },
+                  { text: 'Frontend', link: '/frontend' },
+                ],
+              },
             ],
           },
         ],
@@ -34,7 +40,13 @@ export default defineConfig({
             items: [
               { text: 'Student', link: '/student' },
               { text: 'Admin', link: '/admin' },
-              { text: 'Dev', link: '/dev' },
+              {
+                text: 'Dev',
+                items: [
+                  { text: 'Backend', link: '/backend' },
+                  { text: 'Frontend', link: '/frontend' },
+                ],
+              },
             ],
           },
         ],
@@ -51,7 +63,13 @@ export default defineConfig({
             items: [
               { text: 'Student', link: '/en/student' },
               { text: 'Admin', link: '/en/admin' },
-              { text: 'Dev', link: '/en/dev' },
+              {
+                text: 'Dev',
+                items: [
+                  { text: 'Backend', link: '/en/backend' },
+                  { text: 'Frontend', link: '/en/frontend' },
+                ],
+              },
             ],
           },
         ],
@@ -62,7 +80,13 @@ export default defineConfig({
             items: [
               { text: 'Student', link: '/en/student' },
               { text: 'Admin', link: '/en/admin' },
-              { text: 'Dev', link: '/en/dev' },
+              {
+                text: 'Dev',
+                items: [
+                  { text: 'Backend', link: '/en/backend' },
+                  { text: 'Frontend', link: '/en/frontend' },
+                ],
+              },
             ],
           },
         ],
