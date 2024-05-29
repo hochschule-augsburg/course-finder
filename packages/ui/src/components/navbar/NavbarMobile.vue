@@ -9,7 +9,6 @@ import {
   mdiShieldCrownOutline,
   mdiThemeLightDark,
 } from '@mdi/js'
-import { inject, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -29,9 +28,6 @@ defineProps<{
 }>()
 const { t } = useI18n()
 const userStore = useUserStore()
-const infoDialogVisible = ref(false)
-
-const startOnboarding = inject<() => void>('startOnboarding') // TODO tmp
 </script>
 
 <template>
@@ -91,10 +87,9 @@ const startOnboarding = inject<() => void>('startOnboarding') // TODO tmp
               v-bind="props"
               :prepend-icon="mdiHelpCircleOutline"
               :title="t('help')"
-              @click="startOnboarding"
             />
           </template>
-          <InfoDialog v-model="infoDialogVisible" />
+          <InfoOptionsList />
         </VMenu>
 
         <VDivider />

@@ -1,22 +1,18 @@
 <script lang="ts" setup>
-import type { onAfterStepOptions } from 'v-onboarding'
-
-import { useLocalStorage } from '@vueuse/core'
+import { mdiClose } from '@mdi/js'
 import {
   VOnboardingStep,
   VOnboardingWrapper,
   useVOnboarding,
 } from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
-import { onMounted, provide, ref } from 'vue'
+import { provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VApp,
   VBtn,
   VCard,
   VCardActions,
-  VCardText,
-  VCardTitle,
   VMain,
   VSpacer,
 } from 'vuetify/components'
@@ -29,26 +25,27 @@ import { useUserStore } from './stores/UserStore'
 useUserStore()
 
 const { t } = useI18n()
-const onboardingStep = useLocalStorage('onboardingStep', 0)
-const onboardingWrapper = ref(null)
-const { goToStep } = useVOnboarding(onboardingWrapper)
+const onboardingWrapper = ref<null | typeof VOnboardingWrapper>(null)
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { finish, start } = useVOnboarding(onboardingWrapper)
 
 const coursesStore = useCoursesStore()
 const enrollmentStore = useEnrollmentStore()
 
-function afterStep(options?: onAfterStepOptions) {
-  onboardingStep.value = options ? options.index + 1 : 0
-}
-
 async function selectSubject() {
   await enrollmentStore.addSubject(coursesStore.filteredSubjects[0].moduleCode)
+}
+
+async function unselectSubject() {
+  await enrollmentStore.removeSubject(
+    coursesStore.filteredSubjects[0].moduleCode,
+  )
 }
 
 const steps = ref(
   [
     '#enrollment-overview',
     '#filter-section',
-    '#subject-view-toggle',
     '.subject-element',
     '.enroll-checkbox',
     '#enroll-button',
@@ -62,20 +59,13 @@ const steps = ref(
       title: t('tour.title.' + selector.slice(1)),
     },
     on: {
-      afterStep,
+      afterStep: selector === '#enroll-button' ? unselectSubject : () => {},
       beforeStep: selector === '#enroll-button' ? selectSubject : () => {},
     },
   })),
 )
 
-provide('startOnboarding', () => goToStep(0))
-
-onMounted(() => {
-  if (onboardingStep.value === steps.value.length) {
-    return
-  }
-  goToStep(onboardingStep.value)
-})
+provide('startOnboarding', () => start())
 </script>
 
 <template>
@@ -83,14 +73,15 @@ onMounted(() => {
     <VOnboardingWrapper :steps ref="onboardingWrapper">
       <template #default="{ previous, next, step, isFirst, isLast }">
         <VOnboardingStep>
-          <VCard v-if="step.content" max-width="300">
-            <VCardTitle v-if="step.content.title">
-              {{ step.content.title }}
-            </VCardTitle>
-
-            <VCardText v-if="step.content.description">
-              <p>{{ step.content.description }}</p>
-            </VCardText>
+          <VCard
+            v-if="step.content"
+            :text="step.content.description"
+            :title="step.content.title"
+            max-width="300"
+          >
+            <template #append>
+              <VIcon :icon="mdiClose" @click="finish" />
+            </template>
 
             <VCardActions>
               <VBtn

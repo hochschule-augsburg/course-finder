@@ -9,7 +9,6 @@ import {
   mdiShieldCrownOutline,
   mdiThemeLightDark,
 } from '@mdi/js'
-import { inject, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn, VIcon, VMenu, VToolbarTitle, VTooltip } from 'vuetify/components'
 
@@ -23,9 +22,6 @@ defineProps<{
 const { t } = useI18n()
 
 const userStore = useUserStore()
-const infoDialogVisible = ref(false)
-
-const startOnboarding = inject<() => void>('startOnboarding') // TODO tmp
 </script>
 
 <template>
@@ -74,13 +70,17 @@ const startOnboarding = inject<() => void>('startOnboarding') // TODO tmp
         <LocaleOptionsList :change-locale="changeLocale" />
       </VMenu>
 
-      <VBtn icon @click="startOnboarding">
-        <VIcon :icon="mdiHelpCircleOutline" />
-        <VTooltip activator="parent" location="left" open-delay="500">
-          {{ t('help') }}
-        </VTooltip>
-      </VBtn>
-      <InfoDialog v-model="infoDialogVisible" />
+      <VMenu transition="slied-y-transition">
+        <template #activator="{ props }">
+          <VBtn v-bind="props" icon>
+            <VIcon :icon="mdiHelpCircleOutline" />
+            <VTooltip activator="parent" location="left" open-delay="500">
+              {{ t('help') }}
+            </VTooltip>
+          </VBtn>
+        </template>
+        <InfoOptionsList />
+      </VMenu>
 
       <div v-if="userStore.user" class="align-self-center">
         <VBtn

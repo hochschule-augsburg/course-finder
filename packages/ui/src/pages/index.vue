@@ -2,7 +2,7 @@
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
@@ -16,10 +16,26 @@ const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
 )
 const { mobile } = useDisplay()
-const subjectView = mobile.value
-  ? 'grid'
-  : useLocalStorage('subjectView', mobile.value ? 'grid' : 'list')
+const lastSubjectView = useLocalStorage(
+  'subjectView',
+  mobile.value ? 'grid' : 'list',
+)
+const subjectView = computed(() =>
+  mobile.value ? 'grid' : lastSubjectView.value,
+)
 const enrollFormVisible = ref(false)
+
+const isFirstVisit = useLocalStorage('isFirstVisit', true, {
+  listenToStorageChanges: false,
+})
+const startOnboarding = inject<() => void>('startOnboarding')
+
+onMounted(() => {
+  if (startOnboarding && isFirstVisit.value) {
+    isFirstVisit.value = false
+    startOnboarding()
+  }
+})
 </script>
 
 <template>
@@ -29,8 +45,8 @@ const enrollFormVisible = ref(false)
     <div class="pt-1">
       <FilterSection />
       <VBtnToggle
-        v-model="subjectView"
-        :disabled="mobile"
+        v-if="!mobile"
+        v-model="lastSubjectView"
         class="px-3 d-flex justify-end"
         id="subject-view-toggle"
         mandatory
