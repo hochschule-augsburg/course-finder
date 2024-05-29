@@ -11,6 +11,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/sirchnik/subject-enroll' },
     ],
   },
+  head: [['link', { rel: 'icon', href: '/subject-enroll/favicon.ico' }]],
   locales: {
     root: {
       label: 'Deutsch',
