@@ -4,17 +4,17 @@ layout: home
 
 hero:
   name: 'CourseFinder'
-  tagline: Wahlpflichtfachanmeldung
+  tagline: Subject Enrollment
 
 features:
   - title: Showcase
-    details: Informatik
+    details: Computer Science
     link: https://showcase.informatik.tha.de/
     linkText: tha.de
     rel: external
     target: blank
-  - title: Projekttag Informatik
-    details: Sommersemester 2024
+  - title: Project day (CS)
+    details: Summer semester 2024
     link: https://www.tha.de/Informatik/Events/Projekttag-Informatik-im-Sommersemester-2024.html
     linkText: tha.de
     rel: external
