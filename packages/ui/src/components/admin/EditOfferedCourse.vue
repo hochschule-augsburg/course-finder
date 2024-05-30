@@ -8,6 +8,7 @@ import {
   fieldsOfStudyAbbrMap,
 } from '@/helper/enums/fieldsOfStudy'
 import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
+import { format, setDay, startOfWeek } from 'date-fns'
 import { cloneDeep } from 'lodash-es'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -86,13 +87,54 @@ function submit() {
 function addDate() {
   const last = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
   formData.value?.appointments.dates.push({
-    from: last.toString(),
-    to: last.toString(),
+    from: '',
+    to: '',
   })
 }
 
 function removeDate() {
   formData.value?.appointments.dates.pop()
+}
+
+const intervalData = ref({
+  endTime: '',
+  startTime: '',
+  weekday: '',
+})
+
+function updateWeeklyAppointment(index: number) {
+  if (
+    intervalData.value.endTime &&
+    intervalData.value.startTime &&
+    intervalData.value.weekday
+  ) {
+    const today = startOfWeek(new Date(), { weekStartsOn: 1 })
+    const dayIndex = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ].indexOf(intervalData.value.weekday)
+
+    const appointmentDate = setDay(today, dayIndex)
+    const formattedDate = format(appointmentDate, 'yyyy-MM-dd')
+    const fromTime = `${formattedDate}T${intervalData.value.startTime}`
+    const toTime = `${formattedDate}T${intervalData.value.endTime}`
+
+    if (formData.value) {
+      formData.value.appointments.dates[index] = {
+        from: fromTime,
+        to: toTime,
+      }
+      console.log({ from: fromTime, to: toTime })
+      intervalData.value.endTime = ''
+      intervalData.value.startTime = ''
+      intervalData.value.weekday = ''
+    }
+  }
 }
 </script>
 
@@ -181,26 +223,69 @@ function removeDate() {
               <div class="dateId-box" style="display: flex">
                 <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
               </div>
-              <VRow>
-                <VCol cols="12" sm="6">
-                  <VTextField
-                    v-model="interval.from"
-                    :label="t('from')"
-                    type="datetime-local"
-                    hide-details
-                    required
-                  />
-                </VCol>
-                <VCol cols="12" sm="6">
-                  <VTextField
-                    v-model="interval.to"
-                    :label="t('to')"
-                    type="datetime-local"
-                    hide-details
-                    required
-                  />
-                </VCol>
-              </VRow>
+              <div v-if="formData.appointments.type === 'weekly'">
+                <VRow>
+                  <VCol cols="12" sm="4">
+                    <VSelect
+                      v-model="intervalData.weekday"
+                      :items="[
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                        'Sunday',
+                      ]"
+                      :value="interval.from"
+                      label="Weekday"
+                      @update:model-value="updateWeeklyAppointment(index)"
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="4">
+                    <VTextField
+                      v-model="intervalData.startTime"
+                      :label="t('from')"
+                      type="time"
+                      hide-details
+                      required
+                      @update:focused="updateWeeklyAppointment(index)"
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="4">
+                    <VTextField
+                      v-model="intervalData.endTime"
+                      :label="t('to')"
+                      type="time"
+                      hide-details
+                      required
+                      @update:focused="updateWeeklyAppointment(index)"
+                    />
+                  </VCol>
+                </VRow>
+              </div>
+              <div v-else>
+                <VRow>
+                  <VCol cols="12" sm="6">
+                    <VTextField
+                      v-model="interval.from"
+                      :label="t('from')"
+                      type="datetime-local"
+                      hide-details
+                      required
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="6">
+                    <VTextField
+                      v-model="interval.to"
+                      :label="t('to')"
+                      type="datetime-local"
+                      hide-details
+                      required
+                    />
+                  </VCol>
+                </VRow>
+              </div>
             </div>
             <br />
             <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
