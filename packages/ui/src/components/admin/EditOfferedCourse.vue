@@ -90,23 +90,20 @@ function addDate() {
     from: '',
     to: '',
   })
+  datesArray.value.push({ endTime: '', startTime: '', weekday: '' })
 }
 
 function removeDate() {
   formData.value?.appointments.dates.pop()
 }
 
-const intervalData = ref({
-  endTime: '',
-  startTime: '',
-  weekday: '',
-})
-
 function updateWeeklyAppointment(index: number) {
+  const dateObject = datesArray.value.at(index)
   if (
-    intervalData.value.endTime &&
-    intervalData.value.startTime &&
-    intervalData.value.weekday
+    dateObject &&
+    dateObject.weekday &&
+    dateObject.startTime &&
+    dateObject.endTime
   ) {
     const today = startOfWeek(new Date(), { weekStartsOn: 1 })
     const dayIndex = [
@@ -117,12 +114,12 @@ function updateWeeklyAppointment(index: number) {
       'Friday',
       'Saturday',
       'Sunday',
-    ].indexOf(intervalData.value.weekday)
+    ].indexOf(dateObject.weekday)
 
     const appointmentDate = setDay(today, dayIndex)
     const formattedDate = format(appointmentDate, 'yyyy-MM-dd')
-    const fromTime = `${formattedDate}T${intervalData.value.startTime}`
-    const toTime = `${formattedDate}T${intervalData.value.endTime}`
+    const fromTime = `${formattedDate}T${dateObject.startTime}`
+    const toTime = `${formattedDate}T${dateObject.endTime}`
 
     if (formData.value) {
       formData.value.appointments.dates[index] = {
@@ -130,12 +127,20 @@ function updateWeeklyAppointment(index: number) {
         to: toTime,
       }
       console.log({ from: fromTime, to: toTime })
-      intervalData.value.endTime = ''
-      intervalData.value.startTime = ''
-      intervalData.value.weekday = ''
     }
+  } else {
+    console.log('event fired but data not completed')
   }
 }
+
+const datesArray = ref<
+  Array<{
+    endTime: string
+    startTime: string
+    weekday: string
+  }>
+>([])
+//TODO initialize datesArray when on offeredcourse edit window is open where course already has dates inside
 </script>
 
 <template>
@@ -216,18 +221,15 @@ function updateWeeklyAppointment(index: number) {
           <VCol cols="12">
             <VIcon :icon="mdiCalendar" />
             <strong>{{ t('appointments') }}</strong>
-            <div
-              v-for="(interval, index) in formData.appointments.dates"
-              :key="index"
-            >
-              <div class="dateId-box" style="display: flex">
-                <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
-              </div>
-              <div v-if="formData.appointments.type === 'weekly'">
+            <div v-if="formData.appointments.type === 'weekly'">
+              <div v-for="(interval, index) in datesArray" :key="index">
+                <div class="dateId-box" style="display: flex">
+                  <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
+                </div>
                 <VRow>
                   <VCol cols="12" sm="4">
                     <VSelect
-                      v-model="intervalData.weekday"
+                      v-model="interval.weekday"
                       :items="[
                         'Monday',
                         'Tuesday',
@@ -237,14 +239,13 @@ function updateWeeklyAppointment(index: number) {
                         'Saturday',
                         'Sunday',
                       ]"
-                      :value="interval.from"
                       label="Weekday"
                       @update:model-value="updateWeeklyAppointment(index)"
                     />
                   </VCol>
                   <VCol cols="12" sm="4">
                     <VTextField
-                      v-model="intervalData.startTime"
+                      v-model="interval.startTime"
                       :label="t('from')"
                       type="time"
                       hide-details
@@ -254,7 +255,7 @@ function updateWeeklyAppointment(index: number) {
                   </VCol>
                   <VCol cols="12" sm="4">
                     <VTextField
-                      v-model="intervalData.endTime"
+                      v-model="interval.endTime"
                       :label="t('to')"
                       type="time"
                       hide-details
@@ -264,7 +265,16 @@ function updateWeeklyAppointment(index: number) {
                   </VCol>
                 </VRow>
               </div>
-              <div v-else>
+            </div>
+            <div v-else>
+              <div
+                v-for="(interval, index) in formData.appointments.dates"
+                :key="index"
+              >
+                <div class="dateId-box" style="display: flex">
+                  <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
+                </div>
+                {{ console.log(interval.from, interval.to) }}
                 <VRow>
                   <VCol cols="12" sm="6">
                     <VTextField
