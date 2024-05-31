@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
@@ -11,6 +12,7 @@ defineOptions({
 })
 
 const enrollmentStore = useEnrollmentStore()
+const coursesStore = useCoursesStore()
 
 const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
@@ -30,12 +32,15 @@ const isFirstVisit = useLocalStorage('isFirstVisit', true, {
 })
 const startOnboarding = inject<() => void>('startOnboarding')
 
-onMounted(() => {
-  if (startOnboarding && isFirstVisit.value) {
-    isFirstVisit.value = false
-    startOnboarding()
-  }
-})
+watch(
+  () => coursesStore.currentPhase,
+  () => {
+    if (startOnboarding && isFirstVisit.value && coursesStore.currentPhase) {
+      isFirstVisit.value = false
+      startOnboarding()
+    }
+  },
+)
 </script>
 
 <template>

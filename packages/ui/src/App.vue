@@ -29,16 +29,15 @@ const onboardingWrapper = ref<null | typeof VOnboardingWrapper>(null)
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { finish, start } = useVOnboarding(onboardingWrapper)
 
-const coursesStore = useCoursesStore()
-const enrollmentStore = useEnrollmentStore()
-
 async function selectSubject() {
-  await enrollmentStore.addSubject(coursesStore.filteredSubjects[0].moduleCode)
+  await useEnrollmentStore().addSubject(
+    useCoursesStore().filteredSubjects[0].moduleCode,
+  )
 }
 
 async function unselectSubject() {
-  await enrollmentStore.removeSubject(
-    coursesStore.filteredSubjects[0].moduleCode,
+  await useEnrollmentStore().removeSubject(
+    useCoursesStore().filteredSubjects[0].moduleCode,
   )
 }
 
