@@ -7,22 +7,21 @@ import { VApp, VMain } from 'vuetify/components'
 
 import CustomOnboarding from './components/CustomOnboarding.vue'
 import { ModalDialog } from './components/DialogService'
-import { useUserStore } from './stores/UserStore'
+import { useCoursesStore } from './stores/CoursesStore'
+import { useEnrollmentStore } from './stores/EnrollmentStore'
 
-const userStore = useUserStore()
-// await userStore.initPromise
 const { t } = useI18n()
-// const enrollmentStore = useEnrollmentStore()
-// const coursesStore = useCoursesStore()
+const enrollmentStore = useEnrollmentStore()
+const coursesStore = useCoursesStore()
 
 async function selectSubject() {
-  // await enrollmentStore.addSubject(coursesStore.filteredSubjects[0].moduleCode)
+  await enrollmentStore.addSubject(coursesStore.filteredSubjects[0].moduleCode)
 }
 
 async function unselectSubject() {
-  // await enrollmentStore.removeSubject(
-  //   coursesStore.filteredSubjects[0].moduleCode,
-  // )
+  await enrollmentStore.removeSubject(
+    coursesStore.filteredSubjects[0].moduleCode,
+  )
 }
 
 const steps = computed(() =>
