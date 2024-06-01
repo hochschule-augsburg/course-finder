@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { homeTour, useTourPool } from '@/composables/tourPool'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
@@ -30,14 +31,14 @@ const enrollFormVisible = ref(false)
 const isFirstVisit = useLocalStorage('isFirstVisit', true, {
   listenToStorageChanges: false,
 })
-const startOnboarding = inject<() => void>('startOnboarding')
 
+const { startTour } = useTourPool()
 watch(
   () => coursesStore.currentPhase,
   () => {
-    if (startOnboarding && isFirstVisit.value && coursesStore.currentPhase) {
+    if (homeTour && isFirstVisit.value && coursesStore.currentPhase) {
       isFirstVisit.value = false
-      startOnboarding()
+      startTour(homeTour)
     }
   },
 )

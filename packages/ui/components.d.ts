@@ -13,6 +13,7 @@ declare module 'vue' {
     CourseDialog: typeof import('./src/components/admin/CourseDialog.vue')['default']
     CustomFooter: typeof import('./src/components/CustomFooter.vue')['default']
     CustomNavbar: typeof import('./src/components/navbar/CustomNavbar.vue')['default']
+    CustomOnboarding: typeof import('./src/components/CustomOnboarding.vue')['default']
     EditOfferedCourse: typeof import('./src/components/admin/EditOfferedCourse.vue')['default']
     EnrollCheckbox: typeof import('./src/components/subject/EnrollCheckbox.vue')['default']
     EnrollmentForm: typeof import('./src/components/EnrollmentForm.vue')['default']

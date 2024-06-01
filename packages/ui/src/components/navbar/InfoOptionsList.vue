@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import { homeTour, useTourPool } from '@/composables/tourPool'
 import { useCoursesStore } from '@/stores/CoursesStore'
-import { inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VDivider, VList, VListItem } from 'vuetify/components'
 
 const { t } = useI18n()
-
-const startOnboarding = inject<() => void>('startOnboarding')
+const { startTour } = useTourPool()
 const coursesStore = useCoursesStore()
 </script>
 
@@ -15,7 +14,7 @@ const coursesStore = useCoursesStore()
     <VListItem
       v-if="coursesStore.currentPhase"
       :title="t('tutorial')"
-      @click="startOnboarding"
+      @click="startTour(homeTour)"
     />
     <VDivider v-if="coursesStore.currentPhase" />
     <VListItem
