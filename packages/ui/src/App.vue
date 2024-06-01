@@ -6,7 +6,7 @@ import {
   useVOnboarding,
 } from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
-import { provide, ref } from 'vue'
+import { computed, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VApp,
@@ -27,21 +27,22 @@ useUserStore()
 const { t } = useI18n()
 const onboardingWrapper = ref<null | typeof VOnboardingWrapper>(null)
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { finish, start } = useVOnboarding(onboardingWrapper)
+const { finish, start } = useVOnboarding(onboardingWrapper) // method doesn't need this context
+
+const enrollmentStore = useEnrollmentStore()
+const coursesStore = useCoursesStore()
 
 async function selectSubject() {
-  await useEnrollmentStore().addSubject(
-    useCoursesStore().filteredSubjects[0].moduleCode,
-  )
+  await enrollmentStore.addSubject(coursesStore.filteredSubjects[0].moduleCode)
 }
 
 async function unselectSubject() {
-  await useEnrollmentStore().removeSubject(
-    useCoursesStore().filteredSubjects[0].moduleCode,
+  await enrollmentStore.removeSubject(
+    coursesStore.filteredSubjects[0].moduleCode,
   )
 }
 
-const steps = ref(
+const steps = computed(() =>
   [
     '#enrollment-overview',
     '#filter-section',
