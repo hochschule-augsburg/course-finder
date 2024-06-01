@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { homeTour } from '@/composables/tourPool'
+import { homeTour } from '@/stores/TourStore'
 import 'v-onboarding/dist/style.css'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'

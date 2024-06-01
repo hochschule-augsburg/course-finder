@@ -1,17 +1,19 @@
+import type { VOnboardingWrapper } from 'v-onboarding'
 import type { Ref } from 'vue'
 
-import { type VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
+import { defineStore } from 'pinia'
+import { useVOnboarding } from 'v-onboarding'
 import { ref } from 'vue'
+
+export const homeTour = Symbol('homeTour')
 
 export type Tour = {
   [key: symbol]: { finish: () => void; start: () => void }
 }
 
-export const homeTour = Symbol('homeTour')
+export const useTourStore = defineStore('tour', () => {
+  const tours = ref<Tour>({})
 
-const tours = ref<Tour>({})
-
-export function useTourPool() {
   function registerTour(
     wrapper: Ref<null | typeof VOnboardingWrapper>,
     name: symbol,
@@ -32,4 +34,4 @@ export function useTourPool() {
   }
 
   return { finishTour, registerTour, startTour }
-}
+})

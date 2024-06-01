@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { homeTour, useTourPool } from '@/composables/tourPool'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { homeTour, useTourStore } from '@/stores/TourStore'
 import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
@@ -32,11 +32,11 @@ const isFirstVisit = useLocalStorage('isFirstVisit', true, {
   listenToStorageChanges: false,
 })
 
-const { startTour } = useTourPool()
+const { startTour } = useTourStore()
 watch(
   () => coursesStore.currentPhase,
   () => {
-    if (homeTour && isFirstVisit.value && coursesStore.currentPhase) {
+    if (isFirstVisit.value && coursesStore.currentPhase) {
       isFirstVisit.value = false
       startTour(homeTour)
     }

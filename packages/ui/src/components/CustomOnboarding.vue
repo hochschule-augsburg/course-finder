@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { StepEntity } from 'v-onboarding'
 
-import { useTourPool } from '@/composables/tourPool'
+import { useTourStore } from '@/stores/TourStore'
 import { mdiClose } from '@mdi/js'
 import { VOnboardingStep, VOnboardingWrapper } from 'v-onboarding'
 import { ref } from 'vue'
@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const onboardingWrapper = ref<null | typeof VOnboardingWrapper>(null)
-const { registerTour } = useTourPool()
+const { registerTour } = useTourStore()
 const { finish } = registerTour(onboardingWrapper, props.name)
 </script>
 

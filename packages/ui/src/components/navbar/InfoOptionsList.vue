@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { homeTour, useTourPool } from '@/composables/tourPool'
 import { useCoursesStore } from '@/stores/CoursesStore'
+import { homeTour, useTourStore } from '@/stores/TourStore'
 import { useI18n } from 'vue-i18n'
 import { VDivider, VList, VListItem } from 'vuetify/components'
 
 const { t } = useI18n()
-const { startTour } = useTourPool()
+const { startTour } = useTourStore()
 const coursesStore = useCoursesStore()
 </script>
 
