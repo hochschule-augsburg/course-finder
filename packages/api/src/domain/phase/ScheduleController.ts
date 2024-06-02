@@ -48,16 +48,13 @@ export function schedulePhase(phase: Enrollphase) {
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
       () => {
-        if (
-          !process.env.MAIL_DISTRIBUTORS?.split(' ') ||
-          !process.env.PRODUCTION_URL
-        ) {
+        if (!process.env.MAIL_RECEIVERS || !process.env.FRONTEND_HOSTNAME) {
           throw new Error(
-            'MAIL_DISTRIBUTORS and PRODUCTION_URL has to be set for email notification to work',
+            'MAIL_RECEIVERS and FRONTEND_HOSTNAME has to be set for email notification to work',
           )
         }
         sendEmail(
-          process.env.MAIL_DISTRIBUTORS.split(' '),
+          process.env.MAIL_RECEIVERS.split(' '),
           'Die WPF Anmeldephase endet bald | WPF registrations will soon be closing',
           `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleDateString(
             'de-DE',
@@ -69,7 +66,7 @@ export function schedulePhase(phase: Enrollphase) {
               weekday: 'long',
               year: 'numeric',
             },
-          )}.\nDie Anmeldung erfolgt über folgender Seite:\n${process.env.PRODUCTION_URL}\n\nRegistrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
+          )}.\nDie Anmeldung erfolgt über folgender Seite:\n${process.env.FRONTEND_HOSTNAME}\n\nRegistrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
             'en-US',
             {
               day: 'numeric',
@@ -79,7 +76,7 @@ export function schedulePhase(phase: Enrollphase) {
               weekday: 'long',
               year: 'numeric',
             },
-          )}.\nRegistrations can be made on the following website:\n${process.env.PRODUCTION_URL}`,
+          )}.\nRegistrations can be made on the following website:\n${process.env.FRONTEND_HOSTNAME}`,
         )
       },
     ),
