@@ -163,6 +163,7 @@ async function initFormData() {
     )
     formData.value = {
       ...cloneDeep(phase),
+      //TODO: Adjust time for prefill +2hours
       emailNotificationAt: phase.emailNotificationAt.toISOString(),
       end: phase.end.toISOString().slice(0, 16),
       start: phase.start.toISOString().slice(0, 16),

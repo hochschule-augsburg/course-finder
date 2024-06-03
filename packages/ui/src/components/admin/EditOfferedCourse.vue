@@ -56,14 +56,19 @@ watchEffect(() => {
     ...cloneDeep(props.offeredCourse),
     appointments: {
       dates: props.offeredCourse?.appointments.dates.map((e) => ({
-        from: e.from.toISOString(),
-        to: e.to.toISOString(),
+        from: addHours(new Date(e.from), 2).toISOString().slice(0, 16),
+        to: addHours(new Date(e.to), 2).toISOString().slice(0, 16),
       })),
       type: props.offeredCourse?.appointments.type,
     },
     for: props.offeredCourse.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e),
   }
 })
+
+//TODO: Better way to do this?
+function addHours(date: Date, hours: number) {
+  return new Date(date.getTime() + hours * 60 * 60 * 1000)
+}
 
 const { locale, t } = useI18n()
 
@@ -82,6 +87,12 @@ function submit() {
     },
     for: formData.value.for.map((e) => abbrFieldsOfStudyMap[e] ?? e),
   })
+  datesArray.value = []
+}
+
+function cancel() {
+  emits('cancel')
+  datesArray.value = []
 }
 
 function addDate() {
@@ -91,6 +102,7 @@ function addDate() {
     to: '',
   })
   datesArray.value.push({ endTime: '', startTime: '', weekday: '' })
+  console.log(datesArray.value)
 }
 
 function removeDate() {
@@ -106,7 +118,7 @@ function updateWeeklyAppointment(index: number) {
     dateObject.endTime
   ) {
     const today = startOfWeek(new Date(), { weekStartsOn: 1 })
-    const dayIndex = [
+    const daysOfWeek = [
       'Monday',
       'Tuesday',
       'Wednesday',
@@ -114,9 +126,10 @@ function updateWeeklyAppointment(index: number) {
       'Friday',
       'Saturday',
       'Sunday',
-    ].indexOf(dateObject.weekday)
+    ]
+    const dayIndex = daysOfWeek.indexOf(dateObject.weekday) + 1
 
-    const appointmentDate = setDay(today, dayIndex)
+    const appointmentDate = setDay(today, dayIndex, { weekStartsOn: 1 })
     const formattedDate = format(appointmentDate, 'yyyy-MM-dd')
     const fromTime = `${formattedDate}T${dateObject.startTime}`
     const toTime = `${formattedDate}T${dateObject.endTime}`
@@ -140,7 +153,37 @@ const datesArray = ref<
     weekday: string
   }>
 >([])
-//TODO initialize datesArray when on offeredcourse edit window is open where course already has dates inside
+
+function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
+  dates.forEach(function (date) {
+    const fromDate = new Date(date.from)
+    const toDate = new Date(date.to)
+
+    if (!isNaN(fromDate.getTime()) && !isNaN(toDate.getTime())) {
+      const startTime = fromDate.toTimeString().split(' ')[0].slice(0, -3)
+      const endTime = toDate.toTimeString().split(' ')[0].slice(0, -3)
+      const weekday = fromDate.toLocaleDateString('en-US', { weekday: 'long' })
+
+      const dateEntry = {
+        endTime: endTime,
+        startTime: startTime,
+        weekday: weekday,
+      }
+
+      const isDuplicate = datesArray.value.some(
+        (item) =>
+          item.endTime === dateEntry.endTime &&
+          item.startTime === dateEntry.startTime &&
+          item.weekday === dateEntry.weekday,
+      )
+
+      if (!isDuplicate) {
+        datesArray.value.push(dateEntry)
+      }
+    }
+  })
+  return datesArray.value
+}
 </script>
 
 <template>
@@ -222,7 +265,12 @@ const datesArray = ref<
             <VIcon :icon="mdiCalendar" />
             <strong>{{ t('appointments') }}</strong>
             <div v-if="formData.appointments.type === 'weekly'">
-              <div v-for="(interval, index) in datesArray" :key="index">
+              <div
+                v-for="(interval, index) in initializeDatesArray(
+                  formData.appointments.dates,
+                )"
+                :key="index"
+              >
                 <div class="dateId-box" style="display: flex">
                   <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
                 </div>
@@ -274,7 +322,7 @@ const datesArray = ref<
                 <div class="dateId-box" style="display: flex">
                   <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
                 </div>
-                {{ console.log(interval.from, interval.to) }}
+                {{ console.log(datesArray) }}
                 <VRow>
                   <VCol cols="12" sm="6">
                     <VTextField
@@ -314,7 +362,7 @@ const datesArray = ref<
       </VCardText>
       <VDivider />
       <template #actions>
-        <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
+        <VBtn :text="t('global.cancel')" @click="cancel" />
         <VSpacer />
         <VBtn
           v-if="enableDelete"
