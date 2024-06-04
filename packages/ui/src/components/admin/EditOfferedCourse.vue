@@ -104,8 +104,39 @@ function addDateWeekly() {
   datesArray.value.push({ endTime: '', startTime: '', weekday: '' })
 }
 
-function removeDate() {
-  formData.value?.appointments.dates.pop()
+function removeDate(index: number) {
+  formData.value?.appointments.dates.splice(index, 1)
+}
+
+function removeDateWeekly(index: number) {
+  const dateArrayObject = datesArray.value.at(index)
+
+  if (!dateArrayObject || !formData.value?.appointments?.dates) {
+    return
+  }
+
+  const { endTime, startTime, weekday } = dateArrayObject
+
+  formData.value.appointments.dates = formData.value.appointments.dates.filter(
+    (data) => {
+      const dateFrom = new Date(data.from)
+      const dateTo = new Date(data.to)
+
+      const dayOfWeek = dateFrom.toLocaleDateString('en-US', {
+        weekday: 'long',
+      })
+
+      const fromTime = dateFrom.toTimeString().split(' ')[0].slice(0, -3) // "HH:MM"
+      const toTime = dateTo.toTimeString().split(' ')[0].slice(0, -3)
+      console.log(dayOfWeek, weekday, fromTime, startTime, toTime, endTime)
+      return !(
+        dayOfWeek === weekday &&
+        fromTime === startTime &&
+        toTime === endTime
+      )
+    },
+  )
+  datesArray.value.splice(index, 1)
 }
 
 function updateWeeklyAppointment(index: number) {
@@ -118,13 +149,13 @@ function updateWeeklyAppointment(index: number) {
   ) {
     const today = startOfWeek(new Date(), { weekStartsOn: 1 })
     const daysOfWeek = [
-      t('monday'),
-      t('tuesday'),
-      t('wednesday'),
-      t('thursday'),
-      t('friday'),
-      t('saturday'),
-      t('sunday'),
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
     ]
     const dayIndex = daysOfWeek.indexOf(dateObject.weekday) + 1
 
@@ -152,11 +183,6 @@ const datesArray = ref<
 >([])
 
 function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
-  let localeString = 'en-US'
-  if (locale.value === 'de') {
-    localeString = 'de-DE'
-  }
-
   dates.forEach(function (date) {
     const fromDate = new Date(date.from)
     const toDate = new Date(date.to)
@@ -164,7 +190,7 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
     if (!isNaN(fromDate.getTime()) && !isNaN(toDate.getTime())) {
       const startTime = fromDate.toTimeString().split(' ')[0].slice(0, -3)
       const endTime = toDate.toTimeString().split(' ')[0].slice(0, -3)
-      const weekday = fromDate.toLocaleDateString(localeString, {
+      const weekday = fromDate.toLocaleDateString('en-US', {
         weekday: 'long',
       })
 
@@ -188,6 +214,16 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
   })
   return datesArray.value
 }
+
+const weekdayItems = [
+  { value: 'Monday', weekday: t('monday') },
+  { value: 'Tuesday', weekday: t('tuesday') },
+  { value: 'Wednesday', weekday: t('wednesday') },
+  { value: 'Thursday', weekday: t('thursday') },
+  { value: 'Friday', weekday: t('friday') },
+  { value: 'Saturday', weekday: t('saturday') },
+  { value: 'Sunday', weekday: t('sunday') },
+]
 </script>
 
 <template>
@@ -276,21 +312,18 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                 :key="index"
               >
                 <div class="dateId-box" style="display: flex">
-                  <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
+                  <VIcon
+                    :icon="mdiTrashCanOutline"
+                    @click="removeDateWeekly(index)"
+                  />
                 </div>
                 <VRow>
                   <VCol cols="12" sm="4">
                     <VSelect
                       v-model="interval.weekday"
-                      :items="[
-                        t('monday'),
-                        t('tuesday'),
-                        t('wednesday'),
-                        t('thursday'),
-                        t('friday'),
-                        t('saturday'),
-                        t('sunday'),
-                      ]"
+                      :items="weekdayItems"
+                      item-title="weekday"
+                      item-value="value"
                       label="Weekday"
                       @update:model-value="updateWeeklyAppointment(index)"
                     />
@@ -326,7 +359,10 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                 :key="index"
               >
                 <div class="dateId-box" style="display: flex">
-                  <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
+                  <VIcon
+                    :icon="mdiTrashCanOutline"
+                    @click="removeDate(index)"
+                  />
                 </div>
                 <VRow>
                   <VCol cols="12" sm="6">
