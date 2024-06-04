@@ -36,7 +36,7 @@ model Student {
   term         Int?
   regNumber    String?
   StudentPhase StudentPhase[]
-  Faculty      Faculty        @relation(fields: [facultyName], references: [name], onDelete: Cascade)
+  Faculty      Faculty        @relation(fields: [facultyName], references: [name])
   facultyName  String
 
   createdAt DateTime @default(now())
@@ -121,7 +121,7 @@ model OfferedCourse {
 }
 
 model StudentPhase {
-  Student       Student         @relation(fields: [username], references: [username], onDelete: Cascade)
+  Student       Student         @relation(fields: [username], references: [username])
   username      String
   Phase         Enrollphase     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId       Int
