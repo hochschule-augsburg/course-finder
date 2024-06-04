@@ -6,8 +6,6 @@ const envSchema = z.object({
   LDAP_BASE_DN: z.string(),
   LDAP_URL: z.string(),
   MAIL_RECEIVERS: z.string(),
-  MAIL_SENDER_PASSWORD: z.string(),
-  MAIL_SENDER_USERNAME: z.string(),
   SERVER_HOSTNAME: z.string(),
   SERVER_PORT: z.string(),
   SESSION_SECRET: z.string(),

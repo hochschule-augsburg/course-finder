@@ -2,8 +2,6 @@ import type { Attachment } from 'nodemailer/lib/mailer'
 
 import nodemailer from 'nodemailer'
 
-import env from '../../env'
-
 export async function sendEmail(
   to: string | string[],
   subject: string,
@@ -11,10 +9,6 @@ export async function sendEmail(
   attachments?: Attachment[],
 ) {
   const transporter = nodemailer.createTransport({
-    auth: {
-      pass: env.MAIL_SENDER_PASSWORD,
-      user: env.MAIL_SENDER_USERNAME,
-    },
     host: 'smtp.hs-augsburg.de',
     port: 25,
     secure: false, // will still use STARTTLS if the host supports it

@@ -15,8 +15,6 @@ declare global {
       SERVER_HOSTNAME?: string
       SERVER_PORT?: string
 
-      MAIL_SENDER_USERNAME?: string
-      MAIL_SENDER_PASSWORD?: string
       MAIL_RECEIVERS?: string
     }
   }

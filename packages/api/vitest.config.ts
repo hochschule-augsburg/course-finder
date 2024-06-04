@@ -8,8 +8,6 @@ export default defineConfig({
       LDAP_BASE_DN: 'testLdapBaseDn',
       LDAP_URL: 'testLdapUrl',
       MAIL_RECEIVERS: 'testMailReceivers',
-      MAIL_SENDER_PASSWORD: 'testMailSenderPassword',
-      MAIL_SENDER_USERNAME: 'testMailSenderUsername',
       SERVER_HOSTNAME: 'testServerHostname',
       SERVER_PORT: 'testServerPort',
       SESSION_SECRET: 'testSessionSecret',
