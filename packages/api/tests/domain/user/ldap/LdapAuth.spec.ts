@@ -2,6 +2,7 @@ import { type DN, InvalidCredentialsError } from 'ldapts'
 
 import { pwdAuth } from '../../../../src/domain/user/ldap/LdapAuth'
 import ldapStudentResult from '../../../../src/domain/user/ldap/example-responses/loggedInStudent.json'
+import env from '../../../../src/env'
 import { prismaMock } from '../../../setup/prisma'
 
 vi.mock('ldapts', async () => {
@@ -36,8 +37,8 @@ vi.mock('ldapts', async () => {
 
 describe('LdapAuth', () => {
   beforeAll(() => {
-    process.env.LDAP_URL = 'a'
-    process.env.LDAP_BASE_DN = 'a'
+    env.LDAP_URL = 'a'
+    env.LDAP_BASE_DN = 'a'
   })
   test('pwdAuth - successful authentication', async () => {
     const username = 'doejohn'
