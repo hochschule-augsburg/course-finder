@@ -6,6 +6,10 @@ hero:
   name: 'CourseFinder'
   tagline: Wahlpflichtfachanmeldung
 
+  image:
+    src: logo.svg
+    alt: CourseFinder Logo
+
 features:
   - title: Showcase
     details: Informatik

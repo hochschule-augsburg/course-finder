@@ -14,3 +14,7 @@
     --vp-c-bg-alt: #1E1E1E;
     --vp-c-bg-elv: #1E1E1E;
 }
+
+.VPHero .image{
+    height: 20rem;
+}
