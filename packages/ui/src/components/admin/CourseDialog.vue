@@ -20,7 +20,11 @@ import {
 
 import { dialogService } from '../DialogService'
 
-const props = defineProps<{ selectedSubject?: Course; visible: boolean }>()
+const props = defineProps<{
+  onTheFly?: boolean
+  selectedSubject?: Course
+  visible: boolean
+}>()
 const emit = defineEmits<{ cancel: []; submit: [Course | undefined] }>()
 const formData = ref<
   { lecturers: string; varyingCP: string } & Omit<
@@ -118,8 +122,8 @@ function deleteSubject() {
       :prepend-icon="mdiPencil"
     >
       <template v-if="!selectedSubject?.moduleCode" #title>
-        <div class="d-flex align-center" style="width: 30%">
-          <span>{{ t('title') }} &nbsp;</span>
+        <div class="d-flex align-center" style="width: 35%">
+          <span>{{ t('createOnTheFly') }} &nbsp;</span>
           <VTextField
             v-model="formData.moduleCode"
             :label="t('module-code')"
@@ -199,6 +203,7 @@ function deleteSubject() {
         <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
         <VSpacer />
         <VSwitch
+          v-if="props.onTheFly !== true"
           v-model="formData.published"
           color="primary"
           label="published"
@@ -221,6 +226,7 @@ function deleteSubject() {
 
 <i18n lang="yaml">
 en:
+  createOnTheFly: 'New Course - {0}'
   title: 'Edit - {0}'
   title-en: Title (English)
   title-de: Title (German)
@@ -235,6 +241,7 @@ en:
     comma: List separated by commas
   really-want-to-delete: Do you really want to delete this course?
 de:
+  createOnTheFly: 'Neuer Kurs - {0}'
   title: 'Bearbeiten - {0}'
   title-en: Titel (Englisch)
   title-de: Titel (Deutsch)

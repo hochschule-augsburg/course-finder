@@ -60,16 +60,17 @@ export const ModalDialog = defineComponent(
           <VCardActions>
             <VSpacer />
             <VBtn
-              color="error"
               // @ts-expect-error wrong typing
               onClick={cancel}
+              variant="plain"
             >
               {t('global.cancel')}
             </VBtn>
             <VBtn
-              color="success"
+              color="primary"
               // @ts-expect-error wrong typing
               onClick={confirm}
+              variant="tonal"
             >
               {t('global.confirm')}
             </VBtn>

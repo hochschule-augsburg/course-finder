@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { useCoursesStore } from '@/stores/CoursesStore'
+import { useSubjectChunks } from '@/composables/subjectChunks'
 import { VExpansionPanel, VExpansionPanels } from 'vuetify/components'
-const coursesStore = useCoursesStore()
+
+const { subjects } = useSubjectChunks()
 </script>
 
 <template>
   <VExpansionPanels class="px-1 py-4" variant="popout">
-    <VExpansionPanel
-      v-for="subject in coursesStore.filteredSubjects"
-      :key="subject.moduleCode"
-    >
+    <VExpansionPanel v-for="subject in subjects" :key="subject.moduleCode">
       <SubjectTableRow :subject />
     </VExpansionPanel>
   </VExpansionPanels>

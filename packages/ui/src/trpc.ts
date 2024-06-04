@@ -13,7 +13,7 @@ export const trpc = createTRPCClient<AppRouter>({
         })
       },
       transformer: superjson,
-      url: import.meta.env.VITE_API_URL + 'trpc',
+      url: import.meta.env.VITE_API_URL + 'api/trpc',
     }),
   ],
 })

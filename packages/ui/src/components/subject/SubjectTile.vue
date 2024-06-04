@@ -25,6 +25,7 @@ const dev = import.meta.env.DEV
   <VCard
     :subtitle="subject.lecturers.join(', ')"
     :title="locale === 'de' ? subject.title.de : subject.title.en"
+    class="subject-element"
     color="secondary"
     height="200"
     width="300"

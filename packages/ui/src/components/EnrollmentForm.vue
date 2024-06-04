@@ -3,7 +3,7 @@ import type { EnrolledCourse } from '@/stores/EnrollmentStore'
 
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
-import { mdiAlphaFCircle, mdiAlphaPCircle } from '@mdi/js'
+import { mdiAlphaFCircle, mdiAlphaPCircle, mdiClose } from '@mdi/js'
 import { sumBy } from 'lodash-es'
 import { computed, ref, toRaw, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -145,6 +145,7 @@ async function validate() {
   <VDialog
     v-model:model-value="visible"
     :persistent="!isFormUntouched"
+    id="enroll-form"
     max-width="500"
   >
     <SubjectDialog
@@ -152,12 +153,18 @@ async function validate() {
       :subject="selectedSubject"
     />
     <VSheet
-      class="pa-5"
+      class="pa-4"
       color="secondary"
       max-width="var(--dialog-max-width)"
       rounded="lg"
     >
-      <VForm ref="form">
+      <VRow align="center" class="mb-1">
+        <VSpacer />
+        <VBtn class="mr-2" variant="plain" icon @click="visible = false">
+          <VIcon :icon="mdiClose" size="small" />
+        </VBtn>
+      </VRow>
+      <VForm class="mx-2" ref="form">
         <VTextField
           v-model.number="creditsNeeded"
           :label="t('credits-wanted')"
@@ -209,13 +216,19 @@ async function validate() {
         </VRow>
         <VRow align="center" class="mt-2 mb-1 px-3">
           <VBtn
-            :text="t('global.cancel')"
+            :text="t('autofill')"
             class="mr-3"
-            @click="visible = false"
+            variant="plain"
+            @click="autoFill"
           />
           <VSpacer />
-          <VBtn :text="t('autofill')" class="mr-3" @click="autoFill" />
-          <VBtn :loading="loading" :text="t('register')" @click="validate" />
+          <VBtn
+            :loading="loading"
+            :text="t('register')"
+            color="primary"
+            variant="tonal"
+            @click="validate"
+          />
         </VRow>
       </VForm>
     </VSheet>

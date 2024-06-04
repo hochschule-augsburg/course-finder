@@ -2,10 +2,14 @@ import { TRPCError } from '@trpc/server'
 import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
+import type { I18nJson } from '../../../prisma/PrismaTypes'
+
 import { assign } from '../../../domain/assign/AssignmentAlgorithm'
+import { sendEmail } from '../../../domain/mail/Mail'
 import { phaseService } from '../../../domain/phase/PhaseService'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
+// import { sendEmail } from '../../../domain/mail/Mail'
 
 export const assignRouter = router({
   assign: adminProcedure
@@ -88,6 +92,128 @@ export const assignRouter = router({
     .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
     .mutation(async ({ input }) => {
       await phaseService.updatePhase(input.phaseId, { state: 'FINISHED' })
-      // TODO send emails
+      const results = await prisma.phaseAssignment.findMany({
+        select: { moduleCode: true, username: true },
+        where: { phaseId: input.phaseId, tryNo: input.tryNo },
+      })
+      const groupedResults = groupBy(results, 'username')
+      emailToAdmin(groupedResults)
+      emailToStudents(input.phaseId, groupedResults)
     }),
 })
+
+async function emailToStudents(
+  phaseId: number,
+  results: Record<string, { moduleCode: string }[]>,
+) {
+  const emails = await getStudentEmails(results)
+  const phase = await prisma.enrollphase.findUnique({ where: { id: phaseId } })
+  if (!phase) {
+    throw new Error(`Phase with id ${phaseId} not found`)
+  }
+  const courses = await prisma.course.findMany({
+    select: { lecturers: true, moduleCode: true, title: true },
+  })
+
+  const formatedResults = Object.fromEntries(
+    Object.entries(results).map(([student, modules]) => [
+      student,
+      modules
+        .map((e) => {
+          const course = courses.find((c) => c.moduleCode === e.moduleCode)
+          if (!course) {
+            throw new Error(`Course with moduleCode ${e.moduleCode} not found`)
+          }
+          return `\t- ${mergeLocales(course?.title)} - ${course.lecturers.join(', ')}`
+        })
+        .join('\n'),
+    ]),
+  )
+
+  const title = mergeLocales(phase?.title)
+  // send emails to students
+  Object.entries(emails).forEach(([username, email]) =>
+    sendEmail(
+      email,
+      `${title} - Results/Ergebnisse`,
+      `\
+Die Ergebnisse der ${title} wurden veröffentlicht.
+${formatedResults[username]}
+Sie können die Ergebnisse auch auf der Website einsehen.
+--
+\n\n
+The results of the ${title} have been published.
+${formatedResults[username]}
+Sie können die Ergebnisse auch auf der Website einsehen.\
+      `,
+    ),
+  )
+}
+
+async function emailToAdmin(results: Record<string, { moduleCode: string }[]>) {
+  const mail = await prisma.user.findFirst({ where: { type: 'Admin' } })
+  if (!mail) {
+    throw new Error('No admin found')
+  }
+  const txtText = constructTxtText(results)
+  await sendEmail(
+    mail?.email,
+    'Wahlpflichtfächer',
+    'Die Wahlpflichtfächer wurden ausgelost.',
+    [{ content: txtText, filename: 'results.txt' }],
+  )
+}
+
+async function getStudentEmails(
+  results: Record<string, unknown>,
+): Promise<Record<string, string>> {
+  const studentUsers = await prisma.user.findMany({
+    where: {
+      type: 'Student',
+    },
+  })
+  return Object.fromEntries(
+    Object.keys(results).map((entry) => {
+      const student = studentUsers.find((s) => s.username === entry)
+      const email = student?.email
+
+      if (!email) {
+        throw new Error(`Student with username ${entry} not found`)
+      }
+
+      return [entry, email]
+    }),
+  )
+}
+
+function constructTxtText(
+  results: Record<string, { moduleCode: string }[]>,
+): string {
+  let txtText = ''
+  // List of modules (A-Z)
+  let uniqueModuleCodes: string[] = []
+  Object.values(results).forEach((stringArray) =>
+    stringArray.forEach((s) => uniqueModuleCodes.push(s.moduleCode)),
+  )
+  uniqueModuleCodes = Array.from(new Set(uniqueModuleCodes)).sort()
+  txtText += 'Stattfindende Module\n\n'
+  uniqueModuleCodes.forEach((mc) => (txtText += mc + '\n'))
+  // List of allocations (A-Z by username)
+  txtText += '\nStudent-Modulcode Zuweisungen\n\n'
+  Object.keys(results)
+    .sort()
+    .forEach((key) => {
+      txtText += key + ': '
+      results[key].forEach((s) => (txtText += s.moduleCode + ', '))
+      txtText += '\n'
+    })
+  return txtText
+}
+
+function mergeLocales(i18n: I18nJson) {
+  return i18n.de && i18n.en ? `${i18n.de} / ${i18n.en}` : i18n.de || i18n.en
+}
+
+// for testing functions that are otherwise not exported
+export const testGetStudentEmails = { getStudentEmails }
+export const testConstructTxtText = { constructTxtText }

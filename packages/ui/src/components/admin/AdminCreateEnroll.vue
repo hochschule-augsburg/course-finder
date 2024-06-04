@@ -164,8 +164,8 @@ async function initFormData() {
     formData.value = {
       ...cloneDeep(phase),
       emailNotificationAt: phase.emailNotificationAt.toISOString(),
-      end: phase.end.toISOString(),
-      start: phase.start.toISOString(),
+      end: phase.end.toISOString().slice(0, 16),
+      start: phase.start.toISOString().slice(0, 16),
     }
 
     return
@@ -173,8 +173,8 @@ async function initFormData() {
   formData.value = {
     description: { de: '', en: '' },
     emailNotificationAt: '',
-    end: '',
-    start: '',
+    end: new Date().toISOString().slice(0, 16),
+    start: new Date().toISOString().slice(0, 16),
     title: { de: '', en: '' },
   }
 }

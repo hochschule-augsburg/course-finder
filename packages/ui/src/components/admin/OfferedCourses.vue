@@ -3,7 +3,8 @@ import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { mdiMagnify, mdiPencil } from '@mdi/js'
+import { trpc } from '@/trpc'
+import { mdiInvoiceTextPlus, mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -20,7 +21,7 @@ import {
 } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
-
+const adminStore = useAdminCoursesStore()
 const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 
 const coursesStore = useAdminCoursesStore()
@@ -30,6 +31,56 @@ const tableOne: Course[] = reactive([...coursesStore.courses])
 const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
+
+const selectedSubject = ref<Course>(adminStore.courses[0])
+const showModalForm = ref(false)
+const onTheFly = ref(true)
+
+function openNewDialog() {
+  selectedSubject.value = {
+    creditPoints: 0,
+    editorUsername: null,
+    extraInfo: null,
+    facultyName: null,
+    infoUrl: null,
+    lecturers: [],
+    moduleCode: '',
+    published: false,
+    semesterHours: 0,
+    title: { de: '', en: '' },
+    varyingCP: {},
+  }
+  showModalForm.value = true
+}
+
+async function createSubject(subject: Course | undefined) {
+  if (!subject) {
+    return
+  }
+  try {
+    const result = await trpc.admin.courses.create.mutate(subject)
+    adminStore.courses.push(result)
+    // Perf is okay
+    adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
+    offeredCoursesArray.value.push({
+      Course: {
+        lecturers: subject.lecturers,
+        title: subject.title,
+      },
+      appointments: { dates: [], type: 'weekly' },
+      externalRegistration: false,
+      extraInfo: null,
+      for: [],
+      maxParticipants: null,
+      minParticipants: 0,
+      moduleCode: subject.moduleCode,
+      moodleCourse: null,
+    })
+    showModalForm.value = false
+  } catch (e) {
+    console.log('Error creating Subject')
+  }
+}
 
 function handlePuttingBackLogic(subject: Course) {
   //Retrieve the data from the shared object
@@ -127,17 +178,17 @@ const searchOffered = ref('')
   <div>
     <VRow>
       <VCol cols="12" md="6">
-        {{ t('available-courses') }}
+        <h3>{{ t('available-courses') }}</h3>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchCourses"
           :label="t('global.search')"
           :prepend-inner-icon="mdiMagnify"
-          placeholder="t('global.search')"
         />
         <div class="off-course">
           <Draggable
             :clone="convertToOfferedCourseData"
+            :empty-insert-threshold="100"
             :list="tableOne"
             class="list-group draggable-container"
             ghost-class="ghost"
@@ -162,22 +213,31 @@ const searchOffered = ref('')
         </div>
       </VCol>
       <VCol cols="12" md="6">
-        {{ t('offered-courses') }}
+        <h3>
+          {{ t('offered-courses') }}
+          <VIcon
+            v-tooltip="t('on-the-fly')"
+            :icon="mdiInvoiceTextPlus"
+            size="25"
+            @click="openNewDialog"
+          />
+        </h3>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchOffered"
           :label="t('global.search')"
           :prepend-inner-icon="mdiMagnify"
-          placeholder="t('global.search')"
         />
         <div class="off-course">
           <Draggable
             :clone="convertToCourse"
+            :empty-insert-threshold="100"
             :list="offeredCoursesArray"
             class="list-group"
             ghost-class="ghost"
             group="courses"
             item-key="moduleCode"
+            force-fallback
           >
             <template #item="{ element, index }">
               <div v-if="filterOffered(element)" class="list-group-item">
@@ -262,6 +322,13 @@ const searchOffered = ref('')
         </div>
       </VCol>
     </VRow>
+    <CourseDialog
+      :on-the-fly="onTheFly"
+      :selected-subject="selectedSubject"
+      :visible="showModalForm"
+      @cancel="showModalForm = false"
+      @submit="createSubject"
+    />
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
@@ -284,6 +351,7 @@ const searchOffered = ref('')
 
 <i18n lang="yaml">
 en:
+  on-the-fly: Create new offered course
   available-courses: Available courses
   offered-courses: Offered courses
   type: Type
@@ -299,6 +367,7 @@ en:
   extra-info: Extra information
   external-registration: External registration
 de:
+  on-the-fly: Neues Angebot erstellen
   available-courses: Verfügbare Kurse
   offered-courses: Angebote Kurse
   type: Typ

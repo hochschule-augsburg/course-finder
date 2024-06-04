@@ -18,7 +18,7 @@ const { locale, t } = useI18n()
 
 <template>
   <div>
-    <VExpansionPanelTitle color="secondary">
+    <VExpansionPanelTitle class="subject-element" color="secondary">
       <EnrollCheckbox v-if="subject.offeredCourse" :subject class="checkbox" />
       <VContainer class="ma-0 ml-2">
         <VRow no-gutters>
