@@ -28,7 +28,9 @@ const phaseState = computed(() => {
     text: orgPhaseStates.find((e) => e.value === state)?.text,
   }
 })
-const phaseStates = orgPhaseStates.filter((e) => !false)
+const phaseStates = orgPhaseStates.filter((e) =>
+  ['FINISHED', 'NOT_STARTED', 'OPEN'].includes(e.value),
+)
 
 async function updateState(newValue: Phase['state']) {
   await coursesStore.updatePhaseState(phaseId, newValue)
@@ -87,14 +89,20 @@ async function updateState(newValue: Phase['state']) {
             </VRow>
           </VCol>
         </VRow>
-        <VRow>
+        <VRow v-if="['DRAWING', 'FINISHED'].includes(phaseState.modelValue)">
           <VCol>
             <h2>{{ t('assignments') }}</h2>
           </VCol>
-        </VRow>
-        <VRow>
           <VCol>
             <AssignmentView :phase-id />
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol cols="12">
+            <h2>{{ t('available-courses') }}</h2>
+          </VCol>
+          <VCol cols="36">
+            <OfferedCoursesTable :phase-id />
           </VCol>
         </VRow>
       </VContainer>
@@ -114,6 +122,7 @@ en:
   phase-state: Phase State
   open-phase: Open Phase
   redraw: Redraw
+  available-courses: Available Courses
 
 de:
   edit: Bearbeiten
@@ -123,4 +132,5 @@ de:
   phase-state: Zustand
   open-phase: Phase eröffnen
   redraw: Neu ziehen
+  available-courses: Verfügbare Kurse
 </i18n>
