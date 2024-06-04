@@ -30,6 +30,7 @@ declare module 'vue' {
     NavbarMobile: typeof import('./src/components/navbar/NavbarMobile.vue')['default']
     OfferedCourses: typeof import('./src/components/admin/OfferedCourses.vue')['default']
     OfferedCoursesTable: typeof import('./src/components/admin/phase/OfferedCoursesTable.vue')['default']
+    PhaseStateButton: typeof import('./src/components/admin/phase/PhaseStateButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubjectDetails: typeof import('./src/components/subject/SubjectDetails.vue')['default']
