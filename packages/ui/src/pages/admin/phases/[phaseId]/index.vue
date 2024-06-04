@@ -5,7 +5,14 @@ import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { VBtn, VCol, VContainer, VRow, VSelect } from 'vuetify/components'
+import {
+  VBtn,
+  VCol,
+  VContainer,
+  VListItem,
+  VRow,
+  VSelect,
+} from 'vuetify/components'
 
 const { t } = useI18n()
 const coursesStore = useAdminCoursesStore()

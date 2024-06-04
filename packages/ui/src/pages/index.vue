@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { homeTour, useTourStore } from '@/stores/TourStore'
 import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
@@ -11,15 +13,35 @@ defineOptions({
 })
 
 const enrollmentStore = useEnrollmentStore()
+const coursesStore = useCoursesStore()
 
 const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
 )
-const subjectView = useLocalStorage(
+const { mobile } = useDisplay()
+const lastSubjectView = useLocalStorage(
   'subjectView',
-  useDisplay().mobile.value ? 'grid' : 'list',
+  mobile.value ? 'grid' : 'list',
+)
+const subjectView = computed(() =>
+  mobile.value ? 'grid' : lastSubjectView.value,
 )
 const enrollFormVisible = ref(false)
+
+const isFirstVisit = useLocalStorage('isFirstVisit', true, {
+  listenToStorageChanges: false,
+})
+
+const { startTour } = useTourStore()
+watch(
+  () => coursesStore.currentPhase,
+  () => {
+    if (isFirstVisit.value && coursesStore.currentPhase) {
+      isFirstVisit.value = false
+      startTour(homeTour)
+    }
+  },
+)
 </script>
 
 <template>
@@ -29,8 +51,10 @@ const enrollFormVisible = ref(false)
     <div class="pt-1">
       <FilterSection />
       <VBtnToggle
-        v-model="subjectView"
+        v-if="!mobile"
+        v-model="lastSubjectView"
         class="px-3 d-flex justify-end"
+        id="subject-view-toggle"
         mandatory
       >
         <VBtn :icon="mdiFormatListBulleted" text="list" value="list" />
@@ -38,7 +62,11 @@ const enrollFormVisible = ref(false)
       </VBtnToggle>
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
-      <div v-if="enrollmentStore.enrolledSubjects.length > 0" class="floating">
+      <div
+        v-if="enrollmentStore.enrolledSubjects.length > 0"
+        class="floating"
+        id="enroll-button"
+      >
         <VBadge :model-value="pendingEnroll" color="primary" dot>
           <VBtn icon @click="enrollFormVisible = true">
             <VIcon :icon="mdiPenLock" />

@@ -35,7 +35,7 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
-  <div v-ripple class="pa-2" @click.stop="handleUpdateEnroll">
+  <div v-ripple class="pa-2 enroll-checkbox" @click.stop="handleUpdateEnroll">
     <VBadge v-if="enrolled" :content="enrolled.points">
       <VIcon :icon="mdiCheckboxMarked" size="large" />
     </VBadge>

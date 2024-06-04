@@ -56,30 +56,35 @@ export const enrollRouter = router({
           message: 'modules not offered for you',
         })
       }
-      await prisma.studentPhase.delete({
-        where: {
-          username_phaseId: {
-            phaseId: ctx.phase.id,
-            username: ctx.user.username,
+
+      const data = {
+        StudentChoice: {
+          createMany: {
+            data: input.data.map((e) => ({
+              moduleCode: e.moduleCode,
+              points: e.points,
+            })),
           },
         },
-      })
-
-      await prisma.studentPhase.create({
-        data: {
-          StudentChoice: {
-            createMany: {
-              data: input.data.map((e) => ({
-                moduleCode: e.moduleCode,
-                points: e.points,
-              })),
+        creditsNeeded: input.creditsNeeded,
+        phaseId: ctx.phase.id,
+        username: ctx.user.username,
+      }
+      prisma.$transaction([
+        prisma.studentChoice.deleteMany({
+          where: { phaseId: ctx.phase.id, username: ctx.user.username },
+        }),
+        prisma.studentPhase.upsert({
+          create: data,
+          update: data,
+          where: {
+            username_phaseId: {
+              phaseId: ctx.phase.id,
+              username: ctx.user.username,
             },
           },
-          creditsNeeded: input.creditsNeeded,
-          phaseId: ctx.phase.id,
-          username: ctx.user.username,
-        },
-      })
+        }),
+      ])
 
       return getStudentChoices(ctx.phase.id, ctx.user.username)
     }),

@@ -1,12 +1,12 @@
 import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useAdminCoursesStore } from './AdminCoursesStore'
 
 export const useAdminAssignStore = defineStore('admin-assign', () => {
   const coursesStore = useAdminCoursesStore()
-  const assignments = ref<
+  const assignmentsRaw = ref<
     Record<
       number,
       Array<
@@ -17,6 +17,23 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
       >
     >
   >({})
+  const assignments = computed(() => {
+    return Object.fromEntries(
+      Object.entries(assignmentsRaw.value).map(([phaseId, tries]) => {
+        return [
+          phaseId,
+          tries.map((tryNo) => {
+            return tryNo.map((trie) => ({
+              ...trie,
+              Course: coursesStore.phaseOfferedCourses[Number(phaseId)]?.find(
+                (e) => e.moduleCode === trie.moduleCode,
+              ),
+            }))
+          }),
+        ]
+      }),
+    )
+  })
 
   void init()
   return {
@@ -32,7 +49,7 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
     if (assignments.value[phaseId]) {
       return
     }
-    assignments.value[phaseId] = await trpc.admin.assign.list.query({
+    assignmentsRaw.value[phaseId] = await trpc.admin.assign.list.query({
       phaseId,
     })
   }
@@ -52,6 +69,7 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
     if (!assignments.value[phaseId]) {
       assignments.value[phaseId] = []
     }
-    assignments.value[phaseId][tryNo] = result
+    assignmentsRaw.value[phaseId][tryNo] = result
+    return tryNo
   }
 })

@@ -53,7 +53,7 @@ const phaseStats = computedAsync(async () => {
         <VCard :title="t('statistics')" class="h-100" link>
           <VCardText>
             <p class="text-center text-weight-bold" style="font-size: 4rem">
-              {{ phaseStats?.studentCount ?? 0 }}
+              <span>{{ phaseStats?.studentCount ?? '_' }}</span>
             </p>
           </VCardText>
           <VCardSubtitle>{{ t('registered-students') }}</VCardSubtitle>

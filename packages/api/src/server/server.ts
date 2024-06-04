@@ -1,11 +1,13 @@
 import { fastifyCookie } from '@fastify/cookie'
 import { fastifyCors } from '@fastify/cors'
+import { fastifyMultipart } from '@fastify/multipart'
 import { fastifySession } from '@fastify/session'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
 import type { ClientUserExtended } from '../prisma/PrismaTypes'
 
+import { adminFastifyRoutes } from '../routes/admin/AdminFastifyRoutes'
 import { appRouter } from '../routes/router'
 import { createContext } from './context'
 
@@ -26,6 +28,7 @@ export async function createServer() {
 
   const server = fastify({ logger: true })
 
+  await server.register(fastifyMultipart)
   await server.register(fastifyCookie)
   await server.register(fastifySession, {
     cookie: {
@@ -50,10 +53,12 @@ export async function createServer() {
     },
   })
 
-  void server.register(fastifyTRPCPlugin, {
-    prefix: '/trpc',
+  await server.register(fastifyTRPCPlugin, {
+    prefix: '/api/trpc',
     trpcOptions: { createContext, router: appRouter },
   })
+
+  await server.register(adminFastifyRoutes)
 
   async function stop() {
     await server.close()

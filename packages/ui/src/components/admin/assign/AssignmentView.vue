@@ -2,7 +2,7 @@
 import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, nextTick, onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -17,7 +17,7 @@ import {
 } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 
 const assignStore = useAdminAssignStore()
 const coursesStore = useAdminCoursesStore()
@@ -38,7 +38,12 @@ const publishing = ref(false)
 const published = ref(false)
 
 onBeforeMount(async () => {
-  await assignStore.fetchAssignments(props.phaseId)
+  await Promise.all([
+    assignStore.fetchAssignments(props.phaseId),
+    coursesStore.fetchOfferedCourses(props.phaseId),
+  ])
+  tryNo.value = (assignStore.assignments[props.phaseId]?.length || 1) - 1
+  void statsStore.fetchPhase(props.phaseId)
 })
 
 async function publish() {
@@ -51,6 +56,12 @@ async function publish() {
   } finally {
     publishing.value = false
   }
+}
+
+async function newAssignment() {
+  const newTryNo = await assignStore.newAssignment(props.phaseId)
+  await nextTick()
+  tryNo.value = newTryNo
 }
 </script>
 
@@ -80,7 +91,7 @@ async function publish() {
               :disabled="!!drawingObstacle"
               color="success"
               flat
-              @click="assignStore.newAssignment(phaseId)"
+              @click="newAssignment"
             >
               {{ t('new-assignment') }}
             </VBtn>
@@ -101,13 +112,23 @@ async function publish() {
             <tr>
               <th>{{ t('module-code') }}</th>
               <th>{{ t('title') }}</th>
+              <th>{{ t('min') }}</th>
+              <th>{{ t('max') }}</th>
               <th>{{ t('count') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="course in assignment" :key="course.moduleCode">
               <td>{{ course.moduleCode }}</td>
-              <!-- <td>{{ course.title }}</td> -->
+              <td>
+                {{
+                  locale === 'de'
+                    ? course.Course?.Course.title.de
+                    : course.Course?.Course.title.de
+                }}
+              </td>
+              <td>{{ course.Course?.minParticipants }}</td>
+              <td>{{ course.Course?.maxParticipants }}</td>
               <td>{{ course.count }}</td>
             </tr>
           </tbody>
@@ -133,8 +154,10 @@ en:
   new-assignment: New Assignment
   module-code: Module Code
   title: Title
-  count: Count
+  count: Assignment Count
   published: Published iteration {0}
+  min: Min
+  max: Max
   obstacles:
     not-in-drawing: Not in drawing state
     not-enough-students: Not enough students
@@ -145,7 +168,9 @@ de:
   new-assignment: Neue Auslosung
   module-code: Modulcode
   title: Titel
-  count: Anzahl
+  count: Anzahl Auslosungen
+  min: Min
+  max: Max
   published: Iteration {0} Veröffentlicht
   obstacles:
     not-in-drawing: Nicht im Auslosungsstatus
