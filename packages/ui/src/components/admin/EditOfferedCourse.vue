@@ -2,6 +2,7 @@
 import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
 import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTypes'
 
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import {
   abbrFieldsOfStudyMap,
   fieldsOfStudy,
@@ -56,19 +57,14 @@ watchEffect(() => {
     ...cloneDeep(props.offeredCourse),
     appointments: {
       dates: props.offeredCourse?.appointments.dates.map((e) => ({
-        from: addHours(new Date(e.from), 2).toISOString().slice(0, 16),
-        to: addHours(new Date(e.to), 2).toISOString().slice(0, 16),
+        from: getLocalISOString(e.from),
+        to: getLocalISOString(e.to),
       })),
       type: props.offeredCourse?.appointments.type,
     },
     for: props.offeredCourse.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e),
   }
 })
-
-//TODO: Better way to do this?
-function addHours(date: Date, hours: number) {
-  return new Date(date.getTime() + hours * 60 * 60 * 1000)
-}
 
 const { locale, t } = useI18n()
 
@@ -96,13 +92,16 @@ function cancel() {
 }
 
 function addDate() {
-  const last = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
+  const lastTo = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
+
   formData.value?.appointments.dates.push({
-    from: '',
-    to: '',
+    from: getLocalISOString(lastTo),
+    to: getLocalISOString(lastTo),
   })
+}
+
+function addDateWeekly() {
   datesArray.value.push({ endTime: '', startTime: '', weekday: '' })
-  console.log(datesArray.value)
 }
 
 function removeDate() {
@@ -119,13 +118,13 @@ function updateWeeklyAppointment(index: number) {
   ) {
     const today = startOfWeek(new Date(), { weekStartsOn: 1 })
     const daysOfWeek = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
+      t('monday'),
+      t('tuesday'),
+      t('wednesday'),
+      t('thursday'),
+      t('friday'),
+      t('saturday'),
+      t('sunday'),
     ]
     const dayIndex = daysOfWeek.indexOf(dateObject.weekday) + 1
 
@@ -141,8 +140,6 @@ function updateWeeklyAppointment(index: number) {
       }
       console.log({ from: fromTime, to: toTime })
     }
-  } else {
-    console.log('event fired but data not completed')
   }
 }
 
@@ -155,6 +152,11 @@ const datesArray = ref<
 >([])
 
 function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
+  let localeString = 'en-US'
+  if (locale.value === 'de') {
+    localeString = 'de-DE'
+  }
+
   dates.forEach(function (date) {
     const fromDate = new Date(date.from)
     const toDate = new Date(date.to)
@@ -162,7 +164,9 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
     if (!isNaN(fromDate.getTime()) && !isNaN(toDate.getTime())) {
       const startTime = fromDate.toTimeString().split(' ')[0].slice(0, -3)
       const endTime = toDate.toTimeString().split(' ')[0].slice(0, -3)
-      const weekday = fromDate.toLocaleDateString('en-US', { weekday: 'long' })
+      const weekday = fromDate.toLocaleDateString(localeString, {
+        weekday: 'long',
+      })
 
       const dateEntry = {
         endTime: endTime,
@@ -279,13 +283,13 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                     <VSelect
                       v-model="interval.weekday"
                       :items="[
-                        'Monday',
-                        'Tuesday',
-                        'Wednesday',
-                        'Thursday',
-                        'Friday',
-                        'Saturday',
-                        'Sunday',
+                        t('monday'),
+                        t('tuesday'),
+                        t('wednesday'),
+                        t('thursday'),
+                        t('friday'),
+                        t('saturday'),
+                        t('sunday'),
                       ]"
                       label="Weekday"
                       @update:model-value="updateWeeklyAppointment(index)"
@@ -298,7 +302,7 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                       type="time"
                       hide-details
                       required
-                      @update:focused="updateWeeklyAppointment(index)"
+                      @update:model-value="updateWeeklyAppointment(index)"
                     />
                   </VCol>
                   <VCol cols="12" sm="4">
@@ -308,11 +312,13 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                       type="time"
                       hide-details
                       required
-                      @update:focused="updateWeeklyAppointment(index)"
+                      @update:model-value="updateWeeklyAppointment(index)"
                     />
                   </VCol>
                 </VRow>
               </div>
+              <br />
+              <VBtn @click="addDateWeekly"> {{ t('add-date') }} </VBtn>
             </div>
             <div v-else>
               <div
@@ -322,7 +328,6 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                 <div class="dateId-box" style="display: flex">
                   <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
                 </div>
-                {{ console.log(datesArray) }}
                 <VRow>
                   <VCol cols="12" sm="6">
                     <VTextField
@@ -344,9 +349,9 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
                   </VCol>
                 </VRow>
               </div>
+              <br />
+              <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
             </div>
-            <br />
-            <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
           </VCol>
           <VCol cols="12">
             <VTextarea
@@ -385,6 +390,13 @@ en:
   minimum-participants: Minimum participants
   maximum-participants: Maximum participants
   moodle-course-link: Moodle course link
+  monday: 'Monday'
+  tuesday: 'Tuesday'
+  wednesday: 'Wednesday'
+  thursday: 'Thursday'
+  friday: 'Friday'
+  saturday: 'Saturday'
+  sunday: 'Sunday'
   appointments: Appointment(s)
   from: From
   to: To
@@ -401,6 +413,13 @@ de:
   title: 'Bearbeiten - {0}'
   minimum-participants: Mindestteilnehmer
   maximum-participants: Maximale Teilnehmer
+  monday: 'Montag'
+  tuesday: 'Dienstag'
+  wednesday: 'Mittwoch'
+  thursday: 'Donnerstag'
+  friday: 'Freitag'
+  saturday: 'Samstag'
+  sunday: 'Sonntag'
   moodle-course-link: Moodle-Kurslink
   appointments: Termin(e)
   from: Von

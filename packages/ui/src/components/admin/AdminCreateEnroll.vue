@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Phase } from '@/stores/admin/AdminCoursesStore'
 
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
 import { isWithinInterval } from 'date-fns'
@@ -163,10 +164,9 @@ async function initFormData() {
     )
     formData.value = {
       ...cloneDeep(phase),
-      //TODO: Adjust time for prefill +2hours
-      emailNotificationAt: phase.emailNotificationAt.toISOString(),
-      end: phase.end.toISOString().slice(0, 16),
-      start: phase.start.toISOString().slice(0, 16),
+      emailNotificationAt: getLocalISOString(phase.emailNotificationAt),
+      end: getLocalISOString(phase.end),
+      start: getLocalISOString(phase.start),
     }
 
     return
@@ -174,8 +174,8 @@ async function initFormData() {
   formData.value = {
     description: { de: '', en: '' },
     emailNotificationAt: '',
-    end: new Date().toISOString().slice(0, 16),
-    start: new Date().toISOString().slice(0, 16),
+    end: getLocalISOString(new Date()),
+    start: getLocalISOString(new Date()),
     title: { de: '', en: '' },
   }
 }
