@@ -17,7 +17,7 @@ export type Subject = {
 export const useCoursesStore = defineStore('courses', () => {
   const userStore = useUserStore()
   const filtersStore = useFiltersStore()
-  const currentPhase = ref<EnrollPhase>()
+  const currentPhase = ref<EnrollPhase | null>()
   const subjects = ref<Subject[]>([])
   const filteredSubjects = ref<Subject[]>([])
   const enrollmentStore = useEnrollmentStore()

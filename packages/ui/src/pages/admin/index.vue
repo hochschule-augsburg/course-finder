@@ -34,7 +34,7 @@ const phaseStats = computedAsync(async () => {
     </VRow>
 
     <VRow justify="center">
-      <VCol cols="12" md="4" sm="6">
+      <VCol v-if="adminCourses.currentPhase" cols="12" md="4" sm="6">
         <VCard
           :title="t('current-phase')"
           :to="`admin/phases/${adminCourses.currentPhase?.id}`"
@@ -49,7 +49,7 @@ const phaseStats = computedAsync(async () => {
         </VCard>
       </VCol>
 
-      <VCol cols="10" md="3" sm="6">
+      <VCol v-if="adminCourses.currentPhase" cols="10" md="3" sm="6">
         <VCard :title="t('statistics')" class="h-100" link>
           <VCardText>
             <p class="text-center text-weight-bold" style="font-size: 4rem">

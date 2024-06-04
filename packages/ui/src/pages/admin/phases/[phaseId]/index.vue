@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { Phase } from '@/stores/admin/AdminCoursesStore'
+
 import { phaseStates as orgPhaseStates } from '@/helper/enums/phaseStates'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { computed } from 'vue'
@@ -26,19 +28,11 @@ const phaseState = computed(() => {
     text: orgPhaseStates.find((e) => e.value === state)?.text,
   }
 })
-const phaseStates = computed(() => {
-  let states = orgPhaseStates.slice()
-  if (phaseState.value.modelValue !== 'FINISHED') {
-    states = states.filter((e) => e.value !== 'FINISHED')
-  }
-  if (
-    phaseState.value.modelValue !== 'NOT_STARTED' ||
-    coursesStore.phases[phaseId].start.getTime() < Date.now()
-  ) {
-    states = states.filter((e) => e.value !== 'NOT_STARTED')
-  }
-  return states
-})
+const phaseStates = orgPhaseStates.filter((e) => !false)
+
+async function updateState(newValue: Phase['state']) {
+  await coursesStore.updatePhaseState(phaseId, newValue)
+}
 </script>
 
 <template>
@@ -59,15 +53,20 @@ const phaseStates = computed(() => {
                 <VBtn :to="`${phaseId}/edit`">{{ t('edit') }}</VBtn>
               </VCol>
               <VCol cols="8">
+                <VBtn
+                  v-if="phaseState.modelValue === 'NOT_STARTED'"
+                  @click="updateState('OPEN')"
+                >
+                  {{ t('open-phase') }}
+                </VBtn>
                 <VSelect
+                  v-else-if="phaseState.modelValue !== 'FINISHED'"
                   :item-title="(e) => t(`phase-states.${e.text}`)"
                   :item-value="(e) => e.value"
                   :items="phaseStates"
                   :label="t('phase-state')"
                   :model-value="phaseState.modelValue"
-                  @update:model-value="
-                    (value) => coursesStore.updatePhaseState(phaseId, value)
-                  "
+                  @update:model-value="(value) => updateState(value)"
                 >
                   <template #item="{ props: itemProps, item }">
                     <VListItem
@@ -81,6 +80,9 @@ const phaseStates = computed(() => {
                     }}</span>
                   </template>
                 </VSelect>
+                <VBtn v-else @click="updateState('DRAWING')">
+                  {{ t('redraw') }}
+                </VBtn>
               </VCol>
             </VRow>
           </VCol>
@@ -110,6 +112,8 @@ en:
   assignments: Assignments
   phase-not-found: Phase not found
   phase-state: Phase State
+  open-phase: Open Phase
+  redraw: Redraw
 
 de:
   edit: Bearbeiten
@@ -117,4 +121,6 @@ de:
   assignments: Zuordnungen
   phase-not-found: Phase nicht gefunden
   phase-state: Zustand
+  open-phase: Phase eröffnen
+  redraw: Neu ziehen
 </i18n>

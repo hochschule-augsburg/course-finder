@@ -114,9 +114,6 @@ export const enrollRouter = router({
           })),
         }
       }),
-    getCurrentPhase: adminProcedure.query(async () => {
-      return (await prisma.enrollphase.findFirst({})) ?? undefined
-    }),
     list: adminProcedure.query(async () => {
       return Object.fromEntries(
         (

@@ -7,7 +7,6 @@ import type {
 
 import { trpc } from '@/trpc'
 import { useAsyncState } from '@vueuse/core'
-import { isWithinInterval } from 'date-fns'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -26,10 +25,7 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
 
   const currentPhase = computed(() => {
     return Object.values(phases.value).find((e) =>
-      isWithinInterval(new Date(), {
-        end: new Date(e.end),
-        start: new Date(e.start),
-      }),
+      ['CLOSED', 'DRAWING', 'OPEN'].includes(e.state),
     )
   })
   return {
