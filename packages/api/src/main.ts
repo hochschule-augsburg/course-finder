@@ -8,7 +8,7 @@ await prisma.$connect()
 
 // Start the registration cycle
 startPhaseSchedulingFromDatabase()
-startScheduledDeletion
+startScheduledDeletion()
 
 
 await server.start()

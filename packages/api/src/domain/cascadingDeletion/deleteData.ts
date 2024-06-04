@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import schedule from 'node-schedule';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../prisma/prisma';
 
 export async function deleteOldData(cutoffDate: Date): Promise<void> {
   try {
