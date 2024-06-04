@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import ballot from '@/assets/ballot.jpg'
-import compass from '@/assets/compass.jpg'
+import ballot from '@/assets/ballot.png'
+import compass from '@/assets/compass.png'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import { computedAsync } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import { VCard, VCardSubtitle, VCardText, VImg } from 'vuetify/components'
+import { useTheme } from 'vuetify'
 const { t } = useI18n()
+const theme = useTheme()
 const adminCourses = useAdminCoursesStore()
 const adminStats = useAdminStatsStore()
 
@@ -48,10 +50,18 @@ const phaseStats = computedAsync(async () => {
         </VCard>
       </template>
       <VCard :title="t('all-courses')" class="tile" to="admin/courses">
-        <VImg :src="compass" height="12rem" />
+        <VImg :src="compass" height="12rem" 
+         :class="{
+          img:theme.global.name.value === 'customDarkTheme',
+        }"
+         />
       </VCard>
       <VCard :title="t('all-phases')" class="tile" to="admin/phases">
-        <VImg :src="ballot" height="12rem" />
+        <VImg :src="ballot" height="12rem"
+         :class="{
+          img:theme.global.name.value === 'customDarkTheme',
+        }"
+         />
       </VCard>
     </div>
   </div>
@@ -61,6 +71,10 @@ const phaseStats = computedAsync(async () => {
 .tile {
   height: 15rem;
   width: 25rem;
+
+  .img {
+    filter: invert(1);
+  }
 }
 </style>
 
