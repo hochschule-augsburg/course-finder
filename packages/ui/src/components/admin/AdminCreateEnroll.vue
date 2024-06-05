@@ -173,7 +173,7 @@ async function initFormData() {
   }
   formData.value = {
     description: { de: '', en: '' },
-    emailNotificationAt: '',
+    emailNotificationAt: getLocalISOString(new Date()),
     end: getLocalISOString(new Date()),
     start: getLocalISOString(new Date()),
     title: { de: '', en: '' },
@@ -191,7 +191,7 @@ async function initFormData() {
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
       <VRow justify="center">
-        <VCol cols="10" sm="3">
+        <VCol cols="12" sm="3">
           <VTextField
             v-model="formData.start"
             :label="t('start-date')"
@@ -199,7 +199,7 @@ async function initFormData() {
             required
           />
         </VCol>
-        <VCol cols="10" sm="3">
+        <VCol cols="12" sm="3">
           <VTextField
             v-model="formData.end"
             :label="t('end-date')"
@@ -207,7 +207,7 @@ async function initFormData() {
             required
           />
         </VCol>
-        <VCol cols="10" sm="3">
+        <VCol cols="12" sm="3">
           <VTextField
             v-model="formData.emailNotificationAt"
             :label="t('sent-email-notification-at')"

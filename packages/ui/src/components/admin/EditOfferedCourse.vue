@@ -263,20 +263,6 @@ const weekdayItems = [
               required
             />
           </VCol>
-          <VCol cols="6">
-            <VTextField
-              v-model="formData.moodleCourse"
-              :label="t('moodle-course-link')"
-              type="url"
-              required
-            />
-          </VCol>
-          <VCol cols="6">
-            <VSwitch
-              v-model="formData.externalRegistration"
-              :label="t('external-registration')"
-            />
-          </VCol>
           <VCol cols="12" sm="6">
             <VSelect
               v-model="formData.for"
@@ -294,12 +280,26 @@ const weekdayItems = [
               </template>
             </VSelect>
           </VCol>
+          <VCol cols="12" sm="6">
+            <VTextField
+              v-model="formData.moodleCourse"
+              :label="t('moodle-course-link')"
+              type="url"
+              required
+            />
+          </VCol>
           <VCol>
             <VRadioGroup v-model="formData.appointments.type" inline>
               <VRadio :label="t('weekly')" value="weekly" />
               <VRadio :label="t('block')" value="block" />
               <VRadio :label="t('irregular')" value="irregular" />
             </VRadioGroup>
+          </VCol>
+          <VCol cols="6">
+            <VSwitch
+              v-model="formData.externalRegistration"
+              :label="t('external-registration')"
+            />
           </VCol>
           <VCol cols="12">
             <VIcon :icon="mdiCalendar" />
@@ -311,14 +311,12 @@ const weekdayItems = [
                 )"
                 :key="index"
               >
-                <div class="dateId-box" style="display: flex">
-                  <VIcon
-                    :icon="mdiTrashCanOutline"
-                    @click="removeDateWeekly(index)"
-                  />
-                </div>
-                <VRow>
-                  <VCol cols="12" sm="4">
+                <VRow class="flex" dense>
+                  <VCol
+                    cols="12"
+                    sm="auto"
+                    style="flex-grow: 1; flex-shrink: 1"
+                  >
                     <VSelect
                       v-model="interval.weekday"
                       :items="weekdayItems"
@@ -338,7 +336,11 @@ const weekdayItems = [
                       @update:model-value="updateWeeklyAppointment(index)"
                     />
                   </VCol>
-                  <VCol cols="12" sm="4">
+                  <VCol
+                    cols="12"
+                    sm="auto"
+                    style="flex-grow: 1; flex-shrink: 1"
+                  >
                     <VTextField
                       v-model="interval.endTime"
                       :label="t('to')"
@@ -346,12 +348,23 @@ const weekdayItems = [
                       hide-details
                       required
                       @update:model-value="updateWeeklyAppointment(index)"
-                    />
+                    >
+                      <template #append>
+                        <div class="dateId-box">
+                          <VIcon
+                            :icon="mdiTrashCanOutline"
+                            size="30"
+                            @click="removeDateWeekly(index)"
+                          />
+                        </div>
+                      </template>
+                    </VTextField>
                   </VCol>
                 </VRow>
               </div>
               <br />
               <VBtn @click="addDateWeekly"> {{ t('add-date') }} </VBtn>
+              <br />
             </div>
             <div v-else>
               <div
@@ -389,6 +402,7 @@ const weekdayItems = [
               <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
             </div>
           </VCol>
+          <div><br /></div>
           <VCol cols="12">
             <VTextarea
               v-model="formData.extraInfo"
