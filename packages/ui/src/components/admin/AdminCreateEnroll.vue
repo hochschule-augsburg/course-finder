@@ -136,6 +136,7 @@ async function createEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
+      createdAt: new Date(),
       emailNotificationAt: new Date(formData.value.emailNotificationAt),
       end: new Date(formData.value.end),
       id: 0,
@@ -171,6 +172,7 @@ async function initFormData() {
     return
   }
   formData.value = {
+    createdAt: new Date(),
     description: { de: '', en: '' },
     emailNotificationAt: '',
     end: new Date().toISOString().slice(0, 16),
