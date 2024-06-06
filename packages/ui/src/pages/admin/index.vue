@@ -55,7 +55,7 @@ const phaseStats = computedAsync(async () => {
             img: theme.global.name.value === 'customDarkTheme',
           }"
           :src="compass"
-          height="12rem"
+          height="10rem"
         />
       </VCard>
       <VCard :title="t('all-phases')" class="tile" to="admin/phases">
@@ -64,7 +64,7 @@ const phaseStats = computedAsync(async () => {
             img: theme.global.name.value === 'customDarkTheme',
           }"
           :src="ballot"
-          height="12rem"
+          height="10rem"
         />
       </VCard>
     </div>
