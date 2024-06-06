@@ -190,28 +190,31 @@ async function initFormData() {
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
-      <VRow>
-        <VCol cols="12" sm="4">
+      <VRow dense>
+        <VCol cols="12" md="4" sm="6">
           <VTextField
             v-model="formData.start"
             :label="t('start-date')"
             type="datetime-local"
+            hide-details
             required
           />
         </VCol>
-        <VCol cols="12" sm="4">
+        <VCol cols="12" md="4" sm="6">
           <VTextField
             v-model="formData.end"
             :label="t('end-date')"
             type="datetime-local"
+            hide-details
             required
           />
         </VCol>
-        <VCol cols="12" sm="4">
+        <VCol cols="12" md="4">
           <VTextField
             v-model="formData.emailNotificationAt"
             :label="t('sent-email-notification-at')"
             type="datetime-local"
+            hide-details
             required
           />
         </VCol>
@@ -221,6 +224,7 @@ async function initFormData() {
           <VTextField
             v-model="formData.title.en"
             :label="t('title-en')"
+            hide-details
             required
           />
         </VCol>
@@ -228,6 +232,7 @@ async function initFormData() {
           <VTextField
             v-model="formData.title.de"
             :label="t('title-de')"
+            hide-details
             required
           />
         </VCol>
@@ -237,6 +242,7 @@ async function initFormData() {
           <VTextarea
             v-model="formData.description.en"
             :label="t('description-en')"
+            hide-details
             required
           />
         </VCol>
@@ -244,6 +250,7 @@ async function initFormData() {
           <VTextarea
             v-model="formData.description.de"
             :label="t('description-de')"
+            hide-details
             required
           />
         </VCol>
@@ -255,16 +262,17 @@ async function initFormData() {
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
       <VRow>
-        <VCol sm="9">
+        <VCol sm="8">
           <VSelect
             :items="oldPhasesSelect"
             :label="t('load-old-phases')"
             :model-value="loadedOldPhase"
             item-title="text"
+            hide-details
             @update:model-value="loadOldPhase"
           />
         </VCol>
-        <VCol sm="3">
+        <VCol sm="4">
           <VBtn :text="t('clear')" @click="clearSelection" />
         </VCol>
       </VRow>

@@ -105,9 +105,8 @@ function deleteSubject() {
   <VDialog
     :model-value="visible"
     max-width="1000"
-    min-width="800"
+    min-width="auto"
     transition="false"
-    width="auto"
     @update:model-value="$emit('cancel')"
   >
     <VCard
@@ -127,6 +126,7 @@ function deleteSubject() {
           <VTextField
             v-model="formData.moduleCode"
             :label="t('module-code')"
+            min-width="150px"
             autofocus
             hide-details
             required
@@ -139,6 +139,7 @@ function deleteSubject() {
             <VTextField
               v-model="formData.title.en"
               :label="t('title-en')"
+              hide-details
               required
             />
           </VCol>
@@ -149,7 +150,7 @@ function deleteSubject() {
               required
             />
           </VCol>
-          <VCol>
+          <VCol cols="12" md="4" sm="6">
             <VTextField
               v-model="formData.editorUsername"
               :label="t('editor-username')"
@@ -161,6 +162,7 @@ function deleteSubject() {
               v-model="formData.semesterHours"
               :label="t('semester-hours')"
               type="number"
+              hide-details
               required
             />
           </VCol>
@@ -169,10 +171,11 @@ function deleteSubject() {
               v-model="formData.creditPoints"
               :label="t('credit-points')"
               type="number"
+              hide-details
               required
             />
           </VCol>
-          <VCol>
+          <VCol cols="12" md="4" sm="6">
             <VTextField
               v-model="formData.varyingCP"
               :label="t('varying-cp')"
@@ -190,6 +193,7 @@ function deleteSubject() {
             <VTextarea
               v-model="formData.extraInfo"
               :label="t('extra-info')"
+              hide-details
               required
             />
           </VCol>

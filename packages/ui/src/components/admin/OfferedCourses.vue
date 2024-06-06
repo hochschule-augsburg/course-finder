@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { Course } from '@/stores/admin/AdminCoursesStore'
+import type { Ref } from 'vue'
 
 import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
 import { mdiInvoiceTextPlus, mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
-import { reactive, ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
 import {
@@ -28,7 +29,7 @@ const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 const coursesStore = useAdminCoursesStore()
 const { locale, t } = useI18n()
 
-const tableOne: Course[] = reactive([...coursesStore.courses])
+const tableOne: Ref<Course[]> = ref([...coursesStore.courses])
 const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
@@ -36,6 +37,25 @@ const removeStore = ref<OfferedCourseData[]>([])
 const selectedSubject = ref<Course>(adminStore.courses[0])
 const showModalForm = ref(false)
 const onTheFly = ref(true)
+
+watch(
+  offeredCoursesArray,
+  () => {
+    console.log(tableOne.value)
+    tableOne.value = removeLoadedCourses()
+    console.log(tableOne.value)
+  },
+  { immediate: false },
+)
+
+function removeLoadedCourses() {
+  tableOne.value = [...coursesStore.courses]
+  return tableOne.value.filter((data) => {
+    return !offeredCoursesArray.value.some(
+      (offData) => offData.moduleCode === data.moduleCode,
+    )
+  })
+}
 
 function openNewDialog() {
   selectedSubject.value = {
