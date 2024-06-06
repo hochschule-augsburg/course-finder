@@ -101,7 +101,20 @@ function addDate() {
 }
 
 function addDateWeekly() {
-  datesArray.value.push({ endTime: '', startTime: '', weekday: '' })
+  const last = datesArray.value.at(-1)
+  if (last) {
+    datesArray.value.push({
+      endTime: last.endTime,
+      startTime: last.startTime,
+      weekday: last.weekday,
+    })
+  } else {
+    datesArray.value.push({
+      endTime: '00:00',
+      startTime: '00:00',
+      weekday: '',
+    })
+  }
 }
 
 function removeDate(index: number) {
@@ -159,7 +172,7 @@ function updateWeeklyAppointment(index: number) {
     ]
     const dayIndex = daysOfWeek.indexOf(dateObject.weekday) + 1
 
-    const appointmentDate = setDay(today, dayIndex, { weekStartsOn: 1 })
+    const appointmentDate = setDay(today, dayIndex)
     const formattedDate = format(appointmentDate, 'yyyy-MM-dd')
     const fromTime = `${formattedDate}T${dateObject.startTime}`
     const toTime = `${formattedDate}T${dateObject.endTime}`
@@ -311,15 +324,12 @@ const weekdayItems = [
                 )"
                 :key="index"
               >
-                <VRow class="flex" dense>
-                  <VCol
-                    cols="12"
-                    sm="auto"
-                    style="flex-grow: 1; flex-shrink: 1"
-                  >
+                <VRow dense>
+                  <VCol cols="12" sm="4">
                     <VSelect
                       v-model="interval.weekday"
                       :items="weekdayItems"
+                      hide-details="auto"
                       item-title="weekday"
                       item-value="value"
                       label="Weekday"
@@ -336,11 +346,7 @@ const weekdayItems = [
                       @update:model-value="updateWeeklyAppointment(index)"
                     />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    sm="auto"
-                    style="flex-grow: 1; flex-shrink: 1"
-                  >
+                  <VCol cols="12" sm="4">
                     <VTextField
                       v-model="interval.endTime"
                       :label="t('to')"
@@ -361,6 +367,7 @@ const weekdayItems = [
                     </VTextField>
                   </VCol>
                 </VRow>
+                <VDivider :thickness="2" class="mt-3 mb-3 hidden-sm-and-up" />
               </div>
               <br />
               <VBtn @click="addDateWeekly"> {{ t('add-date') }} </VBtn>
