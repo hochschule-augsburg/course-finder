@@ -184,14 +184,14 @@ async function initFormData() {
 <template>
   <VForm>
     <VContainer v-if="formData">
-      <VRow justify="center">
+      <VRow>
         <VCol cols="12" sm="5">
           <h1>{{ t(phaseId ? 'edit-enrollment' : 'create-enrollment') }}</h1>
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="3">
+      <VRow>
+        <VCol cols="12" sm="4">
           <VTextField
             v-model="formData.start"
             :label="t('start-date')"
@@ -199,7 +199,7 @@ async function initFormData() {
             required
           />
         </VCol>
-        <VCol cols="12" sm="3">
+        <VCol cols="12" sm="4">
           <VTextField
             v-model="formData.end"
             :label="t('end-date')"
@@ -207,7 +207,7 @@ async function initFormData() {
             required
           />
         </VCol>
-        <VCol cols="12" sm="3">
+        <VCol cols="12" sm="4">
           <VTextField
             v-model="formData.emailNotificationAt"
             :label="t('sent-email-notification-at')"
@@ -216,15 +216,15 @@ async function initFormData() {
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="5">
+      <VRow>
+        <VCol cols="12" sm="6">
           <VTextField
             v-model="formData.title.en"
             :label="t('title-en')"
             required
           />
         </VCol>
-        <VCol cols="12" sm="5">
+        <VCol cols="12" sm="6">
           <VTextField
             v-model="formData.title.de"
             :label="t('title-de')"
@@ -232,15 +232,15 @@ async function initFormData() {
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="10">
+      <VRow>
+        <VCol cols="12">
           <VTextarea
             v-model="formData.description.en"
             :label="t('description-en')"
             required
           />
         </VCol>
-        <VCol cols="12" sm="10">
+        <VCol cols="12">
           <VTextarea
             v-model="formData.description.de"
             :label="t('description-de')"
@@ -248,14 +248,14 @@ async function initFormData() {
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="5">
+      <VRow>
+        <VCol cols="12" sm="7">
           <h1>{{ t('offered-courses') }}</h1>
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol sm="7">
+      <VRow>
+        <VCol sm="9">
           <VSelect
             :items="oldPhasesSelect"
             :label="t('load-old-phases')"
@@ -268,23 +268,22 @@ async function initFormData() {
           <VBtn :text="t('clear')" @click="clearSelection" />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="10">
+      <VRow>
+        <VCol cols="12">
           <OfferedCourses
             v-if="adminCoursesStore.isInit"
             v-model="sharedObject"
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="5">
+      <VRow>
+        <VCol class="text-right">
           <VBtn
             :text="t(phaseId ? 'global.save' : 'create-enrollment')"
-            justify="center"
+            class="ms-auto"
             @click="submit"
           />
         </VCol>
-        <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
     </VContainer>
   </VForm>

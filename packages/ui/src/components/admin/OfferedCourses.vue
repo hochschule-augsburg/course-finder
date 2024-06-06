@@ -11,6 +11,7 @@ import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
 import {
   VCard,
+  VCardItem,
   VCardText,
   VCardTitle,
   VCol,
@@ -242,24 +243,31 @@ const searchOffered = ref('')
             <template #item="{ element, index }">
               <div v-if="filterOffered(element)" class="list-group-item">
                 <VCard
-                  class="hoverable-card"
+                  class="hoverable-card mx-auto"
                   color="secondary"
                   rounded="0"
                   hover
                 >
-                  <VCardTitle>
-                    {{
-                      locale === 'de'
-                        ? element.Course.title.de
-                        : element.Course.title.en
-                    }}
-                    <VIcon
-                      :icon="mdiPencil"
-                      class="pencil-icon"
-                      size="20"
-                      @click="editOfferedCourse = index"
-                    />
-                  </VCardTitle>
+                  <VCardItem>
+                    <template #append>
+                      <div class="dateId-box">
+                        <VIcon
+                          :icon="mdiPencil"
+                          class="pencil-icon"
+                          size="20"
+                          @click="editOfferedCourse = index"
+                        />
+                      </div>
+                    </template>
+                    <VCardTitle class="d-flex justify-space-between">
+                      {{
+                        locale === 'de'
+                          ? element.Course.title.de
+                          : element.Course.title.en
+                      }}
+                    </VCardTitle>
+                  </VCardItem>
+
                   <VCardText>
                     <div>
                       {{ t('type') }}:
