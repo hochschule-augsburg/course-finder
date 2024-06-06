@@ -7,7 +7,11 @@ import { type Enrollphase, PhaseState } from '@prisma/client'
 import { groupBy } from 'lodash-es'
 import { z } from 'zod'
 
-import { i18nInput, offeredCourseSpec } from '../../prisma/PrismaZod'
+import {
+  i18nInput,
+  offeredCourseSpec,
+  zodEnumFromObjKeys,
+} from '../../prisma/PrismaZod'
 import { prisma } from '../../prisma/prisma'
 import {
   cancelPhase,
@@ -24,6 +28,8 @@ export const phaseSpec = z.object({
   state: zodEnumFromObjKeys(PhaseState).optional(),
   title: i18nInput,
 })
+
+export const ACTIVE_PHASE_STATES = ['OPEN', 'DRAWING', 'CLOSED']
 
 type phaseSpecType = z.infer<typeof phaseSpec>
 
@@ -116,14 +122,6 @@ export const phaseService = {
   createPhase,
   deletePhase,
   updatePhase,
-}
-
-function zodEnumFromObjKeys<K extends string>(
-  obj: Record<K, unknown>,
-): z.ZodEnum<[K, ...K[]]> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const [firstKey, ...otherKeys] = Object.keys(obj) as K[]
-  return z.enum([firstKey, ...otherKeys])
 }
 
 async function updateOfferedCourses(

@@ -102,7 +102,11 @@ async function newAssignment() {
     </VTabs>
 
     <VTabsWindow v-model="tryNo">
+      <span v-if="!assignStore.assignments[phaseId]?.length">
+        {{ t('no-data') }}
+      </span>
       <VTabsWindowItem
+        v-else
         v-for="(assignment, i) in assignStore.assignments[phaseId]"
         :key="i"
         :value="i"

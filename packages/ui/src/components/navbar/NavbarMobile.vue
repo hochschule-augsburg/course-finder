@@ -9,7 +9,6 @@ import {
   mdiShieldCrownOutline,
   mdiThemeLightDark,
 } from '@mdi/js'
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,
@@ -29,7 +28,6 @@ defineProps<{
 }>()
 const { t } = useI18n()
 const userStore = useUserStore()
-const infoDialogVisible = ref(false)
 </script>
 
 <template>
@@ -89,10 +87,9 @@ const infoDialogVisible = ref(false)
               v-bind="props"
               :prepend-icon="mdiHelpCircleOutline"
               :title="t('help')"
-              @click="infoDialogVisible = true"
             />
           </template>
-          <InfoDialog v-model="infoDialogVisible" />
+          <InfoOptionsList />
         </VMenu>
 
         <VDivider />

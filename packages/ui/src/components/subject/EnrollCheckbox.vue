@@ -2,7 +2,11 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useCourseEnroll } from '@/stores/EnrollmentStore'
-import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js'
+import {
+  mdiAlphaEBox,
+  mdiCheckboxBlankOutline,
+  mdiCheckboxMarked,
+} from '@mdi/js'
 import { useI18n } from 'vue-i18n'
 import { VBadge, VIcon } from 'vuetify/components'
 
@@ -35,12 +39,23 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
-  <div v-ripple class="pa-2" @click.stop="handleUpdateEnroll">
+  <div
+    v-if="!subject.offeredCourse?.externalRegistration"
+    v-ripple
+    class="pa-2"
+    @click.stop="handleUpdateEnroll"
+  >
     <VBadge v-if="enrolled" :content="enrolled.points">
       <VIcon :icon="mdiCheckboxMarked" size="large" />
     </VBadge>
     <VIcon v-else :icon="mdiCheckboxBlankOutline" size="large" />
   </div>
+  <VTooltip v-else location="top">
+    <template #activator="{ toolTipProps }">
+      <VIcon :icon="mdiAlphaEBox" size="large" v-bind="toolTipProps" />
+    </template>
+    {{ t('external-registration') }}
+  </VTooltip>
 </template>
 
 <i18n lang="yaml">

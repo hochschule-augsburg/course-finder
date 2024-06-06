@@ -1,18 +1,14 @@
 <script setup lang="ts">
+import ballot from '@/assets/ballot.png'
+import compass from '@/assets/compass.png'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import { computedAsync } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
-import {
-  VBtn,
-  VCard,
-  VCardSubtitle,
-  VCardText,
-  VCol,
-  VContainer,
-  VRow,
-} from 'vuetify/components'
+import { useTheme } from 'vuetify'
+import { VCard, VCardSubtitle, VCardText, VImg } from 'vuetify/components'
 const { t } = useI18n()
+const theme = useTheme()
 const adminCourses = useAdminCoursesStore()
 const adminStats = useAdminStatsStore()
 
@@ -26,18 +22,14 @@ const phaseStats = computedAsync(async () => {
 </script>
 
 <template>
-  <VContainer>
-    <VRow>
-      <VCol>
-        <h1>{{ t('dashboard') }}</h1>
-      </VCol>
-    </VRow>
-
-    <VRow justify="center">
-      <VCol cols="12" md="4" sm="6">
+  <div class="mx-10">
+    <h1>{{ t('dashboard') }}</h1>
+    <div class="d-flex flex-wrap justify-space-around ga-4">
+      <template v-if="adminCourses.currentPhase">
         <VCard
           :title="t('current-phase')"
           :to="`admin/phases/${adminCourses.currentPhase?.id}`"
+          class="tile"
           density="compact"
         >
           <VCardText>
@@ -47,10 +39,8 @@ const phaseStats = computedAsync(async () => {
             />
           </VCardText>
         </VCard>
-      </VCol>
 
-      <VCol cols="10" md="3" sm="6">
-        <VCard :title="t('statistics')" class="h-100" link>
+        <VCard :title="t('statistics')" class="tile">
           <VCardText>
             <p class="text-center text-weight-bold" style="font-size: 4rem">
               <span>{{ phaseStats?.studentCount ?? '_' }}</span>
@@ -58,36 +48,39 @@ const phaseStats = computedAsync(async () => {
           </VCardText>
           <VCardSubtitle>{{ t('registered-students') }}</VCardSubtitle>
         </VCard>
-      </VCol>
-      <!-- Assign Students Button -->
-      <VCol cols="12" md="3">
-        <VRow>
-          <VCol cols="12">
-            <VBtn color="success" to="admin/courses" block>
-              {{ t('all-courses') }}
-            </VBtn>
-          </VCol>
-          <VCol cols="12">
-            <VBtn color="info" to="admin/phases" block>
-              {{ t('all-phases') }}
-            </VBtn>
-          </VCol>
-        </VRow>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol cols="12">
-        <h2>{{ t('available-courses') }}</h2>
-      </VCol>
-      <VCol cols="36">
-        <OfferedCoursesTable
-          v-if="adminCourses.currentPhase"
-          :phase-id="adminCourses.currentPhase?.id"
+      </template>
+      <VCard :title="t('all-courses')" class="tile" to="admin/courses">
+        <VImg
+          :class="{
+            img: theme.global.name.value === 'customDarkTheme',
+          }"
+          :src="compass"
+          height="10rem"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </VCard>
+      <VCard :title="t('all-phases')" class="tile" to="admin/phases">
+        <VImg
+          :class="{
+            img: theme.global.name.value === 'customDarkTheme',
+          }"
+          :src="ballot"
+          height="10rem"
+        />
+      </VCard>
+    </div>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.tile {
+  height: 15rem;
+  width: 25rem;
+
+  .img {
+    filter: invert(1);
+  }
+}
+</style>
 
 <i18n lang="yaml">
 en:
@@ -97,7 +90,6 @@ en:
   registered-students: Registered Students
   all-courses: All Courses
   all-phases: All Phases
-  available-courses: Available Courses
 de:
   dashboard: Übersicht
   current-phase: Aktuelle Phase
@@ -105,5 +97,4 @@ de:
   registered-students: Angemeldete Studierende
   all-courses: Alle Kurse
   all-phases: Alle Phasen
-  available-courses: Verfügbare Kurse
 </i18n>
