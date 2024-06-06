@@ -3,10 +3,23 @@ import ballot from '@/assets/ballot.png'
 import compass from '@/assets/compass.png'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
+import {
+  mdiAccountMultiple,
+  mdiBookMultiple,
+  mdiCalendarClock,
+  mdiTimetable,
+} from '@mdi/js'
 import { computedAsync } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
-import { useTheme } from 'vuetify'
-import { VCard, VCardSubtitle, VCardText, VImg } from 'vuetify/components'
+import {
+  VCard,
+  VCardText,
+  VCardTitle,
+  VCol,
+  VContainer,
+  VIcon,
+  VRow,
+} from 'vuetify/components'
 const { t } = useI18n()
 const theme = useTheme()
 const adminCourses = useAdminCoursesStore()
@@ -22,49 +35,125 @@ const phaseStats = computedAsync(async () => {
 </script>
 
 <template>
-  <div class="mx-10">
-    <h1>{{ t('dashboard') }}</h1>
-    <div class="d-flex flex-wrap justify-space-around ga-4">
-      <template v-if="adminCourses.currentPhase">
+  <VContainer>
+    <VRow>
+      <VCol>
+        <h1>{{ t('dashboard') }}</h1>
+      </VCol>
+    </VRow>
+
+    <VRow>
+      <VCol cols="12" md="6" xl="3">
         <VCard
           :title="t('current-phase')"
           :to="`admin/phases/${adminCourses.currentPhase?.id}`"
-          class="tile"
+          class="h-100"
+          color="#ADD8E6"
           density="compact"
         >
           <VCardText>
-            <EnrollmentPhase
-              :phase-id="adminCourses.currentPhase?.id"
-              class="pa-4"
-            />
+            <VRow>
+              <VCol class="d-flex align-center justify-center" cols="8">
+                <EnrollmentPhase
+                  :phase-id="adminCourses.currentPhase?.id"
+                  class="pa-4"
+                />
+              </VCol>
+              <VCol class="d-flex align-center justify-center" cols="4">
+                <VIcon :icon="mdiTimetable" size="130px" />
+              </VCol>
+            </VRow>
           </VCardText>
         </VCard>
 
-        <VCard :title="t('statistics')" class="tile">
+      <VCol cols="12" md="6" xl="3">
+        <VCard :title="t('statistics')" class="h-100" color="#FFD580" link>
           <VCardText>
-            <p class="text-center text-weight-bold" style="font-size: 4rem">
-              <span>{{ phaseStats?.studentCount ?? '_' }}</span>
-            </p>
+            <VRow>
+              <VCol class="d-flex align-center justify-center">
+                <div>
+                  <p class="text-center mb-0">
+                    <span class="text-h1">{{
+                      phaseStats?.studentCount ?? '_'
+                    }}</span>
+                  </p>
+                  <p class="text-center mb-0">
+                    {{ t('registered-students') }}
+                  </p>
+                </div>
+              </VCol>
+              <VCol class="d-flex align-center justify-center">
+                <VIcon :icon="mdiAccountMultiple" size="130px" />
+              </VCol>
+            </VRow>
           </VCardText>
-          <VCardSubtitle>{{ t('registered-students') }}</VCardSubtitle>
         </VCard>
-      </template>
-      <VCard :title="t('all-courses')" class="tile" to="admin/courses">
-        <VImg
-          :class="{
-            img: theme.global.name.value === 'customDarkTheme',
-          }"
-          :src="compass"
-          height="10rem"
-        />
-      </VCard>
-      <VCard :title="t('all-phases')" class="tile" to="admin/phases">
-        <VImg
-          :class="{
-            img: theme.global.name.value === 'customDarkTheme',
-          }"
-          :src="ballot"
-          height="10rem"
+      </VCol>
+      <!-- Assign Students Button -->
+      <VCol cols="12" md="6" xl="3">
+        <VCard
+          :title="t('all-courses')"
+          class="h-100"
+          color="#90EE90"
+          to="admin/courses"
+        >
+          <VCardText>
+            <VRow>
+              <VCol class="d-flex align-center justify-center">
+                <div>
+                  <p class="text-center mb-0" style="color: $black">
+                    <span class="text-h1">{{
+                      adminCourses.courses.length
+                    }}</span>
+                  </p>
+                  <p class="text-center mb-0" style="color: $black">
+                    {{ t('total-courses') }}
+                  </p>
+                </div>
+              </VCol>
+              <VCol class="d-flex align-center justify-center">
+                <VIcon :icon="mdiBookMultiple" size="130px" />
+              </VCol>
+            </VRow>
+          </VCardText>
+        </VCard>
+      </VCol>
+      <VCol cols="12" md="6" xl="3">
+        <VCard class="h-100" color="#FF7F7F" to="admin/phases">
+          <VCardTitle class="black">
+            {{ t('all-phases') }}
+          </VCardTitle>
+          <VCardText>
+            <VRow>
+              <VCol class="d-flex align-center justify-center">
+                <div>
+                  <p class="text-center mb-0 black">
+                    <span class="text-h1">{{
+                      Object.keys(adminCourses.phases).length
+                    }}</span>
+                  </p>
+                  <p class="text-center mb-0 black">
+                    {{ t('total-phases') }}
+                  </p>
+                </div>
+              </VCol>
+              <VCol class="d-flex align-center justify-center">
+                <VIcon :icon="mdiCalendarClock" color="black" size="130px" />
+              </VCol>
+            </VRow>
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+
+    <VRow>
+      <VCol cols="12">
+        <h2>{{ t('available-courses') }}</h2>
+      </VCol>
+      <VCol cols="36">
+        <OfferedCoursesTable
+          v-if="adminCourses.currentPhase"
+          :phase-id="adminCourses.currentPhase?.id"
         />
       </VCard>
     </div>
@@ -90,6 +179,9 @@ en:
   registered-students: Registered Students
   all-courses: All Courses
   all-phases: All Phases
+  available-courses: Available Courses
+  total-courses: Total courses
+  total-phases: Total phases
 de:
   dashboard: Übersicht
   current-phase: Aktuelle Phase
@@ -97,4 +189,15 @@ de:
   registered-students: Angemeldete Studierende
   all-courses: Alle Kurse
   all-phases: Alle Phasen
+  available-courses: Verfügbare Kurse
+  total-courses: Kurse
+  total-phases: Phasen
 </i18n>
+
+<style lang="scss" scoped>
+$black: #000000;
+
+.black {
+  color: $black;
+}
+</style>
