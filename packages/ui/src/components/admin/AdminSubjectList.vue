@@ -7,7 +7,7 @@ import { mdiInvoiceTextPlus, mdiPencil } from '@mdi/js'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VIcon, VTable } from 'vuetify/components'
+import { VBtn, VContainer, VIcon, VTable } from 'vuetify/components'
 
 const adminStore = useAdminCoursesStore()
 
@@ -82,15 +82,21 @@ async function updateSubject(subject: Course) {
 </script>
 
 <template>
-  <div>
-    <VTable>
+  <VContainer>
+    <VTable height="1000px" fixed-header hover rounded>
       <thead>
         <tr>
-          <th class="text-left">{{ t('no.') }}</th>
-          <th class="text-left">{{ t('name') }}</th>
-          <th class="text-left">{{ t('lecturer') }}</th>
-          <th>CP</th>
-          <th>SWS</th>
+          <th class="text-left">
+            <strong>{{ t('no.') }}</strong>
+          </th>
+          <th class="text-left">
+            <strong>{{ t('name') }}</strong>
+          </th>
+          <th class="text-left">
+            <strong>{{ t('lecturer') }}</strong>
+          </th>
+          <th><strong>CP</strong></th>
+          <th><strong>SWS</strong></th>
           <th>
             <VBtn @click="openNewDialog">
               {{ t('new') }} &nbsp; <VIcon :icon="mdiInvoiceTextPlus" />
@@ -119,7 +125,7 @@ async function updateSubject(subject: Course) {
       @cancel="showModalForm = false"
       @submit="processSubject"
     />
-  </div>
+  </VContainer>
 </template>
 
 <i18n lang="yaml">
@@ -133,5 +139,5 @@ de:
   name: Name
   lecturer: Dozent
   no.: Nr.
-  new: New
+  new: Neu
 </i18n>

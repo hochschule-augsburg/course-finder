@@ -41,9 +41,7 @@ const onTheFly = ref(true)
 watch(
   offeredCoursesArray,
   () => {
-    console.log(tableOne.value)
     tableOne.value = removeLoadedCourses()
-    console.log(tableOne.value)
   },
   { immediate: false },
 )

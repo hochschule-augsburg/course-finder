@@ -144,7 +144,6 @@ function removeDateWeekly(index: number) {
 
       const fromTime = dateFrom.toTimeString().split(' ')[0].slice(0, -3) // "HH:MM"
       const toTime = dateTo.toTimeString().split(' ')[0].slice(0, -3)
-      console.log(dayOfWeek, weekday, fromTime, startTime, toTime, endTime)
       return !(
         dayOfWeek === weekday &&
         fromTime === startTime &&

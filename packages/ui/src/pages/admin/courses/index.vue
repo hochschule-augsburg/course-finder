@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { mdiUpload } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 </script>
@@ -10,10 +11,12 @@ const { t } = useI18n()
         <VCol>
           <h1>{{ t('courses') }}</h1>
         </VCol>
-        <VCol cols="8" />
-        <VCol>
-          <VBtn class="mr-8" color="primary" to="courses/upload">
+        <VCol class="text-right">
+          <VBtn color="primary" to="courses/upload">
             {{ t('add') }}
+            <template #append>
+              <VIcon :icon="mdiUpload" color="white" size="20" />
+            </template>
           </VBtn>
         </VCol>
       </VRow>
@@ -25,8 +28,8 @@ const { t } = useI18n()
 <i18n lang="yaml">
 en:
   courses: All courses
-  add: Add
+  add: Import courses
 de:
   courses: Alle Kurse
-  add: Hinzufügen
+  add: Kurse importieren
 </i18n>
