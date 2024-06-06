@@ -270,7 +270,7 @@ const searchOffered = ref('')
                         .dates"
                       :key="appointIndex"
                     >
-                      <div>
+                      <div v-if="element.appointments.type !== 'weekly'">
                         <strong>{{ t('from') }}:</strong>
                         {{
                           //TODO
@@ -290,6 +290,23 @@ const searchOffered = ref('')
                             day: '2-digit',
                             month: '2-digit',
                             year: '2-digit',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
+                      </div>
+                      <div v-else>
+                        <strong>{{ t('at') }}:</strong>
+                        {{
+                          timespan.from.toLocaleString(locale, {
+                            weekday: 'long',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
+                        -
+                        {{
+                          timespan.to.toLocaleString(locale, {
                             hour: 'numeric',
                             minute: '2-digit',
                           })
@@ -359,6 +376,7 @@ en:
     weekly: Weekly
     block: Block Event
     irregular: Irregular
+  at: 'On'
   from: From
   to: To
   min-participants: Min participants
@@ -375,6 +393,7 @@ de:
     weekly: Wöchentlich
     block: Blockveranstaltung
     irregular: Unregelmäßig
+  at: Am
   from: Von
   to: Bis
   min-participants: Mindestteilnehmer

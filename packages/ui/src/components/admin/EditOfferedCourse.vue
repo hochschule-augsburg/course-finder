@@ -72,6 +72,9 @@ function submit() {
   if (!formData.value) {
     return
   }
+  formData.value.appointments.dates = formData.value.appointments.dates.filter(
+    (data) => data !== undefined,
+  )
   emits('submit', {
     ...formData.value,
     appointments: {
@@ -378,32 +381,38 @@ const weekdayItems = [
                 v-for="(interval, index) in formData.appointments.dates"
                 :key="index"
               >
-                <div class="dateId-box" style="display: flex">
-                  <VIcon
-                    :icon="mdiTrashCanOutline"
-                    @click="removeDate(index)"
-                  />
+                <div v-if="interval !== undefined">
+                  <VRow dense>
+                    <VCol cols="12" sm="6">
+                      <VTextField
+                        v-model="interval.from"
+                        :label="t('from')"
+                        type="datetime-local"
+                        hide-details
+                        required
+                      />
+                    </VCol>
+                    <VCol cols="12" sm="6">
+                      <VTextField
+                        v-model="interval.to"
+                        :label="t('to')"
+                        type="datetime-local"
+                        hide-details
+                        required
+                      >
+                        <template #append>
+                          <div class="dateId-box">
+                            <VIcon
+                              :icon="mdiTrashCanOutline"
+                              size="30"
+                              @click="removeDate(index)"
+                            />
+                          </div>
+                        </template>
+                      </VTextField>
+                    </VCol>
+                  </VRow>
                 </div>
-                <VRow>
-                  <VCol cols="12" sm="6">
-                    <VTextField
-                      v-model="interval.from"
-                      :label="t('from')"
-                      type="datetime-local"
-                      hide-details
-                      required
-                    />
-                  </VCol>
-                  <VCol cols="12" sm="6">
-                    <VTextField
-                      v-model="interval.to"
-                      :label="t('to')"
-                      type="datetime-local"
-                      hide-details
-                      required
-                    />
-                  </VCol>
-                </VRow>
               </div>
               <br />
               <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
