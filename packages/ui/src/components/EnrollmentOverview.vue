@@ -6,7 +6,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSheet } from 'vuetify/components'
 
-const props = defineProps<{ phase: EnrollPhase | undefined }>()
+const props = defineProps<{ phase: EnrollPhase | null | undefined }>()
 const { locale } = useI18n()
 
 const stateText = computed(
@@ -16,7 +16,7 @@ const stateText = computed(
 
 <template>
   <VSheet
-    v-if="phase !== undefined"
+    v-if="phase"
     class="px-4 py-3"
     color="secondary"
     id="enrollment-overview"
@@ -31,7 +31,7 @@ const stateText = computed(
       }}
     </p>
     <p>
-      {{ locale === 'de' ? phase.description.de : phase.description.en }}
+      {{ phase.description[locale] }}
     </p>
     <p>
       {{ $t(`phase-states.long.${stateText}`) }}

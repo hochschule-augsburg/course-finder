@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useAssignStore } from '@/stores/AssignStore'
 import { useCoursesStore } from '@/stores/CoursesStore'
+import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
-import { computed, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   VList,
   VListItem,
@@ -11,85 +14,75 @@ import {
   VTabsWindowItem,
 } from 'vuetify/components'
 
-const phaseIndex = ref(0)
+const { locale } = useI18n()
 
 // TODO alle USER-PHASES statt phases
 const coursesStore = useCoursesStore()
-const phases = computed(() => [
-  {
-    ...coursesStore.currentPhase,
-    subjects: coursesStore.subjects.slice(0, 3).map((s) => ({
-      enrolled: undefined,
-      points: (Math.random() * 100).toFixed(0),
-      ...s,
-    })),
-    title: { de: 'Anmeldung SS24', en: 'Anmeldung SS24' },
-  },
-  {
-    ...coursesStore.currentPhase,
-    subjects: coursesStore.subjects.slice(0, 4).map((s) => ({
-      enrolled: s.title.de?.startsWith('A') ? true : false,
-      points: (Math.random() * 100).toFixed(0),
-      ...s,
-    })),
-    title: { de: 'Anmeldung WS23/24', en: 'Anmeldung WS23/24' },
-  },
-  {
-    ...coursesStore.currentPhase,
+const assignStore = useAssignStore()
+const enrollStore = useEnrollmentStore()
 
-    subjects: coursesStore.subjects.slice(0, 5).map((s) => ({
-      enrolled: s.title.de?.startsWith('A') ? true : false,
-      points: (Math.random() * 100).toFixed(0),
-      ...s,
-    })),
-    title: { de: 'Anmeldung SS23', en: 'Anmeldung SS23' },
-  },
-  {
-    ...coursesStore.currentPhase,
-    subjects: coursesStore.subjects.slice(0, 6).map((s) => ({
-      enrolled: s.title.de?.startsWith('A') ? true : false,
-      points: (Math.random() * 100).toFixed(0),
-      ...s,
-    })),
-    title: { de: 'Anmeldung WS22/23', en: 'Anmeldung WS22/23' },
-  },
-])
+const phaseIndex = ref(0)
 
 const selectedModuleCode = ref<string>()
 const selectedSubject = computed(() =>
   coursesStore.subjects.find((s) => s.moduleCode === selectedModuleCode.value),
 )
+
+onBeforeMount(() => {
+  void assignStore.fetch()
+})
 </script>
 
 <template>
   <VTabs v-model="phaseIndex" show-arrows>
     <VTab
-      v-for="(phase, i) in phases"
+      v-for="(phase, i) in assignStore.assignPhases"
       :key="i"
-      :text="phase.title.de"
+      :text="phase.Phase.title[locale]"
       :value="i"
     />
   </VTabs>
 
   <VTabsWindow v-model="phaseIndex">
-    <VTabsWindowItem v-for="(phase, i) in phases" :key="i" :value="i">
-      <!-- update phase type in EnrollmentOverview -->
-      <!-- <EnrollmentOverview v-if="phase" :phase="phase" /> -->
-      <EnrollmentOverview v-if="phase" :phase="coursesStore.currentPhase" />
+    <VTabsWindowItem
+      v-if="coursesStore.currentPhase"
+      :value="coursesStore.currentPhase.id"
+    >
+      <EnrollmentOverview :phase="coursesStore.currentPhase" />
 
-      <VList v-if="phase.subjects.length">
+      <VList>
         <VListItem
-          v-for="subject in phases[phaseIndex].subjects"
-          :prepend-icon="
-            subject.enrolled === undefined
-              ? mdiHelp
-              : subject.enrolled
-                ? mdiCheck
-                : mdiClose
-          "
+          v-for="subject in enrollStore.enrolledSubjects"
           :key="subject.moduleCode"
+          :prepend-icon="mdiHelp"
           :subtitle="subject.points"
-          :title="subject.title.de"
+          :title="subject.title[locale]"
+          @click="selectedModuleCode = subject.moduleCode"
+        />
+      </VList>
+    </VTabsWindowItem>
+    <VTabsWindowItem
+      v-for="(phase, i) in assignStore.assignPhases"
+      :key="i"
+      :value="i"
+    >
+      <EnrollmentOverview :phase="phase.Phase" />
+
+      <VList v-if="phase.assignments.length | phase.lost.length">
+        <VListItem
+          v-for="subject in phase.assignments"
+          :key="subject.moduleCode"
+          :prepend-icon="mdiCheck"
+          :subtitle="subject.points"
+          :title="subject.Course?.title[locale] ?? subject.moduleCode"
+          @click="selectedModuleCode = subject.moduleCode"
+        />
+        <VListItem
+          v-for="subject in phase.lost"
+          :key="subject.moduleCode"
+          :prepend-icon="mdiClose"
+          :subtitle="subject.points"
+          :title="subject.Course?.title[locale] ?? subject.moduleCode"
           @click="selectedModuleCode = subject.moduleCode"
         />
       </VList>
