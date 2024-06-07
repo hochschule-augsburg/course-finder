@@ -1,3 +1,5 @@
+import type { User } from '@prisma/client'
+
 import {
   testConstructTxtText,
   testGetStudentEmails,
@@ -10,7 +12,7 @@ const assignmentResults = {
   stud3: [{ moduleCode: 'course b' }, { moduleCode: 'course c' }],
 }
 
-const userMock = [
+const userMock: User[] = [
   {
     auth: {
       method: 'local' as const,
