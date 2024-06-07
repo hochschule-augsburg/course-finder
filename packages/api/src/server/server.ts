@@ -25,7 +25,7 @@ export async function createServer() {
   await server.register(fastifyCookie)
   await server.register(fastifyJwt, {
     cookie: {
-      cookieName: 'session-jwt',
+      cookieName: 'cf-token',
       signed: false,
     },
     secret: env.JWT_SECRET,
