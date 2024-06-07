@@ -5,7 +5,10 @@ import { prisma } from '../../prisma/prisma'
 
 export function adminFastifyRoutes(fastify: FastifyInstance) {
   fastify.post('/api/admin/courses/upload-module-book', async (req, reply) => {
-    if (req.session.user?.type !== 'Admin') {
+    if (req.cookies['cf-token']) {
+      await req.jwtVerify()
+    }
+    if (req.user?.type !== 'Admin') {
       return reply.status(401).send({ error: 'Unauthorized' })
     }
 
