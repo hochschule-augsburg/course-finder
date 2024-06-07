@@ -150,6 +150,7 @@ async function main() {
       end: new Date('2024-07-15'),
       id: 3,
       start: new Date('2024-03-30'),
+      state: 'OPEN',
       title: {
         de: 'Testanmeldungsphase 2024',
         en: 'Test Registration Phase 2024',
