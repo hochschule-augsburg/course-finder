@@ -1,19 +1,17 @@
 import { TRPCError } from '@trpc/server'
 import { randomBytes } from 'crypto'
-import { TOTP } from 'totp-generator'
 import { z } from 'zod'
 
 import type { ClientUserExtended } from '../../prisma/PrismaTypes'
 
-import { sendEmail } from '../../domain/mail/Mail'
 import { authenticate } from '../../domain/user/UserService'
+import { env } from '../../env'
 import { prisma } from '../../prisma/prisma'
 import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
-    await ctx.req.session.save()
-    return ctx.req.session.user
+    return ctx.user
   }),
   // rate limited by reverse proxy
   login: publicProcedure
@@ -38,30 +36,33 @@ export const authRouter = router({
           return result.cause
         }
 
-        if (result.twoFA) {
-          const { expires, otp } = TOTP.generate(generateBase32Key(), {
-            period: 240,
-          })
-          ctx.req.session.twoFA = { expires, otp, username: input.username }
-          await Promise.all([
-            ctx.req.session.save(),
-            await sendEmail(
-              result.user.email,
-              'Your two-factor authentication code',
-              otp,
-            ),
-          ])
-          return 'two-fa-required'
-        }
-        ctx.req.session.user = result.user
-        ctx.req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7 // 1 week
-        await ctx.req.session.save()
+        // if (result.twoFA) {
+        //   const { expires, otp } = TOTP.generate(generateBase32Key(), {
+        //     period: 240,
+        //   })
+        //   ctx.req.session.twoFA = { expires, otp, username: input.username }
+        //   await Promise.all([
+        //     ctx.req.session.save(),
+        //     await sendEmail(
+        //       result.user.email,
+        //       'Your two-factor authentication code',
+        //       otp,
+        //     ),
+        //   ])
+        //   return 'two-fa-required'
+        // }
+        const token = await ctx.res.jwtSign(result.user)
+        ctx.res.setCookie('session-jwt', token, {
+          domain: env.SERVER_HOSTNAME,
+          httpOnly: true,
+          path: '/',
+          sameSite: true,
+          secure: process.env.NODE_ENV === 'production',
+        })
         return result.user
       },
     ),
-  logout: publicProcedure.mutation(async ({ ctx }) => {
-    await ctx.req.session.destroy()
-  }),
+  logout: publicProcedure.mutation(async ({ ctx }) => {}),
   // rate limited by reverse proxy
   twoFA: publicProcedure
     .input(z.object({ otp: z.string(), username: z.string() }))

@@ -1,7 +1,7 @@
 import { fastifyCookie } from '@fastify/cookie'
 import { fastifyCors } from '@fastify/cors'
+import { fastifyJwt } from '@fastify/jwt'
 import { fastifyMultipart } from '@fastify/multipart'
-import { fastifySession } from '@fastify/session'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
@@ -12,10 +12,9 @@ import { adminFastifyRoutes } from '../routes/admin/AdminFastifyRoutes'
 import { appRouter } from '../routes/router'
 import { createContext } from './context'
 
-declare module 'fastify' {
-  interface Session {
-    twoFA?: { expires: number; otp: string; username: string }
-    user?: ClientUserExtended
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+    payload: ClientUserExtended
   }
 }
 
@@ -24,13 +23,12 @@ export async function createServer() {
 
   await server.register(fastifyMultipart)
   await server.register(fastifyCookie)
-  await server.register(fastifySession, {
+  await server.register(fastifyJwt, {
     cookie: {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
+      cookieName: 'session-jwt',
+      signed: false,
     },
-    secret: env.SESSION_SECRET,
+    secret: env.JWT_SECRET,
   })
   await server.register(fastifyCors, {
     credentials: true,
