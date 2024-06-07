@@ -22,13 +22,11 @@ export const courseRouter = router({
     })
   }),
   getCurrentPhase: studentOnlyProcedure.query(async () => {
-    return (
-      (await prisma.enrollphase.findFirst({
-        where: {
-          AND: { end: { gte: new Date() }, start: { lte: new Date() } },
-        },
-      })) ?? undefined
-    )
+    return prisma.enrollphase.findFirst({
+      where: {
+        state: { in: ['OPEN', 'CLOSED', 'DRAWING'] },
+      },
+    })
   }),
   getOfferedCourses: studentOnlyProcedure
     .input(

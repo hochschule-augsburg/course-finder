@@ -7,13 +7,13 @@ import type { ClientUserExtended } from '../../prisma/PrismaTypes'
 
 import { sendEmail } from '../../domain/mail/Mail'
 import { authenticate } from '../../domain/user/UserService'
+import { env } from '../../env'
 import { prisma } from '../../prisma/prisma'
 import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
-    await ctx.req.session.save()
-    return ctx.req.session.user
+    return ctx.user
   }),
   // rate limited by reverse proxy
   login: publicProcedure
@@ -39,28 +39,37 @@ export const authRouter = router({
         }
 
         if (result.twoFA) {
-          const { expires, otp } = TOTP.generate(generateBase32Key(), {
-            period: 240,
+          const otp = TOTP.generate(generateBase32Key(), {
+            period: 120,
           })
-          ctx.req.session.twoFA = { expires, otp, username: input.username }
           await Promise.all([
-            ctx.req.session.save(),
+            prisma.user.update({
+              data: {
+                otp,
+              },
+              where: { username: input.username },
+            }),
             await sendEmail(
               result.user.email,
               'Your two-factor authentication code',
-              otp,
+              `Your code is ${otp.otp}. It will expire in 2 minutes.`,
             ),
           ])
           return 'two-fa-required'
         }
-        ctx.req.session.user = result.user
-        ctx.req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7 // 1 week
-        await ctx.req.session.save()
+        const token = await ctx.res.jwtSign(result.user)
+        ctx.res.setCookie('cf-token', token, {
+          domain: env.SERVER_HOSTNAME,
+          httpOnly: true,
+          path: '/',
+          sameSite: true,
+          secure: process.env.NODE_ENV === 'production',
+        })
         return result.user
       },
     ),
   logout: publicProcedure.mutation(async ({ ctx }) => {
-    await ctx.req.session.destroy()
+    ctx.res.clearCookie('cf-token')
   }),
   // rate limited by reverse proxy
   twoFA: publicProcedure
@@ -72,28 +81,36 @@ export const authRouter = router({
       }): Promise<
         'code-expired' | 'code-invalid' | ClientUserExtended | undefined
       > => {
-        if (ctx.req.session.twoFA?.username !== input.username) {
+        const user =
+          (await prisma.user.findUnique({
+            include: { Student: true },
+            where: { username: input.username },
+          })) ?? undefined
+
+        if (!user?.otp) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'No twoFA session',
           })
         }
-        if (new Date().getTime() > ctx.req.session.twoFA.expires) {
+        if (new Date().getTime() > user.otp.expires) {
           return 'code-expired'
         }
-        if (input.otp !== ctx.req.session.twoFA.otp) {
+        if (input.otp !== user.otp.otp) {
           return 'code-invalid'
         }
-        const user = await prisma.user.findUnique({
-          include: { Student: true },
-          where: { username: input.username },
+        const clientUser: ClientUserExtended = {
+          ...user,
+          auth: { twoFA: user.auth.twoFA },
+        }
+        const token = await ctx.res.jwtSign(clientUser)
+        ctx.res.setCookie('cf-token', token, {
+          domain: env.SERVER_HOSTNAME,
+          httpOnly: true,
+          path: '/',
+          sameSite: true,
+          secure: process.env.NODE_ENV === 'production',
         })
-        ctx.req.session.twoFA = undefined
-        const clientUser = user
-          ? { ...user, auth: { twoFA: user.auth.twoFA } }
-          : undefined
-        ctx.req.session.user = clientUser
-        await ctx.req.session.save()
         return clientUser
       },
     ),

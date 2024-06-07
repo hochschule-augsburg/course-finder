@@ -70,7 +70,7 @@ export const enrollRouter = router({
         phaseId: ctx.phase.id,
         username: ctx.user.username,
       }
-      prisma.$transaction([
+      await prisma.$transaction([
         prisma.studentChoice.deleteMany({
           where: { phaseId: ctx.phase.id, username: ctx.user.username },
         }),
@@ -178,11 +178,7 @@ export const enrollRouter = router({
 })
 
 function checkIfPhaseIsOpen(phase: Enrollphase) {
-  const now = new Date()
-  if (
-    phase.end.getTime() < now.getTime() ||
-    phase.start.getTime() > now.getTime()
-  ) {
+  if (phase.state !== 'OPEN') {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'phase not active',

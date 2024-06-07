@@ -9,7 +9,6 @@ import { sendEmail } from '../../../domain/mail/Mail'
 import { phaseService } from '../../../domain/phase/PhaseService'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
-// import { sendEmail } from '../../../domain/mail/Mail'
 
 export const assignRouter = router({
   assign: adminProcedure

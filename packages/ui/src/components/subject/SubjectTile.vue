@@ -1,22 +1,15 @@
 <script lang="ts" setup>
-import type { Subject } from '@/stores/CoursesStore'
-
-import { mdiAlphaEBox } from '@mdi/js'
+import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { useI18n } from 'vue-i18n'
-import {
-  VCard,
-  VCardText,
-  VCol,
-  VIcon,
-  VRow,
-  VTooltip,
-} from 'vuetify/components'
+import { VCard, VCardText, VCol, VRow } from 'vuetify/components'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
 
 defineProps<{ subject: Subject }>()
 
 const { locale, t } = useI18n()
+
+const coursesStore = useCoursesStore()
 
 const dev = import.meta.env.DEV
 </script>
@@ -31,17 +24,8 @@ const dev = import.meta.env.DEV
     width="300"
     hover
   >
-    <template v-if="subject.offeredCourse" #append>
-      <EnrollCheckbox
-        v-if="!subject.offeredCourse.externalRegistration"
-        :subject="subject"
-      />
-      <VTooltip v-else location="top">
-        <template #activator="{ props }">
-          <VIcon :icon="mdiAlphaEBox" size="large" v-bind="props" />
-        </template>
-        {{ t('external-registration') }}
-      </VTooltip>
+    <template v-if="coursesStore.currentPhase?.state === 'OPEN'" #append>
+      <EnrollCheckbox :subject="subject" />
     </template>
     <VCardText>
       <span v-if="dev" class="font-italic font-weight-thin">{{

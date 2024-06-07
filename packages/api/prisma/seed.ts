@@ -31,6 +31,21 @@ async function main() {
     ],
   })
 
+  await prisma.user.create({
+    data: {
+      auth: {
+        method: 'local',
+        password: hashPassword('user-2fa', 'salt'),
+        salt: 'salt',
+        twoFA: true,
+      },
+      email: 'niklas.sirch@tha.de',
+      name: 'Niklas',
+      type: 'Professor',
+      username: 'user-2fa',
+    },
+  })
+
   // Create professors
   await prisma.user.create({
     data: {

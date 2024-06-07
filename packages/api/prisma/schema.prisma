@@ -24,6 +24,8 @@ model User {
   /// [Auth]
   auth     Json
   type     String
+  /// [Otp]
+  otp      Json?
   Course   Course[]
 
   createdAt DateTime @default(now())

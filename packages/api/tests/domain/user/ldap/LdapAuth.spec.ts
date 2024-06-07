@@ -35,10 +35,6 @@ vi.mock('ldapts', async () => {
 })
 
 describe('LdapAuth', () => {
-  beforeAll(() => {
-    process.env.LDAP_URL = 'a'
-    process.env.LDAP_BASE_DN = 'a'
-  })
   test('pwdAuth - successful authentication', async () => {
     const username = 'doejohn'
     const password = 'password'

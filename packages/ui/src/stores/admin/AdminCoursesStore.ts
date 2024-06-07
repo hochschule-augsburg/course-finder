@@ -5,9 +5,9 @@ import type {
   OfferedCourse,
 } from '@workspace/api/src/prisma/PrismaTypes'
 
+import { phaseStates } from '@/helper/enums/phaseStates'
 import { trpc } from '@/trpc'
 import { useAsyncState } from '@vueuse/core'
-import { isWithinInterval } from 'date-fns'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -19,6 +19,18 @@ export type AdminOfferedCourse = {
   Course: { lecturers: string[]; title: I18nJson }
 } & OfferedCourse
 
+export function usePhaseState(phaseId: number) {
+  const coursesStore = useAdminCoursesStore()
+
+  return computed(() => {
+    const state = coursesStore.phases[phaseId]?.state
+    return {
+      modelValue: state,
+      text: phaseStates.find((e) => e.value === state)?.text,
+    }
+  })
+}
+
 export const useAdminCoursesStore = defineStore('admin-courses', () => {
   const courses = ref<Course[]>([])
   const phases = ref<Record<number, Phase>>({})
@@ -26,10 +38,7 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
 
   const currentPhase = computed(() => {
     return Object.values(phases.value).find((e) =>
-      isWithinInterval(new Date(), {
-        end: new Date(e.end),
-        start: new Date(e.start),
-      }),
+      ['CLOSED', 'DRAWING', 'OPEN'].includes(e.state),
     )
   })
   return {
@@ -47,9 +56,13 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
 
   async function init() {
     await Promise.all([
-      (async () => (courses.value = await trpc.admin.courses.list.query()))(),
       (async () =>
-        (phases.value = await trpc.admin.enroll.phase.list.query()))(),
+        Object.assign(courses.value, await trpc.admin.courses.list.query()))(),
+      (async () =>
+        Object.assign(
+          phases.value,
+          await trpc.admin.enroll.phase.list.query(),
+        ))(),
     ])
   }
 
@@ -58,11 +71,14 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
     if (!phase || !state) {
       throw new Error('Phase not found')
     }
-    await trpc.admin.enroll.phase.update.mutate({
+    const result = await trpc.admin.enroll.phase.updateState.mutate({
       id: phaseId,
       state: state,
     })
-    phase.state = state
+    if (typeof result === 'object') {
+      phase.state = state
+    }
+    return result
   }
 
   async function fetchOfferedCourses(phaseId: number) {

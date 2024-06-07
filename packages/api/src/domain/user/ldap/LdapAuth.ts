@@ -4,6 +4,7 @@ import { ZodError } from 'zod'
 
 import type { AuthResult } from '../UserService'
 
+import { env } from '../../../env'
 import { prisma } from '../../../prisma/prisma'
 import {
   type ResultType as UserDataType,
@@ -93,8 +94,5 @@ export async function pwdAuth(
 }
 
 const getConfiguration = once(() => {
-  if (!process.env.LDAP_URL || !process.env.LDAP_BASE_DN) {
-    throw new Error('LDAP_URL and LDAP_BASE_DN has to be set for LDAP to work')
-  }
-  return { baseDn: process.env.LDAP_BASE_DN, url: process.env.LDAP_URL }
+  return { baseDn: env.LDAP_BASE_DN, url: env.LDAP_URL }
 })

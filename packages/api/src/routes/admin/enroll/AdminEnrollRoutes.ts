@@ -1,9 +1,17 @@
+import { PhaseState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { sumBy } from 'lodash-es'
 import { z } from 'zod'
 
-import { phaseService, phaseSpec } from '../../../domain/phase/PhaseService'
-import { offeredCourseSpec } from '../../../prisma/PrismaZod'
+import {
+  ACTIVE_PHASE_STATES,
+  phaseService,
+  phaseSpec,
+} from '../../../domain/phase/PhaseService'
+import {
+  offeredCourseSpec,
+  zodEnumFromObjKeys,
+} from '../../../prisma/PrismaZod'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
 
@@ -114,9 +122,6 @@ export const enrollRouter = router({
           })),
         }
       }),
-    getCurrentPhase: adminProcedure.query(async () => {
-      return (await prisma.enrollphase.findFirst({})) ?? undefined
-    }),
     list: adminProcedure.query(async () => {
       return Object.fromEntries(
         (
@@ -132,6 +137,31 @@ export const enrollRouter = router({
       .input(phaseSpec.partial().extend({ id: z.number() }))
       .mutation(async ({ input }) => {
         return phaseService.updatePhase(input.id, input)
+      }),
+    updateState: adminProcedure
+      .input(
+        z.object({ id: z.number(), state: zodEnumFromObjKeys(PhaseState) }),
+      )
+      .mutation(async ({ input }) => {
+        if (ACTIVE_PHASE_STATES.includes(input.state)) {
+          const result = await prisma.enrollphase.findFirst({
+            where: {
+              id: { not: input.id },
+              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+              state: { in: ACTIVE_PHASE_STATES as PhaseState[] },
+            },
+          })
+          if (result) {
+            return {
+              error: 'a-phase-is-already-active',
+              phase: result,
+            }
+          }
+        }
+        return prisma.enrollphase.update({
+          data: { state: input.state },
+          where: { id: input.id },
+        })
       }),
   },
   statistics: {
