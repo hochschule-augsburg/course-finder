@@ -7,7 +7,7 @@ import fastify from 'fastify'
 
 import type { ClientUserExtended } from '../prisma/PrismaTypes'
 
-import env from '../env'
+import { env } from '../env'
 import { adminFastifyRoutes } from '../routes/admin/AdminFastifyRoutes'
 import { appRouter } from '../routes/router'
 import { createContext } from './context'
@@ -20,10 +20,6 @@ declare module 'fastify' {
 }
 
 export async function createServer() {
-  if (env.SESSION_SECRET.length < 32) {
-    throw new Error('env SESSION_SECRET is required and needs 32 characters')
-  }
-
   const server = fastify({ logger: true })
 
   await server.register(fastifyMultipart)
@@ -66,7 +62,7 @@ export async function createServer() {
       await server.listen({
         // relevant for docker
         host: env.SERVER_HOSTNAME,
-        port: Number(env.SERVER_PORT),
+        port: env.SERVER_PORT,
       })
       console.log('listening on port', env.SERVER_PORT)
     } catch (err) {

@@ -7,8 +7,8 @@
     "prisma/"
   ],
   "scripts": {
-    "dev:inspect": "docker start postgres-docker & tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
-    "dev": "docker start postgres-docker & tsx watch --clear-screen=false src/main.ts | pino-pretty",
+    "dev:inspect": "tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
+    "dev": "tsx watch --clear-screen=false src/main.ts | pino-pretty",
     "build": "tsc --noEmit && pnpm run bundle",
     "bundle": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
     "start": "env NODE_ENV=production node dist/main.js",
@@ -18,7 +18,7 @@
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
-    "db:reset": "prisma migrate dev reset",
+    "db:reset": "prisma migrate reset",
     "db:migrate": "prisma migrate dev",
     "postinstall": "pnpm db:generate||true"
   },

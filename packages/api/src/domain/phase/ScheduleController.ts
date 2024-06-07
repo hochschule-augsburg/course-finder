@@ -3,7 +3,7 @@ import type { Job } from 'node-schedule'
 import { type Enrollphase, PhaseState } from '@prisma/client'
 import { scheduleJob } from 'node-schedule'
 
-import env from '../../env'
+import { env } from '../../env'
 import { prisma } from '../../prisma/prisma'
 import { sendEmail } from '../mail/Mail'
 
@@ -50,7 +50,7 @@ export function schedulePhase(phase: Enrollphase) {
       phase.emailNotificationAt,
       () => {
         sendEmail(
-          env.MAIL_RECEIVERS.split(' '),
+          env.MAIL_RECEIVERS,
           'Die WPF Anmeldephase endet bald | WPF registrations will soon be closing',
           `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleDateString(
             'de-DE',
