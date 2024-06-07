@@ -8,7 +8,13 @@ import {
 } from '@/stores/admin/AdminCoursesStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VListItem, VSelect, VTooltip } from 'vuetify/components'
+import {
+  VBtn,
+  VListItem,
+  VSelect,
+  VTooltip,
+  VSnackbar,
+} from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
 

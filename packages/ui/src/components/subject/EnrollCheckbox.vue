@@ -8,7 +8,7 @@ import {
   mdiCheckboxMarked,
 } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
-import { VBadge, VIcon } from 'vuetify/components'
+import { VBadge, VIcon, VTooltip } from 'vuetify/components'
 
 import { dialogService } from '../DialogService'
 
