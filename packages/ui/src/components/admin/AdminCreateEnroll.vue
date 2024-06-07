@@ -132,11 +132,11 @@ async function createEnrollment() {
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
     adminCoursesStore.phases[newPhase.id] = {
+      createdAt: new Date(),
       description: {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      createdAt: new Date(),
       emailNotificationAt: new Date(formData.value.emailNotificationAt),
       end: new Date(formData.value.end),
       id: 0,
