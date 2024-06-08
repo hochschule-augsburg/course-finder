@@ -3,7 +3,7 @@ import { useAssignStore } from '@/stores/AssignStore'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VList,
@@ -21,7 +21,12 @@ const coursesStore = useCoursesStore()
 const assignStore = useAssignStore()
 const enrollStore = useEnrollmentStore()
 
-const phaseIndex = ref(0)
+const phaseIndex = ref<number | undefined>(coursesStore.currentPhase?.id)
+watchEffect(() => {
+  if (coursesStore.currentPhase) {
+    phaseIndex.value = coursesStore.currentPhase.id
+  }
+})
 
 const selectedModuleCode = ref<string>()
 const selectedSubject = computed(() =>
@@ -36,10 +41,15 @@ onBeforeMount(() => {
 <template>
   <VTabs v-model="phaseIndex" show-arrows>
     <VTab
+      v-if="coursesStore.currentPhase"
+      :text="coursesStore.currentPhase.title[locale]"
+      :value="coursesStore.currentPhase.id"
+    />
+    <VTab
       v-for="(phase, i) in assignStore.assignPhases"
       :key="i"
       :text="phase.Phase.title[locale]"
-      :value="i"
+      :value="phase.phaseId"
     />
   </VTabs>
 
@@ -64,7 +74,7 @@ onBeforeMount(() => {
     <VTabsWindowItem
       v-for="(phase, i) in assignStore.assignPhases"
       :key="i"
-      :value="i"
+      :value="phase.phaseId"
     >
       <EnrollmentOverview :phase="phase.Phase" />
 
