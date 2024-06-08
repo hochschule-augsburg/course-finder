@@ -30,6 +30,9 @@ const coursesStore = useAdminCoursesStore()
 const { locale, t } = useI18n()
 
 const tableOne: Ref<Course[]> = ref([...coursesStore.courses])
+const showErrorDialog = ref(false)
+const errorDialogMessage = ref('')
+
 const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
@@ -97,7 +100,10 @@ async function createSubject(subject: Course | undefined) {
     })
     showModalForm.value = false
   } catch (e) {
-    console.log('Error creating Subject')
+    // console.log('Error creating Subject')
+    showModalForm.value = false
+    errorDialogMessage.value = t('subject-creation-error')
+    showErrorDialog.value = true
   }
 }
 
@@ -372,6 +378,11 @@ const searchOffered = ref('')
       @cancel="showModalForm = false"
       @submit="createSubject"
     />
+    <ErrorDialog
+      :message="errorDialogMessage"
+      :visible="showErrorDialog"
+      @close="showErrorDialog = false"
+    />
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
@@ -410,6 +421,7 @@ en:
   for-fields-of-study: For fields of study
   extra-info: Extra information
   external-registration: External registration
+  subject-creation-error: Error creating subject. Entered module-code might alredy exist.
 de:
   on-the-fly: Neues Angebot erstellen
   available-courses: Verfügbare Kurse
@@ -427,6 +439,7 @@ de:
   for-fields-of-study: Für Studienfelder
   extra-info: Zusätzliche Informationen
   external-registration: Externe Anmeldung
+  subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
 </i18n>
 
 <style scoped lang="scss">

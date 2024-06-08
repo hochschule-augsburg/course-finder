@@ -14,7 +14,7 @@ const { t } = useI18n()
 
 <template>
   <VDialog
-    :model-value="visible"
+    :model-value="props.visible"
     max-width="600px"
     @update:model-value="$emit('close')"
   >
@@ -23,10 +23,9 @@ const { t } = useI18n()
         {{ t('title') }}
       </VCardTitle>
       <VCardText>
-        {{ message }}
+        {{ props.message }}
       </VCardText>
       <VCardActions>
-        <VCardSpacer />
         <VBtn @click="emits('close')">
           {{ t('close') }}
         </VBtn>

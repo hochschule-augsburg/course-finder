@@ -234,7 +234,7 @@ function requiredFieldRule() {
         />
         <VBtn
           :disabled="
-            !formData.moduleCode || (!formData.title.en && !formData.title.de)
+            !formData.moduleCode || (!formData.title.de && !formData.title.en)
           "
           :text="t('global.save')"
           @click="submit"
@@ -267,7 +267,7 @@ de:
   title: 'Bearbeiten - {0}'
   title-en: Titel (Englisch)
   title-de: Titel (Deutsch)
-  module-code: Modulcode
+  module-code: Modulkürzel
   editor-username: Nutzername des Bearbeiters
   semester-hours: Semesterstunden
   credit-points: Credit Points

@@ -49,6 +49,8 @@ const adminCoursesStore = useAdminCoursesStore()
 <i18n lang="yaml">
 en:
   enrollment-phases: Enrollment Phases
+  add: Add
 de:
   enrollment-phases: Anmeldephasen
+  add: Hinzufügen
 </i18n>

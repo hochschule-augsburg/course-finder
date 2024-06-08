@@ -20,7 +20,7 @@ const showModalForm = ref(false)
 const selectedSubject = ref<Course>(adminStore.courses[0])
 let dialogAction: ((e: Course) => Promise<void>) | undefined = undefined
 const showErrorDialog = ref(false)
-let errorDialogMessage = ''
+const errorDialogMessage = ref('')
 
 function openNewDialog() {
   selectedSubject.value = {
@@ -71,17 +71,23 @@ async function createSubject(subject: Course) {
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
   } catch (e) {
+    // console.log('Error creating Subject')
+    errorDialogMessage.value = t('subject-creation-error')
     showErrorDialog.value = true
-    errorDialogMessage = t('subject-creation-error')
   }
 }
 
 async function updateSubject(subject: Course) {
   try {
+    if (!subject.title.de && !subject.title.en) {
+      throw new Error()
+    }
     const result = await trpc.admin.courses.update.mutate(subject)
     merge(selectedSubject.value, result)
   } catch (e) {
-    console.log('Error updating Subject')
+    // console.log('Error updating Subject')
+    errorDialogMessage.value = t('subject-editing-error')
+    showErrorDialog.value = true
   }
 }
 </script>
@@ -144,11 +150,13 @@ en:
   lecturer: Lecturer
   no.: No.
   new: New
-  subject-creation-error: Error creating Subject. Entered module-code might alredy exist.
+  subject-creation-error: Error creating subject. Entered module-code might alredy exist.
+  subject-editing-error: Error editing subject. Module code must be unique and at least one title is required.
 de:
   name: Name
   lecturer: Dozent
   no.: Nr.
   new: Neu
   subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
+  subject-editing-error: Fehler bei der Kurseditierung. Modulkürzel muss einzigartig sein und mindestens ein Titel ist erforderlich.
 </i18n>
