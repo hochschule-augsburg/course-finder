@@ -59,6 +59,10 @@
   color: rgb(var(--v-theme-on-surface)) !important;
 }
 
+.v-messages__message {
+  color: rgb(var(--v-theme-primary)) !important;
+}
+
 a {
   text-decoration: none;
   color: rgb(var(--v-theme-primary));

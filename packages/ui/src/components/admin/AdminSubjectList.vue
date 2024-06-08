@@ -9,6 +9,8 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VBtn, VContainer, VIcon, VTable } from 'vuetify/components'
 
+import ErrorDialog from './ErrorDialog.vue'
+
 const adminStore = useAdminCoursesStore()
 
 const { locale, t } = useI18n()
@@ -17,6 +19,8 @@ const showModalForm = ref(false)
 
 const selectedSubject = ref<Course>(adminStore.courses[0])
 let dialogAction: ((e: Course) => Promise<void>) | undefined = undefined
+const showErrorDialog = ref(false)
+let errorDialogMessage = ''
 
 function openNewDialog() {
   selectedSubject.value = {
@@ -67,7 +71,8 @@ async function createSubject(subject: Course) {
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
   } catch (e) {
-    console.log('Error creating Subject')
+    showErrorDialog.value = true
+    errorDialogMessage = t('subject-creation-error')
   }
 }
 
@@ -125,19 +130,25 @@ async function updateSubject(subject: Course) {
       @cancel="showModalForm = false"
       @submit="processSubject"
     />
+    <ErrorDialog
+      :message="errorDialogMessage"
+      :visible="showErrorDialog"
+      @close="showErrorDialog = false"
+    />
   </VContainer>
 </template>
 
 <i18n lang="yaml">
 en:
-  edit: Edit
   name: Name
   lecturer: Lecturer
   no.: No.
   new: New
+  subject-creation-error: Error creating Subject. Entered module-code might alredy exist.
 de:
   name: Name
   lecturer: Dozent
   no.: Nr.
   new: Neu
+  subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
 </i18n>

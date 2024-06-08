@@ -99,6 +99,10 @@ function deleteSubject() {
     title: t('global.confirm'),
   })
 }
+
+function requiredFieldRule() {
+  return (v: boolean) => !!v || t('hint.module-code-required')
+}
 </script>
 
 <template>
@@ -126,9 +130,11 @@ function deleteSubject() {
           <VTextField
             v-model="formData.moduleCode"
             :label="t('module-code')"
+            :rules="[requiredFieldRule()]"
+            hide-details="auto"
             min-width="150px"
+            validate-on="input"
             autofocus
-            hide-details
             required
           />
         </div>
@@ -201,6 +207,14 @@ function deleteSubject() {
         <small class="text-caption text-medium-emphasis">
           {{ t('hint.comma') }}
         </small>
+        <br />
+        <small
+          v-if="!formData.title.de && !formData.title.en"
+          class="text-caption"
+          style="color: rgb(var(--v-theme-primary))"
+        >
+          {{ t('hint.title') }}
+        </small>
       </VCardText>
       <VDivider />
       <template #actions>
@@ -219,7 +233,9 @@ function deleteSubject() {
           @click="deleteSubject"
         />
         <VBtn
-          :disabled="!formData.moduleCode"
+          :disabled="
+            !formData.moduleCode || (!formData.title.en && !formData.title.de)
+          "
           :text="t('global.save')"
           @click="submit"
         />
@@ -242,7 +258,9 @@ en:
   lecturers: Lecturers
   extra-info: Extra Information
   hint:
-    comma: List separated by commas
+    comma: Lecturerlist separated by commas
+    title: At least one title required
+    module-code-required: required field
   really-want-to-delete: Do you really want to delete this course?
 de:
   createOnTheFly: 'Neuer Kurs - {0}'
@@ -257,6 +275,8 @@ de:
   lecturers: Dozenten
   extra-info: Zusätzliche Informationen
   hint:
-    comma: Liste mit Kommas getrennt
+    comma: Dozentenliste mit Kommas getrennt
+    title: Mindestens ein Titel ist erforderlich
+    module-code-required: Feld erforderlich
   really-want-to-delete: Möchten Sie diesen Kurs wirklich löschen?
 </i18n>

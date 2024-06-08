@@ -20,6 +20,7 @@ declare module 'vue' {
     EnrollmentForm: typeof import('./src/components/EnrollmentForm.vue')['default']
     EnrollmentOverview: typeof import('./src/components/EnrollmentOverview.vue')['default']
     EnrollmentPhase: typeof import('./src/components/admin/EnrollmentPhase.vue')['default']
+    ErrorDialog: typeof import('./src/components/admin/ErrorDialog.vue')['default']
     FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
     InfoOptionsList: typeof import('./src/components/navbar/InfoOptionsList.vue')['default']
