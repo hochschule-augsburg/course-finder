@@ -100,7 +100,6 @@ async function createSubject(subject: Course | undefined) {
     })
     showModalForm.value = false
   } catch (e) {
-    // console.log('Error creating Subject')
     showModalForm.value = false
     errorDialogMessage.value = t('subject-creation-error')
     showErrorDialog.value = true
@@ -421,7 +420,7 @@ en:
   for-fields-of-study: For fields of study
   extra-info: Extra information
   external-registration: External registration
-  subject-creation-error: Error creating subject. Entered module-code might alredy exist.
+  subject-creation-error: Error when creating subject. Entered module-code might alredy exist.
 de:
   on-the-fly: Neues Angebot erstellen
   available-courses: Verfügbare Kurse

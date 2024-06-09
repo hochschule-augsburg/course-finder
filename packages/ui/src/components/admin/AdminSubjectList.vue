@@ -71,7 +71,6 @@ async function createSubject(subject: Course) {
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
   } catch (e) {
-    // console.log('Error creating Subject')
     errorDialogMessage.value = t('subject-creation-error')
     showErrorDialog.value = true
   }
@@ -85,7 +84,6 @@ async function updateSubject(subject: Course) {
     const result = await trpc.admin.courses.update.mutate(subject)
     merge(selectedSubject.value, result)
   } catch (e) {
-    // console.log('Error updating Subject')
     errorDialogMessage.value = t('subject-editing-error')
     showErrorDialog.value = true
   }
@@ -150,8 +148,8 @@ en:
   lecturer: Lecturer
   no.: No.
   new: New
-  subject-creation-error: Error creating subject. Entered module-code might alredy exist.
-  subject-editing-error: Error editing subject. Module code must be unique and at least one title is required.
+  subject-creation-error: Error when creating subject. Entered module-code might alredy exist.
+  subject-editing-error: Error when editing subject. Module code must be unique and at least one title is required.
 de:
   name: Name
   lecturer: Dozent

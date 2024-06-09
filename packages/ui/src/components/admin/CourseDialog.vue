@@ -100,8 +100,7 @@ function deleteSubject() {
   })
 }
 
-function requiredFieldRule() {
-  // return (v: boolean) => !!v || t('hint.module-code-required')
+function moduleCodeRequiredRule() {
   if (!formData.value?.moduleCode) {
     return () => false || t('hint.module-code-required')
   }
@@ -134,7 +133,7 @@ function requiredFieldRule() {
           <VTextField
             v-model="formData.moduleCode"
             :label="t('module-code')"
-            :rules="[requiredFieldRule()]"
+            :rules="[moduleCodeRequiredRule()]"
             hide-details="auto"
             min-width="150px"
             validate-on="input"

@@ -241,13 +241,9 @@ const weekdayItems = [
 ]
 
 function validate(): boolean {
-  // modulcode required
-  if (formData.value?.moduleCode === undefined) {
-    return true
-  }
   // minParticipants required, of type number, min 0
   if (
-    formData.value?.minParticipants?.valueOf() === undefined ||
+    !formData.value?.minParticipants?.valueOf() ||
     !isNumber(formData.value?.minParticipants?.valueOf()) ||
     formData.value?.minParticipants?.valueOf() < 0
   ) {
