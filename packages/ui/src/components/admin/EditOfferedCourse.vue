@@ -10,7 +10,7 @@ import {
 } from '@/helper/enums/fieldsOfStudy'
 import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
 import { format, setDay, startOfWeek } from 'date-fns'
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, isNumber } from 'lodash-es'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -239,6 +239,40 @@ const weekdayItems = [
   { value: 'Saturday', weekday: t('saturday') },
   { value: 'Sunday', weekday: t('sunday') },
 ]
+
+function validate(): boolean {
+  // modulcode required
+  if (formData.value?.moduleCode === undefined) {
+    return true
+  }
+  // minParticipants required, of type number, min 0
+  if (
+    formData.value?.minParticipants?.valueOf() === undefined ||
+    !isNumber(formData.value?.minParticipants?.valueOf()) ||
+    formData.value?.minParticipants?.valueOf() < 0
+  ) {
+    return true
+  }
+  // when maxParticipants defined, it must be of type number and greater than minParticipants
+  if (
+    formData.value?.maxParticipants?.valueOf() !== undefined &&
+    (!isNumber(formData.value?.maxParticipants?.valueOf()) ||
+      formData.value?.minParticipants?.valueOf() >
+        formData.value?.maxParticipants?.valueOf())
+  ) {
+    return true
+  }
+  return false
+}
+
+function minParticipantsRules() {
+  if (!isNumber(formData.value?.minParticipants?.valueOf())) {
+    return () => false || t('validation.nan')
+  } else if (formData.value?.minParticipants?.valueOf() < 0) {
+    return () => false || t('validation.less-than-zero')
+  }
+  return true
+}
 </script>
 
 <template>
@@ -266,8 +300,10 @@ const weekdayItems = [
             <VTextField
               v-model.number="formData.minParticipants"
               :label="t('minimum-participants')"
+              :rules="[minParticipantsRules()]"
+              hide-details="auto"
               type="number"
-              required
+              validate-on="input"
             />
           </VCol>
           <VCol cols="12" sm="6">
@@ -275,7 +311,7 @@ const weekdayItems = [
               v-model.number="formData.maxParticipants"
               :label="t('maximum-participants')"
               type="number"
-              required
+              requried
             />
           </VCol>
           <VCol cols="12" sm="6">
@@ -429,6 +465,18 @@ const weekdayItems = [
         <small class="text-caption text-medium-emphasis"
           >*{{ t('multiple-elements-separation') }}</small
         >
+        <br />
+        <small
+          v-if="
+            formData.maxParticipants?.valueOf() !== undefined &&
+            formData.maxParticipants?.valueOf() <
+              formData.minParticipants?.valueOf()
+          "
+          class="text-caption"
+          style="color: rgb(var(--v-theme-primary))"
+        >
+          {{ t('validation.less-than-min') }}
+        </small>
       </VCardText>
       <VDivider />
       <template #actions>
@@ -439,11 +487,7 @@ const weekdayItems = [
           :text="t('global.delete')"
           @click="$emit('submit', undefined)"
         />
-        <VBtn
-          :disabled="!formData.moduleCode"
-          :text="t('global.save')"
-          @click="submit"
-        />
+        <VBtn :disabled="validate()" :text="t('global.save')" @click="submit" />
       </template>
     </VCard>
   </VDialog>
@@ -474,6 +518,10 @@ en:
   extra-information: Extra information
   multiple-elements-separation: '*separate multiple elements with comma'
   external-registration: External registration
+  validation:
+    nan: 'Please enter a number'
+    less-than-zero: 'Participant number at least 0'
+    less-than-min: 'Maximum participants must be greater than minimum Participants'
 de:
   title: 'Bearbeiten - {0}'
   minimum-participants: Mindestteilnehmer
@@ -498,4 +546,8 @@ de:
   extra-information: Zusätzliche Informationen
   multiple-elements-separation: '*Trennen Sie mehrere Elemente mit Kommas'
   external-registration: Externe Anmeldung
+  validation:
+    nan: 'Bitte eine Zahl eingeben'
+    less-than-zero: 'Teilnehmerzahl mindestens 0'
+    less-than-min: 'Maximalteilnehmerzahl muss größer sein als Mindestteilnehmerzahl'
 </i18n>

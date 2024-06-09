@@ -5,8 +5,10 @@ import { createI18n } from 'vue-i18n'
 
 const i18n = createI18n({
   fallbackLocale: 'en',
+  // fallbackWarn: false,
   locale: 'de',
   messages,
+  // missingWarn: false,
 })
 
 declare module 'vue-i18n' {

@@ -101,7 +101,11 @@ function deleteSubject() {
 }
 
 function requiredFieldRule() {
-  return (v: boolean) => !!v || t('hint.module-code-required')
+  // return (v: boolean) => !!v || t('hint.module-code-required')
+  if (!formData.value?.moduleCode) {
+    return () => false || t('hint.module-code-required')
+  }
+  return true
 }
 </script>
 
