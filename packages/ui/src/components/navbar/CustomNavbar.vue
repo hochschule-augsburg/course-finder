@@ -59,8 +59,10 @@ onMounted(() => {
   }
 
   if (savedLocale) {
+    //@ts-expect-error we save these locales
     locale.value = savedLocale
   } else {
+    //@ts-expect-error default to en
     locale.value = supportedLocales[navigator.language] ?? 'en'
   }
 

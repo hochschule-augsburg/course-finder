@@ -33,7 +33,10 @@ const formData = ref<
     end: string
     id?: number
     start: string
-  } & Omit<Phase, 'emailNotificationAt' | 'end' | 'id' | 'start' | 'state'>
+  } & Omit<
+    Phase,
+    'emailNotificationAt' | 'end' | 'id' | 'publishedTry' | 'start' | 'state'
+  >
 >()
 
 void initFormData()
@@ -139,6 +142,7 @@ async function createEnrollment() {
       emailNotificationAt: new Date(formData.value.emailNotificationAt),
       end: new Date(formData.value.end),
       id: 0,
+      publishedTry: null,
       start: new Date(formData.value.start),
       state: 'NOT_STARTED',
       title: { de: formData.value.title.de, en: formData.value.title.en },

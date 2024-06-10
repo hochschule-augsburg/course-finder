@@ -51,7 +51,7 @@ async function handleUpdateEnroll() {
     <VIcon v-else :icon="mdiCheckboxBlankOutline" size="large" />
   </div>
   <VTooltip v-else location="top">
-    <template #activator="{ toolTipProps }">
+    <template #activator="{ props: toolTipProps }">
       <VIcon :icon="mdiAlphaEBox" size="large" v-bind="toolTipProps" />
     </template>
     {{ t('external-registration') }}
