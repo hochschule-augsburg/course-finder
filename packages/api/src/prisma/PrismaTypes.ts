@@ -59,6 +59,7 @@ export type OfferedCourse = {
 
 declare global {
   namespace PrismaJson {
+    type Otp = { expires: number; otp: string }
     type I18n = I18nJson
     type CourseAppointments = CourseAppointmentsJson<string>
     type Auth = { twoFA?: true } & (

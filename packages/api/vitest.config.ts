@@ -15,6 +15,6 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     includeSource: ['src/domain/enroll/**/*.ts'],
-    setupFiles: ['prisma'].map((file) => `tests/setup/${file}.ts`),
+    setupFiles: ['prisma', 'env'].map((file) => `tests/setup/${file}.ts`),
   },
 })

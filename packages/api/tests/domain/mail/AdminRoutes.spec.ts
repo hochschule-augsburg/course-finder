@@ -1,3 +1,5 @@
+import type { User } from '@prisma/client'
+
 import {
   testConstructTxtText,
   testGetStudentEmails,
@@ -10,7 +12,7 @@ const assignmentResults = {
   stud3: [{ moduleCode: 'course b' }, { moduleCode: 'course c' }],
 }
 
-const userMock = [
+const userMock: User[] = [
   {
     auth: {
       method: 'local' as const,
@@ -19,6 +21,7 @@ const userMock = [
     },
     email: 'stud1@example.com',
     name: 'stud 1',
+    otp: null,
     type: 'Student',
     username: 'stud1',
   },
@@ -30,6 +33,7 @@ const userMock = [
     },
     email: 'stud2@example.com',
     name: 'stud 2',
+    otp: null,
     type: 'Student',
     username: 'stud2',
   },
@@ -41,6 +45,7 @@ const userMock = [
     },
     email: 'stud3@example.com',
     name: 'stud 3',
+    otp: null,
     type: 'Student',
     username: 'stud3',
   },

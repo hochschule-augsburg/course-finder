@@ -4,7 +4,7 @@ import { ZodError } from 'zod'
 
 import type { AuthResult } from '../UserService'
 
-import env from '../../../env'
+import { env } from '../../../env'
 import { prisma } from '../../../prisma/prisma'
 import {
   type ResultType as UserDataType,
