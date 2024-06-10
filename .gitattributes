@@ -1,5 +1,5 @@
 * text eol=lf
-*.jpg -text
-*.jpeg -text
-*.png -text
-*.pdf -text
+*.jpg -binary
+*.jpeg -binary
+*.png -binary
+*.pdf -binary
