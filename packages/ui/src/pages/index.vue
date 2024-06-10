@@ -97,6 +97,6 @@ watch(
 }
 
 .clickable:hover {
-  background-color: rgba(var(--v-theme-primary), 0.2) !important;
+  background-color: rgba(var(--v-theme-primary), 0.05) !important;
 }
 </style>

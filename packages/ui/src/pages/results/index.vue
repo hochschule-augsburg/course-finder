@@ -6,6 +6,7 @@ import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
+  VEmptyState,
   VList,
   VListItem,
   VTab,
@@ -14,9 +15,8 @@ import {
   VTabsWindowItem,
 } from 'vuetify/components'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
-// TODO alle USER-PHASES statt phases
 const coursesStore = useCoursesStore()
 const assignStore = useAssignStore()
 const enrollStore = useEnrollmentStore()
@@ -39,7 +39,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <VTabs v-model="phaseIndex" show-arrows>
+  <VTabs v-model="phaseIndex" class="mx-2 mb-6" show-arrows>
     <VTab
       v-if="coursesStore.currentPhase"
       :text="coursesStore.currentPhase.title[locale]"
@@ -53,14 +53,18 @@ onBeforeMount(() => {
     />
   </VTabs>
 
-  <VTabsWindow v-model="phaseIndex">
+  <VTabsWindow v-model="phaseIndex" class="mx-2">
     <VTabsWindowItem
       v-if="coursesStore.currentPhase"
       :value="coursesStore.currentPhase.id"
     >
-      <EnrollmentOverview :phase="coursesStore.currentPhase" />
+      <EnrollmentOverview :phase="coursesStore.currentPhase" class="mb-3" />
 
-      <VList>
+      <VList
+        v-if="enrollStore.enrolledSubjects.length"
+        bg-color="secondary"
+        rounded="lg"
+      >
         <VListItem
           v-for="subject in enrollStore.enrolledSubjects"
           :key="subject.moduleCode"
@@ -70,15 +74,21 @@ onBeforeMount(() => {
           @click="selectedModuleCode = subject.moduleCode"
         />
       </VList>
+
+      <VEmptyState v-else :title="t('empty-state')" />
     </VTabsWindowItem>
     <VTabsWindowItem
       v-for="(phase, i) in assignStore.assignPhases"
       :key="i"
       :value="phase.phaseId"
     >
-      <EnrollmentOverview :phase="phase.Phase" />
+      <EnrollmentOverview :phase="phase.Phase" class="mb-3" />
 
-      <VList v-if="phase.assignments.length | phase.lost.length">
+      <VList
+        v-if="phase.assignments.length | phase.lost.length"
+        bg-color="secondary"
+        rounded="lg"
+      >
         <VListItem
           v-for="subject in phase.assignments"
           :key="subject.moduleCode"
@@ -96,6 +106,8 @@ onBeforeMount(() => {
           @click="selectedModuleCode = subject.moduleCode"
         />
       </VList>
+
+      <VEmptyState v-else :title="t('empty-state')" />
     </VTabsWindowItem>
   </VTabsWindow>
 
@@ -105,3 +117,10 @@ onBeforeMount(() => {
     @update:visible="selectedModuleCode = undefined"
   />
 </template>
+
+<i18n lang="yaml">
+de:
+  empty-state: Keine Anmeldungen
+en:
+  empty-state: No Enrollments
+</i18n>
