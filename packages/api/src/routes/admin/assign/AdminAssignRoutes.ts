@@ -90,7 +90,15 @@ export const assignRouter = router({
   publish: adminProcedure
     .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
     .mutation(async ({ input }) => {
-      await phaseService.updatePhase(input.phaseId, { state: 'FINISHED' })
+      await Promise.all([
+        phaseService.updatePhase(input.phaseId, { state: 'FINISHED' }),
+        prisma.enrollphase.update({
+          data: {
+            publishedTry: input.tryNo,
+          },
+          where: { id: input.phaseId },
+        }),
+      ])
       const results = await prisma.phaseAssignment.findMany({
         select: { moduleCode: true, username: true },
         where: { phaseId: input.phaseId, tryNo: input.tryNo },

@@ -3,7 +3,7 @@ import type { User } from '@prisma/client'
 import {
   testConstructTxtText,
   testGetStudentEmails,
-} from '../../../src/routes/admin/assign/AssignRoutes'
+} from '../../../src/routes/admin/assign/AdminAssignRoutes'
 import { prismaMock } from '../../setup/prisma'
 
 const assignmentResults = {

@@ -4,8 +4,8 @@ import type { EnrolledCourse } from '@/stores/EnrollmentStore'
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiAlphaFCircle, mdiAlphaPCircle, mdiClose } from '@mdi/js'
-import { sumBy } from 'lodash-es'
-import { computed, ref, toRaw, watch } from 'vue'
+import { cloneDeep, sumBy } from 'lodash-es'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDisplay } from 'vuetify'
 import {
@@ -49,7 +49,7 @@ const isFormUntouched = computed(
 
 watch(visible, () => {
   if (visible.value) {
-    formData.value = structuredClone(toRaw(enrollmentStore.enrolledSubjects))
+    formData.value = cloneDeep(enrollmentStore.enrolledSubjects)
     creditsNeeded.value = enrollmentStore.creditsNeeded
   }
 })
