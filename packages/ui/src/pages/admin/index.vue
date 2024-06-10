@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import ballot from '@/assets/ballot.png'
-import compass from '@/assets/compass.png'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import {
@@ -21,7 +19,7 @@ import {
   VRow,
 } from 'vuetify/components'
 const { t } = useI18n()
-const theme = useTheme()
+
 const adminCourses = useAdminCoursesStore()
 const adminStats = useAdminStatsStore()
 
@@ -65,6 +63,7 @@ const phaseStats = computedAsync(async () => {
             </VRow>
           </VCardText>
         </VCard>
+      </VCol>
 
       <VCol cols="12" md="6" xl="3">
         <VCard :title="t('statistics')" class="h-100" color="#FFD580" link>
@@ -155,9 +154,9 @@ const phaseStats = computedAsync(async () => {
           v-if="adminCourses.currentPhase"
           :phase-id="adminCourses.currentPhase?.id"
         />
-      </VCard>
-    </div>
-  </div>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
 
 <style scoped lang="scss">
