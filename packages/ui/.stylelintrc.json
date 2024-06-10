@@ -39,7 +39,7 @@
       ],
       {
         "ignoreValues": {
-          "/color$/": ["inherit"],
+          "/color$/": ["inherit", "initial"],
           "/^margin/": ["0", "auto", "+"],
           "/^padding/": ["0"],
           "gap": ["0"],

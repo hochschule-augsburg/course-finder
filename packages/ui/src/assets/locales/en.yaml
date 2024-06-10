@@ -61,3 +61,14 @@ tour:
     enroll-checkbox: Click here to select a course.
     enroll-button: Click here to prioritize and enroll in the selected courses.
     nav-bar: Here you have various options such as changing the language and theme, and logging in or out. If you need help, click on the help icon.
+
+pages:
+  admin:
+    index: Dashboard
+    courses:
+      index: Courses
+      upload: Upload
+    phases:
+      index: Phases
+      phaseId: '{phaseId}'
+      edit: Edit

@@ -3,6 +3,7 @@ import { fetchFastify } from '@/fastify'
 import { refThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { definePage } from 'vue-router/auto'
 import {
   VBtn,
   VCol,
@@ -11,6 +12,10 @@ import {
   VRow,
   VSnackbar,
 } from 'vuetify/components'
+
+definePage({
+  name: 'admin.courses.upload',
+})
 
 const { t } = useI18n()
 const pending = ref(false)

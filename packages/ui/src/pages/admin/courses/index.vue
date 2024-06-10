@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import { mdiUpload } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
+import { definePage } from 'vue-router/auto'
+
+definePage({
+  name: 'admin.courses.index',
+})
+
 const { t } = useI18n()
 </script>
 
