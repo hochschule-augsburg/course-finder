@@ -12,7 +12,6 @@ import { useI18n } from 'vue-i18n'
 import {
   VCard,
   VCardText,
-  VCardTitle,
   VCol,
   VContainer,
   VIcon,
@@ -41,53 +40,56 @@ const phaseStats = computedAsync(async () => {
     </VRow>
 
     <VRow>
-      <VCol cols="12" md="6" xl="3">
-        <VCard
-          :title="t('current-phase')"
-          :to="`admin/phases/${adminCourses.currentPhase?.id}`"
-          class="h-100"
-          color="#ADD8E6"
-          density="compact"
-        >
-          <VCardText>
-            <VRow>
-              <VCol class="d-flex align-center justify-center" cols="8">
-                <EnrollmentPhase
-                  :phase-id="adminCourses.currentPhase?.id"
-                  class="pa-4"
-                />
-              </VCol>
-              <VCol class="d-flex align-center justify-center" cols="4">
-                <VIcon :icon="mdiTimetable" size="130px" />
-              </VCol>
-            </VRow>
-          </VCardText>
-        </VCard>
-      </VCol>
+      <template v-if="adminCourses.currentPhase">
+        <VCol cols="12" md="6" xl="3">
+          <VCard
+            :title="t('current-phase')"
+            :to="`admin/phases/${adminCourses.currentPhase?.id}`"
+            class="h-100"
+            color="#ADD8E6"
+            density="compact"
+          >
+            <VCardText>
+              <VRow>
+                <VCol class="d-flex align-center justify-center" cols="8">
+                  <EnrollmentPhase
+                    :phase-id="adminCourses.currentPhase?.id"
+                    class="pa-4"
+                  />
+                </VCol>
+                <VCol class="d-flex align-center justify-center" cols="4">
+                  <VIcon :icon="mdiTimetable" size="130px" />
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VCol>
 
-      <VCol cols="12" md="6" xl="3">
-        <VCard :title="t('statistics')" class="h-100" color="#FFD580" link>
-          <VCardText>
-            <VRow>
-              <VCol class="d-flex align-center justify-center">
-                <div>
-                  <p class="text-center mb-0">
-                    <span class="text-h1">{{
-                      phaseStats?.studentCount ?? '_'
-                    }}</span>
-                  </p>
-                  <p class="text-center mb-0">
-                    {{ t('registered-students') }}
-                  </p>
-                </div>
-              </VCol>
-              <VCol class="d-flex align-center justify-center">
-                <VIcon :icon="mdiAccountMultiple" size="130px" />
-              </VCol>
-            </VRow>
-          </VCardText>
-        </VCard>
-      </VCol>
+        <VCol cols="12" md="6" xl="3">
+          <VCard :title="t('statistics')" class="h-100" color="#FFD580" link>
+            <VCardText>
+              <VRow>
+                <VCol class="d-flex align-center justify-center">
+                  <div>
+                    <p class="text-center mb-0">
+                      <span class="text-h1">{{
+                        phaseStats?.studentCount ?? '_'
+                      }}</span>
+                    </p>
+                    <p class="text-center mb-0">
+                      {{ t('registered-students') }}
+                    </p>
+                  </div>
+                </VCol>
+                <VCol class="d-flex align-center justify-center">
+                  <VIcon :icon="mdiAccountMultiple" size="130px" />
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </template>
+
       <!-- Assign Students Button -->
       <VCol cols="12" md="6" xl="3">
         <VCard
@@ -110,6 +112,7 @@ const phaseStats = computedAsync(async () => {
                   </p>
                 </div>
               </VCol>
+
               <VCol class="d-flex align-center justify-center">
                 <VIcon :icon="mdiBookMultiple" size="130px" />
               </VCol>
@@ -136,24 +139,13 @@ const phaseStats = computedAsync(async () => {
                   </p>
                 </div>
               </VCol>
+
               <VCol class="d-flex align-center justify-center">
                 <VIcon :icon="mdiCalendarClock" color="black" size="130px" />
               </VCol>
             </VRow>
           </VCardText>
         </VCard>
-      </VCol>
-    </VRow>
-
-    <VRow>
-      <VCol cols="12">
-        <h2>{{ t('available-courses') }}</h2>
-      </VCol>
-      <VCol cols="36">
-        <OfferedCoursesTable
-          v-if="adminCourses.currentPhase"
-          :phase-id="adminCourses.currentPhase?.id"
-        />
       </VCol>
     </VRow>
   </VContainer>
