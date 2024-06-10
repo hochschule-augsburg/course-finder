@@ -64,4 +64,5 @@ Wiederverwendbare Komponenten werden im `components/` Verzeichnis abgelegt. Jede
 - **Template**: Definiert die HTML-Struktur.
 - **Script**: Enthält die Logik der Komponente, geschrieben in TypeScript.
 - **Style**: Beinhaltet scoped SCSS, spezifisch für die Komponente.
-  ![components graph](assets/components.png)
+
+![components graph](assets/components.png)
