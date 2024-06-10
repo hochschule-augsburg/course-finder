@@ -67,7 +67,7 @@ Zusätzlich gibt es zwei Buttons, mit denen der Student die Darstellung der Wahl
 
 ![Menu-Button](assets/menubutton.png)
 
-Klickt er jedoch auf den Button mit den 3x3 Punkten **(Dots-Grid-Button)**, werden ihm mehrere Wahlpflichtfächer in einer Zeile angezeigt, wobei maximal drei Fächer in einer Zeile stehen.
+Klickt er jedoch auf den Button mit den 3x3 Punkten **(Dots-Grid-Button)**, werden ihm mehrere Wahlpflichtfächer in einer Zeile angezeigt.
 
 ![Dots-Grid-Button](assets/dotsgridbutton.png)
 

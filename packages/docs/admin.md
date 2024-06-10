@@ -60,6 +60,8 @@ Der Admin ist ebenfalls in der Lage, die Kurse zu bearbeiten die in der aktuelle
 
 - **Anzahl der Mindestteilnehmer**
 - **Anzahl der maximalen Teilnehmer**
+- **Moodle-Kurslink:** Link für den Moodle-Kurs
+- **Externe Anmeldung:** Falls "Externe Anmeldung" ausgewählt wird, bedeutet dies, dass es sich um einen Kurs handelt, für den man sich nicht über diese Webseite anmelden kann. Jedoch wird der Kurs den Studenten dennoch angezeigt, damit sie wissen, dass dieser Kurs in dem Semester stattfindet. Ein Beispiel für einen Kurs, der eine externe Anmeldung benötigt, wäre "Computer Games Development", da die Anmeldung für diesen Kurs über Moodle erfolgt.
 - **Studienfelder:** Für welche Studienfelder dieser Kurs angeboten werden soll
 - **Veranstaltungsart:** Auswahl zwischen drei Optionen: wöchentlich, unregelmäßig oder Blockveranstaltung
 - **Termine:** Festlegung, zu welcher Uhrzeit und an welchem Datum der jeweilige Kurs stattfindet
@@ -67,7 +69,6 @@ Der Admin ist ebenfalls in der Lage, die Kurse zu bearbeiten die in der aktuelle
 
 ![Kurse bearbeiten](assets/kursebearbeiten.png)
 
-weendfpiojweß0f8iw089zu
 
 ### **2.3 Kurse bearbeiten, löschen, hinzufügen**
 
@@ -75,7 +76,11 @@ Um alle Kurse einsehen zu können und diese zu bearbeiten, zu löschen oder neue
 
 ![Alle Kurse Button](assets/allekursebutton.png)
 
-Neue Kurse können **hinzugefügt** werden, indem man den Button "NEW" anklickt. Dadurch öffnet sich ein Pop-up-Fenster, welches es ermöglicht, unter anderem die Semesterwochenstunden, Creditpoints, Dozenten und zusätzliche Informationen festzulegen.
+Falls der Admin alle Kurse aus dem Modulhandbuch **hinzufügen** möchte, muss er auf den Button "Importieren" klicken. Dies ermöglicht es, das gesamte Modulhandbuch für die Wahlpflichtfächer zu importieren. Nach dem Import werden die erforderlichen Daten, wie beispielsweise der Titel des Kurses und die Namen der Dozenten, extrahiert. Anschließend werden auf Basis dieser Daten die Kurse automatisch erstellt.
+
+**BILD HINZUFÜGEN**
+
+Einzelne Kurse können **hinzugefügt** werden, indem man den Button "NEW" anklickt. Dadurch öffnet sich ein Pop-up-Fenster, welches es ermöglicht, unter anderem die Semesterwochenstunden, Creditpoints, Dozenten und zusätzliche Informationen festzulegen.
 
 ![Neuen Kurs hinzufügen](assets/neuerkurs.png)
 
