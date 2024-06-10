@@ -20,15 +20,16 @@ export async function deleteOldData(cutoffDate: Date): Promise<void> {
 }
 
 export async function startScheduledDeletion() {
-  const cutoffDate = new Date()
-  cutoffDate.setFullYear(cutoffDate.getFullYear() - 1.5)
-
   const rule = new schedule.RecurrenceRule()
+  rule.month = [1, 8] // Februar und September
   rule.date = 1 // Erster Tag des Monats
   rule.hour = 0 // 00:00 Uhr
-  rule.month = [1, 8] // Februar und September
+  rule.minute = 0
 
   schedule.scheduleJob(rule, async () => {
+    const cutoffDate = new Date()
+    // cutoffDate.setFullYear(cutoffDate.getFullYear() - 1.5)
+    cutoffDate.setDate(cutoffDate.getDate() - 1.5 * 365)
     console.log('Running scheduled task to delete old data...')
     await deleteOldData(cutoffDate)
   })
