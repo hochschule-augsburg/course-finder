@@ -5,7 +5,10 @@ import { prisma } from '../../prisma/prisma'
 
 export function adminFastifyRoutes(fastify: FastifyInstance) {
   fastify.post('/api/admin/courses/upload-module-book', async (req, reply) => {
-    if (req.session.user?.type !== 'Admin') {
+    if (req.cookies['cf-token']) {
+      await req.jwtVerify()
+    }
+    if (req.user?.type !== 'Admin') {
       return reply.status(401).send({ error: 'Unauthorized' })
     }
 
@@ -19,13 +22,18 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
 
     const courses = await parseCourses(await data.toBuffer())
     await prisma.$transaction(
-      courses.map((course) =>
-        prisma.course.upsert({
+      courses.map((course) => {
+        const promise = prisma.course.upsert({
           create: course,
           update: course,
           where: { moduleCode: course.moduleCode },
-        }),
-      ),
+        })
+        promise.catch((e) => {
+          console.log(course, e)
+          return e
+        })
+        return promise
+      }),
     )
 
     reply.send({ status: 'success' })

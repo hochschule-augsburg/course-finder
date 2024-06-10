@@ -63,7 +63,7 @@ async function extractPDFSections(
           (e) => e.startsWith('Module code') || e.startsWith('Modulkürzel'),
         )
 
-        const moduleCode = content[index + 1]
+        const moduleCode = content[index + 1].split(',')[0].trim()
         if (!moduleCode) {
           throw new Error(`moduleCode not found (p. ${start}-${end})`)
         }

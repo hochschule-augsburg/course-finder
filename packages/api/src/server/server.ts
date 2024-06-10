@@ -1,40 +1,34 @@
 import { fastifyCookie } from '@fastify/cookie'
 import { fastifyCors } from '@fastify/cors'
+import { fastifyJwt } from '@fastify/jwt'
 import { fastifyMultipart } from '@fastify/multipart'
-import { fastifySession } from '@fastify/session'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
 import type { ClientUserExtended } from '../prisma/PrismaTypes'
 
-import env from '../env'
+import { env } from '../env'
 import { adminFastifyRoutes } from '../routes/admin/AdminFastifyRoutes'
 import { appRouter } from '../routes/router'
 import { createContext } from './context'
 
-declare module 'fastify' {
-  interface Session {
-    twoFA?: { expires: number; otp: string; username: string }
-    user?: ClientUserExtended
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+    payload: ClientUserExtended
   }
 }
 
 export async function createServer() {
-  if (env.SESSION_SECRET.length < 32) {
-    throw new Error('env SESSION_SECRET is required and needs 32 characters')
-  }
-
   const server = fastify({ logger: true })
 
   await server.register(fastifyMultipart)
   await server.register(fastifyCookie)
-  await server.register(fastifySession, {
+  await server.register(fastifyJwt, {
     cookie: {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
+      cookieName: 'cf-token',
+      signed: false,
     },
-    secret: env.SESSION_SECRET,
+    secret: env.JWT_SECRET,
   })
   await server.register(fastifyCors, {
     credentials: true,
@@ -66,7 +60,7 @@ export async function createServer() {
       await server.listen({
         // relevant for docker
         host: env.SERVER_HOSTNAME,
-        port: Number(env.SERVER_PORT),
+        port: env.SERVER_PORT,
       })
       console.log('listening on port', env.SERVER_PORT)
     } catch (err) {

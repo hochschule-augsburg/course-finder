@@ -19,19 +19,44 @@ function extractData(
     content: string
   },
 ): Course {
+  const lines = data.content.split('\n')
+  const titleDe = getData(
+    lines.findIndex((e) => e.startsWith('Modulbezeichnung')),
+    lines,
+  )
+  const titleEn = getData(
+    lines.findIndex((e) => e.startsWith('Title in English')),
+    lines,
+  )
+  const facultyName = getData(
+    lines.findIndex((e) => e.startsWith('Fakultät') || e.startsWith('Faculty')),
+    lines,
+  )
+    ?.replace('Fakultät für ', '')
+    .replace('Faculty of Computer Science', 'Informatik')
+    .replace('Informatik / Faculty of Computer Science', 'Informatik')
+    .replace('Computer Science', 'Informatik')
+    .replace('Informatik / Informatik', 'Informatik')
+  if (!facultyName) {
+    throw new Error(`Faculty name not found for module ${moduleCode}`)
+  }
+
+  const lecturers = getLecturer(
+    lines.findLastIndex(
+      (e) =>
+        e.startsWith('Module coordinator') ||
+        e.startsWith('Modulverantwortlicher'),
+    ),
+    lines,
+  )
+
   return {
     creditPoints: parseInt(nc(data.content.match(/(?:credits|CPs):\s(\d+)/))),
     editorUsername: null,
     extraInfo: null,
-    facultyName: nc(data.content.match(/[^\s]*(?:Faculty|Fakultät)\s(.+)/)),
+    facultyName,
     infoUrl: null,
-    lecturers: [
-      nc(
-        data.content.match(
-          /(?:Module coordinator|Modulverantwortlicher)\s(.+)/,
-        ),
-      ),
-    ],
+    lecturers,
     moduleCode,
     pdf: data.buffer,
     published: true,
@@ -39,13 +64,28 @@ function extractData(
       nc(data.content.match(/(?:Credit hours|SWS):\s(\d+)/)),
     ),
     title: {
-      de: nc(data.content.match(/Modulbezeichnung\s(.+)/)),
-      en: nc(
-        data.content.match(/(?:Titel in Englisch|Title in English)\s(.+)/),
-      ),
+      de: titleDe ?? titleEn,
+      en: titleEn ?? titleDe,
     },
     varyingCP: null,
   }
+}
+
+function getData(titleIndex: number, lines: string[]) {
+  if (titleIndex !== -1) {
+    return lines[titleIndex + 1]?.trim()
+  }
+}
+
+function getLecturer(titleIndex: number, lines: string[]) {
+  const lecturers = []
+  for (const line of lines.slice(titleIndex + 1)) {
+    if (line.startsWith('Fakultät') || line.startsWith('Faculty')) {
+      break
+    }
+    lecturers.push(line)
+  }
+  return lecturers
 }
 
 function nc(searchRes: RegExpMatchArray | null): string {
@@ -56,6 +96,10 @@ function nc(searchRes: RegExpMatchArray | null): string {
       .replace('–', '\t\t–')
       .replace('Fakultät für ', '')
       .replace('Faculty of Computer Science', 'Informatik')
+      .replace('Informatik / Faculty of Computer Science', 'Informatik')
+      .replace('Computer Science', 'Informatik')
+      .replace('Informatik / Informatik', 'Informatik')
+      .trim()
   }
   return ''
 }

@@ -21,8 +21,6 @@ declare module 'vue' {
     EnrollmentPhase: typeof import('./src/components/admin/EnrollmentPhase.vue')['default']
     FilterDialog: typeof import('./src/components/FilterDialog.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
-    HelpOptionsList: typeof import('./src/components/navbar/HelpOptionsList.vue')['default']
-    InfoDialog: typeof import('./src/components/InfoDialog.vue')['default']
     InfoOptionsList: typeof import('./src/components/navbar/InfoOptionsList.vue')['default']
     LocaleOptionsList: typeof import('./src/components/navbar/LocaleOptionsList.vue')['default']
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
