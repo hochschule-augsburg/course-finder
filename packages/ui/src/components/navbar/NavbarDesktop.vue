@@ -75,7 +75,7 @@ const userStore = useUserStore()
           <VBtn v-bind="props" icon>
             <VIcon :icon="mdiHelpCircleOutline" />
             <VTooltip activator="parent" location="left" open-delay="500">
-              {{ t('help') }}
+              {{ t('global.help') }}
             </VTooltip>
           </VBtn>
         </template>
@@ -126,7 +126,6 @@ const userStore = useUserStore()
 
 <i18n lang="yaml">
 en:
-  help: Help
   change-lang: Select Language
   change-theme: Select Theme
   login: Login
@@ -135,7 +134,6 @@ en:
   my-courses: My courses
 
 de:
-  help: Hilfe
   change-lang: Sprache wählen
   change-theme: Theme wählen
   login: Login

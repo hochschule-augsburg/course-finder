@@ -159,10 +159,7 @@ async function validate() {
       v-model:visible="showSubjectDialog"
       :subject="selectedSubject"
     />
-    <VCard
-      subtitle="Automatische Verteilung mit 'Autofill'"
-      title="Priorisierung"
-    >
+    <VCard :subtitle="t('subtitle')" :title="t('title')">
       <template #append>
         <!-- TODO: update link -->
         <VBtn
@@ -172,9 +169,15 @@ async function validate() {
           icon
         >
           <VIcon :icon="mdiHelpCircle" />
+          <VTooltip activator="parent" location="top right" offset="2">
+            {{ t('global.help') }}
+          </VTooltip>
         </VBtn>
         <VBtn variant="plain" icon @click="visible = false">
           <VIcon :icon="mdiClose" />
+          <VTooltip activator="parent" location="top right" offset="2">
+            {{ t('global.close') }}
+          </VTooltip>
         </VBtn>
       </template>
       <VCardText class="pt-3 pb-0">
@@ -256,6 +259,8 @@ de:
   autofill: Autofill
   prio: Priorität
   fallback: Fallback
+  title: Priorisierung
+  subtitle: Automatische Priorisierung mit 'Autofill' möglich
 en:
   register: Register
   field-required: This field is required!
@@ -266,4 +271,6 @@ en:
   autofill: Autofill
   prio: Priority
   fallback: Fallback
+  title: Prioritization
+  subtitle: Automatic prioritization possible with 'Autofill'
 </i18n>

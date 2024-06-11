@@ -11,6 +11,7 @@ global:
   back: Zurück
   search: Suchen
   title: CourseFinder
+  help: Hilfe
 
 filter:
   title: Filter
