@@ -43,7 +43,7 @@ watch(
   () => {
     tableOne.value = removeLoadedCourses()
   },
-  { immediate: false },
+  { immediate: true },
 )
 
 function removeLoadedCourses() {

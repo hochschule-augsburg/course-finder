@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router'
 import { definePage } from 'vue-router/auto'
 
 definePage({
-  name: 'admin.phases.phaseId.edit',
+  name: 'admin.phases.edit',
 })
 
 const route = useRoute()

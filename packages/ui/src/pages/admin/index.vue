@@ -149,7 +149,7 @@ const phaseStats = computedAsync(async () => {
               </VCol>
 
               <VCol class="d-flex align-center justify-center">
-                <VIcon :icon="mdiCalendarClock" color="black" size="130px" />
+                <VIcon :icon="mdiCalendarClock" class="icon" size="130px" />
               </VCol>
             </VRow>
           </VCardText>
@@ -160,13 +160,18 @@ const phaseStats = computedAsync(async () => {
 </template>
 
 <style scoped lang="scss">
-.tile {
-  height: 15rem;
-  width: 25rem;
+$black: #000000;
 
-  .img {
-    filter: invert(1);
-  }
+.black {
+  color: $black;
+}
+
+.icon {
+  color: $black;
+}
+
+.icon:hover {
+  color: rgb(var(--v-theme-primary));
 }
 </style>
 
@@ -192,11 +197,3 @@ de:
   total-courses: Kurse
   total-phases: Phasen
 </i18n>
-
-<style lang="scss" scoped>
-$black: #000000;
-
-.black {
-  color: $black;
-}
-</style>
