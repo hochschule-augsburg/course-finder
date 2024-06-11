@@ -7,21 +7,15 @@ const { t } = useI18n()
 
 <template>
   <div class="mx-15">
-    <VContainer>
-      <VRow justify="center">
-        <VCol>
-          <h1>{{ t('courses') }}</h1>
-        </VCol>
-        <VCol class="text-right">
-          <VBtn color="primary" to="courses/upload">
-            {{ t('add') }}
-            <template #append>
-              <VIcon :icon="mdiUpload" color="white" size="20" />
-            </template>
-          </VBtn>
-        </VCol>
-      </VRow>
-    </VContainer>
+    <div class="d-flex justify-space-between">
+      <h1>{{ t('courses') }}</h1>
+      <VBtn color="primary" to="courses/upload">
+        {{ t('add') }}
+        <template #append>
+          <VIcon :icon="mdiUpload" color="white" size="20" />
+        </template>
+      </VBtn>
+    </div>
     <AdminSubjectList />
   </div>
 </template>
