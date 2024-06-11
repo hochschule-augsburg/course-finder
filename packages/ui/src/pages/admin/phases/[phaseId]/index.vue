@@ -2,12 +2,7 @@
 import { usePhaseState } from '@/stores/admin/AdminCoursesStore'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { definePage } from 'vue-router/auto'
 import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
-
-definePage({
-  name: 'admin.phases.phaseId',
-})
 
 const { t } = useI18n()
 

@@ -68,8 +68,7 @@ pages:
     courses:
       index: Kurse
       upload: Hochladen
-    upload: Upload
     phases:
       index: Phasen
-      phaseId: '{phaseId}'
+      '[phaseId]': '{phaseId}'
       edit: Bearbeiten

@@ -9,7 +9,6 @@ import {
 } from '@mdi/js'
 import { computedAsync } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
-import { definePage } from 'vue-router/auto'
 import {
   VCard,
   VCardText,
@@ -20,9 +19,6 @@ import {
 } from 'vuetify/components'
 const { t } = useI18n()
 
-definePage({
-  name: 'admin.index',
-})
 defineOptions({
   name: 'AdminDashboard',
 })

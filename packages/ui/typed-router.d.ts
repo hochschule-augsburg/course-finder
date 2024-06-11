@@ -19,12 +19,12 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    'admin.index': RouteRecordInfo<'admin.index', '/admin', Record<never, never>, Record<never, never>>,
-    'admin.courses.index': RouteRecordInfo<'admin.courses.index', '/admin/courses', Record<never, never>, Record<never, never>>,
-    'admin.courses.upload': RouteRecordInfo<'admin.courses.upload', '/admin/courses/upload', Record<never, never>, Record<never, never>>,
-    'admin.phases.index': RouteRecordInfo<'admin.phases.index', '/admin/phases', Record<never, never>, Record<never, never>>,
-    'admin.phases.phaseId': RouteRecordInfo<'admin.phases.phaseId', '/admin/phases/:phaseId', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
-    'admin.phases.edit': RouteRecordInfo<'admin.phases.edit', '/admin/phases/:phaseId/edit', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
+    '/admin/': RouteRecordInfo<'/admin/', '/admin', Record<never, never>, Record<never, never>>,
+    '/admin/courses/': RouteRecordInfo<'/admin/courses/', '/admin/courses', Record<never, never>, Record<never, never>>,
+    '/admin/courses/upload': RouteRecordInfo<'/admin/courses/upload', '/admin/courses/upload', Record<never, never>, Record<never, never>>,
+    '/admin/phases/': RouteRecordInfo<'/admin/phases/', '/admin/phases', Record<never, never>, Record<never, never>>,
+    '/admin/phases/[phaseId]/': RouteRecordInfo<'/admin/phases/[phaseId]/', '/admin/phases/:phaseId', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
+    '/admin/phases/[phaseId]/edit': RouteRecordInfo<'/admin/phases/[phaseId]/edit', '/admin/phases/:phaseId/edit', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
     '/results': RouteRecordInfo<'/results', '/results', Record<never, never>, Record<never, never>>,
   }
 }

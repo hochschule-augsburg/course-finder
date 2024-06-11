@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useI18n } from 'vue-i18n'
-import { definePage } from 'vue-router/auto'
 import {
   VBtn,
   VCard,
@@ -10,10 +9,6 @@ import {
   VContainer,
   VRow,
 } from 'vuetify/components'
-
-definePage({
-  name: 'admin.phases.index',
-})
 
 const { t } = useI18n()
 

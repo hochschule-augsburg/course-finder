@@ -13,26 +13,37 @@ const routeItems = computed(() => {
   if (route.path === '/') {
     return []
   }
-  const pathArray = route.path.split('/')
-  pathArray.shift()
-  pathArray.pop()
-  return [
-    ...pathArray.map((path, index) => {
-      const fullPath = '/' + pathArray.slice(0, index + 1).join('/')
-      const routeMatch = router.resolve(fullPath)
-      return {
-        href: fullPath,
-        params: routeMatch.params,
-        text: routeMatch.name,
-      }
-    }),
-    {
-      disabled: true,
-      href: route.fullPath,
-      params: route.params,
-      text: route.name?.toString(),
-    },
-  ].filter((item) => !item.text?.toString().includes('/'))
+  const pathArray = route.path.split('/').slice(1, -1)
+  const breadcrumbItems = pathArray.map((path, index) => {
+    const fullPath = '/' + pathArray.slice(0, index + 1).join('/')
+    const routeMatch = router.resolve(fullPath)
+
+    return {
+      disabled: false,
+      href: fullPath,
+      noBreadcrumbs: routeMatch.meta.noBreadcrumbs,
+      params: routeMatch.params,
+      text: routeMatch.name?.toString(),
+    }
+  })
+
+  breadcrumbItems.push({
+    disabled: true,
+    href: route.fullPath,
+    noBreadcrumbs: route.meta.noBreadcrumbs,
+    params: route.params,
+    text: route.name?.toString(),
+  })
+
+  return breadcrumbItems
+    .filter((item) => !item.noBreadcrumbs)
+    .map((item) => ({
+      ...item,
+      text: item.text
+        ?.replace(/\/$/, '.index')
+        .replace(/\[|\]/g, '')
+        .replace(/\//g, '.'),
+    }))
 })
 </script>
 
@@ -46,7 +57,7 @@ const routeItems = computed(() => {
       <VBreadcrumbsItem :disabled="item.disabled" :to="item.href">
         {{
           // @ts-expect-error wrong typing in vuetify
-          t(`pages.${item.text}`, item.params)
+          t(`pages${item.text}`, item.params)
         }}
       </VBreadcrumbsItem>
     </template>

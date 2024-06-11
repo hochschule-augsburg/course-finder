@@ -5,6 +5,7 @@ import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { definePage } from 'vue-router/auto'
 import {
   VEmptyState,
   VList,
@@ -14,6 +15,12 @@ import {
   VTabsWindow,
   VTabsWindowItem,
 } from 'vuetify/components'
+
+definePage({
+  meta: {
+    noBreadcrumbs: true,
+  },
+})
 
 const { locale, t } = useI18n()
 

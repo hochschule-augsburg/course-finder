@@ -70,5 +70,7 @@ pages:
       upload: Upload
     phases:
       index: Phases
-      phaseId: '{phaseId}'
-      edit: Edit
+      phaseId:
+        index: '{phaseId}'
+      edit:
+        index: Edit
