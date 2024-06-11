@@ -57,6 +57,12 @@ export const authRouter = router({
           ])
           return 'two-fa-required'
         }
+
+        await prisma.student.updateMany({
+          data: { createdAt: new Date() },
+          where: { User: { username: input.username } },
+        })
+
         const token = await ctx.res.jwtSign(result.user)
         ctx.res.setCookie('cf-token', token, {
           domain: env.SERVER_HOSTNAME,

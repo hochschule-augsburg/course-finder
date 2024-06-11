@@ -28,8 +28,7 @@ export async function startScheduledDeletion() {
 
   schedule.scheduleJob(rule, async () => {
     const cutoffDate = new Date()
-    // cutoffDate.setFullYear(cutoffDate.getFullYear() - 1.5)
-    cutoffDate.setDate(cutoffDate.getDate() - 1.5 * 365)
+    cutoffDate.setMonth(cutoffDate.getMonth() - 18)
     console.log('Running scheduled task to delete old data...')
     await deleteOldData(cutoffDate)
   })

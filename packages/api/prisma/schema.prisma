@@ -27,8 +27,6 @@ model User {
   /// [Otp]
   otp      Json?
   Course   Course[]
-
-  createdAt DateTime @default(now())
 }
 
 model Student {
@@ -42,6 +40,7 @@ model Student {
   facultyName  String
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Faculty {
@@ -131,6 +130,7 @@ model StudentPhase {
 
   creditsNeeded    Int
   PhaseAssignments PhaseAssignment[]
+  createdAt DateTime @default(now())
 
   @@id([username, phaseId])
 }
