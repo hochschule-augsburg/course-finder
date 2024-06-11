@@ -3,19 +3,26 @@ import type { EnrolledCourse } from '@/stores/EnrollmentStore'
 
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
-import { mdiAlphaFCircle, mdiAlphaPCircle, mdiClose } from '@mdi/js'
+import {
+  mdiAlphaFCircle,
+  mdiAlphaPCircle,
+  mdiClose,
+  mdiHelpCircle,
+} from '@mdi/js'
 import { cloneDeep, sumBy } from 'lodash-es'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDisplay } from 'vuetify'
 import {
   VBtn,
+  VCard,
+  VCardActions,
+  VCardText,
   VDialog,
   VDivider,
   VForm,
   VIcon,
   VRow,
-  VSheet,
   VSpacer,
   VTextField,
   VTooltip,
@@ -152,86 +159,89 @@ async function validate() {
       v-model:visible="showSubjectDialog"
       :subject="selectedSubject"
     />
-    <VSheet
-      class="pa-4"
-      color="secondary"
-      max-width="var(--dialog-max-width)"
-      rounded="lg"
+    <VCard
+      subtitle="Automatische Verteilung mit 'Autofill'"
+      title="Priorisierung"
     >
-      <VRow align="center" class="mb-1">
-        <VSpacer />
-        <VBtn class="mr-2" variant="plain" icon @click="visible = false">
-          <VIcon :icon="mdiClose" size="small" />
+      <template #append>
+        <!-- TODO: update link -->
+        <VBtn
+          href="https://sirchnik.github.io/subject-enroll/student.html#anmeldung-der-wahlpflichtfacher"
+          target="blank"
+          variant="plain"
+          icon
+        >
+          <VIcon :icon="mdiHelpCircle" />
         </VBtn>
-      </VRow>
-      <VForm class="mx-2" ref="form">
-        <VTextField
-          v-model.number="creditsNeeded"
-          :label="t('credits-wanted')"
-          :rules="integerInputRules"
-          class="mb-3"
-          color="primary"
-          required
-        />
-        <VDivider :thickness="2" class="mt-0 mb-6" />
-        <template v-for="subject in formData" :key="subject.moduleCode">
+        <VBtn variant="plain" icon @click="visible = false">
+          <VIcon :icon="mdiClose" />
+        </VBtn>
+      </template>
+      <VCardText class="pt-3 pb-0">
+        <VForm ref="form">
           <VTextField
-            v-model.number="subject.points"
-            :label="locale === 'de' ? subject.title.de : subject.title.en"
+            v-model.number="creditsNeeded"
+            :label="t('credits-wanted')"
+            :rules="integerInputRules"
             class="mb-3"
             color="primary"
             required
-          >
-            <template #append>
-              <VBtn
-                density="compact"
-                tabindex="-1"
-                flat
-                icon
-                @click="
-                  () => {
-                    subject.autoFillOption = getNextAutoFillOption(
-                      subject.autoFillOption,
-                    )
-                  }
-                "
-              >
-                <VIcon :icon="autoFillOptions[subject.autoFillOption]" />
-                <VTooltip activator="parent" location="top right" offset="2">
-                  {{ t(subject.autoFillOption) }}
-                </VTooltip>
-              </VBtn>
-            </template>
-          </VTextField>
-        </template>
-        <VRow v-if="mobile" align="center" class="mb-6 px-3">
-          <div
-            v-for="(icon, option) in autoFillOptions"
-            :key="option"
-            class="pr-2"
-          >
-            <VIcon :icon size="small" />
-            {{ t(option) }}
-          </div>
-        </VRow>
-        <VRow align="center" class="mt-2 mb-1 px-3">
-          <VBtn
-            :text="t('autofill')"
-            class="mr-3"
-            variant="plain"
-            @click="autoFill"
           />
-          <VSpacer />
-          <VBtn
-            :loading="loading"
-            :text="t('register')"
-            color="primary"
-            variant="tonal"
-            @click="validate"
-          />
-        </VRow>
-      </VForm>
-    </VSheet>
+          <VDivider :thickness="2" class="mt-0 mb-6" />
+          <template v-for="subject in formData" :key="subject.moduleCode">
+            <VTextField
+              v-model.number="subject.points"
+              :label="locale === 'de' ? subject.title.de : subject.title.en"
+              class="mb-3"
+              color="primary"
+              required
+            >
+              <template #append>
+                <VBtn
+                  density="compact"
+                  tabindex="-1"
+                  flat
+                  icon
+                  @click="
+                    () => {
+                      subject.autoFillOption = getNextAutoFillOption(
+                        subject.autoFillOption,
+                      )
+                    }
+                  "
+                >
+                  <VIcon :icon="autoFillOptions[subject.autoFillOption]" />
+                  <VTooltip activator="parent" location="top right" offset="2">
+                    {{ t(subject.autoFillOption) }}
+                  </VTooltip>
+                </VBtn>
+              </template>
+            </VTextField>
+          </template>
+          <VRow v-if="mobile" align="center" class="mb-6 px-3">
+            <div
+              v-for="(icon, option) in autoFillOptions"
+              :key="option"
+              class="pr-2"
+            >
+              <VIcon :icon size="small" />
+              {{ t(option) }}
+            </div>
+          </VRow>
+        </VForm>
+      </VCardText>
+      <VCardActions class="mb-1 mx-2">
+        <VBtn :text="t('autofill')" variant="plain" @click="autoFill" />
+        <VSpacer />
+        <VBtn
+          :loading="loading"
+          :text="t('register')"
+          color="primary"
+          variant="tonal"
+          @click="validate"
+        />
+      </VCardActions>
+    </VCard>
   </VDialog>
 </template>
 

@@ -33,8 +33,8 @@ async function copyLinkToClipboard() {
 
 <template>
   <VDialog v-model:model-value="showSubjectDialog" max-width="750">
-    <VCard v-if="subject" class="pa-2" color="background">
-      <VCardTitle>
+    <VCard v-if="subject" class="pa-3" color="background">
+      <VCardTitle class="px-2">
         <div class="d-flex align-center">
           <span class="text-truncate">
             <strong>
@@ -69,11 +69,11 @@ async function copyLinkToClipboard() {
           </VBtn>
         </div>
       </VCardTitle>
-      <VCardText class="pa-0 pb-3 px-3">
+      <VCardText class="pa-0 pb-3 px-2">
         <SubjectDetails :subject="subject" />
       </VCardText>
 
-      <VCardActions class="mx-4">
+      <VCardActions class="px-2">
         <VSpacer />
         <VBtn
           :text="t('global.close')"
