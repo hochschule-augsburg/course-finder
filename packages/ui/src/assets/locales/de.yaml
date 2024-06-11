@@ -70,5 +70,6 @@ pages:
       upload: Hochladen
     phases:
       index: Phasen
-      '[phaseId]': '{phaseId}'
-      edit: Bearbeiten
+      '[phaseId]':
+        index: '{phaseId}'
+        edit: Bearbeiten

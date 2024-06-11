@@ -72,5 +72,4 @@ pages:
       index: Phases
       phaseId:
         index: '{phaseId}'
-      edit:
-        index: Edit
+        edit: Edit

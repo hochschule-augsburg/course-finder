@@ -156,6 +156,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@date-io/date-fns':
+        specifier: ^3.0.0
+        version: 3.0.0(date-fns@3.6.0)
       '@mdi/js':
         specifier: ^7.4.47
         version: 7.4.47
@@ -544,6 +547,17 @@ packages:
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       postcss-selector-parser: ^6.0.13
+
+  '@date-io/core@3.0.0':
+    resolution: {integrity: sha512-S3j+IAQVBYNkQzchVVhX40eBkGDreBpScy9RXwTS5j2+k07+62pMVPisQ44Gq76Rqy5AOG/EZXCwBpY/jbemvA==}
+
+  '@date-io/date-fns@3.0.0':
+    resolution: {integrity: sha512-hsLAbsdP8LKfi7OQ729cXMWfmHQEq0hn3ysXfAAoc92j6j6sBq0s0tplnkWu6O4iBUpVCYRPGuNjQQhTaOu2AA==}
+    peerDependencies:
+      date-fns: ^3.2.0
+    peerDependenciesMeta:
+      date-fns:
+        optional: true
 
   '@docsearch/css@3.6.0':
     resolution: {integrity: sha512-+sbxb71sWre+PwDK7X2T8+bhS6clcVMLwBPznX45Qu6opJcgRjAp7gYSDzVFp187J+feSj5dNBN1mJoi6ckkUQ==}
@@ -4640,6 +4654,14 @@ snapshots:
   '@csstools/selector-specificity@3.1.1(postcss-selector-parser@6.1.0)':
     dependencies:
       postcss-selector-parser: 6.1.0
+
+  '@date-io/core@3.0.0': {}
+
+  '@date-io/date-fns@3.0.0(date-fns@3.6.0)':
+    dependencies:
+      '@date-io/core': 3.0.0
+    optionalDependencies:
+      date-fns: 3.6.0
 
   '@docsearch/css@3.6.0': {}
 
