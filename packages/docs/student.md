@@ -20,7 +20,7 @@ Ganz oben auf der Webseite befindet sich die Navigationsleiste, die aus mehreren
 
 ### 1.2 Sprache wählen
 
-- **Beschreibung und Anwendung:** Dieser Button ermöglicht es Ihnen, die Sprache der Webseite zu ändern.Klicken Sie auf den Button "Sprache wählen" und wählen Sie die gewünschte Sprache aus dem Dropdown-Menü. Die Webseite wird automatisch in die ausgewählte Sprache übersetzt.
+- **Beschreibung und Anwendung:** Dieser Button ermöglicht es Ihnen, die Sprache der Webseite zu ändern. Klicken Sie auf den Button "Sprache wählen" und wählen Sie die gewünschte Sprache aus dem Dropdown-Menü. Die Webseite wird automatisch in die ausgewählte Sprache übersetzt.
 - **Optionen:**
   - **Deutsch:** Stellt die Webseite auf die deutsche Sprache um.
   - **Englisch:** Stellt die Webseite auf die englische Sprache um.
@@ -29,7 +29,7 @@ Ganz oben auf der Webseite befindet sich die Navigationsleiste, die aus mehreren
 
 ### 1.3 Hilfe
 
-- **Beschreibung und Anwendung:** Mit diesem Button können Sie ein Dropdown-Menü öffnen, dabei kann man sich entweder für ein Tutorial (kurze Anleitung zur Wahl der Wahlpflichtfächer)entscheiden oder man entscheidet sich für die Dokumentation (detaillierte Beschreibung der Webseite).
+- **Beschreibung und Anwendung:** Mit diesem Button können Sie ein Dropdown-Menü öffnen, dabei kann man sich entweder für ein Tutorial (kurze Anleitung zur Wahl der Wahlpflichtfächer) entscheiden oder man entscheidet sich für die Dokumentation (detaillierte Beschreibung der Webseite).
 
 ![Hilfe Button](assets/hilfe.png)
 
@@ -41,7 +41,7 @@ Ganz oben auf der Webseite befindet sich die Navigationsleiste, die aus mehreren
 
 ### 1.5 Logout
 
-- **Beschreibung und Anwendung:** Sobald die Anmeldung abgeschlossen ist wird der Benutzername des Studenten in der Navigationsleiste angezeigt und aus dem Login-Button ein Logout-Button, diesen kann der Student bei Bedarf nutzen, nachdem die Wahl der Wahlpflichtfächer erfolgt ist. 
+- **Beschreibung und Anwendung:** Sobald die Anmeldung abgeschlossen ist wird der Benutzername des Studenten in der Navigationsleiste angezeigt und aus dem Login-Button wird ein Logout-Button, diesen kann der Student bei Bedarf nutzen.
 
 ![Logout](assets/logout.png)
 
@@ -52,7 +52,7 @@ Diese Navigationsleiste ist ein zentraler Bestandteil der Webseite und bietet sc
 ## 2 Funktionen für die Wahlpflichtfächer
 
 ### 2.1 Suchfunktion
-Studenten können mithilfe einer Suchleiste, die eine Lupe enthält, nach Wahlpflichtfächern suchen, wenn sie den Namen des Wahlpflichtfachs kennen. Geben Sie einfach den Namen des gewünschten Wahlpflichtfachs in die Suchleiste ein und drücken Sie Enter oder klicken Sie auf die Lupe.
+Studenten können mithilfe einer Suchleiste, die eine Lupe enthält, nach Wahlpflichtfächern suchen, wenn sie den Namen des Wahlpflichtfachs kennen.
 
 ![Suchfunktion](assets/suchfunktion.png)
 
@@ -71,9 +71,7 @@ Klickt er jedoch auf den Button mit den 3x3 Punkten **(Dots-Grid-Button)**, werd
 
 ![Dots-Grid-Button](assets/dotsgridbutton.png)
 
-All diese Funktionen erleichtern es Studenten, die passenden Wahlpflichtfächer zu finden und ihre Studienplanung effizient zu gestalten.
-
-## 3 Wahlpflichtfächer: Informationen und Anmeldung
+## 3 Wahlpflichtfächer: Informationen, Anmeldung und Änderungen
 
 ### 3.1 Detaillierte Informationen zu Wahlpflichtfächern
 Wenn der Student auf ein Wahlpflichtfach klickt, öffnet sich ein Pop-up-Fenster, das folgende Informationen anzeigt:
@@ -93,7 +91,6 @@ des Modulhandbuchs, der nur Informationen zu dem jeweiligen Wahlpflichtfach enth
 
 ### 3.2 Wahlpflichtfach Anmeldung
 
-## Anmeldung der Wahlpflichtfächer
 
 Die Anmeldung der Wahlpflichtfächer besteht im Grunde aus zwei Phasen: Die Wahl der Fächer, für die man sich anmelden möchte, und die Priorisierung der Wahlpflichtfächer.
 
@@ -136,7 +133,7 @@ Falls zusätzlich Fallback-Wahlpflichtfächer genutzt werden und anschließend d
 
 - **Abschließen der Anmeldung:** Wenn der Student die Prioritäten so verteilt hat, dass sie insgesamt 100 Punkte ergeben, kann die Anmeldung über den Button "Anmeldung" innerhalb des Pop-up-Fensters abgeschlossen werden.
 
-### Änderungen und Abwahlen
+### 3.3 Änderungen und Abwahlen
 
 - **Änderungen:** Wenn der Student nachträglich Änderungen vornehmen möchte, wie z.B. ein Wahlpflichtfach abwählen, muss er auf die Checkbox des jeweiligen Fachs klicken. Es öffnet sich ein Pop-up-Fenster, das ihn darüber informiert, dass durch diese Aktion die vergebenen Punkte verloren gehen.
 
@@ -145,3 +142,13 @@ Falls zusätzlich Fallback-Wahlpflichtfächer genutzt werden und anschließend d
 - **Bestätigen der Abwahl:** Wenn der Student seine Aktion bestätigt, werden die Punkte des abgewählten Wahlpflichtfachs gleichmäßig auf die restlichen ausgewählten Wahlpflichtfächer aufgeteilt.
 
 ![Bestätigen der Abwahl](assets/wpfabwahlbestätigung.png)
+
+## 4 Ergebnis der Wahlpflichtfach-Auslosung einsehen
+
+Falls ein Student nachsehen möchte, welche Wahlpflichtfächer er nach der Auslosung erhalten hat, muss er auf den Balken unterhalb der Navigationsleiste klicken. 
+
+![Enrollmentbutton](assets/enrollmentbutton.png)
+
+Sobald der Balken angeklickt wurde, gelangt der Student zu einer Ansicht, die anzeigt, welche Wahlpflichtfächer ihm zugewiesen wurden. Falls neben einem Wahlpflichtfach ein Fragezeichen steht, bedeutet dies, dass die Auslosung noch nicht stattgefunden hat.
+
+![Ergebnis der Wahlpflichtfach-Auslosung](assets/enrollmentphase.png)

@@ -18,11 +18,10 @@ Sobald die Anmeldung erfolgreich gewesen ist, wird dem Admin in der Navigationsl
 
 Die Admin-Startseite ist eine Übersicht, die folgende Informationen und Funktionen bietet:
 
-- **Aktuelle Phase:** Informationen über die aktuelle Phase (Sommersemester/Wintersemester, Start, Ende und verbleibende Zeit). Sobald man darauf klickt, kann man die aktuelle Phase bearbeiten.
-- **Anzahl der angemeldeten Studenten:** Übersicht über die Anzahl der Studenten, die sich für die Wahlpflichtfächer angemeldet haben.
-- **Button "Alle Kurse":** Mit diesem Button kann der Admin alle Wahlpflichtfächer einsehen, bearbeiten und nach Bedarf neue Wahlpflichtfächer hinzufügen.
-- **Button "Alle Phasen":** Mit diesem Button kann der Admin alle Phasen einsehen, bearbeiten und neue Phasen hinzufügen.
-- **Verfügbare Kurse:** Diese Kurse entsprechen den Wahlpflichtfächern, die in der jeweiligen Phase angeboten werden. Das bedeutet, verfügbare Kurse entsprechen nicht allen Kursen, sondern nur denen, die in der aktuellen Phase angeboten werden.
+- **Aktuelle Phase:** Informationen über die aktuelle Phase (Sommersemester/Wintersemester, Start, Ende und verbleibende Zeit, verfügbare Kurse in der aktuellen Phase). Sobald man darauf klickt, kann man die aktuelle Phase bearbeiten.
+- **Statistik:** Übersicht über die Anzahl der Studenten, die sich bereits für die Wahlpflichtfächer angemeldet haben.
+- **Alle Kurse:** Hiermit kann der Admin alle Wahlpflichtfächer einsehen, bearbeiten und nach Bedarf neue Wahlpflichtfächer hinzufügen.
+- **Alle Phasen:** Hiermit kann der Admin alle Phasen einsehen, bearbeiten und neue Phasen hinzufügen.
 
 ![Admin-Startseite](assets/adminstartseite.png)
 
@@ -54,9 +53,11 @@ Nun kann der Admin auch die angebotenen Kurse für die aktuelle Phase bearbeiten
 
 #### Angebotene Kurse der aktuellen Phase bearbeiten
 
-Der Admin ist ebenfalls in der Lage, die Kurse zu bearbeiten die in der aktuellen Phase angeboten werden, indem er auf den Stift klickt, der sich neben dem Namen des jeweiligen Kurses befindet. Sobald der Admin darauf klickt, wird ein Pop-up-Fenster angezeigt. Dieses ermöglicht es, folgendes zu bearbeiten:
+Der Admin ist ebenfalls in der Lage, die Kurse zu bearbeiten die in der aktuellen Phase angeboten werden, indem er auf den Stift klickt, der sich neben dem Namen des jeweiligen Kurses befindet. 
 
 ![Button für die Kursbearbeitung](assets/kursbearbeitenbutton.png)
+
+Sobald der Admin auf den Stift klickt, wird ein Pop-up-Fenster angezeigt. Dieses ermöglicht es, folgendes zu bearbeiten:
 
 - **Anzahl der Mindestteilnehmer**
 - **Anzahl der maximalen Teilnehmer**
@@ -74,21 +75,17 @@ Der Admin ist ebenfalls in der Lage, die Kurse zu bearbeiten die in der aktuelle
 
 Um alle Kurse einsehen zu können und diese zu bearbeiten, zu löschen oder neue hinzuzufügen, muss der Admin sich auf der Admin-Startseite befinden. Dort befindet sich ein Button namens **"Alle Kurse"**. Sobald man darauf klickt, gelangt man zur gewünschten Ansicht.
 
-![Alle Kurse Button](assets/allekursebutton.png)
+![Alle Kurse](assets/allekursebutton.png)
 
 Falls der Admin alle Kurse aus dem Modulhandbuch **hinzufügen** möchte, muss er auf den Button "Importieren" klicken. Dies ermöglicht es, das gesamte Modulhandbuch für die Wahlpflichtfächer zu importieren. Nach dem Import werden die erforderlichen Daten, wie beispielsweise der Titel des Kurses und die Namen der Dozenten, extrahiert. Anschließend werden auf Basis dieser Daten die Kurse automatisch erstellt.
 
-**BILD HINZUFÜGEN**
+![Modulhandbuch importieren](assets/kurseimportieren.png)
 
 Einzelne Kurse können **hinzugefügt** werden, indem man den Button "NEW" anklickt. Dadurch öffnet sich ein Pop-up-Fenster, welches es ermöglicht, unter anderem die Semesterwochenstunden, Creditpoints, Dozenten und zusätzliche Informationen festzulegen.
 
 ![Neuen Kurs hinzufügen](assets/neuerkurs.png)
 
-Um bereits vorhandene Kurse zu **bearbeiten**, muss man auf den Button klicken, der als Stift dargestellt wird. Dadurch öffnet sich ein Pop-up-Fenster, welches die Möglichkeit bietet, die gewünschten Änderungen vorzunehmen. 
-
-![Kurs bearbeiten](assets/kursbearbeiten.png)
-
-Kurse können innerhalb dieses Pop-up-Fensters auch **gelöscht** werden, indem man den "Löschen"-Button anklickt.
+Um bereits vorhandene Kurse zu **bearbeiten**, muss man auf den Button klicken, der als Stift dargestellt wird. Dadurch öffnet sich ein Pop-up-Fenster, welches die Möglichkeit bietet, die gewünschten Änderungen vorzunehmen. Kurse können innerhalb dieses Pop-up-Fensters auch **gelöscht** werden, indem man den "Löschen"-Button anklickt.
 
 ![Kurs löschen](assets/kurslöschen.png)
 
@@ -96,12 +93,12 @@ Kurse können innerhalb dieses Pop-up-Fensters auch **gelöscht** werden, indem 
 
 Um alle Phasen einsehen und neue Phasen hinzufügen zu können, muss der Admin sich auf der Admin-Startseite befinden. Dort befindet sich ein Button namens "Alle Phasen". Sobald man darauf klickt, gelangt man zur gewünschten Ansicht.
 
-![Alle Phasen](assets/allephasen.png)
+![Alle Phasen](assets/allephasenbutton.png)
 
 Um eine bestimmte Phase zu bearbeiten, muss der Admin auf die jeweilige Phase klicken. Dabei erhält er genau dieselbe Ansicht wie im Kapitel "2.2 Aktuelle Phase bearbeiten". Die Bearbeitung einer Phase verläuft analog wie in dem genannten Kapitel, daher werde ich das Verfahren nicht erneut erklären. Bei Bedarf kann einfach im entsprechenden Kapitel nachgesehen werden.
 
 ![Phasen bearbeiten](assets/phasebearbeiten.png)
 
-Um eine neue Phase hinzuzufügen, muss sich der Admin auf der Ansicht befinden, wo alle Phasen aufgezeigt werden. Dort befindet sich oben rechts ein "ADD"-Button. Nach einem Klick darauf erhält man genau dieselbe Ansicht wie im Kapitel "2.2 Aktuelle Phase bearbeiten". Auch hier werde ich mich nicht wiederholen.
+Um eine neue Phase hinzuzufügen, muss sich der Admin auf der Ansicht befinden, wo alle Phasen aufgezeigt werden. Dort befindet sich oben rechts ein "ADD"-Button. Nach einem Klick darauf erhält man genau dieselbe Ansicht wie im Kapitel "2.2 Aktuelle Phase bearbeiten". Bei Bedarf kann einfach im entsprechenden Kapitel nachgesehen werden.
 
 ![Phasen hinzufügen](assets/phasehinzufügen.png)
