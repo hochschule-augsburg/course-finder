@@ -150,7 +150,8 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     }
     return {
       ...enrolled,
-      autoFillOption: enrolled.points > 1 ? 'prio' : 'fallback',
+      autoFillOption:
+        enrolled.points > 1 || enrolled.points === 0 ? 'prio' : 'fallback',
       title: course.title,
     }
   }

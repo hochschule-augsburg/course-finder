@@ -54,6 +54,7 @@ const steps = computed(() =>
     <CustomNavbar />
     <VMain class="my-4 mx-2">
       <ModalDialog />
+      <CfBreadcrumbs />
       <RouterView />
     </VMain>
     <CustomFooter />

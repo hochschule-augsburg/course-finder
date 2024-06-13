@@ -5,12 +5,15 @@ import { homeTour, useTourStore } from '@/stores/TourStore'
 import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
 defineOptions({
   name: 'CourseEnrollmentOverview',
 })
+
+const router = useRouter()
 
 const enrollmentStore = useEnrollmentStore()
 const coursesStore = useCoursesStore()
@@ -46,7 +49,12 @@ watch(
 
 <template>
   <div class="h-100">
-    <EnrollmentOverview />
+    <EnrollmentOverview
+      v-if="coursesStore.currentPhase"
+      :phase="coursesStore.currentPhase"
+      class="mx-2 mb-9 clickable"
+      @click="router.push('/results')"
+    />
     <EnrollmentForm v-model:visible="enrollFormVisible" />
     <div class="pt-1">
       <FilterSection />
@@ -86,5 +94,9 @@ watch(
   z-index: 1;
   bottom: var(--floating-margin);
   right: var(--floating-margin);
+}
+
+.clickable:hover {
+  background-color: rgba(var(--v-theme-primary), 0.05) !important;
 }
 </style>

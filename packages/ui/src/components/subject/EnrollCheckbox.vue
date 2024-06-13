@@ -8,7 +8,7 @@ import {
   mdiCheckboxMarked,
 } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
-import { VBadge, VIcon } from 'vuetify/components'
+import { VBadge, VIcon, VTooltip } from 'vuetify/components'
 
 import { dialogService } from '../DialogService'
 
@@ -51,7 +51,7 @@ async function handleUpdateEnroll() {
     <VIcon v-else :icon="mdiCheckboxBlankOutline" size="large" />
   </div>
   <VTooltip v-else location="top">
-    <template #activator="{ toolTipProps }">
+    <template #activator="{ props: toolTipProps }">
       <VIcon :icon="mdiAlphaEBox" size="large" v-bind="toolTipProps" />
     </template>
     {{ t('external-registration') }}

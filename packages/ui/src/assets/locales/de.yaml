@@ -11,6 +11,7 @@ global:
   back: Zurück
   search: Suchen
   title: CourseFinder
+  help: Hilfe
 
 filter:
   title: Filter
@@ -61,3 +62,15 @@ tour:
     enroll-checkbox: Klicke hier, um einen Kurs auszuwählen.
     enroll-button: Klicke hier, um die ausgewählten Kurse zu priorisieren und dich einzuschreiben.
     nav-bar: Hier hast du verschiedene Optionen wie das Ändern der Sprache und des Themes sowie das Ein- oder Ausloggen. Wenn die Hilfe benötigst, klicke auf das Hilfesymbol.
+
+pages:
+  admin:
+    index: Dashboard
+    courses:
+      index: Kurse
+      upload: Hochladen
+    phases:
+      index: Phasen
+      '[phaseId]':
+        index: '{phaseId}'
+        edit: Bearbeiten

@@ -41,9 +41,14 @@ function changeLocale(newLocale: LocaleOptions) {
   window.localStorage.setItem('locale', newLocale)
 }
 
-watch(locale, () => {
-  vuetifyLocale.value = locale.value
-})
+watch(
+  locale,
+  () => {
+    vuetifyLocale.value = locale.value
+    document.documentElement.lang = locale.value
+  },
+  { immediate: true },
+)
 
 onMounted(() => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -59,8 +64,10 @@ onMounted(() => {
   }
 
   if (savedLocale) {
+    //@ts-expect-error we save these locales
     locale.value = savedLocale
   } else {
+    //@ts-expect-error default to en
     locale.value = supportedLocales[navigator.language] ?? 'en'
   }
 

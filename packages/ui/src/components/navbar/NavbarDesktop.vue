@@ -75,7 +75,7 @@ const userStore = useUserStore()
           <VBtn v-bind="props" icon>
             <VIcon :icon="mdiHelpCircleOutline" />
             <VTooltip activator="parent" location="left" open-delay="500">
-              {{ t('help') }}
+              {{ t('global.help') }}
             </VTooltip>
           </VBtn>
         </template>
@@ -84,6 +84,19 @@ const userStore = useUserStore()
 
       <div v-if="userStore.user" class="align-self-center">
         <VBtn
+          v-if="userStore.user.type === 'Student'"
+          :prepend-icon="mdiAccountCircle"
+          :ripple="false"
+          class="pr-1 pl-2"
+          to="/results"
+        >
+          {{ userStore.user?.name }}
+          <VTooltip activator="parent" location="left" open-delay="500">
+            {{ t('my-courses') }}
+          </VTooltip>
+        </VBtn>
+        <VBtn
+          v-else
           :prepend-icon="mdiAccountCircle"
           :ripple="false"
           :text="userStore.user?.name"
@@ -113,18 +126,18 @@ const userStore = useUserStore()
 
 <i18n lang="yaml">
 en:
-  help: Help
   change-lang: Select Language
   change-theme: Select Theme
   login: Login
   logout: Logout
   admin: Admin
+  my-courses: My courses
 
 de:
-  help: Hilfe
   change-lang: Sprache wählen
   change-theme: Theme wählen
   login: Login
   logout: Logout
   admin: Admin
+  my-courses: Meine Kurse
 </i18n>

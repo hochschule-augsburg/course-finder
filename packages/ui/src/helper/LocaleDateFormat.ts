@@ -11,3 +11,14 @@ export function getDateFnsLocale(locale: string): Locale {
   }
   return dateFnsLocales[locale] ?? enGB
 }
+
+export function getLocalISOString(date: Date | string) {
+  const d = new Date(date)
+
+  const localOffset = d.getTimezoneOffset() * 60000
+  const localISOString = new Date(d.getTime() - localOffset)
+    .toISOString()
+    .slice(0, 16)
+
+  return localISOString
+}

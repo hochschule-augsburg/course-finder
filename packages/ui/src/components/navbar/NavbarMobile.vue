@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
 import {
+  mdiAccount,
   mdiEarth,
   mdiHelpCircleOutline,
   mdiLoginVariant,
@@ -95,6 +96,15 @@ const userStore = useUserStore()
         <VDivider />
 
         <VListItem
+          v-if="userStore.user?.type === 'Student'"
+          :prepend-icon="mdiAccount"
+          :title="t('my-courses')"
+          to="/results"
+        />
+
+        <VDivider v-if="userStore.user?.type === 'Student'" />
+
+        <VListItem
           v-if="userStore.user"
           :prepend-icon="mdiLogoutVariant"
           :subtitle="userStore.user.name"
@@ -128,6 +138,7 @@ en:
   login: Login
   logout: Logout
   admin: Admin
+  my-courses: My courses
 
 de:
   help: Hilfe
@@ -136,4 +147,5 @@ de:
   login: Login
   logout: Logout
   admin: Admin
+  my-courses: Meine Kurse
 </i18n>

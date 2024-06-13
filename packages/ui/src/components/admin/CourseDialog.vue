@@ -99,15 +99,18 @@ function deleteSubject() {
     title: t('global.confirm'),
   })
 }
+
+const moduleCodeRequiredRule = [
+  (i: string) => !!i || t('hint.module-code-required'),
+]
 </script>
 
 <template>
   <VDialog
     :model-value="visible"
     max-width="1000"
-    min-width="800"
+    min-width="auto"
     transition="false"
-    width="auto"
     @update:model-value="$emit('cancel')"
   >
     <VCard
@@ -127,8 +130,11 @@ function deleteSubject() {
           <VTextField
             v-model="formData.moduleCode"
             :label="t('module-code')"
+            :rules="moduleCodeRequiredRule"
+            hide-details="auto"
+            min-width="150px"
+            validate-on="input"
             autofocus
-            hide-details
             required
           />
         </div>
@@ -139,6 +145,7 @@ function deleteSubject() {
             <VTextField
               v-model="formData.title.en"
               :label="t('title-en')"
+              hide-details
               required
             />
           </VCol>
@@ -149,7 +156,7 @@ function deleteSubject() {
               required
             />
           </VCol>
-          <VCol>
+          <VCol cols="12" md="4" sm="6">
             <VTextField
               v-model="formData.editorUsername"
               :label="t('editor-username')"
@@ -161,6 +168,7 @@ function deleteSubject() {
               v-model="formData.semesterHours"
               :label="t('semester-hours')"
               type="number"
+              hide-details
               required
             />
           </VCol>
@@ -169,10 +177,11 @@ function deleteSubject() {
               v-model="formData.creditPoints"
               :label="t('credit-points')"
               type="number"
+              hide-details
               required
             />
           </VCol>
-          <VCol>
+          <VCol cols="12" md="4" sm="6">
             <VTextField
               v-model="formData.varyingCP"
               :label="t('varying-cp')"
@@ -190,12 +199,21 @@ function deleteSubject() {
             <VTextarea
               v-model="formData.extraInfo"
               :label="t('extra-info')"
+              hide-details
               required
             />
           </VCol>
         </VRow>
         <small class="text-caption text-medium-emphasis">
           {{ t('hint.comma') }}
+        </small>
+        <br />
+        <small
+          v-if="!formData.title.de && !formData.title.en"
+          class="text-caption"
+          style="color: rgb(var(--v-theme-primary))"
+        >
+          {{ t('hint.title') }}
         </small>
       </VCardText>
       <VDivider />
@@ -215,7 +233,9 @@ function deleteSubject() {
           @click="deleteSubject"
         />
         <VBtn
-          :disabled="!formData.moduleCode"
+          :disabled="
+            !formData.moduleCode || (!formData.title.de && !formData.title.en)
+          "
           :text="t('global.save')"
           @click="submit"
         />
@@ -238,14 +258,16 @@ en:
   lecturers: Lecturers
   extra-info: Extra Information
   hint:
-    comma: List separated by commas
+    comma: Lecturerlist separated by commas
+    title: At least one title required
+    module-code-required: required field
   really-want-to-delete: Do you really want to delete this course?
 de:
   createOnTheFly: 'Neuer Kurs - {0}'
   title: 'Bearbeiten - {0}'
   title-en: Titel (Englisch)
   title-de: Titel (Deutsch)
-  module-code: Modulcode
+  module-code: Modulkürzel
   editor-username: Nutzername des Bearbeiters
   semester-hours: Semesterstunden
   credit-points: Credit Points
@@ -253,6 +275,8 @@ de:
   lecturers: Dozenten
   extra-info: Zusätzliche Informationen
   hint:
-    comma: Liste mit Kommas getrennt
+    comma: Dozentenliste mit Kommas getrennt
+    title: Mindestens ein Titel ist erforderlich
+    module-code-required: Feld erforderlich
   really-want-to-delete: Möchten Sie diesen Kurs wirklich löschen?
 </i18n>

@@ -3,7 +3,7 @@ import type { User } from '@prisma/client'
 import {
   testConstructTxtText,
   testGetStudentEmails,
-} from '../../../src/routes/admin/assign/AssignRoutes'
+} from '../../../src/routes/admin/assign/AdminAssignRoutes'
 import { prismaMock } from '../../setup/prisma'
 
 const assignmentResults = {
@@ -20,6 +20,7 @@ const userMock: User[] = [
       salt: 'salt',
     },
     email: 'stud1@example.com',
+    lastActive: new Date(),
     name: 'stud 1',
     otp: null,
     type: 'Student',
@@ -32,6 +33,7 @@ const userMock: User[] = [
       salt: 'salt',
     },
     email: 'stud2@example.com',
+    lastActive: new Date(),
     name: 'stud 2',
     otp: null,
     type: 'Student',
@@ -44,6 +46,7 @@ const userMock: User[] = [
       salt: 'salt',
     },
     email: 'stud3@example.com',
+    lastActive: new Date(),
     name: 'stud 3',
     otp: null,
     type: 'Student',

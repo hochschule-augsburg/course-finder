@@ -36,6 +36,20 @@
   color: rgb(var(--v-theme-on-primary));
 }
 
+.v-breadcrumbs {
+  .v-icon:hover {
+    color: initial;
+  }
+}
+
+.v-breadcrumbs-item--link:hover {
+  text-decoration: none;
+}
+
+.v-breadcrumbs-item:hover {
+  color: rgb(var(--v-theme-primary));
+}
+
 .v-expansion-panel:hover .v-badge__badge {
   background-color: rgb(var(--v-theme-primary));
   color: rgb(var(--v-theme-on-primary));
@@ -43,6 +57,10 @@
 
 .v-carousel__controls {
   color: rgb(var(--v-theme-on-surface)) !important;
+}
+
+.v-messages__message {
+  color: rgb(var(--v-theme-primary)) !important;
 }
 
 a {

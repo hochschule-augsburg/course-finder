@@ -1,5 +1,6 @@
 import { exec } from 'child_process'
 
+import { startScheduledDeletion } from './domain/cascadingDeletion/deleteData'
 import { startPhaseSchedulingFromDatabase } from './domain/phase/PhaseService'
 import { prisma } from './prisma/prisma'
 import { createServer } from './server/server'
@@ -15,6 +16,7 @@ await prisma.$connect()
 
 // Start the registration cycle
 startPhaseSchedulingFromDatabase()
+startScheduledDeletion()
 
 await server.start()
 await prisma.$disconnect()
