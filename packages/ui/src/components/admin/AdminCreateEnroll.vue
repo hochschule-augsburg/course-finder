@@ -94,7 +94,9 @@ async function updateEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : undefined,
       end: new Date(formData.value.end),
       id: props.phaseId,
       offeredCourses: sharedObject.value,
@@ -106,7 +108,9 @@ async function updateEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : new Date(0),
       end: new Date(formData.value.end),
       id: props.phaseId,
       start: new Date(formData.value.start),
@@ -134,7 +138,9 @@ async function createEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : undefined,
       end: new Date(formData.value.end),
       offeredCourses: sharedObject.value,
       start: new Date(formData.value.start),
@@ -145,7 +151,9 @@ async function createEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : new Date(0),
       end: new Date(formData.value.end),
       id: 0,
       publishedTry: null,
@@ -194,11 +202,10 @@ async function initFormData() {
 }
 
 function validate(): boolean {
-  // Startdate, Enddate, Emailnotificationdate, EN Title, DE Title required
+  // Startdate, Enddate, EN Title, DE Title required
   if (
     !formData.value?.start ||
     !formData.value?.end ||
-    !formData.value?.emailNotificationAt ||
     !formData.value?.title.en ||
     !formData.value?.title.de
   ) {
@@ -206,24 +213,22 @@ function validate(): boolean {
     // Startdate <= Enddate
   } else if (new Date(formData.value?.start) > new Date(formData.value?.end)) {
     return true
-    // Startdate <= Emailnotificationdate <= Enddate
+    // Wenn Emailnotification existier, Startdate <= Emailnotificationdate <= Enddate
   } else if (
-    new Date(formData.value?.start) >
+    formData.value?.emailNotificationAt &&
+    (new Date(formData.value?.start) >
       new Date(formData.value?.emailNotificationAt) ||
-    new Date(formData.value?.end) <
-      new Date(formData.value?.emailNotificationAt)
+      new Date(formData.value?.end) <
+        new Date(formData.value?.emailNotificationAt))
   ) {
     return true
   }
   return false
 }
 
-function requiredFieldRule(field: string | undefined) {
-  if (!field) {
-    return () => false || t('validation.field-required')
-  }
-  return true
-}
+const requiredFieldRule = [
+  (i: string | undefined) => !!i || t('validation.field-required'),
+]
 </script>
 
 <template>
@@ -240,7 +245,7 @@ function requiredFieldRule(field: string | undefined) {
           <VTextField
             v-model="formData.start"
             :label="t('start-date')"
-            :rules="[requiredFieldRule(formData.start)]"
+            :rules="requiredFieldRule"
             hide-details="auto"
             type="datetime-local"
             validate-on="input"
@@ -258,7 +263,7 @@ function requiredFieldRule(field: string | undefined) {
           <VTextField
             v-model="formData.end"
             :label="t('end-date')"
-            :rules="[requiredFieldRule(formData.end)]"
+            :rules="requiredFieldRule"
             hide-details="auto"
             type="datetime-local"
             validate-on="input"
@@ -269,11 +274,8 @@ function requiredFieldRule(field: string | undefined) {
           <VTextField
             v-model="formData.emailNotificationAt"
             :label="t('sent-email-notification-at')"
-            :rules="[requiredFieldRule(formData.emailNotificationAt)]"
-            hide-details="auto"
             type="datetime-local"
-            validate-on="input"
-            required
+            hide-details
           />
           <small
             v-if="
@@ -293,7 +295,7 @@ function requiredFieldRule(field: string | undefined) {
           <VTextField
             v-model="formData.title.en"
             :label="t('title-en')"
-            :rules="[requiredFieldRule(formData.title.en)]"
+            :rules="requiredFieldRule"
             hide-details="auto"
             validate-on="input"
             required
@@ -303,7 +305,7 @@ function requiredFieldRule(field: string | undefined) {
           <VTextField
             v-model="formData.title.de"
             :label="t('title-de')"
-            :rules="[requiredFieldRule(formData.title.de)]"
+            :rules="requiredFieldRule"
             hide-details="auto"
             validate-on="input"
             required

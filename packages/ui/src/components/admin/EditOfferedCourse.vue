@@ -243,7 +243,6 @@ const weekdayItems = [
 function validate(): boolean {
   // minParticipants required, of type number, min 0
   if (
-    !formData.value?.minParticipants?.valueOf() ||
     !isNumber(formData.value?.minParticipants?.valueOf()) ||
     formData.value?.minParticipants?.valueOf() < 0
   ) {
@@ -261,14 +260,10 @@ function validate(): boolean {
   return false
 }
 
-function minParticipantsRules() {
-  if (!isNumber(formData.value?.minParticipants?.valueOf())) {
-    return () => false || t('validation.nan')
-  } else if (formData.value?.minParticipants?.valueOf() < 0) {
-    return () => false || t('validation.less-than-zero')
-  }
-  return true
-}
+const minParticipantsRules = [
+  (i: number) => isNumber(i.valueOf()) || t('validation.nan'),
+  (i: number) => i.valueOf() >= 0 || t('validation.less-than-zero'),
+]
 </script>
 
 <template>
@@ -296,7 +291,7 @@ function minParticipantsRules() {
             <VTextField
               v-model.number="formData.minParticipants"
               :label="t('minimum-participants')"
-              :rules="[minParticipantsRules()]"
+              :rules="minParticipantsRules"
               hide-details="auto"
               type="number"
               validate-on="input"
