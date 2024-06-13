@@ -2,4 +2,5 @@
 *.jpg binary
 *.jpeg binary
 *.png binary
+*.PNG binary
 *.pdf binary
