@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import type { Course } from '@/stores/admin/AdminCoursesStore'
+import type { Ref } from 'vue'
 
 import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
 import { mdiInvoiceTextPlus, mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
-import { reactive, ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
 import {
   VCard,
+  VCardItem,
   VCardText,
   VCardTitle,
   VCol,
@@ -27,7 +29,10 @@ const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 const coursesStore = useAdminCoursesStore()
 const { locale, t } = useI18n()
 
-const tableOne: Course[] = reactive([...coursesStore.courses])
+const tableOne: Ref<Course[]> = ref([...coursesStore.courses])
+const showErrorDialog = ref(false)
+const errorDialogMessage = ref('')
+
 const editOfferedCourse = ref<number>(-1)
 
 const removeStore = ref<OfferedCourseData[]>([])
@@ -35,6 +40,23 @@ const removeStore = ref<OfferedCourseData[]>([])
 const selectedSubject = ref<Course>(adminStore.courses[0])
 const showModalForm = ref(false)
 const onTheFly = ref(true)
+
+watch(
+  offeredCoursesArray,
+  () => {
+    tableOne.value = removeLoadedCourses()
+  },
+  { immediate: true },
+)
+
+function removeLoadedCourses() {
+  tableOne.value = [...coursesStore.courses]
+  return tableOne.value.filter((data) => {
+    return !offeredCoursesArray.value.some(
+      (offData) => offData.moduleCode === data.moduleCode,
+    )
+  })
+}
 
 function openNewDialog() {
   selectedSubject.value = {
@@ -78,7 +100,9 @@ async function createSubject(subject: Course | undefined) {
     })
     showModalForm.value = false
   } catch (e) {
-    console.log('Error creating Subject')
+    showModalForm.value = false
+    errorDialogMessage.value = t('subject-creation-error')
+    showErrorDialog.value = true
   }
 }
 
@@ -242,24 +266,31 @@ const searchOffered = ref('')
             <template #item="{ element, index }">
               <div v-if="filterOffered(element)" class="list-group-item">
                 <VCard
-                  class="hoverable-card"
+                  class="hoverable-card mx-auto"
                   color="secondary"
                   rounded="0"
                   hover
                 >
-                  <VCardTitle>
-                    {{
-                      locale === 'de'
-                        ? element.Course.title.de
-                        : element.Course.title.en
-                    }}
-                    <VIcon
-                      :icon="mdiPencil"
-                      class="pencil-icon"
-                      size="20"
-                      @click="editOfferedCourse = index"
-                    />
-                  </VCardTitle>
+                  <VCardItem>
+                    <template #append>
+                      <div class="dateId-box">
+                        <VIcon
+                          :icon="mdiPencil"
+                          class="pencil-icon"
+                          size="20"
+                          @click="editOfferedCourse = index"
+                        />
+                      </div>
+                    </template>
+                    <VCardTitle class="d-flex justify-space-between">
+                      {{
+                        locale === 'de'
+                          ? element.Course.title.de
+                          : element.Course.title.en
+                      }}
+                    </VCardTitle>
+                  </VCardItem>
+
                   <VCardText>
                     <div>
                       {{ t('type') }}:
@@ -270,7 +301,7 @@ const searchOffered = ref('')
                         .dates"
                       :key="appointIndex"
                     >
-                      <div>
+                      <div v-if="element.appointments.type !== 'weekly'">
                         <strong>{{ t('from') }}:</strong>
                         {{
                           //TODO
@@ -290,6 +321,23 @@ const searchOffered = ref('')
                             day: '2-digit',
                             month: '2-digit',
                             year: '2-digit',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
+                      </div>
+                      <div v-else>
+                        <strong>{{ t('at') }}:</strong>
+                        {{
+                          timespan.from.toLocaleString(locale, {
+                            weekday: 'long',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })
+                        }}
+                        -
+                        {{
+                          timespan.to.toLocaleString(locale, {
                             hour: 'numeric',
                             minute: '2-digit',
                           })
@@ -329,6 +377,11 @@ const searchOffered = ref('')
       @cancel="showModalForm = false"
       @submit="createSubject"
     />
+    <ErrorDialog
+      :message="errorDialogMessage"
+      :visible="showErrorDialog"
+      @close="showErrorDialog = false"
+    />
     <EditOfferedCourse
       :offered-course="offeredCoursesArray.at(editOfferedCourse)"
       :visible="editOfferedCourse !== -1"
@@ -359,6 +412,7 @@ en:
     weekly: Weekly
     block: Block Event
     irregular: Irregular
+  at: 'On'
   from: From
   to: To
   min-participants: Min participants
@@ -366,6 +420,7 @@ en:
   for-fields-of-study: For fields of study
   extra-info: Extra information
   external-registration: External registration
+  subject-creation-error: Error when creating subject. Entered module-code might alredy exist.
 de:
   on-the-fly: Neues Angebot erstellen
   available-courses: Verfügbare Kurse
@@ -375,6 +430,7 @@ de:
     weekly: Wöchentlich
     block: Blockveranstaltung
     irregular: Unregelmäßig
+  at: Am
   from: Von
   to: Bis
   min-participants: Mindestteilnehmer
@@ -382,6 +438,7 @@ de:
   for-fields-of-study: Für Studienfelder
   extra-info: Zusätzliche Informationen
   external-registration: Externe Anmeldung
+  subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
 </i18n>
 
 <style scoped lang="scss">

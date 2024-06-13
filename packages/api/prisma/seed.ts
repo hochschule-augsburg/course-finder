@@ -2,7 +2,7 @@
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
 import { readFileSync } from 'fs'
-import { uniqBy } from 'lodash-es'
+import { random, sampleSize, sumBy, uniqBy } from 'lodash-es'
 
 import { data as coursesData } from './assets/courses'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24'
@@ -105,8 +105,8 @@ async function main() {
   await prisma.enrollphase.create({
     data: {
       description: {
-        de: 'Anmeldung zu den Wahlpflichtfächern für das Sommersemester 2023',
-        en: 'Registration for the elective courses for the summer semester 2023',
+        de: 'Anmeldung zu den Wahlpflichtfächern für das Wintersemester 2023/24',
+        en: 'Registration for the elective courses for the winter semester 2023/24',
       },
       emailNotificationAt: getHalfTime(
         new Date('2023-09-29'),
@@ -115,6 +115,7 @@ async function main() {
       end: new Date('2023-10-06'),
       id: 1,
       start: new Date('2023-09-29'),
+      state: 'FINISHED',
       title: {
         de: 'FWP Anmeldung Wintersemester 2023/24',
         en: 'FWP Registration Winter Semester 2023/24',
@@ -134,7 +135,9 @@ async function main() {
       ),
       end: new Date('2024-03-18'),
       id: 2,
+      publishedTry: 1,
       start: new Date('2024-03-03'),
+      state: 'FINISHED',
       title: {
         de: 'FWP Anmeldung Sommersemester 2024',
         en: 'FWP Registration Summer Semester 2024',
@@ -150,6 +153,7 @@ async function main() {
       end: new Date('2024-07-15'),
       id: 3,
       start: new Date('2024-03-30'),
+      state: 'OPEN',
       title: {
         de: 'Testanmeldungsphase 2024',
         en: 'Test Registration Phase 2024',
@@ -203,7 +207,7 @@ async function main() {
           Student: {
             create: {
               StudentPhase: {
-                create: { creditsNeeded: 10, phaseId: 3 },
+                create: { creditsNeeded: random(1, 10), phaseId: 3 },
               },
               facultyName: 'Informatik',
               fieldOfStudy: study,
@@ -293,11 +297,77 @@ async function main() {
     data: offeredCoursesWS2324Data,
   })
 
+  const testPhaseCourses = uniqBy(
+    [...offeredCoursesSS24Data, ...offeredCoursesWS2324Data],
+    (e) => e.moduleCode,
+  )
   await prisma.offeredCourse.createMany({
-    data: uniqBy(
-      [...offeredCoursesSS24Data, ...offeredCoursesWS2324Data],
-      (e) => e.moduleCode,
-    ).map((e) => ({ ...e, phaseId: 3 })),
+    data: testPhaseCourses.map((e) => ({ ...e, phaseId: 3 })),
+  })
+
+  const students = await prisma.student.findMany()
+  const choices = students.flatMap((student) => {
+    const choices = sampleSize(testPhaseCourses, random(0, 6)).map(
+      (course) => ({
+        moduleCode: course.moduleCode,
+        points: Math.random(),
+      }),
+    )
+    const scale = 100 / sumBy(choices, 'points')
+    return choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      points: Math.round(choice.points * scale),
+      username: student.username,
+    }))
+  })
+
+  await prisma.studentChoice.createMany({
+    data: choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      phaseId: 3,
+      points: choice.points,
+      username: choice.username,
+    })),
+  })
+
+  const choicesAssign = students.flatMap((student) => {
+    const choices = sampleSize(offeredCoursesSS24Data, random(0, 6)).map(
+      (course) => ({
+        moduleCode: course.moduleCode,
+        points: Math.random(),
+      }),
+    )
+    const scale = 100 / sumBy(choices, 'points')
+    return choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      points: Math.round(choice.points * scale),
+      username: student.username,
+    }))
+  })
+  await prisma.studentPhase.createMany({
+    data: students.map((student) => ({
+      creditsNeeded: random(1, 10),
+      phaseId: 2,
+      username: student.username,
+    })),
+  })
+  await prisma.studentChoice.createMany({
+    data: choicesAssign.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      phaseId: 2,
+      points: choice.points,
+      username: choice.username,
+    })),
+  })
+  await prisma.phaseAssignment.createMany({
+    data: sampleSize(choicesAssign, random(0, choicesAssign.length)).map(
+      (e) => ({
+        moduleCode: e.moduleCode,
+        phaseId: 2,
+        tryNo: 1,
+        username: e.username,
+      }),
+    ),
   })
 }
 

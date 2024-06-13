@@ -15,6 +15,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  Student
+  Professor
+  User
+  Admin
+}
+
 model User {
   // users have to be clean up every semester
   username String   @id
@@ -23,7 +30,7 @@ model User {
   Student  Student?
   /// [Auth]
   auth     Json
-  type     String
+  type     UserRole
   /// [Otp]
   otp      Json?
   Course   Course[]
@@ -88,6 +95,7 @@ model Enrollphase {
   offeredCourses      OfferedCourse[]
   studentPhases       StudentPhase[]
   state               PhaseState      @default(NOT_STARTED)
+  publishedTry        Int?
   /// time when the email is being sent if time is in the past no mail is sent
   emailNotificationAt DateTime        @default(dbgenerated("(NOW() - '30 days'::interval)"))
 }

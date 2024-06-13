@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Phase } from '@/stores/admin/AdminCoursesStore'
 
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
 import { isWithinInterval } from 'date-fns'
@@ -26,6 +27,8 @@ const props = defineProps<{ phaseId?: number }>()
 const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
 const router = useRouter()
+const showErrorDialog = ref(false)
+const errorDialogMessage = ref('')
 
 const formData = ref<
   {
@@ -33,7 +36,10 @@ const formData = ref<
     end: string
     id?: number
     start: string
-  } & Omit<Phase, 'emailNotificationAt' | 'end' | 'id' | 'start' | 'state'>
+  } & Omit<
+    Phase,
+    'emailNotificationAt' | 'end' | 'id' | 'publishedTry' | 'start' | 'state'
+  >
 >()
 
 void initFormData()
@@ -76,7 +82,6 @@ async function submit() {
   } else {
     await createEnrollment()
   }
-  router.back()
 }
 
 async function updateEnrollment() {
@@ -89,7 +94,9 @@ async function updateEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : undefined,
       end: new Date(formData.value.end),
       id: props.phaseId,
       offeredCourses: sharedObject.value,
@@ -101,16 +108,22 @@ async function updateEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : new Date(0), // todo: this should be set to whatever the db defaults to
       end: new Date(formData.value.end),
       id: props.phaseId,
       start: new Date(formData.value.start),
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
     adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
-    console.log('Success updating enroll phase')
+    // console.log('Success updating enroll phase')
+    router.back()
   } catch (e) {
-    console.log('Error updating enroll phase')
+    errorDialogMessage.value = t(
+      'validation.backend-enroll-phase-updating-error',
+    )
+    showErrorDialog.value = true
   }
   sharedObject.value = []
 }
@@ -125,7 +138,9 @@ async function createEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : undefined,
       end: new Date(formData.value.end),
       offeredCourses: sharedObject.value,
       start: new Date(formData.value.start),
@@ -137,17 +152,24 @@ async function createEnrollment() {
         de: formData.value.description.de,
         en: formData.value.description.en,
       },
-      emailNotificationAt: new Date(formData.value.emailNotificationAt),
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : new Date(0), // todo: this should be set to whatever the db defaults to
       end: new Date(formData.value.end),
       id: 0,
+      publishedTry: null,
       start: new Date(formData.value.start),
       state: 'NOT_STARTED',
       title: { de: formData.value.title.de, en: formData.value.title.en },
     }
     adminCoursesStore.phaseOfferedCourses[newPhase.id] = sharedObject.value
-    console.log('Success creating enroll phase')
+    // console.log('Success creating enroll phase')
+    router.back()
   } catch (e) {
-    console.log('Error creating enroll phase')
+    errorDialogMessage.value = t(
+      'validation.backend-enroll-phase-creation-error',
+    )
+    showErrorDialog.value = true
   }
   sharedObject.value = []
 }
@@ -164,9 +186,9 @@ async function initFormData() {
     )
     formData.value = {
       ...cloneDeep(phase),
-      emailNotificationAt: phase.emailNotificationAt.toISOString(),
-      end: phase.end.toISOString().slice(0, 16),
-      start: phase.start.toISOString().slice(0, 16),
+      emailNotificationAt: getLocalISOString(phase.emailNotificationAt),
+      end: getLocalISOString(phase.end),
+      start: getLocalISOString(phase.start),
     }
 
     return
@@ -174,120 +196,192 @@ async function initFormData() {
   formData.value = {
     createdAt: new Date(),
     description: { de: '', en: '' },
-    emailNotificationAt: '',
-    end: new Date().toISOString().slice(0, 16),
-    start: new Date().toISOString().slice(0, 16),
+    emailNotificationAt: getLocalISOString(new Date()),
+    end: getLocalISOString(new Date()),
+    start: getLocalISOString(new Date()),
     title: { de: '', en: '' },
   }
 }
+
+function validate(): boolean {
+  // Startdate, Enddate, EN Title, DE Title required
+  if (
+    !formData.value?.start ||
+    !formData.value?.end ||
+    !formData.value?.title.en ||
+    !formData.value?.title.de
+  ) {
+    return true
+    // Startdate <= Enddate
+  } else if (new Date(formData.value?.start) > new Date(formData.value?.end)) {
+    return true
+    // Wenn Emailnotification existier, Startdate <= Emailnotificationdate <= Enddate
+  } else if (
+    formData.value?.emailNotificationAt &&
+    (new Date(formData.value?.start) >
+      new Date(formData.value?.emailNotificationAt) ||
+      new Date(formData.value?.end) <
+        new Date(formData.value?.emailNotificationAt))
+  ) {
+    return true
+  }
+  return false
+}
+
+const requiredFieldRule = [
+  (i: string | undefined) => !!i || t('validation.field-required'),
+]
 </script>
 
 <template>
   <VForm>
     <VContainer v-if="formData">
-      <VRow justify="center">
+      <VRow>
         <VCol cols="12" sm="5">
           <h1>{{ t(phaseId ? 'edit-enrollment' : 'create-enrollment') }}</h1>
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="10" sm="3">
+      <VRow dense>
+        <VCol cols="12" md="4" sm="6">
           <VTextField
             v-model="formData.start"
             :label="t('start-date')"
+            :rules="requiredFieldRule"
+            hide-details="auto"
             type="datetime-local"
+            validate-on="input"
             required
           />
+          <small
+            v-if="new Date(formData.start) > new Date(formData.end)"
+            class="text-caption"
+            style="color: rgb(var(--v-theme-primary))"
+          >
+            {{ t('validation.invalid-date-interval') }}
+          </small>
         </VCol>
-        <VCol cols="10" sm="3">
+        <VCol cols="12" md="4" sm="6">
           <VTextField
             v-model="formData.end"
             :label="t('end-date')"
+            :rules="requiredFieldRule"
+            hide-details="auto"
             type="datetime-local"
+            validate-on="input"
             required
           />
         </VCol>
-        <VCol cols="10" sm="3">
+        <VCol cols="12" md="4">
           <VTextField
             v-model="formData.emailNotificationAt"
             :label="t('sent-email-notification-at')"
             type="datetime-local"
-            required
+            hide-details
           />
+          <small
+            v-if="
+              new Date(formData.start) >
+                new Date(formData.emailNotificationAt) ||
+              new Date(formData.end) < new Date(formData.emailNotificationAt)
+            "
+            class="text-caption"
+            style="color: rgb(var(--v-theme-primary))"
+          >
+            {{ t('validation.email-date-out-of-bounds') }}
+          </small>
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="5">
+      <VRow>
+        <VCol cols="12" sm="6">
           <VTextField
             v-model="formData.title.en"
             :label="t('title-en')"
+            :rules="requiredFieldRule"
+            hide-details="auto"
+            validate-on="input"
             required
           />
         </VCol>
-        <VCol cols="12" sm="5">
+        <VCol cols="12" sm="6">
           <VTextField
             v-model="formData.title.de"
             :label="t('title-de')"
+            :rules="requiredFieldRule"
+            hide-details="auto"
+            validate-on="input"
             required
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="10">
+      <VRow>
+        <VCol cols="12">
           <VTextarea
             v-model="formData.description.en"
             :label="t('description-en')"
+            hide-details
             required
           />
         </VCol>
-        <VCol cols="12" sm="10">
+        <VCol cols="12">
           <VTextarea
             v-model="formData.description.de"
             :label="t('description-de')"
+            hide-details
             required
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="5">
+      <VRow>
+        <VCol cols="12" sm="7">
           <h1>{{ t('offered-courses') }}</h1>
         </VCol>
         <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol sm="7">
+      <VRow>
+        <VCol sm="8">
           <VSelect
             :items="oldPhasesSelect"
             :label="t('load-old-phases')"
             :model-value="loadedOldPhase"
             item-title="text"
+            hide-details
             @update:model-value="loadOldPhase"
           />
         </VCol>
-        <VCol sm="3">
+        <VCol sm="4">
           <VBtn :text="t('clear')" @click="clearSelection" />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="10">
+      <VRow>
+        <VCol cols="12">
           <OfferedCourses
             v-if="adminCoursesStore.isInit"
             v-model="sharedObject"
           />
         </VCol>
       </VRow>
-      <VRow justify="center">
-        <VCol cols="12" sm="5">
+      <VRow>
+        <VCol class="text-right">
           <VBtn
+            :disabled="validate()"
             :text="t(phaseId ? 'global.save' : 'create-enrollment')"
-            justify="center"
+            class="ms-auto"
             @click="submit"
           />
         </VCol>
-        <VCol cols="12" sm="5"><VSpacer /></VCol>
       </VRow>
     </VContainer>
+    <ErrorDialog
+      :message="errorDialogMessage"
+      :visible="showErrorDialog"
+      @close="
+        () => {
+          showErrorDialog = false
+          router.back()
+        }
+      "
+    />
   </VForm>
 </template>
 
@@ -305,6 +399,12 @@ en:
   offered-courses: Offered Courses
   load-old-phases: Load Passed Enroll Phases
   clear: Clear Selection
+  validation:
+    field-required: 'required field'
+    invalid-date-interval: 'Startdate must come before enddate'
+    email-date-out-of-bounds: 'E-mail date must be between start- and enddate'
+    backend-enroll-phase-creation-error: 'Error when creating phase.'
+    backend-enroll-phase-updating-error: 'Error when updating phase.'
 de:
   create-enrollment: Anmeldung erstellen
   edit-enrollment: Anmeldephase bearbeiten
@@ -318,4 +418,10 @@ de:
   offered-courses: Angebotene Kurse
   load-old-phases: Vergangene Anmeldephasen laden
   clear: Auswahl löschen
+  validation:
+    field-required: 'Feld erforderlich'
+    invalid-date-interval: 'Startdatum muss vor Enddatum kommen'
+    email-date-out-of-bounds: 'E-maildatum muss zwischen Startdatum und Enddatum liegen'
+    backend-enroll-phase-creation-error: 'Fehler bei der Phasenerstellung.'
+    backend-enroll-phase-updating-error: 'Fehler bei der Phasenaktualisierung.'
 </i18n>

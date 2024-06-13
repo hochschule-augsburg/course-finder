@@ -8,7 +8,13 @@ import {
 } from '@/stores/admin/AdminCoursesStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VListItem, VSelect, VTooltip } from 'vuetify/components'
+import {
+  VBtn,
+  VListItem,
+  VSelect,
+  VSnackbar,
+  VTooltip,
+} from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
 
@@ -87,11 +93,12 @@ async function updateState(newValue: Phase['state']) {
       {{ t('redraw') }}
     </VBtn>
     <VSnackbar
-      v-model="error"
+      :model-value="!!error"
       :timeout="2000"
       color="error"
       location="bottom left"
       rounded="pill"
+      @update:model-value="(value) => (value ? (error = undefined) : null)"
     >
       {{ error || '' }}
     </VSnackbar>

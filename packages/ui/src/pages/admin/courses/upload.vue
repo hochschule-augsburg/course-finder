@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { fetchFastify } from '@/fastify'
+import { refThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -13,7 +14,8 @@ import {
 
 const { t } = useI18n()
 const pending = ref(false)
-const status = ref<'error' | 'success'>()
+const status = refThrottled(ref<'error' | 'success'>())
+const statusMsg = ref('')
 const file = ref<File>()
 const oldFile = ref<File>()
 
@@ -29,9 +31,11 @@ async function uploadFile() {
     await fetchFastify('/admin/courses/upload-module-book', formData)
     oldFile.value = file.value
     file.value = undefined
+    statusMsg.value = t('uploaded-successfully', [oldFile.value.name])
     status.value = 'success'
   } catch (e) {
     console.error(e)
+    statusMsg.value = t('global.unknown-error')
     status.value = 'error'
   } finally {
     pending.value = false
@@ -61,14 +65,10 @@ async function uploadFile() {
       </VCol>
     </VContainer>
     <VSnackbar
-      :text="
-        status === 'error'
-          ? t('unknown-error')
-          : t('uploaded-successfully', [oldFile?.name])
-      "
       :color="status"
       :model-value="!!status"
-      :timeout="1000"
+      :text="statusMsg"
+      :timeout="2000"
       location="bottom left"
       rounded="pill"
       @update:model-value="status = undefined"

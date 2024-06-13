@@ -7,7 +7,9 @@ import { mdiInvoiceTextPlus, mdiPencil } from '@mdi/js'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VBtn, VIcon, VTable } from 'vuetify/components'
+import { VBtn, VContainer, VIcon, VTable } from 'vuetify/components'
+
+import ErrorDialog from './ErrorDialog.vue'
 
 const adminStore = useAdminCoursesStore()
 
@@ -17,6 +19,8 @@ const showModalForm = ref(false)
 
 const selectedSubject = ref<Course>(adminStore.courses[0])
 let dialogAction: ((e: Course) => Promise<void>) | undefined = undefined
+const showErrorDialog = ref(false)
+const errorDialogMessage = ref('')
 
 function openNewDialog() {
   selectedSubject.value = {
@@ -67,30 +71,41 @@ async function createSubject(subject: Course) {
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
   } catch (e) {
-    console.log('Error creating Subject')
+    errorDialogMessage.value = t('subject-creation-error')
+    showErrorDialog.value = true
   }
 }
 
 async function updateSubject(subject: Course) {
   try {
+    if (!subject.title.de && !subject.title.en) {
+      throw new Error()
+    }
     const result = await trpc.admin.courses.update.mutate(subject)
     merge(selectedSubject.value, result)
   } catch (e) {
-    console.log('Error updating Subject')
+    errorDialogMessage.value = t('subject-editing-error')
+    showErrorDialog.value = true
   }
 }
 </script>
 
 <template>
-  <div>
-    <VTable>
+  <VContainer>
+    <VTable height="1000px" fixed-header hover>
       <thead>
         <tr>
-          <th class="text-left">{{ t('no.') }}</th>
-          <th class="text-left">{{ t('name') }}</th>
-          <th class="text-left">{{ t('lecturer') }}</th>
-          <th>CP</th>
-          <th>SWS</th>
+          <th class="text-left">
+            <strong>{{ t('no.') }}</strong>
+          </th>
+          <th class="text-left">
+            <strong>{{ t('name') }}</strong>
+          </th>
+          <th class="text-left">
+            <strong>{{ t('lecturer') }}</strong>
+          </th>
+          <th><strong>CP</strong></th>
+          <th><strong>SWS</strong></th>
           <th>
             <VBtn @click="openNewDialog">
               {{ t('new') }} &nbsp; <VIcon :icon="mdiInvoiceTextPlus" />
@@ -119,19 +134,27 @@ async function updateSubject(subject: Course) {
       @cancel="showModalForm = false"
       @submit="processSubject"
     />
-  </div>
+    <ErrorDialog
+      :message="errorDialogMessage"
+      :visible="showErrorDialog"
+      @close="showErrorDialog = false"
+    />
+  </VContainer>
 </template>
 
 <i18n lang="yaml">
 en:
-  edit: Edit
   name: Name
   lecturer: Lecturer
   no.: No.
   new: New
+  subject-creation-error: Error when creating subject. Entered module-code might alredy exist.
+  subject-editing-error: Error when editing subject. Module code must be unique and at least one title is required.
 de:
   name: Name
   lecturer: Dozent
   no.: Nr.
-  new: New
+  new: Neu
+  subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
+  subject-editing-error: Fehler bei der Kurseditierung. Modulkürzel muss einzigartig sein und mindestens ein Titel ist erforderlich.
 </i18n>

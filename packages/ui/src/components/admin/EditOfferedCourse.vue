@@ -2,13 +2,15 @@
 import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
 import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTypes'
 
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import {
   abbrFieldsOfStudyMap,
   fieldsOfStudy,
   fieldsOfStudyAbbrMap,
 } from '@/helper/enums/fieldsOfStudy'
 import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
-import { cloneDeep } from 'lodash-es'
+import { format, setDay, startOfWeek } from 'date-fns'
+import { cloneDeep, isNumber } from 'lodash-es'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -55,8 +57,8 @@ watchEffect(() => {
     ...cloneDeep(props.offeredCourse),
     appointments: {
       dates: props.offeredCourse?.appointments.dates.map((e) => ({
-        from: e.from.toISOString(),
-        to: e.to.toISOString(),
+        from: getLocalISOString(e.from),
+        to: getLocalISOString(e.to),
       })),
       type: props.offeredCourse?.appointments.type,
     },
@@ -70,6 +72,9 @@ function submit() {
   if (!formData.value) {
     return
   }
+  formData.value.appointments.dates = formData.value.appointments.dates.filter(
+    (data) => data !== undefined,
+  )
   emits('submit', {
     ...formData.value,
     appointments: {
@@ -81,19 +86,184 @@ function submit() {
     },
     for: formData.value.for.map((e) => abbrFieldsOfStudyMap[e] ?? e),
   })
+  datesArray.value = []
+}
+
+function cancel() {
+  emits('cancel')
+  datesArray.value = []
 }
 
 function addDate() {
-  const last = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
+  const lastTo = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
+
   formData.value?.appointments.dates.push({
-    from: last.toString(),
-    to: last.toString(),
+    from: getLocalISOString(lastTo),
+    to: getLocalISOString(lastTo),
   })
 }
 
-function removeDate() {
-  formData.value?.appointments.dates.pop()
+function addDateWeekly() {
+  const last = datesArray.value.at(-1)
+  if (last) {
+    datesArray.value.push({
+      endTime: last.endTime,
+      startTime: last.startTime,
+      weekday: last.weekday,
+    })
+  } else {
+    datesArray.value.push({
+      endTime: '00:00',
+      startTime: '00:00',
+      weekday: '',
+    })
+  }
 }
+
+function removeDate(index: number) {
+  formData.value?.appointments.dates.splice(index, 1)
+}
+
+function removeDateWeekly(index: number) {
+  const dateArrayObject = datesArray.value.at(index)
+
+  if (!dateArrayObject || !formData.value?.appointments?.dates) {
+    return
+  }
+
+  const { endTime, startTime, weekday } = dateArrayObject
+
+  formData.value.appointments.dates = formData.value.appointments.dates.filter(
+    (data) => {
+      const dateFrom = new Date(data.from)
+      const dateTo = new Date(data.to)
+
+      const dayOfWeek = dateFrom.toLocaleDateString('en-US', {
+        weekday: 'long',
+      })
+
+      const fromTime = dateFrom.toTimeString().split(' ')[0].slice(0, -3) // "HH:MM"
+      const toTime = dateTo.toTimeString().split(' ')[0].slice(0, -3)
+      return !(
+        dayOfWeek === weekday &&
+        fromTime === startTime &&
+        toTime === endTime
+      )
+    },
+  )
+  datesArray.value.splice(index, 1)
+}
+
+function updateWeeklyAppointment(index: number) {
+  const dateObject = datesArray.value.at(index)
+  if (
+    dateObject &&
+    dateObject.weekday &&
+    dateObject.startTime &&
+    dateObject.endTime
+  ) {
+    const today = startOfWeek(new Date(), { weekStartsOn: 1 })
+    const daysOfWeek = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ]
+    const dayIndex = daysOfWeek.indexOf(dateObject.weekday) + 1
+
+    const appointmentDate = setDay(today, dayIndex)
+    const formattedDate = format(appointmentDate, 'yyyy-MM-dd')
+    const fromTime = `${formattedDate}T${dateObject.startTime}`
+    const toTime = `${formattedDate}T${dateObject.endTime}`
+
+    if (formData.value) {
+      formData.value.appointments.dates[index] = {
+        from: fromTime,
+        to: toTime,
+      }
+      console.log({ from: fromTime, to: toTime })
+    }
+  }
+}
+
+const datesArray = ref<
+  Array<{
+    endTime: string
+    startTime: string
+    weekday: string
+  }>
+>([])
+
+function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
+  dates.forEach(function (date) {
+    const fromDate = new Date(date.from)
+    const toDate = new Date(date.to)
+
+    if (!isNaN(fromDate.getTime()) && !isNaN(toDate.getTime())) {
+      const startTime = fromDate.toTimeString().split(' ')[0].slice(0, -3)
+      const endTime = toDate.toTimeString().split(' ')[0].slice(0, -3)
+      const weekday = fromDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+      })
+
+      const dateEntry = {
+        endTime: endTime,
+        startTime: startTime,
+        weekday: weekday,
+      }
+
+      const isDuplicate = datesArray.value.some(
+        (item) =>
+          item.endTime === dateEntry.endTime &&
+          item.startTime === dateEntry.startTime &&
+          item.weekday === dateEntry.weekday,
+      )
+
+      if (!isDuplicate) {
+        datesArray.value.push(dateEntry)
+      }
+    }
+  })
+  return datesArray.value
+}
+
+const weekdayItems = [
+  { value: 'Monday', weekday: t('monday') },
+  { value: 'Tuesday', weekday: t('tuesday') },
+  { value: 'Wednesday', weekday: t('wednesday') },
+  { value: 'Thursday', weekday: t('thursday') },
+  { value: 'Friday', weekday: t('friday') },
+  { value: 'Saturday', weekday: t('saturday') },
+  { value: 'Sunday', weekday: t('sunday') },
+]
+
+function validate(): boolean {
+  // minParticipants required, of type number, min 0
+  if (
+    !isNumber(formData.value?.minParticipants?.valueOf()) ||
+    formData.value?.minParticipants?.valueOf() < 0
+  ) {
+    return true
+  }
+  // when maxParticipants defined, it must be of type number and greater than minParticipants
+  if (
+    formData.value?.maxParticipants?.valueOf() !== undefined &&
+    (!isNumber(formData.value?.maxParticipants?.valueOf()) ||
+      formData.value?.minParticipants?.valueOf() >
+        formData.value?.maxParticipants?.valueOf())
+  ) {
+    return true
+  }
+  return false
+}
+
+const minParticipantsRules = [
+  (i: number) => isNumber(i.valueOf()) || t('validation.nan'),
+  (i: number) => i.valueOf() >= 0 || t('validation.less-than-zero'),
+]
 </script>
 
 <template>
@@ -121,8 +291,10 @@ function removeDate() {
             <VTextField
               v-model.number="formData.minParticipants"
               :label="t('minimum-participants')"
+              :rules="minParticipantsRules"
+              hide-details="auto"
               type="number"
-              required
+              validate-on="input"
             />
           </VCol>
           <VCol cols="12" sm="6">
@@ -130,21 +302,7 @@ function removeDate() {
               v-model.number="formData.maxParticipants"
               :label="t('maximum-participants')"
               type="number"
-              required
-            />
-          </VCol>
-          <VCol cols="6">
-            <VTextField
-              v-model="formData.moodleCourse"
-              :label="t('moodle-course-link')"
-              type="url"
-              required
-            />
-          </VCol>
-          <VCol cols="6">
-            <VSwitch
-              v-model="formData.externalRegistration"
-              :label="t('external-registration')"
+              requried
             />
           </VCol>
           <VCol cols="12" sm="6">
@@ -164,6 +322,14 @@ function removeDate() {
               </template>
             </VSelect>
           </VCol>
+          <VCol cols="12" sm="6">
+            <VTextField
+              v-model="formData.moodleCourse"
+              :label="t('moodle-course-link')"
+              type="url"
+              required
+            />
+          </VCol>
           <VCol>
             <VRadioGroup v-model="formData.appointments.type" inline>
               <VRadio :label="t('weekly')" value="weekly" />
@@ -171,40 +337,114 @@ function removeDate() {
               <VRadio :label="t('irregular')" value="irregular" />
             </VRadioGroup>
           </VCol>
+          <VCol cols="6">
+            <VSwitch
+              v-model="formData.externalRegistration"
+              :label="t('external-registration')"
+            />
+          </VCol>
           <VCol cols="12">
             <VIcon :icon="mdiCalendar" />
             <strong>{{ t('appointments') }}</strong>
-            <div
-              v-for="(interval, index) in formData.appointments.dates"
-              :key="index"
-            >
-              <div class="dateId-box" style="display: flex">
-                <VIcon :icon="mdiTrashCanOutline" @click="removeDate" />
+            <div v-if="formData.appointments.type === 'weekly'">
+              <div
+                v-for="(interval, index) in initializeDatesArray(
+                  formData.appointments.dates,
+                )"
+                :key="index"
+              >
+                <VRow dense>
+                  <VCol cols="12" sm="4">
+                    <VSelect
+                      v-model="interval.weekday"
+                      :items="weekdayItems"
+                      hide-details="auto"
+                      item-title="weekday"
+                      item-value="value"
+                      label="Weekday"
+                      @update:model-value="updateWeeklyAppointment(index)"
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="4">
+                    <VTextField
+                      v-model="interval.startTime"
+                      :label="t('from')"
+                      type="time"
+                      hide-details
+                      required
+                      @update:model-value="updateWeeklyAppointment(index)"
+                    />
+                  </VCol>
+                  <VCol cols="12" sm="4">
+                    <VTextField
+                      v-model="interval.endTime"
+                      :label="t('to')"
+                      type="time"
+                      hide-details
+                      required
+                      @update:model-value="updateWeeklyAppointment(index)"
+                    >
+                      <template #append>
+                        <div class="dateId-box">
+                          <VIcon
+                            :icon="mdiTrashCanOutline"
+                            size="30"
+                            @click="removeDateWeekly(index)"
+                          />
+                        </div>
+                      </template>
+                    </VTextField>
+                  </VCol>
+                </VRow>
+                <VDivider :thickness="2" class="mt-3 mb-3 hidden-sm-and-up" />
               </div>
-              <VRow>
-                <VCol cols="12" sm="6">
-                  <VTextField
-                    v-model="interval.from"
-                    :label="t('from')"
-                    type="datetime-local"
-                    hide-details
-                    required
-                  />
-                </VCol>
-                <VCol cols="12" sm="6">
-                  <VTextField
-                    v-model="interval.to"
-                    :label="t('to')"
-                    type="datetime-local"
-                    hide-details
-                    required
-                  />
-                </VCol>
-              </VRow>
+              <br />
+              <VBtn @click="addDateWeekly"> {{ t('add-date') }} </VBtn>
+              <br />
             </div>
-            <br />
-            <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
+            <div v-else>
+              <div
+                v-for="(interval, index) in formData.appointments.dates"
+                :key="index"
+              >
+                <div v-if="interval !== undefined">
+                  <VRow dense>
+                    <VCol cols="12" sm="6">
+                      <VTextField
+                        v-model="interval.from"
+                        :label="t('from')"
+                        type="datetime-local"
+                        hide-details
+                        required
+                      />
+                    </VCol>
+                    <VCol cols="12" sm="6">
+                      <VTextField
+                        v-model="interval.to"
+                        :label="t('to')"
+                        type="datetime-local"
+                        hide-details
+                        required
+                      >
+                        <template #append>
+                          <div class="dateId-box">
+                            <VIcon
+                              :icon="mdiTrashCanOutline"
+                              size="30"
+                              @click="removeDate(index)"
+                            />
+                          </div>
+                        </template>
+                      </VTextField>
+                    </VCol>
+                  </VRow>
+                </div>
+              </div>
+              <br />
+              <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
+            </div>
           </VCol>
+          <div><br /></div>
           <VCol cols="12">
             <VTextarea
               v-model="formData.extraInfo"
@@ -216,21 +456,29 @@ function removeDate() {
         <small class="text-caption text-medium-emphasis"
           >*{{ t('multiple-elements-separation') }}</small
         >
+        <br />
+        <small
+          v-if="
+            formData.maxParticipants?.valueOf() !== undefined &&
+            formData.maxParticipants?.valueOf() <
+              formData.minParticipants?.valueOf()
+          "
+          class="text-caption"
+          style="color: rgb(var(--v-theme-primary))"
+        >
+          {{ t('validation.less-than-min') }}
+        </small>
       </VCardText>
       <VDivider />
       <template #actions>
-        <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
+        <VBtn :text="t('global.cancel')" @click="cancel" />
         <VSpacer />
         <VBtn
           v-if="enableDelete"
           :text="t('global.delete')"
           @click="$emit('submit', undefined)"
         />
-        <VBtn
-          :disabled="!formData.moduleCode"
-          :text="t('global.save')"
-          @click="submit"
-        />
+        <VBtn :disabled="validate()" :text="t('global.save')" @click="submit" />
       </template>
     </VCard>
   </VDialog>
@@ -242,6 +490,13 @@ en:
   minimum-participants: Minimum participants
   maximum-participants: Maximum participants
   moodle-course-link: Moodle course link
+  monday: 'Monday'
+  tuesday: 'Tuesday'
+  wednesday: 'Wednesday'
+  thursday: 'Thursday'
+  friday: 'Friday'
+  saturday: 'Saturday'
+  sunday: 'Sunday'
   appointments: Appointment(s)
   from: From
   to: To
@@ -254,10 +509,21 @@ en:
   extra-information: Extra information
   multiple-elements-separation: '*separate multiple elements with comma'
   external-registration: External registration
+  validation:
+    nan: 'Please enter a number'
+    less-than-zero: 'Participant number at least 0'
+    less-than-min: 'Maximum participants must be greater than minimum Participants'
 de:
   title: 'Bearbeiten - {0}'
   minimum-participants: Mindestteilnehmer
   maximum-participants: Maximale Teilnehmer
+  monday: 'Montag'
+  tuesday: 'Dienstag'
+  wednesday: 'Mittwoch'
+  thursday: 'Donnerstag'
+  friday: 'Freitag'
+  saturday: 'Samstag'
+  sunday: 'Sonntag'
   moodle-course-link: Moodle-Kurslink
   appointments: Termin(e)
   from: Von
@@ -271,4 +537,8 @@ de:
   extra-information: Zusätzliche Informationen
   multiple-elements-separation: '*Trennen Sie mehrere Elemente mit Kommas'
   external-registration: Externe Anmeldung
+  validation:
+    nan: 'Bitte eine Zahl eingeben'
+    less-than-zero: 'Teilnehmerzahl mindestens 0'
+    less-than-min: 'Maximalteilnehmerzahl muss größer sein als Mindestteilnehmerzahl'
 </i18n>

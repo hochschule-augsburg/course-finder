@@ -55,7 +55,12 @@ module.exports = {
     'build-system/**',
   ],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
     indent: 'off',
     'no-throw-literal': 'error',
     curly: 'error',

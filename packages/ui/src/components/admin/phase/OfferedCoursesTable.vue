@@ -32,16 +32,30 @@ watch(
 
 <template>
   <div>
-    <VTable>
+    <VTable height="1000px" fixed-header hover>
       <thead>
         <tr>
-          <th>{{ t('module-code') }}</th>
-          <th>{{ t('title') }}</th>
-          <th>{{ t('fields-of-study') }}</th>
-          <th>{{ t('min') }}</th>
-          <th>{{ t('max') }}</th>
-          <th>{{ t('count') }}</th>
-          <th><span class="text-h6">⌀</span> {{ t('points') }}</th>
+          <th>
+            <strong>{{ t('module-code') }}</strong>
+          </th>
+          <th>
+            <strong>{{ t('title') }}</strong>
+          </th>
+          <th>
+            <strong>{{ t('fields-of-study') }}</strong>
+          </th>
+          <th>
+            <strong>{{ t('min') }}</strong>
+          </th>
+          <th>
+            <strong>{{ t('max') }}</strong>
+          </th>
+          <th>
+            <strong>{{ t('count') }}</strong>
+          </th>
+          <th>
+            <strong><span class="text-h6">⌀</span> {{ t('points') }}</strong>
+          </th>
         </tr>
       </thead>
       <tbody>

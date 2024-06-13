@@ -17,19 +17,12 @@ const adminCoursesStore = useAdminCoursesStore()
 
 <template>
   <div class="mx-10">
-    <VContainer>
-      <VRow justify="center">
-        <VCol>
-          <h1>{{ t('enrollment-phases') }}</h1>
-        </VCol>
-        <VCol cols="8" />
-        <VCol>
-          <VBtn class="mr-8" color="primary" to="phases/new/edit">
-            {{ t('add') }}
-          </VBtn>
-        </VCol>
-      </VRow>
-    </VContainer>
+    <div class="d-flex justify-space-between">
+      <h1>{{ t('enrollment-phases') }}</h1>
+      <VBtn class="mr-8" color="primary" to="phases/new/edit">
+        {{ t('add') }}
+      </VBtn>
+    </div>
     <VContainer>
       <VRow justify="center">
         <VCol
@@ -56,6 +49,8 @@ const adminCoursesStore = useAdminCoursesStore()
 <i18n lang="yaml">
 en:
   enrollment-phases: Enrollment Phases
+  add: Add
 de:
   enrollment-phases: Anmeldephasen
+  add: Hinzufügen
 </i18n>
