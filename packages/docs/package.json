@@ -5,7 +5,9 @@
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress preview",
+    "prettier": "prettier --config ../../.prettierrc.json -c .",
+    "prettier:fix": "prettier --config ../../.prettierrc.json -w ."
   },
   "keywords": [],
   "author": "",

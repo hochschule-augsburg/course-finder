@@ -25,7 +25,9 @@
     "lint": "pnpm --stream --parallel -r run lint",
     "lint:fix": "pnpm --stream --parallel -r run lint:fix",
     "stylelint": "pnpm --stream --parallel -r run stylelint",
-    "stylelint:fix": "pnpm --stream --parallel -r run stylelint:fix"
+    "stylelint:fix": "pnpm --stream --parallel -r run stylelint:fix",
+    "prettier": "pnpm --stream --parallel -r run prettier",
+    "prettier:fix": "pnpm --stream --parallel -r run prettier:fix"
   },
   "type": "module",
   "version": "0.0.0"
