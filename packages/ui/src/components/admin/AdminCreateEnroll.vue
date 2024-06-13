@@ -147,7 +147,6 @@ async function createEnrollment() {
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
     adminCoursesStore.phases[newPhase.id] = {
-      createdAt: new Date(),
       description: {
         de: formData.value.description.de,
         en: formData.value.description.en,
@@ -194,7 +193,6 @@ async function initFormData() {
     return
   }
   formData.value = {
-    createdAt: new Date(),
     description: { de: '', en: '' },
     emailNotificationAt: getLocalISOString(new Date()),
     end: getLocalISOString(new Date()),
