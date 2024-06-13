@@ -13,6 +13,15 @@ import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
+    prisma.user
+      .update({
+        data: {
+          lastActive: new Date(),
+        },
+        where: { username: ctx.user?.username },
+      })
+      .then(() => {})
+
     return ctx.user
   }),
   // rate limited by reverse proxy
@@ -57,11 +66,6 @@ export const authRouter = router({
           ])
           return 'two-fa-required'
         }
-
-        await prisma.student.updateMany({
-          data: { createdAt: new Date() },
-          where: { User: { username: input.username } },
-        })
 
         const token = await ctx.res.jwtSign(result.user)
         ctx.res.setCookie('cf-token', token, {

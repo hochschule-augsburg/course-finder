@@ -34,6 +34,8 @@ model User {
   /// [Otp]
   otp      Json?
   Course   Course[]
+
+  lastActive DateTime @default(now())
 }
 
 model Student {
@@ -43,11 +45,8 @@ model Student {
   term         Int?
   regNumber    String?
   StudentPhase StudentPhase[]
-  Faculty      Faculty        @relation(fields: [facultyName], references: [name])
+  Faculty      Faculty        @relation(fields: [facultyName], references: [name], onDelete: Cascade)
   facultyName  String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Faculty {
@@ -64,11 +63,11 @@ model Course {
   /// [I18n]
   title          Json
   published      Boolean         @default(false)
-  editor         User?           @relation(fields: [editorUsername], references: [username])
+  editor         User?           @relation(fields: [editorUsername], references: [username], onDelete: SetNull)
   editorUsername String?
   /// if lecturer is not in the system
   lecturers      String[]
-  Faculty        Faculty?        @relation(fields: [facultyName], references: [name])
+  Faculty        Faculty?        @relation(fields: [facultyName], references: [name], onDelete: SetNull)
   facultyName    String?
   /// SWS
   semesterHours  Int
@@ -91,7 +90,6 @@ model Enrollphase {
   title               Json
   /// [I18n]
   description         Json
-  createdAt           DateTime        @default(now())
   offeredCourses      OfferedCourse[]
   studentPhases       StudentPhase[]
   state               PhaseState      @default(NOT_STARTED)
@@ -130,7 +128,7 @@ model OfferedCourse {
 }
 
 model StudentPhase {
-  Student       Student         @relation(fields: [username], references: [username])
+  Student       Student         @relation(fields: [username], references: [username], onDelete: Cascade)
   username      String
   Phase         Enrollphase     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
   phaseId       Int
@@ -138,13 +136,13 @@ model StudentPhase {
 
   creditsNeeded    Int
   PhaseAssignments PhaseAssignment[]
-  createdAt DateTime @default(now())
+  createdAt        DateTime          @default(now())
 
   @@id([username, phaseId])
 }
 
 model StudentChoice {
-  OfferedCourse OfferedCourse @relation(fields: [moduleCode, phaseId], references: [moduleCode, phaseId])
+  OfferedCourse OfferedCourse @relation(fields: [moduleCode, phaseId], references: [moduleCode, phaseId], onDelete: Cascade)
   moduleCode    String
   phaseId       Int
   StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId], onDelete: Cascade)
@@ -160,7 +158,7 @@ model PhaseAssignment {
   phaseId       Int
   username      String
   StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId], onDelete: Cascade)
-  offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode])
+  offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode], onDelete: Cascade)
   moduleCode    String
 
   @@id([phaseId, tryNo, username, moduleCode])

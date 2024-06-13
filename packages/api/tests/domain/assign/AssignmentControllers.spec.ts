@@ -20,6 +20,7 @@ describe('AssignmentStudentController', () => {
           username: '',
         },
       ],
+      createdAt: new Date(),
       creditsNeeded: 6,
       phaseId: 0,
       username: 'user1',
