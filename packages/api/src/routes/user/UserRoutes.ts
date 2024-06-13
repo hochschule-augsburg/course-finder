@@ -13,6 +13,9 @@ import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
   getUser: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.user) {
+      return undefined
+    }
     prisma.user
       .update({
         data: {
