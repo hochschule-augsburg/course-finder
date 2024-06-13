@@ -110,7 +110,7 @@ async function updateEnrollment() {
       },
       emailNotificationAt: formData.value.emailNotificationAt
         ? new Date(formData.value.emailNotificationAt)
-        : new Date(0),
+        : new Date(0), // todo: this should be set to whatever the db defaults to
       end: new Date(formData.value.end),
       id: props.phaseId,
       start: new Date(formData.value.start),
@@ -153,7 +153,7 @@ async function createEnrollment() {
       },
       emailNotificationAt: formData.value.emailNotificationAt
         ? new Date(formData.value.emailNotificationAt)
-        : new Date(0),
+        : new Date(0), // todo: this should be set to whatever the db defaults to
       end: new Date(formData.value.end),
       id: 0,
       publishedTry: null,
