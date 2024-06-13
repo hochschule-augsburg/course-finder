@@ -420,7 +420,8 @@ en:
   for-fields-of-study: For fields of study
   extra-info: Extra information
   external-registration: External registration
-  subject-creation-error: Error when creating subject. Entered module-code might alredy exist.
+  subject-creation-error:
+    Error when creating subject. Entered module-code might alredy exist.
 de:
   on-the-fly: Neues Angebot erstellen
   available-courses: Verfügbare Kurse
@@ -438,7 +439,9 @@ de:
   for-fields-of-study: Für Studienfelder
   extra-info: Zusätzliche Informationen
   external-registration: Externe Anmeldung
-  subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
+  subject-creation-error:
+    Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon
+    vergeben sein.
 </i18n>
 
 <style scoped lang="scss">

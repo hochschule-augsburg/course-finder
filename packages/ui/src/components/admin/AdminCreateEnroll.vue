@@ -419,7 +419,8 @@ de:
   validation:
     field-required: 'Feld erforderlich'
     invalid-date-interval: 'Startdatum muss vor Enddatum kommen'
-    email-date-out-of-bounds: 'E-maildatum muss zwischen Startdatum und Enddatum liegen'
+    email-date-out-of-bounds:
+      'E-maildatum muss zwischen Startdatum und Enddatum liegen'
     backend-enroll-phase-creation-error: 'Fehler bei der Phasenerstellung.'
     backend-enroll-phase-updating-error: 'Fehler bei der Phasenaktualisierung.'
 </i18n>

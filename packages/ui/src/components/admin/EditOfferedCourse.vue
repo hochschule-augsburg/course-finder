@@ -512,7 +512,8 @@ en:
   validation:
     nan: 'Please enter a number'
     less-than-zero: 'Participant number at least 0'
-    less-than-min: 'Maximum participants must be greater than minimum Participants'
+    less-than-min:
+      'Maximum participants must be greater than minimum Participants'
 de:
   title: 'Bearbeiten - {0}'
   minimum-participants: Mindestteilnehmer
@@ -540,5 +541,6 @@ de:
   validation:
     nan: 'Bitte eine Zahl eingeben'
     less-than-zero: 'Teilnehmerzahl mindestens 0'
-    less-than-min: 'Maximalteilnehmerzahl muss größer sein als Mindestteilnehmerzahl'
+    less-than-min:
+      'Maximalteilnehmerzahl muss größer sein als Mindestteilnehmerzahl'
 </i18n>

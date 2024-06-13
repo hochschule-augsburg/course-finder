@@ -148,13 +148,20 @@ en:
   lecturer: Lecturer
   no.: No.
   new: New
-  subject-creation-error: Error when creating subject. Entered module-code might alredy exist.
-  subject-editing-error: Error when editing subject. Module code must be unique and at least one title is required.
+  subject-creation-error:
+    Error when creating subject. Entered module-code might alredy exist.
+  subject-editing-error:
+    Error when editing subject. Module code must be unique and at least one
+    title is required.
 de:
   name: Name
   lecturer: Dozent
   no.: Nr.
   new: Neu
-  subject-creation-error: Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.
-  subject-editing-error: Fehler bei der Kurseditierung. Modulkürzel muss einzigartig sein und mindestens ein Titel ist erforderlich.
+  subject-creation-error:
+    Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon
+    vergeben sein.
+  subject-editing-error:
+    Fehler bei der Kurseditierung. Modulkürzel muss einzigartig sein und
+    mindestens ein Titel ist erforderlich.
 </i18n>
