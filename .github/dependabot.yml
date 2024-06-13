@@ -3,12 +3,11 @@ updates:
   - package-ecosystem: npm
     directory: '/'
     schedule:
-      interval: weekly
+      interval: monthly
       time: '07:00'
       timezone: 'Europe/Berlin'
     versioning-strategy: auto
     groups:
-      dev-all:
+      all:
         patterns:
-        - "*"
-        
+          - '*'
