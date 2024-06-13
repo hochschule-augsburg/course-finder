@@ -16,7 +16,7 @@ export async function sendEmail(
 
   const info = await transporter.sendMail({
     attachments,
-    from: 'subject-enroll@tha.de',
+    from: 'course-finder@tha.de',
     subject,
     text,
     to,

@@ -17,7 +17,7 @@
   },
   "keywords": [],
   "license": "MIT",
-  "name": "subject-enroll",
+  "name": "course-finder",
   "scripts": {
     "dev": "pnpm --stream --parallel -r run dev",
     "build": "pnpm --stream --parallel -r run build",

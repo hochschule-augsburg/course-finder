@@ -27,7 +27,7 @@ services:
       - ${CERTS_PRIVKEY}:/prod/certs/privkey.pem
       - ${CERTS_CHAIN}:/prod/certs/chain.pem
       - ${CERTS_FULLCHAIN}:/prod/certs/fullchain.pem
-      - ./subject-enroll.conf.local:/etc/nginx/conf.d/subject-enroll.conf
+      - ./nginx-course-finder.conf.local:/etc/nginx/conf.d/nginx-course-finder.conf
     depends_on:
       - api
 

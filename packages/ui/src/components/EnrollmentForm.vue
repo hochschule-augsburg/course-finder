@@ -161,9 +161,8 @@ async function validate() {
     />
     <VCard :subtitle="t('subtitle')" :title="t('title')">
       <template #append>
-        <!-- TODO: update link -->
         <VBtn
-          href="https://sirchnik.github.io/subject-enroll/student.html#anmeldung-der-wahlpflichtfacher"
+          href="https://hochschule-augsburg.github.io/course-finder/student#_3-2-wahlpflichtfach-anmeldung"
           target="blank"
           variant="plain"
           icon

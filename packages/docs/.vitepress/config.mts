@@ -4,14 +4,17 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'CourseFinder',
   description: 'Wahlpflichtfachanmeldung',
-  base: '/subject-enroll/',
+  base: '/course-finder/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/sirchnik/subject-enroll' },
+      {
+        icon: 'github',
+        link: 'https://github.com/hochschule-augsburg/course-finder/',
+      },
     ],
   },
-  head: [['link', { rel: 'icon', href: '/subject-enroll/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: '/course-finder/favicon.ico' }]],
   locales: {
     root: {
       label: 'Deutsch',

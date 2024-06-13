@@ -19,7 +19,7 @@ const coursesStore = useCoursesStore()
     <VDivider v-if="coursesStore.currentPhase" />
     <VListItem
       :title="t('documentation')"
-      href="https://sirchnik.github.io/subject-enroll/"
+      href="https://hochschule-augsburg.github.io/course-finder/"
       target="_blank"
     />
   </VList>
