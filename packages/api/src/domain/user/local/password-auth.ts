@@ -32,5 +32,9 @@ export function comparePasswords(
   const storedBuffer = Buffer.from(storedPasswordHash, 'hex')
   const inputBuffer = Buffer.from(inputPasswordHash, 'hex')
 
-  return crypto.timingSafeEqual(storedBuffer, inputBuffer)
+  try {
+    return crypto.timingSafeEqual(storedBuffer, inputBuffer)
+  } catch {
+    return false
+  }
 }
