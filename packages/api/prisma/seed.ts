@@ -1,9 +1,9 @@
 /* cSpell:disable */
 import { PrismaClient } from '@prisma/client'
-import crypto from 'crypto'
 import { readFileSync } from 'fs'
 import { random, sampleSize, sumBy, uniqBy } from 'lodash-es'
 
+import { hashPassword } from '../src/domain/user/local/password-auth'
 import { data as coursesData } from './assets/courses'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24'
 import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24'
@@ -35,7 +35,7 @@ async function main() {
     data: {
       auth: {
         method: 'local',
-        password: hashPassword('user-2fa', 'salt'),
+        password: await hashPassword('user-2fa', 'salt'),
         salt: 'salt',
         twoFA: true,
       },
@@ -60,7 +60,7 @@ async function main() {
     data: {
       auth: {
         method: 'local',
-        password: hashPassword('prof1', 'salt'),
+        password: await hashPassword('prof1', 'salt'),
         salt: 'salt',
       },
       email: 'another.professor@example.com',
@@ -166,7 +166,7 @@ async function main() {
       {
         auth: {
           method: 'local',
-          password: hashPassword('admin', 'salt'),
+          password: await hashPassword('admin', 'salt'),
           salt: 'salt',
         },
         email: 'admin@example.com',
@@ -177,7 +177,7 @@ async function main() {
       {
         auth: {
           method: 'local',
-          password: hashPassword('prof', 'salt'),
+          password: await hashPassword('prof', 'salt'),
           salt: 'salt',
         },
         email: 'admin@example.com',
@@ -216,7 +216,7 @@ async function main() {
           },
           auth: {
             method: 'local' as const,
-            password: hashPassword(`stud-${abbr}`, 'salt'),
+            password: await hashPassword(`stud-${abbr}`, 'salt'),
             salt: 'salt',
           },
           email: `stud${abbr}@example.com`,
@@ -369,13 +369,6 @@ async function main() {
       }),
     ),
   })
-}
-
-function hashPassword(password: string, salt: string) {
-  return crypto
-    .createHash('sha256')
-    .update(password + salt)
-    .digest('hex')
 }
 
 function getHalfTime(date1: Date, date2: Date) {

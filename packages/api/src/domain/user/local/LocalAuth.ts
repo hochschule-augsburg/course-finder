@@ -1,8 +1,7 @@
-import crypto from 'crypto'
-
 import type { AuthResult } from '../UserService'
 
 import { prisma } from '../../../prisma/prisma'
+import { comparePasswords, hashPassword } from './password-auth'
 
 export async function pwdAuth(
   username: string,
@@ -19,12 +18,9 @@ export async function pwdAuth(
   }
   const clientUser = { ...user, auth: { twoFA: user.auth.twoFA } }
 
-  const hashedPassword = crypto
-    .createHash('sha256')
-    .update(password + user.auth.salt)
-    .digest('hex')
+  const hashedPassword = await hashPassword(password, user.auth.salt)
 
-  if (hashedPassword === user.auth.password) {
+  if (comparePasswords(hashedPassword, user.auth.password)) {
     if (user.auth.twoFA) {
       return { success: true, twoFA: true, user: clientUser }
     }

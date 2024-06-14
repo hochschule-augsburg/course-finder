@@ -1,6 +1,5 @@
-import crypto from 'crypto'
-
 import { pwdAuth } from '../../../../src/domain/user/local/LocalAuth'
+import { hashPassword } from '../../../../src/domain/user/local/password-auth'
 import { prismaMock } from '../../../setup/prisma'
 
 describe('pwdAuth', () => {
@@ -37,10 +36,7 @@ describe('pwdAuth', () => {
   it('should return success and twoFA status if password is correct', async () => {
     const salt = 'salt'
     const password = 'password'
-    const hashedPassword = crypto
-      .createHash('sha256')
-      .update(password + salt)
-      .digest('hex')
+    const hashedPassword = await hashPassword(password, salt)
 
     // @ts-ignore
     prismaMock.user.findUnique.mockResolvedValue({
