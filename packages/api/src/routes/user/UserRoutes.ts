@@ -73,6 +73,7 @@ export const authRouter = router({
         const token = await ctx.res.jwtSign(result.user)
         ctx.res.setCookie('cf-token', token, {
           domain: env.FRONTEND_HOSTNAME,
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14), // 14 days
           httpOnly: true,
           path: '/',
           sameSite: true,
@@ -81,8 +82,14 @@ export const authRouter = router({
         return result.user
       },
     ),
-  logout: publicProcedure.mutation(async ({ ctx }) => {
-    ctx.res.clearCookie('cf-token')
+  logout: publicProcedure.mutation(({ ctx }) => {
+    ctx.res.clearCookie('cf-token', {
+      domain: env.FRONTEND_HOSTNAME,
+      httpOnly: true,
+      path: '/',
+      sameSite: true,
+      secure: process.env.NODE_ENV === 'production',
+    })
   }),
   // rate limited by reverse proxy
   twoFA: publicProcedure
