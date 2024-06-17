@@ -72,7 +72,7 @@ export const authRouter = router({
 
         const token = await ctx.res.jwtSign(result.user)
         ctx.res.setCookie('cf-token', token, {
-          domain: env.SERVER_HOSTNAME,
+          domain: env.FRONTEND_HOSTNAME,
           httpOnly: true,
           path: '/',
           sameSite: true,
