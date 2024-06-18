@@ -21,6 +21,12 @@ const enrollProcedure = studentOnlyProcedure
         message: 'phase not in database',
       })
     }
+    if ((opts.ctx.user.Student.term ?? 0) < 3) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'student not eligible for enrollment',
+      })
+    }
     return opts.next({ ctx: { phase } })
   })
 
