@@ -19,7 +19,7 @@ const coursesStore = useCoursesStore()
 
 <template>
   <div>
-    <VExpansionPanelTitle color="secondary">
+    <VExpansionPanelTitle class="subject-element" color="secondary">
       <EnrollCheckbox
         v-if="coursesStore.currentPhase?.state === 'OPEN'"
         :subject
