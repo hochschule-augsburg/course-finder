@@ -19,7 +19,7 @@ defineProps<{
   changeTheme: (newTheme: ThemeOptions) => void
   selectedTheme: ThemeOptions
 }>()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 
 const userStore = useUserStore()
 </script>
@@ -46,7 +46,10 @@ const userStore = useUserStore()
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
-            <VIcon :icon="mdiThemeLightDark" />
+            <div>
+              <VIcon :icon="mdiThemeLightDark" />
+              <span class="theme-description">{{ selectedTheme }}</span>
+            </div>
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-theme') }}
             </VTooltip>
@@ -61,7 +64,10 @@ const userStore = useUserStore()
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
-            <VIcon :icon="mdiEarth" />
+            <div>
+              <VIcon :icon="mdiEarth" />
+              <span class="locale-description">{{ locale }}</span>
+            </div>
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-lang') }}
             </VTooltip>
@@ -123,6 +129,25 @@ const userStore = useUserStore()
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.locale-description {
+  font-size: 0.5rem;
+  position: absolute;
+  /* stylelint-disable-next-line unit-disallowed-list */
+  $pos: 4px;
+  top: $pos;
+  right: $pos;
+}
+.theme-description {
+  font-size: 0.5rem;
+  position: absolute;
+  /* stylelint-disable-next-line unit-disallowed-list */
+  $pos: 3px;
+  top: $pos;
+  right: $pos;
+}
+</style>
 
 <i18n lang="yaml">
 en:
