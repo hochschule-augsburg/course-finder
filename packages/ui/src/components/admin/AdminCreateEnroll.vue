@@ -54,7 +54,7 @@ const oldPhasesSelect = computed(() =>
         }),
     )
     .map((phase) => ({
-      text: locale.value === 'de' ? phase.title.de : phase.title.en,
+      text: phase.title[locale.value],
       value: phase.id,
     })),
 )

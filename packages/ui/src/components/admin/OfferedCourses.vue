@@ -223,7 +223,7 @@ const searchOffered = ref('')
             <template #item="{ element }">
               <div v-if="filterCourse(element)" class="list-group-item">
                 <VCard
-                  :title="locale === 'de' ? element.title.de : element.title.en"
+                  :title="element.title[locale]"
                   class="hoverable-card"
                   color="secondary"
                   height="50"
@@ -283,11 +283,7 @@ const searchOffered = ref('')
                       </div>
                     </template>
                     <VCardTitle class="d-flex justify-space-between">
-                      {{
-                        locale === 'de'
-                          ? element.Course.title.de
-                          : element.Course.title.en
-                      }}
+                      {{ element.Course.title[locale] }}
                     </VCardTitle>
                   </VCardItem>
 

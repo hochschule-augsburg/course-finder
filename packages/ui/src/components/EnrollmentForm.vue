@@ -193,7 +193,7 @@ async function validate() {
           <template v-for="subject in formData" :key="subject.moduleCode">
             <VTextField
               v-model.number="subject.points"
-              :label="locale === 'de' ? subject.title.de : subject.title.en"
+              :label="subject.title[locale]"
               class="mb-3"
               color="primary"
               required

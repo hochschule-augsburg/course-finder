@@ -29,7 +29,7 @@ const coursesStore = useCoursesStore()
         <VRow no-gutters>
           <VCol cols="5">
             <strong class="v-card-title pl-0">
-              {{ locale === 'de' ? subject.title.de : subject.title.en }}
+              {{ subject.title[locale] }}
             </strong>
           </VCol>
           <VCol cols="3">

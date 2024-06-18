@@ -276,14 +276,8 @@ const minParticipantsRules = [
   >
     <VCard
       v-if="formData"
-      :title="
-        t('title', [
-          locale === 'en'
-            ? offeredCourse?.Course.title.en
-            : offeredCourse?.Course.title.de,
-        ])
-      "
       :prepend-icon="mdiPencil"
+      :title="t('title', [offeredCourse?.Course.title[locale]])"
     >
       <VCardText>
         <VRow dense>

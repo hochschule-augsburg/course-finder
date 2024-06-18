@@ -23,11 +23,11 @@ const stateText = computed(
     rounded="lg"
   >
     <h2>
-      {{ locale === 'de' ? phase.title.de : phase.title.en }}
+      {{ phase.title[locale] }}
     </h2>
     <p>
       {{
-        `${phase.start.toLocaleDateString()} - ${phase.end.toLocaleDateString()}`
+        `${phase.start.toLocaleDateString(locale)} - ${phase.end.toLocaleDateString(locale)}`
       }}
     </p>
     <p>

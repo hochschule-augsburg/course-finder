@@ -38,7 +38,7 @@ async function copyLinkToClipboard() {
         <div class="d-flex align-center">
           <span class="text-truncate">
             <strong>
-              {{ locale === 'de' ? subject.title.de : subject.title.en }}
+              {{ subject.title[locale] }}
             </strong>
             -
             {{ subject.lecturers.join(', ') }}

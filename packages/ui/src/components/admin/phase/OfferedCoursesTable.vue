@@ -62,11 +62,7 @@ watch(
         <tr v-for="course in sortedCourses" :key="course.moduleCode">
           <td>{{ course.moduleCode }}</td>
           <td>
-            {{
-              locale === 'en'
-                ? course.Course.title?.en
-                : course.Course.title?.de
-            }}
+            {{ course.Course.title?.[locale] }}
           </td>
           <td>
             {{ course.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e).join(', ') }}

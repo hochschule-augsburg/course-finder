@@ -39,9 +39,7 @@ const phaseAlreadyActive = computed(() =>
 async function updateState(newValue: Phase['state']) {
   const result = await coursesStore.updatePhaseState(props.phaseId, newValue)
   if ('error' in result) {
-    error.value = t(result.error, [
-      locale.value === 'de' ? result.phase.title.de : result.phase.title.en,
-    ])
+    error.value = t(result.error, [result.phase.title[locale.value]])
   }
 }
 </script>
@@ -60,13 +58,7 @@ async function updateState(newValue: Phase['state']) {
           </VBtn>
         </div>
       </template>
-      {{
-        t('a-phase-is-already-active', [
-          locale === 'de'
-            ? phaseAlreadyActive?.title.de
-            : phaseAlreadyActive?.title.en,
-        ])
-      }}
+      {{ t('a-phase-is-already-active', [phaseAlreadyActive?.title[locale]]) }}
     </VTooltip>
     <VSelect
       v-else-if="phaseState.modelValue !== 'FINISHED'"

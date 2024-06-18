@@ -125,11 +125,7 @@ async function newAssignment() {
             <tr v-for="course in assignment" :key="course.moduleCode">
               <td>{{ course.moduleCode }}</td>
               <td>
-                {{
-                  locale === 'de'
-                    ? course.Course?.Course.title.de
-                    : course.Course?.Course.title.de
-                }}
+                {{ course.Course?.Course.title[locale] }}
               </td>
               <td>{{ course.Course?.minParticipants }}</td>
               <td>{{ course.Course?.maxParticipants }}</td>

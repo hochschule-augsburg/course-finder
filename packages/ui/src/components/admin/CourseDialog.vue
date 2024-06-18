@@ -115,14 +115,8 @@ const moduleCodeRequiredRule = [
   >
     <VCard
       v-if="formData"
-      :title="
-        t('title', [
-          locale === 'en'
-            ? selectedSubject?.title.en
-            : selectedSubject?.title.de,
-        ])
-      "
       :prepend-icon="mdiPencil"
+      :title="t('title', [selectedSubject?.title[locale]])"
     >
       <template v-if="!selectedSubject?.moduleCode" #title>
         <div class="d-flex align-center" style="width: 35%">
