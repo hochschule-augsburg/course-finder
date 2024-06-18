@@ -2,10 +2,12 @@
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useCourseEnroll } from '@/stores/EnrollmentStore'
+import { useUserStore } from '@/stores/UserStore'
 import {
   mdiAlphaEBox,
   mdiCheckboxBlankOutline,
   mdiCheckboxMarked,
+  mdiLockAlert,
 } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
 import { VBadge, VIcon, VTooltip } from 'vuetify/components'
@@ -19,6 +21,7 @@ const { t } = useI18n()
 const { modelValue: enrolled, update: updateEnrolled } = useCourseEnroll(
   props.subject,
 )
+const userStore = useUserStore()
 
 async function handleUpdateEnroll() {
   if (enrolled.value?.points) {
@@ -39,8 +42,14 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
+  <VTooltip v-if="(userStore.user?.Student?.term ?? 0) < 3" location="top">
+    <template #activator="{ props: toolTipProps }">
+      <VIcon :icon="mdiLockAlert" size="large" v-bind="toolTipProps" />
+    </template>
+    {{ t('only-term-3-plus') }}
+  </VTooltip>
   <div
-    v-if="!subject.offeredCourse?.externalRegistration"
+    v-else-if="!subject.offeredCourse?.externalRegistration"
     v-ripple
     class="pa-2"
     @click.stop="handleUpdateEnroll"
@@ -59,8 +68,12 @@ async function handleUpdateEnroll() {
 </template>
 
 <i18n lang="yaml">
-de:
-  points-get-lost: Die vergebenen Punkte gehen verloren!
 en:
   points-get-lost: The assigned points will be lost!
+  external-registration: External Registration
+  only-term-3-plus: Only from 3rd semester
+de:
+  points-get-lost: Die vergebenen Punkte gehen verloren!
+  external-registration: Externe Anmeldung
+  only-term-3-plus: Nur ab 3. Semester
 </i18n>
