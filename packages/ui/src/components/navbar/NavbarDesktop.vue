@@ -19,7 +19,7 @@ defineProps<{
   changeTheme: (newTheme: ThemeOptions) => void
   selectedTheme: ThemeOptions
 }>()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 
 const userStore = useUserStore()
 </script>
@@ -46,7 +46,13 @@ const userStore = useUserStore()
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
-            <VIcon :icon="mdiThemeLightDark" />
+            <div>
+              <VIcon :icon="mdiThemeLightDark" />
+              <span
+                style="font-size: 8px; position: absolute; top: 3px; right: 3px"
+                >{{ selectedTheme }}</span
+              >
+            </div>
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-theme') }}
             </VTooltip>
@@ -61,7 +67,13 @@ const userStore = useUserStore()
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
           <VBtn v-bind="props" icon>
-            <VIcon :icon="mdiEarth" />
+            <div class="relative">
+              <VIcon :icon="mdiEarth" />
+              <span
+                style="font-size: 8px; position: absolute; top: 4px; right: 4px"
+                >{{ locale }}</span
+              >
+            </div>
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-lang') }}
             </VTooltip>
