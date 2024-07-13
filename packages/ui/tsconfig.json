@@ -12,6 +12,7 @@
   "compilerOptions": {
     "types": [
       "vite/client",
+      "vue-router/auto",
       "unplugin-vue-router/client",
       "vitest/globals",
       "@intlify/unplugin-vue-i18n/messages"

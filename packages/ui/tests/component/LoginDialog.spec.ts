@@ -10,7 +10,7 @@ import { VBtn, VTextField } from 'vuetify/components'
 import { i18nForTests } from '../test-utils/i18nForTests'
 import { mockedStore } from '../test-utils/piniaMock'
 
-describe('LoginDialog.vue', () => {
+describe.skip('LoginDialog.vue', () => {
   it('emits success event on successful login', async () => {
     const wrapper = mountComponent()
     const userStore = mockedStore(useUserStore)

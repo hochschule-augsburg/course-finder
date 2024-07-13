@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+//@ts-ignore
 const phaseId = Number(route.params.phaseId)
 </script>
 

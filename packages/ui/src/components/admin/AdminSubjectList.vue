@@ -70,7 +70,7 @@ async function createSubject(subject: Course) {
     adminStore.courses.push(result)
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
-  } catch (e) {
+  } catch {
     errorDialogMessage.value = t('subject-creation-error')
     showErrorDialog.value = true
   }
@@ -83,7 +83,7 @@ async function updateSubject(subject: Course) {
     }
     const result = await trpc.admin.courses.update.mutate(subject)
     merge(selectedSubject.value, result)
-  } catch (e) {
+  } catch {
     errorDialogMessage.value = t('subject-editing-error')
     showErrorDialog.value = true
   }

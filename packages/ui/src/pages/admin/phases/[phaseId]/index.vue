@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { usePhaseState } from '@/stores/admin/AdminCoursesStore'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router/auto'
 import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
 
 const { t } = useI18n()
 
 const route = useRoute()
+//@ts-ignore
 const phaseId = Number(route.params.phaseId)
 
 const phaseState = usePhaseState(phaseId)

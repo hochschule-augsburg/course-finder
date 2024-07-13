@@ -25,14 +25,17 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 21
+          node-version: 20
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --strict-peer-dependencies
 
-      - run: pnpm build
-      - run: pnpm lint
-      - run: pnpm stylelint
-      - run: pnpm prettier
-      - run: pnpm test
+      - name: Generate prisma schema types
+        run: pnpm run --filter=api db:generate
+
+      - run: pnpm -r build
+      - run: pnpm -r lint
+      - run: pnpm -r stylelint
+      - run: pnpm -r prettier
+      - run: pnpm -r test

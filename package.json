@@ -2,7 +2,7 @@
   "author": "",
   "description": "",
   "devDependencies": {
-    "@types/node": "^20.14.9",
+    "@types/node": "^20.14.10",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
@@ -10,7 +10,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-sort-keys-fix": "^1.1.2",
     "eslint-plugin-typescript-sort-keys": "^3.2.0",
-    "eslint-plugin-unused-imports": "^4.0.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "eslint-plugin-vitest": "^0.5.4",
     "typescript-eslint": "^7.14.1",
     "vitest": "^1.6.0"
@@ -18,17 +18,6 @@
   "keywords": [],
   "license": "MIT",
   "name": "course-finder",
-  "scripts": {
-    "dev": "pnpm --stream --parallel -r run dev",
-    "build": "pnpm --stream --parallel -r run build",
-    "test": "pnpm --stream --parallel -r run test",
-    "lint": "pnpm --stream --parallel -r run lint",
-    "lint:fix": "pnpm --stream --parallel -r run lint:fix",
-    "stylelint": "pnpm --stream --parallel -r run stylelint",
-    "stylelint:fix": "pnpm --stream --parallel -r run stylelint:fix",
-    "prettier": "pnpm --stream --parallel -r run prettier",
-    "prettier:fix": "pnpm --stream --parallel -r run prettier:fix"
-  },
   "type": "module",
   "version": "0.0.0"
 }

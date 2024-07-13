@@ -58,7 +58,7 @@ export const useCoursesStore = defineStore('courses', () => {
       } else {
         currentPhase.value = undefined
       }
-    } catch (e) {
+    } catch {
       currentPhase.value = undefined
     }
     if (currentPhase.value) {
