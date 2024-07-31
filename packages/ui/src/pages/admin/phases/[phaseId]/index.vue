@@ -7,7 +7,7 @@ import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
 const { t } = useI18n()
 
 const route = useRoute()
-//@ts-ignore
+//@ts-expect-error not typed because parent
 const phaseId = Number(route.params.phaseId)
 
 const phaseState = usePhaseState(phaseId)

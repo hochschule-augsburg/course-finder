@@ -14,6 +14,7 @@ import { useI18n } from 'vue-i18n'
 import {
   VBtn,
   VDivider,
+  VIcon,
   VList,
   VListItem,
   VMenu,
@@ -27,7 +28,7 @@ defineProps<{
   changeTheme: (newTheme: ThemeOptions) => void
   selectedTheme: ThemeOptions
 }>()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const userStore = useUserStore()
 </script>
 
@@ -56,10 +57,16 @@ const userStore = useUserStore()
           <template #activator="{ props }">
             <VListItem
               v-bind="props"
-              :prepend-icon="mdiThemeLightDark"
               :title="t('change-theme')"
               class="justify-start"
-            />
+            >
+              <template #prepend>
+                <div class="position-relative">
+                  <VIcon :icon="mdiThemeLightDark" class="mr-8" />
+                  <span class="theme-description">{{ selectedTheme }}</span>
+                </div>
+              </template>
+            </VListItem>
           </template>
           <ThemeOptionsList
             :change-theme="changeTheme"
@@ -71,11 +78,14 @@ const userStore = useUserStore()
 
         <VMenu transition="slide-y-transition">
           <template #activator="{ props }">
-            <VListItem
-              v-bind="props"
-              :prepend-icon="mdiEarth"
-              :title="t('change-lang')"
-            />
+            <VListItem v-bind="props" :title="t('change-lang')">
+              <template #prepend>
+                <div class="position-relative">
+                  <VIcon :icon="mdiEarth" class="mr-8" />
+                  <span class="locale-description">{{ locale }}</span>
+                </div>
+              </template>
+            </VListItem>
           </template>
           <LocaleOptionsList :change-locale="changeLocale" />
         </VMenu>
@@ -129,6 +139,24 @@ const userStore = useUserStore()
     </VMenu>
   </div>
 </template>
+
+<style scoped lang="scss">
+/* stylelint-disable */
+.theme-description {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  position: absolute;
+  top: -10px;
+  bottom: 18px;
+}
+.locale-description {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  position: absolute;
+  top: -10px;
+  right: 26px;
+}
+</style>
 
 <i18n lang="yaml">
 en:

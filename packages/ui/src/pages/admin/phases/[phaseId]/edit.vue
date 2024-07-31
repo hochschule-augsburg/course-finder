@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-//@ts-ignore
+//@ts-expect-error not typed because parent
 const phaseId = Number(route.params.phaseId)
 </script>
 
