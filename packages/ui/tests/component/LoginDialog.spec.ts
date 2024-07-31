@@ -1,4 +1,4 @@
-import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import LoginDialog from '@/components/LoginDialog.vue'
 import { useUserStore } from '@/stores/UserStore'
@@ -8,13 +8,16 @@ import { createVuetify } from 'vuetify'
 import { VBtn, VTextField } from 'vuetify/components'
 
 import { i18nForTests } from '../test-utils/i18nForTests'
-import { mockedStore } from '../test-utils/piniaMock'
 
-describe.skip('LoginDialog.vue', () => {
+vi.mock('@/stores/UserStore')
+
+describe('LoginDialog.vue', () => {
   it('emits success event on successful login', async () => {
+    //@ts-ignore
+    vi.mocked(useUserStore).mockReturnValue({
+      login: () => ({}) as any,
+    })
     const wrapper = mountComponent()
-    const userStore = mockedStore(useUserStore)
-    userStore.login.mockResolvedValueOnce({} as ClientUserExtended)
 
     wrapper.findComponent(VBtn).vm.$emit('click')
     await flushPromises()
@@ -23,9 +26,11 @@ describe.skip('LoginDialog.vue', () => {
   })
 
   it('sets error value on failed login', async () => {
+    //@ts-ignore
+    vi.mocked(useUserStore).mockReturnValue({
+      login: () => Promise.reject(new Error('bla')),
+    })
     const wrapper = mountComponent()
-    const userStore = mockedStore(useUserStore)
-    userStore.login.mockRejectedValue(new Error('bla'))
 
     wrapper.findComponent(VBtn).vm.$emit('click')
     await flushPromises()
@@ -42,10 +47,19 @@ describe.skip('LoginDialog.vue', () => {
     const username = 'testuser'
     const password = 'testpassword'
     const otp = '123456'
+    let allowLogin = false
 
+    const loginMock = vi.fn(() => {
+      if (allowLogin) {
+        return {} as any
+      }
+      return Promise.resolve('two-fa-required' as const)
+    })
+    //@ts-ignore
+    vi.mocked(useUserStore).mockReturnValue({
+      login: loginMock,
+    })
     const wrapper = mountComponent()
-    const userStore = mockedStore(useUserStore)
-    userStore.login.mockResolvedValueOnce('two-fa-required')
 
     wrapper
       .findAllComponents(VTextField)
@@ -60,9 +74,9 @@ describe.skip('LoginDialog.vue', () => {
     wrapper.findComponent(VBtn).vm.$emit('click')
     await flushPromises()
 
-    expect(userStore.login).toHaveBeenCalledWith(username, password)
+    expect(loginMock).toHaveBeenCalledWith(username, password)
 
-    userStore.login.mockResolvedValueOnce({} as ClientUserExtended)
+    allowLogin = true
 
     wrapper
       .findAllComponents(VTextField)
@@ -72,29 +86,33 @@ describe.skip('LoginDialog.vue', () => {
     wrapper.findComponent(VBtn).vm.$emit('click')
     await flushPromises()
 
-    expect(userStore.login).toHaveBeenCalledWith(username, password, otp)
+    expect(loginMock).toHaveBeenCalledWith(username, password, otp)
     expect(wrapper.emitted('success')).toBeTruthy()
   })
 
   it('sets error value on failed twoFALogin', async () => {
+    const errorText = 'code-expired'
+    let loginReturn: Promise<typeof errorText> = Promise.resolve(errorText)
+    const loginMock = vi.fn(() => loginReturn)
+    //@ts-ignore
+    vi.mocked(useUserStore).mockReturnValue({
+      login: loginMock,
+    })
     const wrapper = mountComponent({ shallow: true })
-    const userStore = mockedStore(useUserStore)
-    userStore.login.mockRejectedValueOnce(new Error())
+
+    // @ts-ignore
+    await wrapper.vm.twoFALogin()
+
+    // @ts-ignore
+    expect(wrapper.vm.error).toBe(`error.two-fa.${errorText}`)
+
+    loginReturn = Promise.reject()
 
     // @ts-ignore
     await wrapper.vm.twoFALogin()
 
     // @ts-ignore
     expect(wrapper.vm.error).toBe('global.unknown-error')
-
-    const error = 'code-expired'
-    userStore.login.mockResolvedValueOnce(error)
-
-    // @ts-ignore
-    await wrapper.vm.twoFALogin()
-
-    // @ts-ignore
-    expect(wrapper.vm.error).toBe(`error.two-fa.${error}`)
   })
 })
 

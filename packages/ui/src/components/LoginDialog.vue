@@ -19,7 +19,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const { login: storeLogin } = useUserStore()
+const userStore = useUserStore()
 
 const username = ref('')
 const password = ref('')
@@ -32,9 +32,9 @@ const error = ref<string>()
 
 async function twoFALogin() {
   pending.value = true
-  let result: 'unknown-error' | Awaited<ReturnType<typeof storeLogin>>
+  let result: 'unknown-error' | Awaited<ReturnType<typeof userStore.login>>
   try {
-    result = await storeLogin(username.value, password.value, otp.value)
+    result = await userStore.login(username.value, password.value, otp.value)
   } catch (e) {
     console.error(e)
     error.value = 'global.unknown-error'
@@ -51,9 +51,9 @@ async function twoFALogin() {
 
 async function login() {
   pending.value = true
-  let result: 'unknown-error' | Awaited<ReturnType<typeof storeLogin>>
+  let result: 'unknown-error' | Awaited<ReturnType<typeof userStore.login>>
   try {
-    result = await storeLogin(username.value, password.value)
+    result = await userStore.login(username.value, password.value)
   } catch (e) {
     console.error(e)
     error.value = 'global.unknown-error'
