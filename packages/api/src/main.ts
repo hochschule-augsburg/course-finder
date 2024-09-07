@@ -15,7 +15,7 @@ const server = await createServer()
 await prisma.$connect()
 
 // Start the registration cycle
-startPhaseSchedulingFromDatabase()
+await startPhaseSchedulingFromDatabase()
 startScheduledDeletion()
 
 await server.start()

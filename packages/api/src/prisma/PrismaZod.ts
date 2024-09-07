@@ -37,7 +37,6 @@ export const offeredCourseSpec = z.object({
 export function zodEnumFromObjKeys<K extends string>(
   obj: Record<K, unknown>,
 ): z.ZodEnum<[K, ...K[]]> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const [firstKey, ...otherKeys] = Object.keys(obj) as K[]
   return z.enum([firstKey, ...otherKeys])
 }

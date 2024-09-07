@@ -16,7 +16,7 @@ export const authRouter = router({
     if (!ctx.user) {
       return undefined
     }
-    prisma.user
+    await prisma.user
       .update({
         data: {
           lastActive: new Date(),

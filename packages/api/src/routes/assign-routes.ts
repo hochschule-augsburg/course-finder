@@ -28,13 +28,13 @@ export const assignRouter = router({
             tryNo: true,
           },
         },
+        phaseId: true,
         StudentChoice: {
           select: {
             moduleCode: true,
             points: true,
           },
         },
-        phaseId: true,
       },
       where: {
         username: ctx.user.username,
@@ -56,12 +56,12 @@ export const assignRouter = router({
           }
         })
         return {
-          Phase: phase.Phase,
           assignments: sortBy(assignments, 'points'),
           lost: sortBy(
             differenceBy(phase.StudentChoice, assignments, (e) => e.moduleCode),
             'points',
           ),
+          Phase: phase.Phase,
           phaseId: phase.phaseId,
         }
       })

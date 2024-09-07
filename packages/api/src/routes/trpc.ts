@@ -1,6 +1,6 @@
 import type { Student } from '@prisma/client'
 
-import { TRPCError, initTRPC } from '@trpc/server'
+import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 
 import type { ClientUser } from '../prisma/PrismaTypes'
@@ -27,21 +27,18 @@ t.middleware(async ({ ctx, next, path, type }) => {
 export const router = t.router
 export const publicProcedure = t.procedure
 
-export const studentOnlyProcedure = t.procedure.use(
-  async function isAuthed(opts) {
-    const { ctx } = opts
-    if (ctx.user?.type === 'Student') {
-      return opts.next({
-        ctx: {
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          user: ctx.user as { Student: Student } & ClientUser,
-        },
-      })
-    }
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
-  },
-)
-export const studentProcedure = t.procedure.use(async function isAuthed(opts) {
+export const studentOnlyProcedure = t.procedure.use(function isAuthed(opts) {
+  const { ctx } = opts
+  if (ctx.user?.type === 'Student') {
+    return opts.next({
+      ctx: {
+        user: ctx.user as { Student: Student } & ClientUser,
+      },
+    })
+  }
+  throw new TRPCError({ code: 'UNAUTHORIZED' })
+})
+export const studentProcedure = t.procedure.use(function isAuthed(opts) {
   const { ctx } = opts
   if (!userHasPermission(ctx.user, 'Student')) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
@@ -52,7 +49,7 @@ export const studentProcedure = t.procedure.use(async function isAuthed(opts) {
     },
   })
 })
-export const profProcedure = t.procedure.use(async function isAuthed(opts) {
+export const profProcedure = t.procedure.use(function isAuthed(opts) {
   const { ctx } = opts
   if (!userHasPermission(ctx.user, 'Professor')) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
@@ -63,7 +60,7 @@ export const profProcedure = t.procedure.use(async function isAuthed(opts) {
     },
   })
 })
-export const adminProcedure = t.procedure.use(async function isAuthed(opts) {
+export const adminProcedure = t.procedure.use(function isAuthed(opts) {
   const { ctx } = opts
   if (!userHasPermission(ctx.user, 'Admin')) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })

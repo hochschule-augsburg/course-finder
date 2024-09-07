@@ -8,26 +8,26 @@ import {
   phaseService,
   phaseSpec,
 } from '../../../domain/phase/PhaseService'
+import { prisma } from '../../../prisma/prisma'
 import {
   offeredCourseSpec,
   zodEnumFromObjKeys,
 } from '../../../prisma/PrismaZod'
-import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
 
 export const enrollRouter = router({
   offeredCourse: {
     create: adminProcedure
       .input(z.array(offeredCourseSpec.extend({ phaseId: z.number() })))
-      .mutation(async ({ input }) => {
-        return await prisma.offeredCourse.createMany({
+      .mutation(({ input }) => {
+        return prisma.offeredCourse.createMany({
           data: input,
         })
       }),
     delete: adminProcedure
       .input(z.object({ moduleCode: z.string(), phaseId: z.number() }))
-      .mutation(async ({ input }) => {
-        return await prisma.offeredCourse.delete({
+      .mutation(({ input }) => {
+        return prisma.offeredCourse.delete({
           where: {
             phaseId_moduleCode: {
               moduleCode: input.moduleCode,
@@ -62,9 +62,9 @@ export const enrollRouter = router({
           .partial()
           .extend({ moduleCode: z.string(), phaseId: z.number() }),
       )
-      .mutation(async ({ input }) => {
+      .mutation(({ input }) => {
         const { moduleCode, phaseId, ...data } = input
-        return await prisma.offeredCourse.update({
+        return prisma.offeredCourse.update({
           data,
           where: {
             phaseId_moduleCode: { moduleCode, phaseId },
@@ -88,10 +88,10 @@ export const enrollRouter = router({
           include: {
             offeredCourses: {
               select: {
+                appointments: true,
                 Course: {
                   select: { lecturers: true, title: true },
                 },
-                appointments: true,
                 externalRegistration: true,
                 extraInfo: true,
                 for: true,
@@ -135,7 +135,7 @@ export const enrollRouter = router({
     }),
     update: adminProcedure
       .input(phaseSpec.partial().extend({ id: z.number() }))
-      .mutation(async ({ input }) => {
+      .mutation(({ input }) => {
         return phaseService.updatePhase(input.id, input)
       }),
     updateState: adminProcedure
@@ -147,7 +147,7 @@ export const enrollRouter = router({
           const result = await prisma.enrollphase.findFirst({
             where: {
               id: { not: input.id },
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+
               state: { in: ACTIVE_PHASE_STATES as PhaseState[] },
             },
           })
@@ -171,8 +171,8 @@ export const enrollRouter = router({
         const arrayStats = (
           await prisma.offeredCourse.findMany({
             select: {
-              StudentChoice: { select: { points: true } },
               moduleCode: true,
+              StudentChoice: { select: { points: true } },
             },
             where: { phaseId: input.phaseId },
           })

@@ -6,6 +6,15 @@ import { sharedRules } from '../../eslint-shared.js'
 export default ts.config(
   js.configs.recommended,
   ...ts.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   ...sharedRules,
   {
     rules: {},

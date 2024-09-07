@@ -48,6 +48,7 @@ describe('pwdAuth', () => {
     expect(result).toEqual({
       success: true,
       twoFA: true,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       user: expect.any(Object),
     })
   })

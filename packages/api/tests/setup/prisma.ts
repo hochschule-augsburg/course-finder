@@ -14,5 +14,4 @@ beforeEach(() => {
   mockReset(prismaMock)
 })
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 export const prismaMock = prisma as DeepMockProxy<PrismaClient>

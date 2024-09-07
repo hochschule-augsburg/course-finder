@@ -15,8 +15,8 @@ main()
     console.error(e)
     process.exit(1)
   })
-  .finally(async () => {
-    await prisma.$disconnect()
+  .finally(() => {
+    void prisma.$disconnect()
   })
 
 async function main() {
@@ -85,9 +85,9 @@ async function main() {
       return prisma.course.create({
         data: {
           ...course,
-          Faculty: { connect: { name: 'Informatik' } },
           creditPoints: 6,
           editor: { connect: { username: 'scholz' } },
+          Faculty: { connect: { name: 'Informatik' } },
           lecturers: ['Scholz'],
           moduleCode: `test${i}`,
           published: true,
@@ -188,7 +188,7 @@ async function main() {
     ],
   })
 
-  Promise.all(
+  await Promise.all(
     [
       ['Informatik (Bachelor)', '1'],
       ['Informatik (Bachelor)', 'in'],
@@ -204,16 +204,6 @@ async function main() {
     ].map(async ([study, abbr]) => {
       await prisma.user.create({
         data: {
-          Student: {
-            create: {
-              StudentPhase: {
-                create: { creditsNeeded: random(1, 10), phaseId: 3 },
-              },
-              facultyName: 'Informatik',
-              fieldOfStudy: study,
-              term: 4,
-            },
-          },
           auth: {
             method: 'local' as const,
             password: await hashPassword(`stud-${abbr}`, 'salt'),
@@ -221,6 +211,16 @@ async function main() {
           },
           email: `stud${abbr}@example.com`,
           name: `student ${abbr}`,
+          Student: {
+            create: {
+              facultyName: 'Informatik',
+              fieldOfStudy: study,
+              StudentPhase: {
+                create: { creditsNeeded: random(1, 10), phaseId: 3 },
+              },
+              term: 4,
+            },
+          },
           type: 'Student',
           username: `stud-${abbr}`,
         },
@@ -231,8 +231,8 @@ async function main() {
   // Not in Modulhandbuch
   await prisma.course.create({
     data: {
-      Faculty: { connect: { name: 'Informatik' } },
       creditPoints: 5,
+      Faculty: { connect: { name: 'Informatik' } },
       lecturers: ['Prof. Dr. Christoph Buck'],
       moduleCode: '__SES4.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
@@ -242,8 +242,8 @@ async function main() {
   })
   await prisma.course.create({
     data: {
-      Faculty: { connect: { name: 'Informatik' } },
       creditPoints: 2,
+      Faculty: { connect: { name: 'Informatik' } },
       lecturers: ['Helia Hollmann', 'Philipp Schurk'],
       moduleCode: '__ISB.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
@@ -256,8 +256,8 @@ async function main() {
   })
   await prisma.course.create({
     data: {
-      Faculty: { connect: { name: 'Informatik' } },
       creditPoints: 5,
+      Faculty: { connect: { name: 'Informatik' } },
       lecturers: ['Helia Hollmann'],
       moduleCode: '__CAS.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
@@ -270,8 +270,8 @@ async function main() {
   })
   await prisma.course.create({
     data: {
-      Faculty: { connect: { name: 'Informatik' } },
       creditPoints: 5,
+      Faculty: { connect: { name: 'Informatik' } },
       lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
       moduleCode: '__PRT.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),

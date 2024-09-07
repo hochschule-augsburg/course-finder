@@ -1,14 +1,14 @@
 import { type DN, InvalidCredentialsError } from 'ldapts'
 
-import { pwdAuth } from '../../../../src/domain/user/ldap/LdapAuth'
 import ldapStudentResult from '../../../../src/domain/user/ldap/example-responses/loggedInStudent.json'
+import { pwdAuth } from '../../../../src/domain/user/ldap/LdapAuth'
 import { prismaMock } from '../../../setup/prisma'
 
 vi.mock('ldapts', async () => {
   const originalModule = await vi.importActual('ldapts')
 
   class MockClient {
-    async bind(dn: DN | string, password: string) {
+    bind(dn: DN | string, password: string) {
       if (dn.toString().includes('doejohn') && password === 'password') {
         return
       }
@@ -18,7 +18,7 @@ vi.mock('ldapts', async () => {
       throw new InvalidCredentialsError()
     }
 
-    async search(dn: DN | string) {
+    search(dn: DN | string) {
       if (dn.toString().includes('doejohn')) {
         return {
           searchEntries: [ldapStudentResult],
