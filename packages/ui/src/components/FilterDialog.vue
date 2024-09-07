@@ -5,7 +5,7 @@ import { mdiFilter } from '@mdi/js'
 import { startOfWeek } from 'date-fns'
 import { range } from 'lodash-es'
 import { storeToRefs } from 'pinia'
-import { computed, defineModel } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   VBtn,

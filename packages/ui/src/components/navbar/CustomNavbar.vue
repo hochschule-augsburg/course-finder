@@ -51,7 +51,6 @@ watch(
 )
 
 onMounted(() => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const savedTheme = localStorage.getItem('theme') as ThemeOptions
   const savedLocale = window.localStorage.getItem('locale')
   const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')

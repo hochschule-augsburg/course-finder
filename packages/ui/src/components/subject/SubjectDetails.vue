@@ -14,9 +14,8 @@ import { useAsyncState } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import VuePdfEmbed from 'vue-pdf-embed'
-import 'vue-pdf-embed/dist/style/annotationLayer.css'
-import 'vue-pdf-embed/dist/style/index.css'
-import 'vue-pdf-embed/dist/style/textLayer.css'
+import 'vue-pdf-embed/dist/styles/annotationLayer.css'
+import 'vue-pdf-embed/dist/styles/textLayer.css'
 import { useTheme } from 'vuetify'
 import {
   VBtn,

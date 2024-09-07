@@ -4,8 +4,8 @@ import type {
 } from '@workspace/api/src/prisma/PrismaTypes'
 
 export type OfferedCourseData = {
-  Course: { lecturers: string[]; title: I18nJson }
   appointments: CourseAppointmentsJson<Date>
+  Course: { lecturers: string[]; title: I18nJson }
   externalRegistration: boolean
   extraInfo: null | string
   for: string[]

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import LoginDialog from '@/components/LoginDialog.vue'
@@ -106,7 +108,7 @@ describe('LoginDialog.vue', () => {
     // @ts-ignore
     expect(wrapper.vm.error).toBe(`error.two-fa.${errorText}`)
 
-    loginReturn = Promise.reject()
+    loginReturn = Promise.reject(new Error('bla'))
 
     // @ts-ignore
     await wrapper.vm.twoFALogin()

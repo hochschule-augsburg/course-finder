@@ -14,7 +14,7 @@ export async function fetchFastify<T extends keyof FastifyRoutesBody>(
   input: T,
   data: FastifyRoutesBody[T],
   init?: Omit<RequestInit, 'body'>,
-) {
+): Promise<FastifyRoutesBody[T]> {
   const result = await fetch(import.meta.env.VITE_API_URL + 'api' + input, {
     ...assign({}, init, fastifyRoutes[input]),
     body: data,
@@ -24,5 +24,6 @@ export async function fetchFastify<T extends keyof FastifyRoutesBody>(
   if (!result.ok) {
     throw new Error(result.statusText)
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return result.json()
 }

@@ -59,8 +59,8 @@ watch(
     <div class="pt-1">
       <FilterSection />
       <VBtnToggle
-        v-if="!mobile"
         v-model="lastSubjectView"
+        v-if="!mobile"
         class="px-3 d-flex justify-end"
         id="subject-view-toggle"
         mandatory

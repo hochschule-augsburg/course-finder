@@ -13,7 +13,6 @@ export const useAssignStore = defineStore('assign', () => {
   const coursesStore = useCoursesStore()
   const assignPhases = ref<
     Array<{
-      Phase: EnrollPhase
       assignments: Array<{
         Course?: {
           title: I18nJson
@@ -28,6 +27,7 @@ export const useAssignStore = defineStore('assign', () => {
         moduleCode: string
         points: number
       }>
+      Phase: EnrollPhase
       phaseId: number
     }>
   >([])

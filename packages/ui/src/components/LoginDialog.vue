@@ -106,8 +106,8 @@ function validUsername(input: string) {
         />
       </VForm>
       <VTextField
-        v-if="twoFANeeded"
         v-model="otp"
+        v-if="twoFANeeded"
         :label="t('two-fa-code')"
         type="number"
         hide-spin-buttons
