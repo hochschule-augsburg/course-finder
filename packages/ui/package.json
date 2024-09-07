@@ -12,8 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:update": "vitest run -u",
-    "lint": "eslint . --ext .ts,.vue --ignore-path .gitignore",
-    "lint:fix": "eslint . --ext .ts,.vue --fix --ignore-path .gitignore",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "stylelint": "stylelint **/*.{vue,scss}",
     "stylelint:fix": "stylelint **/*.{scss} --fix"
   },

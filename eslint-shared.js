@@ -1,0 +1,60 @@
+import perfectionist from 'eslint-plugin-perfectionist'
+import unusedImports from 'eslint-plugin-unused-imports'
+
+export const sharedRules = [
+  perfectionist.configs['recommended-natural'],
+  {
+    plugins: {
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      'no-return-await': 'error',
+      ...{
+        '@typescript-eslint/no-unused-vars': 'off',
+        'unused-imports/no-unused-imports': 'error',
+        'unused-imports/no-unused-vars': [
+          'warn',
+          {
+            vars: 'all',
+            varsIgnorePattern: '^_',
+            args: 'after-used',
+            argsIgnorePattern: '^_',
+          },
+        ],
+      },
+      '@typescript-eslint/only-throw-error': 'off',
+
+      '@typescript-eslint/consistent-type-imports': 'error',
+      'no-restricted-imports': 'off',
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@api/**'],
+              message: 'only types can be shared between frontend and backend',
+              allowTypeImports: true,
+            },
+          ],
+        },
+      ],
+      'no-underscore-dangle': 'error',
+      'no-else-return': 'error',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'func-style': ['error', 'declaration'],
+      'require-await': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
+      eqeqeq: 'error',
+      curly: 'error',
+
+      'no-restricted-properties': [
+        'error',
+        {
+          object: 'window',
+          property: 'context',
+        },
+      ],
+    },
+  },
+]
