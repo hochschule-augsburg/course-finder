@@ -36,7 +36,7 @@ const enrollmentStore = useEnrollmentStore()
 
 const visible = defineModel<boolean>('visible')
 
-const form = ref<VForm | null>()
+const form = ref<null | VForm>()
 const formData = ref<EnrolledCourse[]>([])
 const loading = ref<boolean>(false)
 const showSubjectDialog = ref<boolean>(false)

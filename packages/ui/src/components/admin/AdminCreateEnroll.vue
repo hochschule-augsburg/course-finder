@@ -16,8 +16,8 @@ import {
   VForm,
   VRow,
   VSelect,
-  VTextField,
   VTextarea,
+  VTextField,
 } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
@@ -119,7 +119,7 @@ async function updateEnrollment() {
     adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
     // console.log('Success updating enroll phase')
     router.back()
-  } catch (e) {
+  } catch {
     errorDialogMessage.value = t(
       'validation.backend-enroll-phase-updating-error',
     )
@@ -164,7 +164,7 @@ async function createEnrollment() {
     adminCoursesStore.phaseOfferedCourses[newPhase.id] = sharedObject.value
     // console.log('Success creating enroll phase')
     router.back()
-  } catch (e) {
+  } catch {
     errorDialogMessage.value = t(
       'validation.backend-enroll-phase-creation-error',
     )
@@ -354,8 +354,8 @@ const requiredFieldRule = [
       <VRow>
         <VCol cols="12">
           <OfferedCourses
-            v-if="adminCoursesStore.isInit"
             v-model="sharedObject"
+            v-if="adminCoursesStore.isInit"
           />
         </VCol>
       </VRow>

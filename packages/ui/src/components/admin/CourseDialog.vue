@@ -14,8 +14,8 @@ import {
   VRow,
   VSpacer,
   VSwitch,
-  VTextField,
   VTextarea,
+  VTextField,
 } from 'vuetify/components'
 
 import { dialogService } from '../DialogService'
@@ -215,8 +215,8 @@ const moduleCodeRequiredRule = [
         <VBtn :text="t('global.cancel')" @click="$emit('cancel')" />
         <VSpacer />
         <VSwitch
-          v-if="props.onTheFly !== true"
           v-model="formData.published"
+          v-if="props.onTheFly !== true"
           color="primary"
           label="published"
           hide-details

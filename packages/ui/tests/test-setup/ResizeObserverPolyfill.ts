@@ -1,1 +1,2 @@
-global.ResizeObserver = require('resize-observer-polyfill')
+import ResizeObserver from 'resize-observer-polyfill'
+global.ResizeObserver = ResizeObserver

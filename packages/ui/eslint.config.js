@@ -4,7 +4,7 @@ import ts from 'typescript-eslint'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import { sharedRules } from '../../eslint-shared.js'
 
-const vue = {
+const vueRules = {
   'vue/block-lang': [
     'error',
     {
@@ -25,7 +25,6 @@ const vue = {
   'vue/enforce-style-attribute': ['error', { allow: ['scoped'] }],
   'vue/define-emits-declaration': ['warn', 'type-based'],
   'vue/define-props-declaration': ['warn', 'type-based'],
-  'vue/no-boolean-default': ['warn', 'default-false'],
   'vue/component-name-in-template-casing': [
     'error',
     'PascalCase',
@@ -45,7 +44,6 @@ const vue = {
       math: 'always',
     },
   ],
-  'vue/component-name-in-template-casing': 'warn',
   'vue/custom-event-name-casing': 'warn',
   'vue/no-ref-object-reactivity-loss': 'warn',
   'vue/no-required-prop-with-default': 'warn',
@@ -54,7 +52,6 @@ const vue = {
   'vue/no-useless-v-bind': 'warn',
   'vue/no-v-text': 'warn',
   'vue/eqeqeq': ['error', 'always'],
-  'vue/no-child-content': 'off',
   ...{
     'vue/attributes-order': 'off',
     'perfectionist/sort-vue-attributes': [
@@ -64,7 +61,7 @@ const vue = {
         order: 'asc',
         groups: ['v-model', 'v-', 'multiline', 'unknown', 'shorthand', 'v-on'],
         customGroups: {
-          'v-modal': 'v-model*',
+          'v-model': 'v-model*',
           'v-': 'v-*',
           'v-on': '@*',
         },
@@ -104,7 +101,7 @@ export default ts.config(
   ...sharedRules,
   {
     rules: {
-      ...vue,
+      ...vueRules,
     },
   },
   {

@@ -8,7 +8,6 @@ export const sharedRules = [
       'unused-imports': unusedImports,
     },
     rules: {
-      'no-return-await': 'error',
       ...{
         '@typescript-eslint/no-unused-vars': 'off',
         'unused-imports/no-unused-imports': 'error',
@@ -44,7 +43,6 @@ export const sharedRules = [
       'no-var': 'error',
       'func-style': ['error', 'declaration'],
       'require-await': 'error',
-      '@typescript-eslint/consistent-type-imports': 'error',
       eqeqeq: 'error',
       curly: 'error',
 

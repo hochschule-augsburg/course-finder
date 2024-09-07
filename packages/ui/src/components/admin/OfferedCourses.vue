@@ -85,11 +85,11 @@ async function createSubject(subject: Course | undefined) {
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
     offeredCoursesArray.value.push({
+      appointments: { dates: [], type: 'weekly' },
       Course: {
         lecturers: subject.lecturers,
         title: subject.title,
       },
-      appointments: { dates: [], type: 'weekly' },
       externalRegistration: false,
       extraInfo: null,
       for: [],
@@ -99,7 +99,7 @@ async function createSubject(subject: Course | undefined) {
       moodleCourse: null,
     })
     showModalForm.value = false
-  } catch (e) {
+  } catch {
     showModalForm.value = false
     errorDialogMessage.value = t('subject-creation-error')
     showErrorDialog.value = true
@@ -143,11 +143,11 @@ function convertToOfferedCourseData(course: Course): OfferedCourseData {
   const removeStoreData = handlePuttingInAgainLogic(course)
   if (removeStoreData === undefined) {
     return {
+      appointments: { dates: [], type: 'weekly' },
       Course: {
         lecturers: course.lecturers,
         title: course.title,
       },
-      appointments: { dates: [], type: 'weekly' },
       externalRegistration: false,
       extraInfo: null,
       for: [],
