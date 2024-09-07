@@ -11,7 +11,7 @@
     "dev": "tsx watch --clear-screen=false src/main.ts | pino-pretty",
     "build": "tsc --noEmit && pnpm run bundle",
     "bundle": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
-    "start": "env NODE_ENV=production node dist/main.js",
+    "start": "env NODE_ENV=production TZ=Europe/Berlin node dist/main.js",
     "lint": "eslint src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
     "play": "tsx watch playground.ts",
     "test": "vitest run",
