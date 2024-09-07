@@ -42,7 +42,7 @@ async function handleUpdateEnroll() {
 </script>
 
 <template>
-  <VTooltip v-if="(userStore.user?.Student?.term ?? 0) < 3" location="top">
+  <VTooltip v-if="!userStore.mayEnroll" location="top">
     <template #activator="{ props: toolTipProps }">
       <VIcon :icon="mdiLockAlert" size="large" v-bind="toolTipProps" />
     </template>

@@ -1,15 +1,28 @@
 import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
 
+import { fieldsOfStudy } from '@/helper/enums/fieldsOfStudy'
 import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router/auto'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<ClientUserExtended>()
   const router = useRouter()
   const initPromise = init()
-  return { initPromise, login, logout, user }
+
+  const mayEnroll = computed(() => {
+    if (!user.value?.Student) {
+      return false
+    }
+    const fieldOfStudy = fieldsOfStudy[user.value?.Student?.fieldOfStudy]
+    if (fieldOfStudy.degree === 'Master') {
+      return true
+    }
+    return (user.value?.Student?.term ?? 0) > 2
+  })
+
+  return { initPromise, login, logout, mayEnroll, user }
 
   async function login(username: string, password: string, otp?: string) {
     if (otp) {

@@ -3,6 +3,7 @@ import type { Enrollphase } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
+import { mayEnroll } from '../../domain/enroll/enrollUtils'
 import { prisma } from '../../prisma/prisma'
 import { router, studentOnlyProcedure } from '../trpc'
 
@@ -21,7 +22,7 @@ const enrollProcedure = studentOnlyProcedure
         message: 'phase not in database',
       })
     }
-    if ((opts.ctx.user.Student.term ?? 0) < 3) {
+    if (!mayEnroll(opts.ctx.user)) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'student not eligible for enrollment',

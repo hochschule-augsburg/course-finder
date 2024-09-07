@@ -1,19 +1,31 @@
 /* eslint-disable perfectionist/sort-objects */
 
-export const fieldsOfStudy: Array<[ldap: string, abbr: string]> = [
-  ['Informatik (Bachelor)', 'IN'],
-  ['Wirtschaftsinformatik (Bachelor)', 'WI'],
-  ['Technische Informatik (Bachelor)', 'TI'],
-  ['International Information Systems (Bachelor)', 'IIS'],
-  //   'Interaktive Medien (Bachelor)', 'IA', don't choose subject here yet
-  ['Applied Research (Master)', 'MAPR'],
-  ['Informatik (Master)', 'MIN'],
-  ['Business Information Systems (Master)', 'BIS'],
-  ['Interaktive Mediensysteme (Master)', 'IMS'],
-  ['Industrielle Sicherheit', 'INS'],
-]
+export const fieldsOfStudy: Record<
+  string,
+  { abbr: string; degree: 'Bachelor' | 'Master' }
+> = {
+  'Informatik (Bachelor)': { abbr: 'IN', degree: 'Bachelor' },
+  'Wirtschaftsinformatik (Bachelor)': { abbr: 'WI', degree: 'Bachelor' },
+  'Technische Informatik (Bachelor)': { abbr: 'TI', degree: 'Bachelor' },
+  'International Information Systems (Bachelor)': {
+    abbr: 'IIS',
+    degree: 'Bachelor',
+  },
+  // 'Interaktive Medien (Bachelor)': { abbr: 'IA', academicRank: 'Bachelor' },
+  'Applied Research (Master)': { abbr: 'MAPR', degree: 'Master' },
+  'Informatik (Master)': { abbr: 'MIN', degree: 'Master' },
+  'Business Information Systems (Master)': {
+    abbr: 'BIS',
+    degree: 'Master',
+  },
+  'Interaktive Mediensysteme (Master)': { abbr: 'IMS', degree: 'Master' },
+  'Industrielle Sicherheit': { abbr: 'INS', degree: 'Master' },
+}
 
-export const fieldsOfStudyAbbrMap = Object.fromEntries(fieldsOfStudy)
+export const fieldsOfStudyAbbrMap = Object.fromEntries(
+  Object.entries(fieldsOfStudy).map(([study, { abbr }]) => [study, abbr]),
+)
+
 export const abbrFieldsOfStudyMap = Object.fromEntries(
-  fieldsOfStudy.map((e) => [e[1], e[0]]),
+  Object.entries(fieldsOfStudy).map(([study, { abbr }]) => [abbr, study]),
 )

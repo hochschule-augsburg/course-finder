@@ -5,7 +5,6 @@ import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTyp
 import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import {
   abbrFieldsOfStudyMap,
-  fieldsOfStudy,
   fieldsOfStudyAbbrMap,
 } from '@/helper/enums/fieldsOfStudy'
 import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
@@ -302,7 +301,7 @@ const minParticipantsRules = [
           <VCol cols="12" sm="6">
             <VSelect
               v-model="formData.for"
-              :items="fieldsOfStudy.map((e) => e[1])"
+              :items="Object.keys(abbrFieldsOfStudyMap)"
               :label="t('for-fields-of-study')"
               chips
               multiple
