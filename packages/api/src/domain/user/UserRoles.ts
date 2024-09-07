@@ -12,7 +12,6 @@ export function userHasPermission(
   role: keyof typeof UserRoles,
 ) {
   return (
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     (UserRoles as Record<string, number>)[user?.type ?? 'Logout'] >=
     UserRoles[role]
   )

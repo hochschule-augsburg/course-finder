@@ -38,7 +38,7 @@ export function schedulePhase(phase: Enrollphase) {
           where: { id: phase.id },
         })
         if (phaseCurrently?.state === 'NOT_STARTED') {
-          prisma.enrollphase.update({
+          await prisma.enrollphase.update({
             data: { state: PhaseState.OPEN },
             where: { id: phase.id },
           })
@@ -48,8 +48,8 @@ export function schedulePhase(phase: Enrollphase) {
     scheduleJob(
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
-      () => {
-        sendEmail(
+      async () => {
+        await sendEmail(
           env.MAIL_RECEIVERS,
           'Die WPF Anmeldephase endet bald | WPF registrations will soon be closing',
           `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleDateString(
@@ -82,7 +82,7 @@ export function schedulePhase(phase: Enrollphase) {
         where: { id: phase.id },
       })
       if (phaseCurrently?.state === 'OPEN') {
-        prisma.enrollphase.update({
+        await prisma.enrollphase.update({
           data: { state: PhaseState.DRAWING },
           where: { id: phase.id },
         })

@@ -57,4 +57,10 @@ export const sharedRules = [
       ],
     },
   },
+  {
+    rules: {
+      '@typescript-eslint/ban-ts-comment': 'off',
+    },
+    files: ['**/*.spec.ts'],
+  },
 ]

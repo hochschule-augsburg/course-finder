@@ -1,6 +1,6 @@
-import { authenticate } from '../../../src/domain/user/UserService'
 import * as ldapPwdAuth from '../../../src/domain/user/ldap/LdapAuth'
 import * as localPwdAuth from '../../../src/domain/user/local/LocalAuth'
+import { authenticate } from '../../../src/domain/user/UserService'
 
 describe('UserService', () => {
   it('should return local auth result if successful', async () => {

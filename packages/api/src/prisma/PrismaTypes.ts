@@ -25,7 +25,7 @@ export type Course = Omit<PCourse, 'pdf'>
 
 export type ClientUser = { auth: { twoFA?: boolean } } & Omit<PUser, 'auth'>
 export type ClientUserExtended = {
-  Student?: PStudent | null
+  Student?: null | PStudent
 } & ClientUser
 
 type TimeInterval<T> = { from: T; to: T }
@@ -33,17 +33,17 @@ type TimeInterval<T> = { from: T; to: T }
 export type CourseAppointmentsJson<T> =
   | {
       /**
-       * Ignore days, months and years
-       */
-      dates: TimeInterval<T>[]
-      type: 'weekly'
-    }
-  | {
-      /**
        * exact dates and time
        */
       dates: TimeInterval<T>[]
       type: 'irregular'
+    }
+  | {
+      /**
+       * Ignore days, months and years
+       */
+      dates: TimeInterval<T>[]
+      type: 'weekly'
     }
   | {
       /**

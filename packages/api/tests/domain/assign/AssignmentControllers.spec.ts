@@ -12,6 +12,9 @@ describe('AssignmentStudentController', () => {
 
   beforeEach(() => {
     phase = {
+      createdAt: new Date(),
+      creditsNeeded: 6,
+      phaseId: 0,
       StudentChoice: [
         {
           moduleCode: '1',
@@ -20,9 +23,6 @@ describe('AssignmentStudentController', () => {
           username: '',
         },
       ],
-      createdAt: new Date(),
-      creditsNeeded: 6,
-      phaseId: 0,
       username: 'user1',
     }
     offeredCourses = [

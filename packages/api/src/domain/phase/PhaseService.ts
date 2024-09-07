@@ -7,12 +7,12 @@ import { type Enrollphase, PhaseState } from '@prisma/client'
 import { groupBy } from 'lodash-es'
 import { z } from 'zod'
 
+import { prisma } from '../../prisma/prisma'
 import {
   i18nInput,
   offeredCourseSpec,
   zodEnumFromObjKeys,
 } from '../../prisma/PrismaZod'
-import { prisma } from '../../prisma/prisma'
 import {
   cancelPhase,
   reschedulePhase,
@@ -50,12 +50,12 @@ async function createPhase(data: phaseSpecType): Promise<Enrollphase> {
       end: data.end,
       offeredCourses: {
         create: data.offeredCourses.map((course) => ({
+          appointments: course.appointments,
           Course: {
             connect: {
               moduleCode: course.moduleCode,
             },
           },
-          appointments: course.appointments,
           extraInfo: course.extraInfo,
           for: { set: course.for },
           maxParticipants: course.maxParticipants,
@@ -153,12 +153,12 @@ async function updateOfferedCourses(
     prisma.offeredCourse.createMany({
       data:
         newCourses?.map((course) => ({
+          appointments: course.appointments,
           Course: {
             connect: {
               moduleCode: course.moduleCode,
             },
           },
-          appointments: course.appointments,
           extraInfo: course.extraInfo,
           for: { set: course.for },
           maxParticipants: course.maxParticipants,

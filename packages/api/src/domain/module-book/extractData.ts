@@ -88,7 +88,7 @@ function getLecturer(titleIndex: number, lines: string[]) {
   return lecturers
 }
 
-function nc(searchRes: RegExpMatchArray | null): string {
+function nc(searchRes: null | RegExpMatchArray): string {
   if (searchRes) {
     return searchRes[1]
       .trim()

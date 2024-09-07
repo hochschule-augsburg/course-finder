@@ -53,7 +53,7 @@ export const resultSpec = z
     }
     return {
       ...common,
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+
       type:
         employeeTypeToUserRole[
           typeof data.employeeType === 'object'

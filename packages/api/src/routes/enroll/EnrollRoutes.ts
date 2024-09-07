@@ -65,6 +65,8 @@ export const enrollRouter = router({
       }
 
       const data = {
+        creditsNeeded: input.creditsNeeded,
+        phaseId: ctx.phase.id,
         StudentChoice: {
           createMany: {
             data: input.data.map((e) => ({
@@ -73,8 +75,6 @@ export const enrollRouter = router({
             })),
           },
         },
-        creditsNeeded: input.creditsNeeded,
-        phaseId: ctx.phase.id,
         username: ctx.user.username,
       }
       await prisma.$transaction([
@@ -111,7 +111,7 @@ export const enrollRouter = router({
     }),
   list: enrollProcedure
     .input(z.object({ phaseId: z.number() }))
-    .query(async ({ ctx, input }) => {
+    .query(({ ctx, input }) => {
       return getStudentChoices(input.phaseId, ctx.user.username)
     }),
   upsert: enrollProcedure
@@ -143,17 +143,18 @@ export const enrollRouter = router({
       }
       await prisma.studentPhase.upsert({
         create: {
+          creditsNeeded: input.creditsNeeded ?? 0,
+          phaseId: input.phaseId,
           StudentChoice: {
             create: {
               moduleCode: input.moduleCode,
               points: input.points,
             },
           },
-          creditsNeeded: input.creditsNeeded ?? 0,
-          phaseId: input.phaseId,
           username: ctx.user.Student.username,
         },
         update: {
+          creditsNeeded: input.creditsNeeded,
           StudentChoice: {
             upsert: {
               create: {
@@ -172,7 +173,6 @@ export const enrollRouter = router({
               },
             },
           },
-          creditsNeeded: input.creditsNeeded,
         },
         where: {
           username_phaseId: {
@@ -196,8 +196,8 @@ function checkIfPhaseIsOpen(phase: Enrollphase) {
 async function getStudentChoices(phaseId: number, username: string) {
   const results = await prisma.studentPhase.findUnique({
     select: {
-      StudentChoice: { select: { moduleCode: true, points: true } },
       creditsNeeded: true,
+      StudentChoice: { select: { moduleCode: true, points: true } },
     },
     where: {
       username_phaseId: {

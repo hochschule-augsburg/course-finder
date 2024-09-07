@@ -14,14 +14,14 @@ export type CourseExtended = {
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
-  getCourses: publicProcedure.query(async () => {
-    return await prisma.course.findMany({
+  getCourses: publicProcedure.query(() => {
+    return prisma.course.findMany({
       orderBy: { moduleCode: 'asc' },
       select: courseFields,
       where: { published: true },
     })
   }),
-  getCurrentPhase: studentOnlyProcedure.query(async () => {
+  getCurrentPhase: studentOnlyProcedure.query(() => {
     return prisma.enrollphase.findFirst({
       where: {
         state: { in: ['OPEN', 'CLOSED', 'DRAWING'] },
@@ -96,10 +96,10 @@ export const courseRouter = router({
 })
 
 export const courseFields: { [key in 'Faculty' | keyof Course]?: boolean } = {
-  Faculty: true,
   creditPoints: true,
   editorUsername: true,
   extraInfo: true,
+  Faculty: true,
   facultyName: true,
   infoUrl: true,
   lecturers: true,

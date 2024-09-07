@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { TRPCError } from '@trpc/server'
 import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
@@ -104,8 +105,8 @@ export const assignRouter = router({
         where: { phaseId: input.phaseId, tryNo: input.tryNo },
       })
       const groupedResults = groupBy(results, 'username')
-      emailToAdmin(groupedResults)
-      emailToStudents(input.phaseId, groupedResults)
+      await emailToAdmin(groupedResults)
+      await emailToStudents(input.phaseId, groupedResults)
     }),
 })
 
@@ -122,7 +123,7 @@ async function emailToStudents(
     select: { lecturers: true, moduleCode: true, title: true },
   })
 
-  const formatedResults = Object.fromEntries(
+  const formattedResults = Object.fromEntries(
     Object.entries(results).map(([student, modules]) => [
       student,
       modules
@@ -139,20 +140,22 @@ async function emailToStudents(
 
   const title = mergeLocales(phase?.title)
   // send emails to students
-  Object.entries(emails).forEach(([username, email]) =>
-    sendEmail(
-      email,
-      `${title} - Results/Ergebnisse`,
-      `\
+  void Promise.all(
+    Object.entries(emails).map(([username, email]) =>
+      sendEmail(
+        email,
+        `${title} - Results/Ergebnisse`,
+        `\
 Die Ergebnisse der ${title} wurden veröffentlicht.
-${formatedResults[username]}
+${formattedResults[username]}
 Sie können die Ergebnisse auch auf der Website einsehen.
 --
 \n\n
 The results of the ${title} have been published.
-${formatedResults[username]}
+${formattedResults[username]}
 Sie können die Ergebnisse auch auf der Website einsehen.\
       `,
+      ),
     ),
   )
 }

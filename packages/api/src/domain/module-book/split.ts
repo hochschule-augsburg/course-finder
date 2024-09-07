@@ -23,6 +23,7 @@ async function extractPDFSections(
   const lastSubjectIndex =
     lines.findLastIndex((e) => e.startsWith('BookmarkLevel: 2')) - 1
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const moduleBookmarksArrays: {
     BookmarkPageNumber: string
     BookmarkTitle: string
@@ -36,6 +37,7 @@ async function extractPDFSections(
         return e.trim()
       }),
     )
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return Object.fromEntries(res)
   })
 

@@ -8,15 +8,15 @@ import { prismaMock } from '../../setup/prisma'
 describe('AssignmentAlgorithm', () => {
   it('should throw error if phase does not exist', async () => {
     prismaMock.enrollphase.findUnique.mockResolvedValue(null)
-    expect(() => assign(1)).rejects.toThrowError()
+    await expect(() => assign(1)).rejects.toThrowError()
   })
 
   it.each<
     [
       name: string,
       input: Array<{
-        StudentChoice: Array<{ moduleCode: string; points: number }>
         creditsNeeded: number
+        StudentChoice: Array<{ moduleCode: string; points: number }>
         username: string
       }>,
       out: Record<string, string[]>,
@@ -25,15 +25,15 @@ describe('AssignmentAlgorithm', () => {
     ['no students', [], {}],
     [
       'no choice',
-      [{ StudentChoice: [], creditsNeeded: 0, username: 'user1' }],
+      [{ creditsNeeded: 0, StudentChoice: [], username: 'user1' }],
       { user1: [] },
     ],
     [
       'no points',
       [
         {
-          StudentChoice: [{ moduleCode: '3', points: 0 }],
           creditsNeeded: 0,
+          StudentChoice: [{ moduleCode: '3', points: 0 }],
           username: 'user1',
         },
       ],
@@ -43,13 +43,13 @@ describe('AssignmentAlgorithm', () => {
       '2 for course',
       [
         {
-          StudentChoice: [{ moduleCode: '3', points: 1000 }],
           creditsNeeded: 3,
+          StudentChoice: [{ moduleCode: '3', points: 1000 }],
           username: 'user1',
         },
         {
-          StudentChoice: [{ moduleCode: '3', points: 1000 }],
           creditsNeeded: 3,
+          StudentChoice: [{ moduleCode: '3', points: 1000 }],
           username: 'user2',
         },
       ],
@@ -62,8 +62,8 @@ describe('AssignmentAlgorithm', () => {
       'not enough credits',
       [
         {
-          StudentChoice: [{ moduleCode: '1', points: 1000 }],
           creditsNeeded: 6,
+          StudentChoice: [{ moduleCode: '1', points: 1000 }],
           username: 'user1',
         },
       ],
@@ -75,13 +75,13 @@ describe('AssignmentAlgorithm', () => {
       'course does not occur',
       [
         {
-          StudentChoice: [{ moduleCode: '1', points: 1000 }],
           creditsNeeded: 6,
+          StudentChoice: [{ moduleCode: '1', points: 1000 }],
           username: 'user1',
         },
         {
-          StudentChoice: [{ moduleCode: '2', points: 1 }],
           creditsNeeded: 6,
+          StudentChoice: [{ moduleCode: '2', points: 1 }],
           username: 'user2',
         },
       ],

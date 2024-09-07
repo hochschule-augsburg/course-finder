@@ -46,12 +46,12 @@ describe('AssignmentUtils', () => {
     it('should keep the total points of all choices to 1000', () => {
       const phase = [
         {
-          StudentChoice: [{ points: 200 }, { points: 300 }],
           phase: 'phase1',
+          StudentChoice: [{ points: 200 }, { points: 300 }],
         },
         {
-          StudentChoice: [{ points: 500 }, { points: 500 }],
           phase: 'phase2',
+          StudentChoice: [{ points: 500 }, { points: 500 }],
         },
       ]
       // @ts-ignore
@@ -97,7 +97,9 @@ describe('AssignmentUtils', () => {
               username: 'first-second-third',
             },
           ] satisfies typeof choices
-        ).map((e) => expect.objectContaining(e)),
+        )
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          .map((e) => expect.objectContaining(e)),
       )
     })
   })

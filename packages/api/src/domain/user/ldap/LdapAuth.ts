@@ -7,8 +7,8 @@ import type { AuthResult } from '../UserService'
 import { env } from '../../../env'
 import { prisma } from '../../../prisma/prisma'
 import {
-  type ResultType as UserDataType,
   resultSpec as userDataSpec,
+  type ResultType as UserDataType,
 } from './LdapUserDataSpec'
 
 export async function pwdAuth(
@@ -47,7 +47,6 @@ export async function pwdAuth(
   }
 
   const userInput = {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     ...(pick(result, Object.keys(prisma.user.fields)) as typeof result),
     auth: {
       method: 'ldap',
@@ -64,7 +63,6 @@ export async function pwdAuth(
   }
   if (result.type === 'Student') {
     const studentInput = {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       ...(pick(result, Object.keys(prisma.student.fields)) as typeof result),
       Faculty: {
         connectOrCreate: {
@@ -75,8 +73,8 @@ export async function pwdAuth(
           where: { name: result.facultyName },
         },
       },
-      User: { connect: { username } },
       facultyName: undefined,
+      User: { connect: { username } },
       username: undefined,
     }
     const student = await prisma.student.upsert({
