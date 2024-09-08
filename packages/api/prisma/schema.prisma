@@ -22,6 +22,15 @@ enum UserRole {
   Admin
 }
 
+enum Singleton {
+  Instance
+}
+
+model AppConf {
+  id         Singleton @id @default(Instance)
+  maxCredits Int       @default(30)
+}
+
 model User {
   // users have to be clean up every semester
   username String   @id

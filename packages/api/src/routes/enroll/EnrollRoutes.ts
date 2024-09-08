@@ -46,6 +46,7 @@ export const enrollRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
+      await checkCreditsNeeded(input.creditsNeeded)
       if (
         (
           await prisma.offeredCourse.findMany({
@@ -124,6 +125,9 @@ export const enrollRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       checkIfPhaseIsOpen(ctx.phase)
+      if (input.creditsNeeded) {
+        await checkCreditsNeeded(input.creditsNeeded)
+      }
       if (
         !(await prisma.offeredCourse.findUnique({
           where: {
@@ -189,6 +193,16 @@ function checkIfPhaseIsOpen(phase: Enrollphase) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'phase not active',
+    })
+  }
+}
+
+async function checkCreditsNeeded(creditsNeeded: number) {
+  const conf = (await prisma.appConf.findFirst())!
+  if (creditsNeeded > conf.maxCredits) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'invalid credits needed',
     })
   }
 }

@@ -41,7 +41,6 @@ export const sharedRules = [
       'no-else-return': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
-      'func-style': ['error', 'declaration'],
       'require-await': 'error',
       eqeqeq: 'error',
       curly: 'error',

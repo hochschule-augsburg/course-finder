@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { EnrolledCourse } from '@/stores/EnrollmentStore'
 
+import { useAppConfStore } from '@/stores/AppConfStore'
 import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
 import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import {
@@ -33,6 +34,7 @@ const { mobile } = useDisplay()
 
 const coursesStore = useCoursesStore()
 const enrollmentStore = useEnrollmentStore()
+const appConfStore = useAppConfStore()
 
 const visible = defineModel<boolean>('visible')
 
@@ -110,9 +112,12 @@ async function autoFill() {
   })
 }
 
-const integerInputRules = [
-  (i: string) => /^[0-9]\d*$/.test(i) || t('integer-input'), // check is input is valid int >= 0
-]
+const integerInputRule = (i: string) =>
+  /^[0-9]\d*$/.test(i) || t('integer-input')
+
+const creditsRule = (i: string) =>
+  Number(i) <= (appConfStore.conf?.maxCredits ?? 0) ||
+  t('too-many-credits', { maxCredits: appConfStore.conf?.maxCredits })
 
 async function validate() {
   const formValidation = await form.value?.validate()
@@ -184,7 +189,7 @@ async function validate() {
           <VTextField
             v-model.number="creditsNeeded"
             :label="t('credits-wanted')"
-            :rules="integerInputRules"
+            :rules="[integerInputRule, creditsRule]"
             class="mb-3"
             color="primary"
             required
@@ -260,6 +265,8 @@ de:
   fallback: Fallback
   title: Priorisierung
   subtitle: Automatische Priorisierung mit 'Autofill' möglich
+  too-many-credits:
+    Zu viele Credit Points. Maximal erlaubt sind {maxCredits} Credit Points.
 en:
   register: Register
   field-required: This field is required!
@@ -272,4 +279,6 @@ en:
   fallback: Fallback
   title: Prioritization
   subtitle: Automatic prioritization possible with 'Autofill'
+  too-many-credits:
+    Too many credit points. Maximum allowed are {maxCredits} credit points.
 </i18n>

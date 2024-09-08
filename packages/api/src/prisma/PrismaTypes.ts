@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import type {
+  AppConf as PAppConf,
   Course as PCourse,
   OfferedCourse as POfferedCourse,
   Enrollphase as PPhase,
@@ -20,6 +21,7 @@ export type I18nJson = {
 export type EnrollPhase = PPhase
 
 export type EnrolledCourse = PStudentChoice
+export type AppConf = Omit<PAppConf, 'id'>
 
 export type Course = Omit<PCourse, 'pdf'>
 
