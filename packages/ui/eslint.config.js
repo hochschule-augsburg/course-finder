@@ -5,6 +5,7 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import { sharedRules } from '../../eslint-shared.js'
 
 const vueRules = {
+  'vue/require-typed-ref': 'warn',
   'vue/block-lang': [
     'error',
     {

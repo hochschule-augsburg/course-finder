@@ -12,6 +12,7 @@ global:
   search: Suchen
   title: CourseFinder
   help: Hilfe
+  settings: Einstellungen
 
 filter:
   title: Filter
@@ -56,16 +57,25 @@ tour:
     enroll-button: Einschreibung
     nav-bar: Optionen
   desc:
-    enrollment-overview: Hier ist eine Übersicht über die aktuelle Einschreibephase.
+    enrollment-overview:
+      Hier ist eine Übersicht über die aktuelle Einschreibephase.
     filter-section: Hier kannst du die Kurse filtern.
-    subject-element: Jedes Element repräsentiert einen Kurs. Klicke, um weitere Details zu sehen.
+    subject-element:
+      Jedes Element repräsentiert einen Kurs. Klicke, um weitere Details zu
+      sehen.
     enroll-checkbox: Klicke hier, um einen Kurs auszuwählen.
-    enroll-button: Klicke hier, um die ausgewählten Kurse zu priorisieren und dich einzuschreiben.
-    nav-bar: Hier hast du verschiedene Optionen wie das Ändern der Sprache und des Themes sowie das Ein- oder Ausloggen. Wenn die Hilfe benötigst, klicke auf das Hilfesymbol.
+    enroll-button:
+      Klicke hier, um die ausgewählten Kurse zu priorisieren und dich
+      einzuschreiben.
+    nav-bar:
+      Hier hast du verschiedene Optionen wie das Ändern der Sprache und des
+      Themes sowie das Ein- oder Ausloggen. Wenn die Hilfe benötigst, klicke auf
+      das Hilfesymbol.
 
 pages:
   admin:
     index: Dashboard
+    settings: Einstellungen
     courses:
       index: Kurse
       upload: Hochladen

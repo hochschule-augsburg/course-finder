@@ -5,6 +5,7 @@ import {
   mdiAccountMultiple,
   mdiBookMultiple,
   mdiCalendarClock,
+  mdiCog,
   mdiTimetable,
 } from '@mdi/js'
 import { computedAsync } from '@vueuse/core'
@@ -37,10 +38,16 @@ const phaseStats = computedAsync(async () => {
 
 <template>
   <VContainer>
-    <VRow>
+    <VRow justify="space-between">
       <VCol>
         <h1>{{ t('dashboard') }}</h1>
       </VCol>
+      <VBtn to="admin/settings" icon>
+        <VIcon :icon="mdiCog" />
+        <VTooltip activator="parent" location="bottom" offset="2">
+          {{ t('pages.admin.settings') }}
+        </VTooltip>
+      </VBtn>
     </VRow>
 
     <VRow>

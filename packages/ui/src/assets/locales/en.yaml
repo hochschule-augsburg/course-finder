@@ -12,6 +12,7 @@ global:
   search: Search
   title: CourseFinder
   help: Help
+  settings: Settings
 
 filter:
   title: Filter
@@ -58,14 +59,18 @@ tour:
   desc:
     enrollment-overview: Here is an overview of the current enrollment phase.
     filter-section: Here you can filter the courses.
-    subject-element: Each element represents a course. Click to see more details.
+    subject-element:
+      Each element represents a course. Click to see more details.
     enroll-checkbox: Click here to select a course.
     enroll-button: Click here to prioritize and enroll in the selected courses.
-    nav-bar: Here you have various options such as changing the language and theme, and logging in or out. If you need help, click on the help icon.
+    nav-bar:
+      Here you have various options such as changing the language and theme, and
+      logging in or out. If you need help, click on the help icon.
 
 pages:
   admin:
     index: Dashboard
+    settings: Settings
     courses:
       index: Courses
       upload: Upload
