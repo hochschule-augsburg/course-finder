@@ -3,11 +3,10 @@ import { TRPCError } from '@trpc/server'
 import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
-import type { I18nJson } from '../../../prisma/PrismaTypes'
-
 import { assign } from '../../../domain/assign/AssignmentAlgorithm'
 import { sendEmail } from '../../../domain/mail/Mail'
 import { phaseService } from '../../../domain/phase/PhaseService'
+import { env } from '../../../env'
 import { prisma } from '../../../prisma/prisma'
 import { adminProcedure, router } from '../../trpc'
 
@@ -126,34 +125,42 @@ async function emailToStudents(
   const formattedResults = Object.fromEntries(
     Object.entries(results).map(([student, modules]) => [
       student,
-      modules
-        .map((e) => {
-          const course = courses.find((c) => c.moduleCode === e.moduleCode)
-          if (!course) {
-            throw new Error(`Course with moduleCode ${e.moduleCode} not found`)
-          }
-          return `\t- ${mergeLocales(course?.title)} - ${course.lecturers.join(', ')}`
-        })
-        .join('\n'),
+      Object.fromEntries(
+        (['de', 'en'] as const).map((locale) => [
+          locale,
+          modules
+            .map((e) => {
+              const course = courses.find((c) => c.moduleCode === e.moduleCode)
+              if (!course) {
+                throw new Error(
+                  `Course with moduleCode ${e.moduleCode} not found`,
+                )
+              }
+              return `- ${course?.title[locale]} - ${course.lecturers.join(', ')}`
+            })
+            .join('<br>'),
+        ]),
+      ) as { de: string; en: string },
     ]),
   )
 
-  const title = mergeLocales(phase?.title)
   // send emails to students
   void Promise.all(
     Object.entries(emails).map(([username, email]) =>
       sendEmail(
         email,
-        `${title} - Results/Ergebnisse`,
+        `${phase.title['de']} - Results/Ergebnisse`,
         `\
-Die Ergebnisse der ${title} wurden veröffentlicht.
-${formattedResults[username]}
-Sie können die Ergebnisse auch auf der Website einsehen.
---
-\n\n
-The results of the ${title} have been published.
-${formattedResults[username]}
-Sie können die Ergebnisse auch auf der Website einsehen.\
+Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
+Deine Zuweisungen:<br>
+${formattedResults[username]['de']}<br><br>
+Sie können die Ergebnisse auch auf <a href="${env.FRONTEND_HOSTNAME}/results">der Website</a> einsehen.<br>
+--<br>
+<br><br>
+The results of the ${phase.title['en']} have been published.<br>
+Your assignments:<br>
+${formattedResults[username]['en']}<br><br>
+You can also view the results on <a href="${env.FRONTEND_HOSTNAME}/results">the website</a>.
       `,
       ),
     ),
@@ -218,10 +225,6 @@ function constructTxtText(
       txtText += '\n'
     })
   return txtText
-}
-
-function mergeLocales(i18n: I18nJson) {
-  return i18n.de && i18n.en ? `${i18n.de} / ${i18n.en}` : i18n.de || i18n.en
 }
 
 // for testing functions that are otherwise not exported

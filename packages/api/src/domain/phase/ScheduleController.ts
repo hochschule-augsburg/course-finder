@@ -51,7 +51,7 @@ export function schedulePhase(phase: Enrollphase) {
       async () => {
         await sendEmail(
           env.MAIL_RECEIVERS,
-          'Die WPF Anmeldephase endet bald | WPF registrations will soon be closing',
+          'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
           `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleDateString(
             'de-DE',
             {
@@ -62,7 +62,7 @@ export function schedulePhase(phase: Enrollphase) {
               weekday: 'long',
               year: 'numeric',
             },
-          )}.\nDie Anmeldung erfolgt über folgender Seite:\n${env.FRONTEND_HOSTNAME}\n\nRegistrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
+          )}.<br>Die Anmeldung erfolgt über folgender Seite:<br><a href="${env.FRONTEND_HOSTNAME}">${env.FRONTEND_HOSTNAME}</a><br><br>Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
             'en-US',
             {
               day: 'numeric',
@@ -72,7 +72,7 @@ export function schedulePhase(phase: Enrollphase) {
               weekday: 'long',
               year: 'numeric',
             },
-          )}.\nRegistrations can be made on the following website:\n${env.FRONTEND_HOSTNAME}`,
+          )}.<br>Registrations can be made on the following website:<br><a href="${env.FRONTEND_HOSTNAME}">${env.FRONTEND_HOSTNAME}</a>`,
         )
       },
     ),

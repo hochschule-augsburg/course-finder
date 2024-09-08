@@ -39,7 +39,7 @@ async function main() {
         salt: 'salt',
         twoFA: true,
       },
-      email: 'niklas.sirch@tha.de',
+      email: 'test@test.com',
       name: 'Niklas',
       type: 'Professor',
       username: 'user-2fa',

@@ -36,14 +36,20 @@ const phaseState = usePhaseState(phaseId)
             </VRow>
           </VCol>
         </VRow>
-        <VRow v-if="['DRAWING', 'FINISHED'].includes(phaseState.modelValue)">
-          <VCol>
-            <h2>{{ t('assignments') }}</h2>
-          </VCol>
-          <VCol>
-            <AssignmentView :phase-id />
-          </VCol>
-        </VRow>
+        <template
+          v-if="['DRAWING', 'FINISHED'].includes(phaseState.modelValue)"
+        >
+          <VRow>
+            <VCol>
+              <h2>{{ t('assignments') }}</h2>
+            </VCol>
+          </VRow>
+          <VRow>
+            <VCol>
+              <AssignmentView :phase-id />
+            </VCol>
+          </VRow>
+        </template>
         <VRow>
           <VCol cols="12">
             <h2>{{ t('available-courses') }}</h2>
