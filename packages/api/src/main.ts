@@ -14,15 +14,18 @@ if (process.env.NODE_ENV !== 'production') {
 const server = await createServer()
 await prisma.$connect()
 
-try {
-  await prisma.appConf.create({})
-} catch {
-  // Do nothing
-}
+if (process.argv.slice(2).includes('master')) {
+  console.log('I am the master process')
+  try {
+    await prisma.appConf.create({})
+  } catch {
+    // Do nothing
+  }
 
-// Start the registration cycle
-await startPhaseSchedulingFromDatabase()
-startScheduledDeletion()
+  // Start the registration cycle
+  await startPhaseSchedulingFromDatabase()
+  startScheduledDeletion()
+}
 
 await server.start()
 await prisma.$disconnect()
