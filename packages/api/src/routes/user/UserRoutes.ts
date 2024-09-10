@@ -12,18 +12,19 @@ import { prisma } from '../../prisma/prisma'
 import { publicProcedure, router } from '../trpc'
 
 export const authRouter = router({
-  getUser: publicProcedure.query(async ({ ctx }) => {
+  getUser: publicProcedure.query(({ ctx }) => {
     if (!ctx.user) {
       return undefined
     }
-    await prisma.user
-      .update({
+    void (async () => {
+      await prisma.user.update({
         data: {
           lastActive: new Date(),
         },
+        select: {},
         where: { username: ctx.user?.username },
       })
-      .then(() => {})
+    })()
 
     return ctx.user
   }),
@@ -61,7 +62,7 @@ export const authRouter = router({
               },
               where: { username: input.username },
             }),
-            await sendEmail(
+            sendEmail(
               result.user.email,
               'Your two-factor authentication code',
               `Your code is ${otp.otp}. It will expire in 2 minutes.`,
