@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "files": [
     "dist/",
-    "prisma/"
+    "prisma/",
+    "pm2.config.cjs"
   ],
   "scripts": {
     "dev:inspect": "tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
