@@ -1,10 +1,10 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-import { prisma } from '../../../prisma/prisma'
-import { i18nInput, nullString } from '../../../prisma/PrismaZod'
-import { courseFields } from '../../course/CourseRoutes'
-import { adminProcedure, router } from '../../trpc'
+import { prisma } from '../../../prisma/prisma.ts'
+import { i18nInput, nullString } from '../../../prisma/PrismaZod.ts'
+import { courseFields } from '../../course/CourseRoutes.ts'
+import { adminProcedure, router } from '../../trpc.ts'
 
 const courseSpec = z.object({
   creditPoints: z.number().int(),

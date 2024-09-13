@@ -7,17 +7,17 @@ import { type Enrollphase, PhaseState } from '@prisma/client'
 import { groupBy } from 'lodash-es'
 import { z } from 'zod'
 
-import { prisma } from '../../prisma/prisma'
+import { prisma } from '../../prisma/prisma.ts'
 import {
   i18nInput,
   offeredCourseSpec,
   zodEnumFromObjKeys,
-} from '../../prisma/PrismaZod'
+} from '../../prisma/PrismaZod.ts'
 import {
   cancelPhase,
   reschedulePhase,
   schedulePhase,
-} from './ScheduleController'
+} from './ScheduleController.ts'
 
 export const phaseSpec = z.object({
   description: i18nInput,

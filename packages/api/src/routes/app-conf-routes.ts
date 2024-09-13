@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-import { prisma } from '../prisma/prisma'
-import { adminProcedure, router, studentProcedure } from './trpc'
+import { prisma } from '../prisma/prisma.ts'
+import { adminProcedure, router, studentProcedure } from './trpc.ts'
 
 export const appConfRoutes = router({
   read: studentProcedure.query(async () => {

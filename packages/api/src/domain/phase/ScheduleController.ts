@@ -3,9 +3,9 @@ import type { Job } from 'node-schedule'
 import { type Enrollphase, PhaseState } from '@prisma/client'
 import { scheduleJob } from 'node-schedule'
 
-import { env } from '../../env'
-import { prisma } from '../../prisma/prisma'
-import { sendEmail } from '../mail/Mail'
+import { env } from '../../env.ts'
+import { prisma } from '../../prisma/prisma.ts'
+import { sendEmail } from '../mail/Mail.ts'
 
 const phaseJobs: Record<number, Job[] | undefined> = {}
 

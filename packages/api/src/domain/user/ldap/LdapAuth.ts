@@ -2,14 +2,14 @@ import { Client, InvalidCredentialsError } from 'ldapts'
 import { once, pick } from 'lodash-es'
 import { ZodError } from 'zod'
 
-import type { AuthResult } from '../UserService'
+import type { AuthResult } from '../UserService.ts'
 
-import { env } from '../../../env'
-import { prisma } from '../../../prisma/prisma'
+import { env } from '../../../env.ts'
+import { prisma } from '../../../prisma/prisma.ts'
 import {
   resultSpec as userDataSpec,
   type ResultType as UserDataType,
-} from './LdapUserDataSpec'
+} from './LdapUserDataSpec.ts'
 
 export async function pwdAuth(
   username: string,

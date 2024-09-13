@@ -1,10 +1,10 @@
-import { adminRouter } from './admin/AdminRoutes'
-import { appConfRoutes } from './app-conf-routes'
-import { assignRouter } from './assign-routes'
-import { courseRouter } from './course/CourseRoutes'
-import { enrollRouter } from './enroll/EnrollRoutes'
-import { router } from './trpc'
-import { authRouter } from './user/UserRoutes'
+import { adminRouter } from './admin/AdminRoutes.ts'
+import { appConfRoutes } from './app-conf-routes.ts'
+import { assignRouter } from './assign-routes.ts'
+import { courseRouter } from './course/CourseRoutes.ts'
+import { enrollRouter } from './enroll/EnrollRoutes.ts'
+import { router } from './trpc.ts'
+import { authRouter } from './user/UserRoutes.ts'
 
 export const appRouter = router({
   admin: adminRouter,

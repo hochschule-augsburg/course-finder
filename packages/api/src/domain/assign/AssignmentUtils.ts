@@ -2,7 +2,7 @@ import type { StudentChoice, StudentPhase } from '@prisma/client'
 
 import { range, shuffle, sumBy } from 'lodash-es'
 
-import type { AssignmentStudentController } from './AssignmentControllers'
+import type { AssignmentStudentController } from './AssignmentControllers.ts'
 
 export function shuffleFirsts(students: AssignmentStudentController[]) {
   if (students.length <= 1) {

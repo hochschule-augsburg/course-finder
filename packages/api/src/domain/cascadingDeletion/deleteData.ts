@@ -1,6 +1,6 @@
 import schedule from 'node-schedule'
 
-import { prisma } from '../../prisma/prisma'
+import { prisma } from '../../prisma/prisma.ts'
 
 async function deleteOldStudents(cutoffDate: Date): Promise<void> {
   try {

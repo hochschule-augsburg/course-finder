@@ -7,13 +7,13 @@ import {
   ACTIVE_PHASE_STATES,
   phaseService,
   phaseSpec,
-} from '../../../domain/phase/PhaseService'
-import { prisma } from '../../../prisma/prisma'
+} from '../../../domain/phase/PhaseService.ts'
+import { prisma } from '../../../prisma/prisma.ts'
 import {
   offeredCourseSpec,
   zodEnumFromObjKeys,
-} from '../../../prisma/PrismaZod'
-import { adminProcedure, router } from '../../trpc'
+} from '../../../prisma/PrismaZod.ts'
+import { adminProcedure, router } from '../../trpc.ts'
 
 export const enrollRouter = router({
   offeredCourse: {

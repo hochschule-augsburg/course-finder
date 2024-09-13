@@ -1,7 +1,10 @@
-import type { ClientUser, ClientUserExtended } from '../../prisma/PrismaTypes'
+import type {
+  ClientUser,
+  ClientUserExtended,
+} from '../../prisma/PrismaTypes.ts'
 
-import { pwdAuth as ldapPwdAuth } from './ldap/LdapAuth'
-import { pwdAuth as localPwdAuth } from './local/LocalAuth'
+import { pwdAuth as ldapPwdAuth } from './ldap/LdapAuth.ts'
+import { pwdAuth as localPwdAuth } from './local/LocalAuth.ts'
 
 export type AuthResult =
   | ({ success: false } & (

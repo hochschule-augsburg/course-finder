@@ -1,6 +1,6 @@
 import type { Course } from '@prisma/client'
 
-import { splitModuleBook } from './split'
+import { splitModuleBook } from './split.ts'
 
 export async function parseCourses(pdf: Buffer) {
   const moduleMap = await splitModuleBook(pdf)

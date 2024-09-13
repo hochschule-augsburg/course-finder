@@ -1,8 +1,8 @@
 import type { OfferedCourse } from '@prisma/client'
 
-import { prisma } from '../../prisma/prisma'
-import { AssignmentStudentController } from './AssignmentControllers'
-import { normalizeChoices, shuffleFirsts } from './AssignmentUtils'
+import { prisma } from '../../prisma/prisma.ts'
+import { AssignmentStudentController } from './AssignmentControllers.ts'
+import { normalizeChoices, shuffleFirsts } from './AssignmentUtils.ts'
 
 type AssignCourse = {
   studentCount: number

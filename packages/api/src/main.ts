@@ -1,9 +1,9 @@
 import { exec } from 'child_process'
 
-import { startScheduledDeletion } from './domain/cascadingDeletion/deleteData'
-import { startPhaseSchedulingFromDatabase } from './domain/phase/PhaseService'
-import { prisma } from './prisma/prisma'
-import { createServer } from './server/server'
+import { startScheduledDeletion } from './domain/cascadingDeletion/deleteData.ts'
+import { startPhaseSchedulingFromDatabase } from './domain/phase/PhaseService.ts'
+import { prisma } from './prisma/prisma.ts'
+import { createServer } from './server/server.ts'
 
 // start database from docker container for development
 if (process.env.NODE_ENV !== 'production') {

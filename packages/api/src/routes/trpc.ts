@@ -3,10 +3,10 @@ import type { Student } from '@prisma/client'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 
-import type { ClientUser } from '../prisma/PrismaTypes'
-import type { Context } from '../server/context'
+import type { ClientUser } from '../prisma/PrismaTypes.ts'
+import type { Context } from '../server/context.ts'
 
-import { userHasPermission } from '../domain/user/UserRoles'
+import { userHasPermission } from '../domain/user/UserRoles.ts'
 
 const t = initTRPC.context<Context>().create({
   errorFormatter({ shape }) {

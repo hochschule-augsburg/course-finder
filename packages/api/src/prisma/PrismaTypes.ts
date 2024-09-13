@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-
 import type {
   AppConf as PAppConf,
   Course as PCourse,

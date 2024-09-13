@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client'
 import { readFileSync } from 'fs'
 import { random, sampleSize, sumBy, uniqBy } from 'lodash-es'
 
-import { hashPassword } from '../src/domain/user/local/password-auth'
-import { data as coursesData } from './assets/courses'
-import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24'
-import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24'
+import { hashPassword } from '../src/domain/user/local/password-auth.ts'
+import { data as coursesData } from './assets/courses.ts'
+import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24.ts'
+import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24.ts'
 
 const prisma = new PrismaClient()
 

@@ -18,6 +18,7 @@
     "target": "esnext",
     "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
     "types": ["node", "vitest/globals", "vitest/importMeta"]
   }
 }

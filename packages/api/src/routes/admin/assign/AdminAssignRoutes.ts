@@ -3,12 +3,12 @@ import { TRPCError } from '@trpc/server'
 import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
-import { assign } from '../../../domain/assign/AssignmentAlgorithm'
-import { sendEmail } from '../../../domain/mail/Mail'
-import { phaseService } from '../../../domain/phase/PhaseService'
-import { env } from '../../../env'
-import { prisma } from '../../../prisma/prisma'
-import { adminProcedure, router } from '../../trpc'
+import { assign } from '../../../domain/assign/AssignmentAlgorithm.ts'
+import { sendEmail } from '../../../domain/mail/Mail.ts'
+import { phaseService } from '../../../domain/phase/PhaseService.ts'
+import { env } from '../../../env.ts'
+import { prisma } from '../../../prisma/prisma.ts'
+import { adminProcedure, router } from '../../trpc.ts'
 
 export const assignRouter = router({
   assign: adminProcedure

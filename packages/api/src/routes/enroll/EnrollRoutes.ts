@@ -3,9 +3,9 @@ import type { Enrollphase } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-import { mayEnroll } from '../../domain/enroll/enrollUtils'
-import { prisma } from '../../prisma/prisma'
-import { router, studentOnlyProcedure } from '../trpc'
+import { mayEnroll } from '../../domain/enroll/enrollUtils.ts'
+import { prisma } from '../../prisma/prisma.ts'
+import { router, studentOnlyProcedure } from '../trpc.ts'
 
 const pointsZodType = z.number().int().gte(0).lte(1000)
 const creditsZodType = z.number().int().gte(0).lte(1000)

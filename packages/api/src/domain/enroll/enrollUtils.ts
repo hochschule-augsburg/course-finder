@@ -1,6 +1,6 @@
 import type { Student } from '@prisma/client'
 
-import type { ClientUser } from '../../prisma/PrismaTypes'
+import type { ClientUser } from '../../prisma/PrismaTypes.ts'
 
 const fieldsOfStudy: Record<
   string,

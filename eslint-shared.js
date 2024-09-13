@@ -1,6 +1,21 @@
 import perfectionist from 'eslint-plugin-perfectionist'
 import unusedImports from 'eslint-plugin-unused-imports'
 
+const banTransformations = {
+  'no-restricted-syntax': [
+    'error',
+    {
+      selector: 'TSEnumDeclaration',
+      message:
+        "TypeScript design flaw and --experimental-strip-types doesn't support transforms",
+    },
+  ],
+  '@typescript-eslint/no-namespace': [
+    'error',
+    { allowDeclarations: true, allowDefinitionFiles: true },
+  ],
+}
+
 export const sharedRules = [
   perfectionist.configs['recommended-natural'],
   {
@@ -8,6 +23,7 @@ export const sharedRules = [
       'unused-imports': unusedImports,
     },
     rules: {
+      ...banTransformations,
       ...{
         '@typescript-eslint/no-unused-vars': 'off',
         'unused-imports/no-unused-imports': 'error',

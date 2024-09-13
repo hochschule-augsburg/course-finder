@@ -3,13 +3,13 @@ import { randomBytes } from 'crypto'
 import { TOTP } from 'totp-generator'
 import { z } from 'zod'
 
-import type { ClientUserExtended } from '../../prisma/PrismaTypes'
+import type { ClientUserExtended } from '../../prisma/PrismaTypes.ts'
 
-import { sendEmail } from '../../domain/mail/Mail'
-import { authenticate } from '../../domain/user/UserService'
-import { env } from '../../env'
-import { prisma } from '../../prisma/prisma'
-import { publicProcedure, router } from '../trpc'
+import { sendEmail } from '../../domain/mail/Mail.ts'
+import { authenticate } from '../../domain/user/UserService.ts'
+import { env } from '../../env.ts'
+import { prisma } from '../../prisma/prisma.ts'
+import { publicProcedure, router } from '../trpc.ts'
 
 export const authRouter = router({
   getUser: publicProcedure.query(({ ctx }) => {
@@ -21,7 +21,6 @@ export const authRouter = router({
         data: {
           lastActive: new Date(),
         },
-        select: {},
         where: { username: ctx.user?.username },
       })
     })()

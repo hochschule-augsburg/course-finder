@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 
-import { parseCourses } from '../../domain/module-book/extractData'
-import { prisma } from '../../prisma/prisma'
+import { parseCourses } from '../../domain/module-book/extractData.ts'
+import { prisma } from '../../prisma/prisma.ts'
 
 export function adminFastifyRoutes(fastify: FastifyInstance) {
   fastify.post('/api/admin/courses/upload-module-book', async (req, reply) => {

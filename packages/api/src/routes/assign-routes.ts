@@ -1,7 +1,7 @@
 import { differenceBy, sortBy } from 'lodash-es'
 
-import { prisma } from '../prisma/prisma'
-import { router, studentOnlyProcedure } from './trpc'
+import { prisma } from '../prisma/prisma.ts'
+import { router, studentOnlyProcedure } from './trpc.ts'
 
 export const assignRouter = router({
   list: studentOnlyProcedure.query(async ({ ctx }) => {

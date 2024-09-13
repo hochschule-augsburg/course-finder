@@ -1,7 +1,7 @@
 import type { AuthResult } from '../UserService'
 
-import { prisma } from '../../../prisma/prisma'
-import { comparePasswords, hashPassword } from './password-auth'
+import { prisma } from '../../../prisma/prisma.ts'
+import { comparePasswords, hashPassword } from './password-auth.ts'
 
 export async function pwdAuth(
   username: string,

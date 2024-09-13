@@ -2,10 +2,10 @@ import type { Course, OfferedCourse } from '@prisma/client'
 
 import { z } from 'zod'
 
-import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes'
+import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes.ts'
 
-import { prisma } from '../../prisma/prisma'
-import { publicProcedure, router, studentOnlyProcedure } from '../trpc'
+import { prisma } from '../../prisma/prisma.ts'
+import { publicProcedure, router, studentOnlyProcedure } from '../trpc.ts'
 
 export type CourseExtended = {
   offeredCourse: {

@@ -5,12 +5,12 @@ import { fastifyMultipart } from '@fastify/multipart'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import fastify from 'fastify'
 
-import type { ClientUserExtended } from '../prisma/PrismaTypes'
+import type { ClientUserExtended } from '../prisma/PrismaTypes.ts'
 
-import { env } from '../env'
-import { adminFastifyRoutes } from '../routes/admin/AdminFastifyRoutes'
-import { appRouter } from '../routes/router'
-import { createContext } from './context'
+import { env } from '../env.ts'
+import { adminFastifyRoutes } from '../routes/admin/AdminFastifyRoutes.ts'
+import { appRouter } from '../routes/router.ts'
+import { createContext } from './context.ts'
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {

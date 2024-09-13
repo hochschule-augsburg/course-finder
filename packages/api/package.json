@@ -8,14 +8,13 @@
     "pm2.config.cjs"
   ],
   "scripts": {
-    "dev:inspect": "tsx watch --inspect --clear-screen=false src/main.ts | pino-pretty",
-    "dev": "tsx watch --clear-screen=false src/main.ts | pino-pretty",
+    "dev:inspect": "node --experimental-strip-types --experimental-transform-types --watch src/main.ts | pino-pretty",
+    "dev": "node --experimental-strip-types --experimental-transform-types --watch src/main.ts | pino-pretty",
     "build": "tsc --noEmit && pnpm run bundle",
     "bundle": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
     "start": "pm2 start --no-daemon pm2.config.cjs",
     "stop": "pm2 stop course-finder-api && pm2 delete course-finder-api",
     "lint": "eslint src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
-    "play": "tsx watch playground.ts",
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
@@ -32,7 +31,7 @@
     "@trpc/server": "next",
     "date-fns": "^3.6.0",
     "fastify": "^4.28.1",
-    "ldapts": "^7.1.1",
+    "ldapts": "^7.2.0",
     "lodash-es": "^4.17.21",
     "node-pdftk": "^2.1.3",
     "node-schedule": "^2.1.1",
@@ -52,15 +51,14 @@
     "@types/node-pdftk": "^2.1.9",
     "@types/node-schedule": "^2.1.7",
     "@types/nodemailer": "^6.4.15",
-    "@types/pg": "^8.11.8",
+    "@types/pg": "^8.11.9",
     "esbuild": "^0.23.1",
     "pino-pretty": "^11.2.2",
-    "tsx": "^4.19.0",
     "typescript": "^5.6.2",
-    "vitest": "^2.0.5",
+    "vitest": "^2.1.0",
     "vitest-mock-extended": "^2.0.2"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "node --experimental-strip-types --experimental-transform-types prisma/seed.ts"
   }
 }
