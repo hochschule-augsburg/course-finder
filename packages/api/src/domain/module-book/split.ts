@@ -62,7 +62,7 @@ async function extractPDFSections(
           e.content.map((e) => e.str).filter((e) => e.trim()),
         )
         const index = content.findIndex(
-          (e) => e.startsWith('Module code') || e.startsWith('Modulkürzel'),
+          (e) => e.startsWith('Kürzel') || e.startsWith('Code'),
         )
 
         const moduleCode = content[index + 1].split(',')[0].trim()

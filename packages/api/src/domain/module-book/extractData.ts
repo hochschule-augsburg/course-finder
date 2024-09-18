@@ -20,14 +20,14 @@ function extractData(
   },
 ): Course {
   const lines = data.content.split('\n')
-  const titleDe = getData(
-    lines.findIndex((e) => e.startsWith('Modulbezeichnung')),
+  //@ts-expect-error only for this phase
+  // eslint-disable-next-line no-unsafe-optional-chaining
+  const [titleDe, titleEn] = getData(
+    lines.findIndex(
+      (e) => e.startsWith('Name / engl.') || e.startsWith('engl. Name'),
+    ),
     lines,
-  )
-  const titleEn = getData(
-    lines.findIndex((e) => e.startsWith('Title in English')),
-    lines,
-  )
+  )?.split('/')
   const facultyName = getData(
     lines.findIndex((e) => e.startsWith('Fakultät') || e.startsWith('Faculty')),
     lines,
@@ -43,9 +43,7 @@ function extractData(
 
   const lecturers = getLecturer(
     lines.findLastIndex(
-      (e) =>
-        e.startsWith('Module coordinator') ||
-        e.startsWith('Modulverantwortlicher'),
+      (e) => e.startsWith('Verantwortlicher') || e.startsWith('Coordinator'),
     ),
     lines,
   )
