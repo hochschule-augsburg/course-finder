@@ -62,7 +62,9 @@ function extractData(
       nc(data.content.match(/(?:Credit hours|SWS):\s(\d+)/)),
     ),
     title: {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       de: titleDe ?? titleEn,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       en: titleEn ?? titleDe,
     },
     varyingCP: null,
