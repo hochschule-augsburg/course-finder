@@ -150,15 +150,10 @@ async function updateOfferedCourses(
         phaseId,
       },
     }),
-    prisma.offeredCourse.createMany({
-      data:
-        newCourses?.map((course) => ({
+    ...(newCourses?.map((course) =>
+      prisma.offeredCourse.create({
+        data: {
           appointments: course.appointments,
-          Course: {
-            connect: {
-              moduleCode: course.moduleCode,
-            },
-          },
           extraInfo: course.extraInfo,
           for: { set: course.for },
           maxParticipants: course.maxParticipants,
@@ -166,8 +161,9 @@ async function updateOfferedCourses(
           moduleCode: course.moduleCode,
           moodleCourse: course.moodleCourse,
           phaseId,
-        })) ?? [],
-    }),
+        },
+      }),
+    ) ?? []),
     ...(updatedCourses?.map((course) =>
       prisma.offeredCourse.update({
         data: {

@@ -283,8 +283,15 @@ const searchOffered = ref('')
                       </div>
                     </template>
                     <VCardTitle class="d-flex justify-space-between">
-                      {{ element.Course.title[locale] }}
+                      <div>
+                        <span class="font-weight-thin">
+                          {{ element.Course.moduleCode }}</span
+                        >-{{ element.Course.title[locale] }}
+                      </div>
                     </VCardTitle>
+                    <VCardSubtitle>
+                      {{ element.Course.lecturers.join(', ') }}
+                    </VCardSubtitle>
                   </VCardItem>
 
                   <VCardText>

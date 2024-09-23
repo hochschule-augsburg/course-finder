@@ -33,6 +33,7 @@
     "sourceMap": true,
     "strict": true,
     "strictPropertyInitialization": true,
+    "allowImportingTsExtensions": true,
     "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
