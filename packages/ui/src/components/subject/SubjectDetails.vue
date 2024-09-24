@@ -77,8 +77,10 @@ const fullscreen = ref(false)
             <p class="mb-4 px-3">
               {{
                 subject.offeredCourse.minParticipants +
-                '-' +
-                subject.offeredCourse.maxParticipants
+                ' - ' +
+                (subject.offeredCourse.maxParticipants
+                  ? +subject.offeredCourse.maxParticipants
+                  : '∞')
               }}
             </p>
 
@@ -165,12 +167,15 @@ const fullscreen = ref(false)
             <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
             <h4>{{ t('note') }}</h4>
           </div>
-          <p v-if="subject.extraInfo" class="mb-4 px-3 d-flex flex-column">
+          <p
+            v-if="subject.extraInfo"
+            class="mb-4 px-3 d-flex flex-column white-space-pre-wrap"
+          >
             {{ subject.extraInfo }}
           </p>
           <p
             v-if="subject.offeredCourse?.extraInfo"
-            class="font-italic mb-4 px-3 d-flex flex-column"
+            class="font-italic mb-4 px-3 d-flex flex-column white-space-pre-wrap"
           >
             {{ subject.offeredCourse.extraInfo }}
           </p>
@@ -226,6 +231,10 @@ const fullscreen = ref(false)
 </template>
 
 <style scoped lang="scss">
+.white-space-pre-wrap {
+  white-space: pre-wrap;
+}
+
 .floating {
   position: absolute;
   top: var(--floating-margin);
