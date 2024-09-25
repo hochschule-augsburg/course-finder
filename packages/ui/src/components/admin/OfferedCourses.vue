@@ -285,7 +285,9 @@ const searchOffered = ref('')
                     <VCardTitle class="d-flex justify-space-between">
                       <div>
                         <span class="font-weight-thin">
-                          {{ element.Course.moduleCode }}</span
+                          {{
+                            element.Course.moduleCode || element.moduleCode
+                          }}</span
                         >-{{ element.Course.title[locale] }}
                       </div>
                     </VCardTitle>
