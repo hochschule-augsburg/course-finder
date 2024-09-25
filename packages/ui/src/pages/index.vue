@@ -22,10 +22,7 @@ const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
 )
 const { mobile } = useDisplay()
-const lastSubjectView = useLocalStorage(
-  'subjectView',
-  mobile.value ? 'grid' : 'list',
-)
+const lastSubjectView = useLocalStorage('subjectView', 'grid')
 const subjectView = computed(() =>
   mobile.value ? 'grid' : lastSubjectView.value,
 )
