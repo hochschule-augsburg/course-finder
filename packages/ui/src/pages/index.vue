@@ -63,7 +63,10 @@ watch(
         <h2 v-if="coursesStore.currentPhase">
           {{ t('your-courses-for', [userStore.user?.Student?.fieldOfStudy]) }}
         </h2>
-        <h2 v-else>{{ t('courses-from-module-book') }}</h2>
+        <template v-else>
+          <h2>{{ t('courses-from-module-book') }}</h2>
+          <span class="text-subtitle-1">{{ t('not-all-offered-each') }}</span>
+        </template>
       </div>
       <VBtnToggle
         v-model="lastSubjectView"
@@ -112,7 +115,9 @@ watch(
 en:
   your-courses-for: Your courses for {0}
   courses-from-module-book: Courses from the current module book
+  not-all-offered-each: Not all courses are offered each semester.
 de:
   your-courses-for: Deine Kurse für {0}
   courses-from-module-book: Kurse aus dem aktellen Modulbuch
+  not-all-offered-each: Nicht alle Kurse werden in jedem Semester angeboten.
 </i18n>
