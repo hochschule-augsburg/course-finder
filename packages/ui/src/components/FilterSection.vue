@@ -34,7 +34,6 @@ function getRangeChipLabel(filter: RangeFilter) {
       :on-click:clear="filtersStore.resetSearch"
       :prepend-inner-icon="mdiMagnify"
       bg-color="secondary"
-      class="mx-3"
       color="primary"
       type="text"
       clearable
@@ -42,7 +41,7 @@ function getRangeChipLabel(filter: RangeFilter) {
       single-line
     />
 
-    <VChipGroup class="mx-3">
+    <VChipGroup>
       <VChip
         v-for="activeRangeFilter in filtersStore.activeRangeFilters"
         :key="activeRangeFilter.name"
