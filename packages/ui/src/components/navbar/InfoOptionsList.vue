@@ -2,8 +2,10 @@
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { homeTour, useTourStore } from '@/stores/TourStore'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { VDivider, VList, VListItem } from 'vuetify/components'
 
+const route = useRoute()
 const { t } = useI18n()
 const { startTour } = useTourStore()
 const coursesStore = useCoursesStore()
@@ -12,7 +14,7 @@ const coursesStore = useCoursesStore()
 <template>
   <VList>
     <VListItem
-      v-if="coursesStore.currentPhase"
+      v-if="coursesStore.currentPhase && route.path === '/'"
       :title="t('tutorial')"
       @click="startTour(homeTour)"
     />
