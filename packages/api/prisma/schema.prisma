@@ -40,6 +40,7 @@ model User {
   /// [Auth]
   auth     Json
   type     UserRole
+  //TODO: does not work with ldap
   /// [Otp]
   otp      Json?
   Course   Course[]

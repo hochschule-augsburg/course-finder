@@ -39,6 +39,7 @@ export async function pwdAuth(
       return { cause: 'invalid-credentials', success: false }
     }
     result = userDataSpec.parse(searchEntries[0])
+    // ldap can change the username here. Only use result.username
   } catch (e) {
     if (e instanceof InvalidCredentialsError || e instanceof ZodError) {
       return { cause: 'invalid-credentials', success: false }
@@ -74,13 +75,13 @@ export async function pwdAuth(
         },
       },
       facultyName: undefined,
-      User: { connect: { username } },
+      User: { connect: { username: result.username } },
       username: undefined,
     }
     const student = await prisma.student.upsert({
       create: studentInput,
       update: studentInput,
-      where: { username },
+      where: { username: result.username },
     })
     return {
       success: true,

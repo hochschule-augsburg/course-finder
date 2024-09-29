@@ -55,6 +55,8 @@ export const authRouter = router({
             period: 120,
           })
           await Promise.all([
+            // TODO if user is from ldap username can be changed.
+            // This will not work in that case.
             prisma.user.update({
               data: {
                 otp,
@@ -91,6 +93,7 @@ export const authRouter = router({
       secure: process.env.NODE_ENV === 'production',
     })
   }),
+  // only works with local users
   // rate limited by reverse proxy
   twoFA: publicProcedure
     .input(z.object({ otp: z.string(), username: z.string() }))
