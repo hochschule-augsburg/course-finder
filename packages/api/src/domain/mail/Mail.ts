@@ -1,4 +1,5 @@
 import type { Attachment } from 'nodemailer/lib/mailer'
+import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 import nodemailer from 'nodemailer'
 
@@ -7,7 +8,7 @@ export async function sendEmail(
   subject: string,
   htmlContent: string,
   attachments?: Attachment[],
-) {
+): Promise<SMTPTransport.SentMessageInfo> {
   const transporter = nodemailer.createTransport({
     host: 'smtp.hs-augsburg.de',
     port: 25,
@@ -18,14 +19,24 @@ export async function sendEmail(
     .replace('{{SUBJECT}}', subject)
     .replace('{{CONTENT}}', htmlContent)
 
-  const info = await transporter.sendMail({
-    attachments,
-    from: 'course-finder@tha.de',
-    html,
-    subject,
-    to,
-  })
-  return info
+  if (process.env.NODE_ENV === 'production') {
+    const info = await transporter.sendMail({
+      attachments,
+      from: 'course-finder@tha.de',
+      html,
+      subject,
+      to,
+    })
+    return info
+  }
+  return {
+    accepted: [],
+    envelope: { from: '', to: [] },
+    messageId: '123',
+    pending: [],
+    rejected: [],
+    response: 'Mocked',
+  }
 }
 
 const template = `

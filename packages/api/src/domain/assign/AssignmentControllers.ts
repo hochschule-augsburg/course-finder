@@ -18,12 +18,17 @@ export class AssignmentStudentController {
   }
 
   courseCanceled(moduleCode: string) {
-    const choiceIndex = this.gained.findIndex(
+    const gainedIndex = this.gained.findIndex(
+      (e) => e.moduleCode === moduleCode,
+    )
+    const choiceIndex = this.choices.findIndex(
       (e) => e.moduleCode === moduleCode,
     )
     if (choiceIndex !== -1) {
-      const choice = this.gained[choiceIndex]
-      this.gained.splice(choiceIndex, 1)
+      this.choices.splice(choiceIndex, 1)
+    } else if (gainedIndex !== -1) {
+      const choice = this.gained[gainedIndex]
+      this.gained.splice(gainedIndex, 1)
       this.lost.push(choice)
     }
   }
