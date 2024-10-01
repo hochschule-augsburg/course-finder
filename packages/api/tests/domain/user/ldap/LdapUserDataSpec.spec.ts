@@ -1,5 +1,5 @@
-import { resultSpec } from '../../../../src/domain/user/ldap/LdapUserDataSpec' // adjust the import path to your actual file structure
-import ldapStudentResult from '../../../../src/domain/user/ldap/example-responses/loggedInStudent.json'
+import ldapStudentResult from '../../../../src/domain/user/ldap/example-responses/loggedInStudent.json' // adjust the import path to your actual file structure
+import { resultSpec } from '../../../../src/domain/user/ldap/LdapUserDataSpec'
 
 describe('resultSpec', () => {
   describe('parse', () => {
