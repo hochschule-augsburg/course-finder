@@ -1,7 +1,7 @@
 vi.mock('../../src/env.ts', () => ({
   env: {
     DATABASE_URL: 'https://example.com',
-    FRONTEND_HOSTNAME: 'localhost',
+    FRONTEND_ORIGIN: 'http://localhost',
     JWT_SECRET:
       'askdfjasdklfauheubnasdfnasdkjfnasdkfjnasdlkfasdfkljabndlfkjabdlkjas;dkj',
     LDAP_BASE_DN: 'dc:example,dc:com',

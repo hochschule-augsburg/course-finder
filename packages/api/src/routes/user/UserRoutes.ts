@@ -11,6 +11,8 @@ import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
 import { publicProcedure, router } from '../trpc.ts'
 
+const domain = new URL(env.FRONTEND_ORIGIN).hostname
+
 export const authRouter = router({
   getUser: publicProcedure.query(({ ctx }) => {
     if (!ctx.user) {
@@ -74,7 +76,7 @@ export const authRouter = router({
 
         const token = await ctx.res.jwtSign(result.user)
         ctx.res.setCookie('cf-token', token, {
-          domain: env.FRONTEND_HOSTNAME,
+          domain,
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14), // 14 days
           httpOnly: true,
           path: '/',
@@ -86,7 +88,7 @@ export const authRouter = router({
     ),
   logout: publicProcedure.mutation(({ ctx }) => {
     ctx.res.clearCookie('cf-token', {
-      domain: env.FRONTEND_HOSTNAME,
+      domain,
       httpOnly: true,
       path: '/',
       sameSite: true,

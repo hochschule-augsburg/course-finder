@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     env: {
       DATABASE_URL: 'testDatabaseUrl',
-      FRONTEND_HOSTNAME: 'testFrontendHostname',
+      FRONTEND_ORIGIN: 'http://testFrontendHostname',
       LDAP_BASE_DN: 'testLdapBaseDn',
       LDAP_URL: 'testLdapUrl',
       MAIL_RECEIVERS: 'testMailReceivers',

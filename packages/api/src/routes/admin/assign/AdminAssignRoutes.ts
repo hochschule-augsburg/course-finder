@@ -154,13 +154,13 @@ async function emailToStudents(
 Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
 Deine Zuweisungen:<br>
 ${formattedResults[username]['de']}<br><br>
-Sie können die Ergebnisse auch auf <a href="${env.FRONTEND_HOSTNAME}/results">der Website</a> einsehen.<br>
+Sie können die Ergebnisse auch auf <a href="${env.FRONTEND_ORIGIN}/results">der Website</a> einsehen.<br>
 --<br>
 <br><br>
 The results of the ${phase.title['en']} have been published.<br>
 Your assignments:<br>
 ${formattedResults[username]['en']}<br><br>
-You can also view the results on <a href="${env.FRONTEND_HOSTNAME}/results">the website</a>.
+You can also view the results on <a href="${env.FRONTEND_ORIGIN}/results">the website</a>.
       `,
       ),
     ),

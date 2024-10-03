@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
-  FRONTEND_HOSTNAME: z.string(),
+  FRONTEND_ORIGIN: z.string(),
   JWT_SECRET: z.string().min(32),
   LDAP_BASE_DN: z.string(),
   LDAP_URL: z.string().url(),

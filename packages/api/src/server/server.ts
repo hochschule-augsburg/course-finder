@@ -32,17 +32,7 @@ export async function createServer() {
   })
   await server.register(fastifyCors, {
     credentials: true,
-    origin: (origin, cb) => {
-      if (
-        origin === undefined ||
-        new URL(origin).hostname === env.FRONTEND_HOSTNAME
-      ) {
-        cb(null, true)
-      } else {
-        // Generate an error on other origins, disabling access
-        cb(new Error('Not allowed'), false)
-      }
-    },
+    origin: env.FRONTEND_ORIGIN,
   })
 
   await server.register(fastifyTRPCPlugin, {

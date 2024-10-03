@@ -62,7 +62,7 @@ export function schedulePhase(phase: Enrollphase) {
               weekday: 'long',
               year: 'numeric',
             },
-          )}.<br>Die Anmeldung erfolgt über folgender Seite:<br><a href="${env.FRONTEND_HOSTNAME}">${env.FRONTEND_HOSTNAME}</a><br><br>Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
+          )}.<br>Die Anmeldung erfolgt über folgender Seite:<br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br><br>Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
             'en-US',
             {
               day: 'numeric',
@@ -72,7 +72,7 @@ export function schedulePhase(phase: Enrollphase) {
               weekday: 'long',
               year: 'numeric',
             },
-          )}.<br>Registrations can be made on the following website:<br><a href="${env.FRONTEND_HOSTNAME}">${env.FRONTEND_HOSTNAME}</a>`,
+          )}.<br>Registrations can be made on the following website:<br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a>`,
         )
       },
     ),
