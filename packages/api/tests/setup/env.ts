@@ -1,9 +1,10 @@
 vi.mock('../../src/env.ts', () => ({
   env: {
+    CONTACT_EMAIL: 'course-finder@example.com',
     DATABASE_URL: 'https://example.com',
     FRONTEND_ORIGIN: 'http://localhost',
     JWT_SECRET:
-      'askdfjasdklfauheubnasdfnasdkjfnasdkfjnasdlkfasdfkljabndlfkjabdlkjas;dkj',
+      'supersecretkeysupersecretkeysupersecretkeysupersecretkeysupersecretkey',
     LDAP_BASE_DN: 'dc:example,dc:com',
     LDAP_URL: 'https://example.com',
     MAIL_RECEIVERS: '',

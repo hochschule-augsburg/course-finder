@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 const envSchema = z.object({
+  CONTACT_EMAIL: z.string().email(),
   DATABASE_URL: z.string().url(),
   FRONTEND_ORIGIN: z.string(),
   JWT_SECRET: z.string().min(32),

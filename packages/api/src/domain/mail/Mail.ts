@@ -3,6 +3,8 @@ import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 import nodemailer from 'nodemailer'
 
+import { env } from '../../env.ts'
+
 export async function sendEmail(
   to: string | string[],
   subject: string,
@@ -19,16 +21,20 @@ export async function sendEmail(
     .replace('{{SUBJECT}}', subject)
     .replace('{{CONTENT}}', htmlContent)
 
-  if (process.env.NODE_ENV === 'production') {
-    const info = await transporter.sendMail({
-      attachments,
-      from: 'course-finder@tha.de',
-      html,
-      subject: `⛵ ${subject} ⛵`,
-      to,
-    })
-    return info
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  const info = await transporter.sendMail({
+    attachments,
+    from: {
+      address: 'no-reply@course-finder.informatik.tha.de',
+      name: 'CourseFinder',
+    },
+    html,
+    replyTo: env.CONTACT_EMAIL,
+    subject: `⛵ ${subject} ⛵`,
+    to,
+  })
+  return info
+  // }
   return {
     accepted: [],
     envelope: { from: '', to: [] },
