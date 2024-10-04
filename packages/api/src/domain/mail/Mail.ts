@@ -24,7 +24,7 @@ export async function sendEmail(
       attachments,
       from: 'course-finder@tha.de',
       html,
-      subject,
+      subject: `⛵ ${subject} ⛵`,
       to,
     })
     return info

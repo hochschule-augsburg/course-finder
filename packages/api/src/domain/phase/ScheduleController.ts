@@ -3,9 +3,8 @@ import type { Job } from 'node-schedule'
 import { type Enrollphase, PhaseState } from '@prisma/client'
 import { scheduleJob } from 'node-schedule'
 
-import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
-import { sendEmail } from '../mail/Mail.ts'
+import { phaseService } from './PhaseService.ts'
 
 const phaseJobs: Record<number, Job[] | undefined> = {}
 
@@ -33,60 +32,27 @@ export function schedulePhase(phase: Enrollphase) {
       `phase-${phase.id}:open-registration`,
       phase.start,
       async () => {
-        const phaseCurrently = await prisma.enrollphase.findUnique({
-          select: { state: true },
-          where: { id: phase.id },
+        await prisma.enrollphase.update({
+          data: { state: PhaseState.OPEN },
+          where: { id: phase.id, state: 'NOT_STARTED' },
         })
-        if (phaseCurrently?.state === 'NOT_STARTED') {
-          await prisma.enrollphase.update({
-            data: { state: PhaseState.OPEN },
-            where: { id: phase.id },
-          })
-        }
+        console.info('Opening phase', phase.id, 'from scheduled job')
       },
     ),
     scheduleJob(
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
       async () => {
-        await sendEmail(
-          env.MAIL_RECEIVERS,
-          'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
-          `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleDateString(
-            'de-DE',
-            {
-              day: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
-              month: 'long',
-              weekday: 'long',
-              year: 'numeric',
-            },
-          )}.<br>Die Anmeldung erfolgt über folgender Seite:<br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br><br>Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleDateString(
-            'en-US',
-            {
-              day: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
-              month: 'long',
-              weekday: 'long',
-              year: 'numeric',
-            },
-          )}.<br>Registrations can be made on the following website:<br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a>`,
-        )
+        await phaseService.sendReminderMail(phase.id)
+        console.info('Sent mail for phase', phase.id, 'from scheduled job')
       },
     ),
     scheduleJob(`phase-${phase.id}:set-drawing`, phase.end, async () => {
-      const phaseCurrently = await prisma.enrollphase.findUnique({
-        select: { state: true },
-        where: { id: phase.id },
+      await prisma.enrollphase.update({
+        data: { state: PhaseState.DRAWING },
+        where: { id: phase.id, state: 'OPEN' },
       })
-      if (phaseCurrently?.state === 'OPEN') {
-        await prisma.enrollphase.update({
-          data: { state: PhaseState.DRAWING },
-          where: { id: phase.id },
-        })
-      }
+      console.info('Closing phase', phase.id, 'from scheduled job')
     }),
   ].filter((job) => job !== null)
 }

@@ -7,12 +7,14 @@ import { type Enrollphase, PhaseState } from '@prisma/client'
 import { groupBy } from 'lodash-es'
 import { z } from 'zod'
 
+import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
 import {
   i18nInput,
   offeredCourseSpec,
   zodEnumFromObjKeys,
 } from '../../prisma/PrismaZod.ts'
+import { sendEmail } from '../mail/Mail.ts'
 import {
   cancelPhase,
   reschedulePhase,
@@ -118,9 +120,43 @@ async function updatePhase(
   return updatedPhase
 }
 
+async function sendReminderMail(phaseId: number) {
+  const phase = await prisma.enrollphase.findUnique({
+    select: {
+      emailNotificationAt: true,
+      end: true,
+      state: true,
+      title: true,
+    },
+    where: { id: phaseId },
+  })
+  if (!phase) {
+    throw new Error('Phase not found')
+  }
+  env.FRONTEND_ORIGIN = 'https://course-finder.informatik.tha.de/'
+  await sendEmail(
+    env.MAIL_RECEIVERS,
+    'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
+    `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
+      'de-DE',
+    )}.<br>
+          Bitte stelle sicher, dass Du Ersatzwahlen getroffen haben, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
+          Die Anmeldung erfolgt über folgender Seite:
+          <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
+          <br>
+          Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
+            'en-US',
+          )}.<br>
+          Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
+          Registrations can be made on the following website:<br>
+          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`,
+  )
+}
+
 export const phaseService = {
   createPhase,
   deletePhase,
+  sendReminderMail,
   updatePhase,
 }
 
