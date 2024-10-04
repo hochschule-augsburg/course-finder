@@ -44,7 +44,7 @@
     "jsdom": "^25.0.1",
     "postcss-html": "^1.7.0",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.79.4",
+    "sass-embedded": "^1.79.4",
     "stylelint": "^16.9.0",
     "stylelint-config-recommended-scss": "^14.1.0",
     "stylelint-config-recommended-vue": "^1.5.0",
