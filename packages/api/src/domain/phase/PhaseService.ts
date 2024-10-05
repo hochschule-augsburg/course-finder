@@ -140,7 +140,7 @@ async function sendReminderMail(phaseId: number) {
     `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
       'de-DE',
     )}.<br>
-          Bitte stelle sicher, dass Du Ersatzwahlen getroffen haben, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
+          Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
           Die Anmeldung erfolgt über folgender Seite:
           <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
           <br>
