@@ -21,20 +21,20 @@ export async function sendEmail(
     .replace('{{SUBJECT}}', subject)
     .replace('{{CONTENT}}', htmlContent)
 
-  // if (process.env.NODE_ENV === 'production') {
-  const info = await transporter.sendMail({
-    attachments,
-    from: {
-      address: 'no-reply@course-finder.informatik.tha.de',
-      name: 'CourseFinder',
-    },
-    html,
-    replyTo: env.CONTACT_EMAIL,
-    subject: `⛵ ${subject} ⛵`,
-    to,
-  })
-  return info
-  // }
+  if (process.env.NODE_ENV === 'production') {
+    const info = await transporter.sendMail({
+      attachments,
+      from: {
+        address: 'no-reply@course-finder.informatik.tha.de',
+        name: 'CourseFinder',
+      },
+      html,
+      replyTo: env.CONTACT_EMAIL,
+      subject: `⛵ ${subject} ⛵`,
+      to,
+    })
+    return info
+  }
   return {
     accepted: [],
     envelope: { from: '', to: [] },

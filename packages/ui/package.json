@@ -25,11 +25,11 @@
     "core-js": "^3.38.1",
     "date-fns": "^4.1.0",
     "lodash-es": "^4.17.21",
-    "pinia": "^2.2.3",
+    "pinia": "^2.2.4",
     "superjson": "^2.2.1",
     "v-onboarding": "^2.8.2",
-    "vue": "^3.5.10",
-    "vue-i18n": "^10.0.3",
+    "vue": "^3.5.11",
+    "vue-i18n": "^10.0.4",
     "vue-pdf-embed": "^2.1.0",
     "vuedraggable": "^4.1.0",
     "vuetify": "^3.7.2"
@@ -56,7 +56,6 @@
     "vite": "^5.4.8",
     "vite-plugin-vue-devtools": "^7.4.6",
     "vite-plugin-vuetify": "^2.0.4",
-    "vitest": "^2.1.1",
     "vitest-mock-extended": "^2.0.2",
     "vue-router": "^4.4.5",
     "vue-tsc": "^2.1.6"
