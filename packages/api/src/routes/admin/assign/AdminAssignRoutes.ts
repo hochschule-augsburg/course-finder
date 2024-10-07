@@ -54,7 +54,7 @@ export const assignRouter = router({
       return {
         result: sortBy(
           Object.entries(courses).map(([moduleCode, { count }]) => ({
-            count,
+            assignCount: count,
             moduleCode,
           })),
           'count',
@@ -67,18 +67,20 @@ export const assignRouter = router({
     .query(
       async ({
         input,
-      }): Promise<{ count: number; moduleCode: string; tryNo: number }[][]> => {
+      }): Promise<
+        { assignCount: number; moduleCode: string; tryNo: number }[][]
+      > => {
         const assignments = await prisma.phaseAssignment.groupBy({
           _count: { moduleCode: true },
           by: ['tryNo', 'moduleCode'],
-          orderBy: { tryNo: 'asc' },
+          orderBy: [{ tryNo: 'asc' }, { moduleCode: 'asc' }],
           where: { phaseId: input.phaseId },
         })
 
         return Object.values(
           groupBy(
             assignments.map((e) => ({
-              count: e._count.moduleCode,
+              assignCount: e._count.moduleCode,
               moduleCode: e.moduleCode,
               tryNo: e.tryNo,
             })),

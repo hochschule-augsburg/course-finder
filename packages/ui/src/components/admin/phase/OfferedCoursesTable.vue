@@ -59,7 +59,18 @@ watch(
         </tr>
       </thead>
       <tbody>
-        <tr v-for="course in sortedCourses" :key="course.moduleCode">
+        <tr
+          v-for="course in sortedCourses"
+          :class="{
+            'bg-red-lighten-5':
+              !course.externalRegistration &&
+              (course.studentCount ?? 0) < course.minParticipants,
+            'bg-yellow-lighten-5':
+              course.maxParticipants &&
+              (course.studentCount ?? 0) > course.maxParticipants,
+          }"
+          :key="course.moduleCode"
+        >
           <td>{{ course.moduleCode }}</td>
           <td>
             {{ course.Course.title?.[locale] }}
@@ -89,7 +100,7 @@ en:
   fields-of-study: Fields of study
   min: Min
   max: Max
-  count: Count
+  count: Count Registrations
   points: Points
   external-registration: External registration
 de:
@@ -98,7 +109,7 @@ de:
   fields-of-study: Studiengänge
   min: Min
   max: Max
-  count: Anzahl
+  count: Anzahl Anmeldungen
   points: Punkte
   external-registration: Externe Anmeldung
 </i18n>

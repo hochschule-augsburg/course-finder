@@ -1,17 +1,20 @@
 import { trpc } from '@/trpc'
+import { differenceBy } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 import { useAdminCoursesStore } from './AdminCoursesStore'
+import { useAdminStatsStore } from './AdminStatsStore'
 
 export const useAdminAssignStore = defineStore('admin-assign', () => {
   const coursesStore = useAdminCoursesStore()
+  const statStore = useAdminStatsStore()
   const assignmentsRaw = ref<
     Record<
       number,
       Array<
         Array<{
-          count: number
+          assignCount: number
           moduleCode: string
         }>
       >
@@ -20,15 +23,37 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
   const assignments = computed(() => {
     return Object.fromEntries(
       Object.entries(assignmentsRaw.value).map(([phaseId, tries]) => {
+        const offeredCoursesNotExtern = coursesStore.phaseOfferedCourses[
+          Number(phaseId)
+        ].filter((e) => !e.externalRegistration)
+        console.log({ offeredCoursesNotExtern })
         return [
           phaseId,
           tries.map((tryNo) => {
-            return tryNo.map((trie) => ({
-              ...trie,
-              Course: coursesStore.phaseOfferedCourses[Number(phaseId)]?.find(
-                (e) => e.moduleCode === trie.moduleCode,
-              ),
-            }))
+            const notAssignedCourses = differenceBy(
+              offeredCoursesNotExtern,
+              tryNo,
+              (e) => e.moduleCode,
+            )
+            return [
+              ...tryNo.map((trie) => ({
+                ...trie,
+                Course: offeredCoursesNotExtern?.find(
+                  (e) => e.moduleCode === trie.moduleCode,
+                ),
+                studentCount:
+                  statStore.course[Number(phaseId)]?.[trie.moduleCode]
+                    ?.studentCount ?? 0,
+              })),
+              ...notAssignedCourses.map((e) => ({
+                assignCount: 0,
+                Course: e,
+                moduleCode: e.moduleCode,
+                studentCount:
+                  statStore.course[Number(phaseId)]?.[e.moduleCode]
+                    ?.studentCount ?? 0,
+              })),
+            ]
           }),
         ]
       }),

@@ -67,39 +67,43 @@ async function newAssignment() {
 
 <template>
   <div>
-    <VTabs v-model="tryNo" class="position-relative">
-      <VTab
-        v-for="(assignment, i) in assignStore.assignments[props.phaseId]"
-        :key="i"
-        :value="i"
-      >
-        {{ t('iteration') }} {{ i }}
-      </VTab>
-      <VSpacer />
-      <VBtn
-        v-if="assignStore.assignments[phaseId]?.length"
-        class="mr-4"
-        flat
-        @click="publish"
-      >
-        {{ t('publish', [tryNo]) }}
-      </VBtn>
-      <VTooltip :disabled="!drawingObstacle" location="top">
-        <template #activator="{ props: tipProps }">
-          <div v-bind="tipProps">
-            <VBtn
-              :disabled="!!drawingObstacle"
-              color="success"
-              flat
-              @click="newAssignment"
-            >
-              {{ t('new-assignment') }}
-            </VBtn>
-          </div>
-        </template>
-        {{ t(`obstacles.${drawingObstacle}`) }}
-      </VTooltip>
-    </VTabs>
+    <div class="d-flex">
+      <VTabs v-model="tryNo" class="position-relative">
+        <VTab
+          v-for="(assignment, i) in assignStore.assignments[props.phaseId]"
+          :key="i"
+          :value="i"
+        >
+          {{ t('iteration') }} {{ i }}
+        </VTab>
+        <VSpacer />
+      </VTabs>
+      <div class="d-flex">
+        <VBtn
+          v-if="assignStore.assignments[phaseId]?.length"
+          class="mr-4"
+          flat
+          @click="publish"
+        >
+          {{ t('publish', [tryNo]) }}
+        </VBtn>
+        <VTooltip :disabled="!drawingObstacle" location="top">
+          <template #activator="{ props: tipProps }">
+            <div v-bind="tipProps">
+              <VBtn
+                :disabled="!!drawingObstacle"
+                color="success"
+                flat
+                @click="newAssignment"
+              >
+                {{ t('new-assignment') }}
+              </VBtn>
+            </div>
+          </template>
+          {{ t(`obstacles.${drawingObstacle}`) }}
+        </VTooltip>
+      </div>
+    </div>
 
     <VTabsWindow v-model="tryNo">
       <span v-if="!assignStore.assignments[phaseId]?.length">
@@ -118,18 +122,24 @@ async function newAssignment() {
               <th>{{ t('title') }}</th>
               <th>{{ t('min') }}</th>
               <th>{{ t('max') }}</th>
-              <th>{{ t('count') }}</th>
+              <th>{{ t('assign-count') }}</th>
+              <th>{{ t('student-count') }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="course in assignment" :key="course.moduleCode">
+            <tr
+              v-for="course in assignment"
+              :class="{ 'bg-red-lighten-4': !course.assignCount }"
+              :key="course.moduleCode"
+            >
               <td>{{ course.moduleCode }}</td>
               <td>
                 {{ course.Course?.Course.title[locale] }}
               </td>
               <td>{{ course.Course?.minParticipants }}</td>
               <td>{{ course.Course?.maxParticipants }}</td>
-              <td>{{ course.count }}</td>
+              <td>{{ course.assignCount }}</td>
+              <td>{{ course.studentCount }}</td>
             </tr>
           </tbody>
         </VTable>
@@ -154,7 +164,8 @@ en:
   new-assignment: New Assignment
   module-code: Module Code
   title: Title
-  count: Assignment Count
+  assign-count: Assignment Count
+  student-count: Student Count
   published: Published iteration {0}
   min: Min
   max: Max
@@ -168,7 +179,8 @@ de:
   new-assignment: Neue Auslosung
   module-code: Modulcode
   title: Titel
-  count: Anzahl Auslosungen
+  assign-count: Anzahl Auslosungen
+  student-count: Anzahl Studierende
   min: Min
   max: Max
   published: Iteration {0} Veröffentlicht
