@@ -57,8 +57,8 @@ export const assignRouter = router({
             assignCount: count,
             moduleCode,
           })),
-          'count',
-        ).reverse(),
+          'moduleCode',
+        ),
         tryNo,
       }
     }),

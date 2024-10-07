@@ -35,7 +35,12 @@ async function sendMail() {
               <VCol cols="4">
                 <div class="d-flex flex-column align-center ga-4">
                   <VBtn :to="`${phaseId}/edit`">{{ t('edit') }}</VBtn>
-                  <VBtn @click="sendMail">{{ t('send-reminder-mail') }}</VBtn>
+                  <VBtn
+                    v-if="phaseState.modelValue === 'OPEN'"
+                    @click="sendMail"
+                  >
+                    <span class="white">{{ t('send-reminder-mail') }}</span>
+                  </VBtn>
                 </div>
               </VCol>
               <VCol cols="5">
