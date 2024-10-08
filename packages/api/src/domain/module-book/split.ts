@@ -17,28 +17,21 @@ async function extractPDFSections(
   if (!numberOfPages) {
     throw new Error('numberOfPages not found')
   }
-  const startSubjectIndex = lines.findIndex((e) =>
-    e.startsWith('BookmarkTitle: 2.1'),
-  )
+  const startSubjectIndex =
+    lines.findIndex((e) => e.startsWith('BookmarkTitle: 2.1')) - 1
   const lastSubjectIndex =
-    lines.findLastIndex((e) => e.startsWith('BookmarkLevel: 2')) - 1
+    lines.findLastIndex((e) => e.startsWith('BookmarkTitle: 2.')) + 3
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  console.log(lines.slice(startSubjectIndex, lastSubjectIndex).join('\n'))
+
   const moduleBookmarksArrays: {
-    BookmarkPageNumber: string
-    BookmarkTitle: string
+    bookmarkPageNumber: string
+    bookmarkTitle: string
   }[] = chunk(lines.slice(startSubjectIndex, lastSubjectIndex), 4).map((e) => {
-    const res = [e[0], e[2]].map((e) =>
-      e.split(':').map((e) => {
-        const bookmarkTitle = e.match(/2.\d+ (.*)/)
-        if (bookmarkTitle && bookmarkTitle[1]) {
-          return bookmarkTitle[1].trim()
-        }
-        return e.trim()
-      }),
-    )
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return Object.fromEntries(res)
+    return {
+      bookmarkPageNumber: e[3].split(':')[1].trim(),
+      bookmarkTitle: e[1].split(':')[1].trim(),
+    }
   })
 
   console.log('read metadata')
@@ -49,9 +42,9 @@ async function extractPDFSections(
         bookmark,
         i,
       ): Promise<[string, { buffer: Buffer; content: string }]> => {
-        const start = parseInt(bookmark.BookmarkPageNumber)
+        const start = parseInt(bookmark.bookmarkPageNumber)
         const end = moduleBookmarksArrays[i + 1]
-          ? parseInt(moduleBookmarksArrays[i + 1].BookmarkPageNumber) - 1
+          ? parseInt(moduleBookmarksArrays[i + 1].bookmarkPageNumber) - 1
           : numberOfPages
         const pdfBuffer = await pdftk
           .input(inputFile)
