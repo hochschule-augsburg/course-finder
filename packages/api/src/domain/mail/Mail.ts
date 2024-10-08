@@ -1,6 +1,7 @@
-import type { Attachment } from 'nodemailer/lib/mailer'
 import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
+import { mkdir, writeFile } from 'node:fs/promises'
+import path from 'node:path'
 import nodemailer from 'nodemailer'
 
 import { env } from '../../env.ts'
@@ -9,7 +10,7 @@ export async function sendEmail(
   to: string | string[],
   subject: string,
   htmlContent: string,
-  attachments?: Attachment[],
+  attachments?: { content: string; filename: string }[],
 ): Promise<SMTPTransport.SentMessageInfo> {
   const transporter = nodemailer.createTransport({
     host: 'smtp.hs-augsburg.de',
@@ -20,6 +21,7 @@ export async function sendEmail(
   const html = template
     .replace('{{SUBJECT}}', subject)
     .replace('{{CONTENT}}', htmlContent)
+  const toArray = typeof to === 'string' ? [to] : to
 
   if (process.env.NODE_ENV === 'production') {
     const info = await transporter.sendMail({
@@ -31,10 +33,23 @@ export async function sendEmail(
       html,
       replyTo: env.CONTACT_EMAIL,
       subject: `⛵ ${subject} ⛵`,
-      to,
+      to: toArray,
     })
     return info
   }
+  await mkdir('.dev-mail', { recursive: true })
+  const mailName = `${new Date().toISOString()}-${toArray.join('-')}`
+  if (attachments) {
+    await Promise.all(
+      attachments.map(async (e) => {
+        await writeFile(
+          path.join('.dev-mail', `${mailName}-${e.filename}`),
+          e.content,
+        )
+      }),
+    )
+  }
+  await writeFile(path.join('.dev-mail', `${mailName}.html`), html)
   return {
     accepted: [],
     envelope: { from: '', to: [] },
