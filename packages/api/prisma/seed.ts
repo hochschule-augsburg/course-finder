@@ -1,7 +1,7 @@
 /* cSpell:disable */
 import { PrismaClient } from '@prisma/client'
 import { readFileSync } from 'fs'
-import { random, sampleSize, sumBy, uniqBy } from 'lodash-es'
+import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
 
 import { hashPassword } from '../src/domain/user/local/password-auth.ts'
 import { data as coursesData } from './assets/courses.ts'
@@ -169,7 +169,7 @@ async function main() {
           password: await hashPassword('admin', 'salt'),
           salt: 'salt',
         },
-        email: 'admin@example.com',
+        email: 'niklas.sirch@tha.de',
         name: 'Admin',
         type: 'Admin',
         username: 'admin',
@@ -190,7 +190,7 @@ async function main() {
 
   await Promise.all(
     [
-      ['Informatik (Bachelor)', '1'],
+      ...range(20).map((i) => ['Informatik (Bachelor)', i.toString()]),
       ['Informatik (Bachelor)', 'in'],
       ['Wirtschaftsinformatik (Bachelor)', 'win'],
       ['Technische Informatik (Bachelor)', 'ti'],

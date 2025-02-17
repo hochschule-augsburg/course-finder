@@ -1,5 +1,8 @@
 const os = require('os')
 
+/**
+ * @type {import('pm2').StartOptions}
+ */
 const app = {
   name: 'course-finder-api',
   script: 'dist/main.js',
@@ -10,8 +13,9 @@ const app = {
   merge_logs: true,
   log_date_format: 'YY-MM-DD HH:mm:ss',
 
-  NODE_ENV: 'production',
-  TZ: 'Europe/Berlin',
+  env: {
+    NODE_ENV: 'production',
+  },
   PORT: 2022,
   exec_mode: 'cluster_mode',
 }

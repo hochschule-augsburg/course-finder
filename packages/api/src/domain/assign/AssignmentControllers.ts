@@ -14,7 +14,7 @@ export class AssignmentStudentController {
       moduleCode: string
     }[],
   ) {
-    this.choices = phase.StudentChoice
+    this.choices = phase.StudentChoice.toSorted((a, b) => b.points - a.points)
   }
 
   courseCanceled(moduleCode: string) {
@@ -26,6 +26,7 @@ export class AssignmentStudentController {
     )
     if (choiceIndex !== -1) {
       this.choices.splice(choiceIndex, 1)
+      this.choices.sort((a, b) => b.points - a.points)
     } else if (gainedIndex !== -1) {
       const choice = this.gained[gainedIndex]
       this.gained.splice(gainedIndex, 1)
@@ -69,7 +70,7 @@ export class AssignmentStudentController {
       }
       const compensation = choice.points / this.choices.length
       const floorComp = Math.floor(compensation)
-      this.choices.sort((e) => e.points)
+      this.choices.sort((a, b) => b.points - a.points)
       this.choices.forEach((e) => (e.points = e.points + floorComp))
       this.choices[0].points += compensation === floorComp ? 0 : 1
     }

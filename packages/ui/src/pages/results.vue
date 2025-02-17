@@ -32,6 +32,8 @@ const phaseIndex = ref<number | undefined>(coursesStore.currentPhase?.id)
 watchEffect(() => {
   if (coursesStore.currentPhase) {
     phaseIndex.value = coursesStore.currentPhase.id
+  } else {
+    phaseIndex.value = assignStore.assignPhases.at(-1)?.phaseId
   }
 })
 
@@ -52,12 +54,13 @@ onBeforeMount(() => {
       :text="coursesStore.currentPhase.title[locale]"
       :value="coursesStore.currentPhase.id"
     />
-    <VTab
-      v-for="(phase, i) in assignStore.assignPhases"
-      :key="i"
-      :text="phase.Phase.title[locale]"
-      :value="phase.phaseId"
-    />
+    <template v-for="(phase, i) in assignStore.assignPhases" :key="i">
+      <VTab
+        v-if="phase.phaseId !== coursesStore.currentPhase?.id"
+        :text="phase.Phase.title[locale]"
+        :value="phase.phaseId"
+      />
+    </template>
   </VTabs>
 
   <VTabsWindow v-model="phaseIndex" class="mx-2">
@@ -84,38 +87,39 @@ onBeforeMount(() => {
 
       <VEmptyState v-else :title="t('empty-state')" />
     </VTabsWindowItem>
-    <VTabsWindowItem
-      v-for="(phase, i) in assignStore.assignPhases"
-      :key="i"
-      :value="phase.phaseId"
-    >
-      <EnrollmentOverview :phase="phase.Phase" class="mb-3" />
-
-      <VList
-        v-if="phase.assignments.length | phase.lost.length"
-        bg-color="secondary"
-        rounded="lg"
+    <template v-for="(phase, i) in assignStore.assignPhases" :key="i">
+      <VTabsWindowItem
+        v-if="phase.phaseId !== coursesStore.currentPhase?.id"
+        :value="phase.phaseId"
       >
-        <VListItem
-          v-for="subject in phase.assignments"
-          :key="subject.moduleCode"
-          :prepend-icon="mdiCheck"
-          :subtitle="subject.points"
-          :title="subject.Course?.title[locale] ?? subject.moduleCode"
-          @click="selectedModuleCode = subject.moduleCode"
-        />
-        <VListItem
-          v-for="subject in phase.lost"
-          :key="subject.moduleCode"
-          :prepend-icon="mdiClose"
-          :subtitle="subject.points"
-          :title="subject.Course?.title[locale] ?? subject.moduleCode"
-          @click="selectedModuleCode = subject.moduleCode"
-        />
-      </VList>
+        <EnrollmentOverview :phase="phase.Phase" class="mb-3" />
 
-      <VEmptyState v-else :title="t('empty-state')" />
-    </VTabsWindowItem>
+        <VList
+          v-if="phase.assignments.length | phase.lost.length"
+          bg-color="secondary"
+          rounded="lg"
+        >
+          <VListItem
+            v-for="subject in phase.assignments"
+            :key="subject.moduleCode"
+            :prepend-icon="mdiCheck"
+            :subtitle="subject.points"
+            :title="subject.Course?.title[locale] ?? subject.moduleCode"
+            @click="selectedModuleCode = subject.moduleCode"
+          />
+          <VListItem
+            v-for="subject in phase.lost"
+            :key="subject.moduleCode"
+            :prepend-icon="mdiClose"
+            :subtitle="subject.points"
+            :title="subject.Course?.title[locale] ?? subject.moduleCode"
+            @click="selectedModuleCode = subject.moduleCode"
+          />
+        </VList>
+
+        <VEmptyState v-else :title="t('empty-state')" />
+      </VTabsWindowItem>
+    </template>
   </VTabsWindow>
 
   <SubjectDialog

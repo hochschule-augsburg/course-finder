@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAssignStore } from '@/stores/AssignStore'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { homeTour, useTourStore } from '@/stores/TourStore'
@@ -21,6 +22,9 @@ const { t } = useI18n()
 const enrollmentStore = useEnrollmentStore()
 const coursesStore = useCoursesStore()
 const userStore = useUserStore()
+const assignStore = useAssignStore()
+
+void assignStore.fetch()
 
 const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
@@ -46,13 +50,16 @@ watch(
     }
   },
 )
+const overviewPhase = computed(
+  () => coursesStore.currentPhase || assignStore.assignPhases.at(-1)?.Phase,
+)
 </script>
 
 <template>
   <div class="h-100">
     <EnrollmentOverview
-      v-if="coursesStore.currentPhase"
-      :phase="coursesStore.currentPhase"
+      v-if="overviewPhase"
+      :phase="overviewPhase"
       class="mx-2 mb-9 clickable"
       @click="router.push('/results')"
     />
