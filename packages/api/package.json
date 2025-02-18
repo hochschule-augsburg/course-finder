@@ -14,7 +14,7 @@
     "bundle": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
     "start": "pm2 start --no-daemon pm2.config.cjs",
     "stop": "pm2 stop course-finder-api && pm2 delete course-finder-api",
-    "lint": "eslint src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
+    "lint": "eslint --no-warn-ignored src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",

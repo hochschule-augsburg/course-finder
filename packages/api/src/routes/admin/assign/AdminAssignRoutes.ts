@@ -114,8 +114,8 @@ export const assignRouter = router({
         where: { id: input.phaseId },
       }))!
       await emailToAdmin(phase, results)
-      // await emailToLists(phase)
-      // await emailToStudents(phase, results)
+      await emailToLists(phase)
+      await emailToStudents(phase, results)
     }),
 })
 export const infos = []
@@ -144,7 +144,9 @@ async function emailToStudents(
                   `Course with moduleCode ${e.moduleCode} not found`,
                 )
               }
-              return `- ${course?.title[locale]} - ${course.lecturers.join(', ')}`
+              return `- ${course?.title[locale]} - ${course.lecturers.join(
+                ', ',
+              )}`
             })
             .join('<br>'),
         ]),

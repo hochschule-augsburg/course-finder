@@ -1,13 +1,13 @@
-import { exec } from 'child_process'
+import { execSync } from 'child_process'
 
 import { startScheduledDeletion } from './domain/cascadingDeletion/deleteData.ts'
 import { startPhaseSchedulingFromDatabase } from './domain/phase/PhaseService.ts'
 import { prisma } from './prisma/prisma.ts'
 import { createServer } from './server/server.ts'
 
-// start database from docker container for development
+// Start database from docker container for development
 if (process.env.NODE_ENV !== 'production') {
-  exec(`docker start ${process.env.DEV_DOCKER_DB}`)
+  execSync(`docker start ${process.env.DEV_DOCKER_DB}`)
 }
 
 // Start the server

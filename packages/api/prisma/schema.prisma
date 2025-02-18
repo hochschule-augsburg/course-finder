@@ -4,8 +4,8 @@ generator client {
 }
 
 generator json {
-  provider = "prisma-json-types-generator"
-  // namespace = "PrismaJson"
+  provider  = "prisma-json-types-generator"
+  namespace = "PrismaJson"
   // clientOutput = "<finds it automatically>"
   // (./ -> relative to schema, or an importable path to require() it)
 }
@@ -69,7 +69,6 @@ model Faculty {
 
 model Course {
   moduleCode     String          @id
-  /// title module
   /// [I18n]
   title          Json
   published      Boolean         @default(false)
