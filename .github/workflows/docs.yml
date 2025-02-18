@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - packages/docs/**
+      - .github/workflows/docs.yml
 
   workflow_dispatch:
 
@@ -24,13 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 21
+          node-version: 23
           cache: 'pnpm'
 
       - name: Install dependencies
