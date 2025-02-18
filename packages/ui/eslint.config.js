@@ -2,7 +2,7 @@ import js from '@eslint/js'
 import eslintPluginVue from 'eslint-plugin-vue'
 import ts from 'typescript-eslint'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
-import { sharedRules } from '../../eslint-shared.js'
+import { sharedRules } from '../eslint-shared.js'
 
 const vueRules = {
   'vue/require-typed-ref': 'warn',
