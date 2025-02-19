@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n'
 import { VCard, VCardActions, VCardText, VDialog } from 'vuetify/components'
 
 const props = defineProps<{
@@ -9,7 +8,6 @@ const props = defineProps<{
 const emits = defineEmits<{
   close: []
 }>()
-const { t } = useI18n()
 </script>
 
 <template>
@@ -19,26 +17,13 @@ const { t } = useI18n()
     @update:model-value="$emit('close')"
   >
     <VCard>
-      <VCardTitle>
-        {{ t('title') }}
-      </VCardTitle>
+      <VCardTitle> Fehler </VCardTitle>
       <VCardText>
         {{ props.message }}
       </VCardText>
       <VCardActions>
-        <VBtn @click="emits('close')">
-          {{ t('close') }}
-        </VBtn>
+        <VBtn @click="emits('close')"> Schließen </VBtn>
       </VCardActions>
     </VCard>
   </VDialog>
 </template>
-
-<i18n lang="yaml">
-en:
-  title: Error
-  close: Close
-de:
-  title: Fehler
-  close: Schließen
-</i18n>

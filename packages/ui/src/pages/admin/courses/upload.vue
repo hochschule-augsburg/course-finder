@@ -31,7 +31,7 @@ async function uploadFile() {
     await fetchFastify('/admin/courses/upload-module-book', formData)
     oldFile.value = file.value
     file.value = undefined
-    statusMsg.value = t('uploaded-successfully', [oldFile.value.name])
+    statusMsg.value = `Datei ${oldFile.value.name} erfolgreich hochgeladen`
     status.value = 'success'
   } catch (e) {
     console.error(e)
@@ -49,16 +49,16 @@ async function uploadFile() {
       <VCol justify="space-between">
         <VFileInput
           v-model="file"
-          :label="t('select-file')"
-          :placeholder="t('select-file')"
           accept=".pdf"
+          label="Datei auswählen"
+          placeholder="Datei auswählen"
           outlined
         />
         <VRow class="pr-3" justify="end">
           <VBtn
             :disabled="!file"
             :loading="pending"
-            :text="t('upload')"
+            text="Upload"
             @click="uploadFile"
           />
         </VRow>
@@ -75,14 +75,3 @@ async function uploadFile() {
     />
   </div>
 </template>
-
-<i18n lang="yaml">
-en:
-  upload: Upload
-  select-file: Select file
-  uploaded-successfully: 'File {0} uploaded successfully'
-de:
-  upload: Upload
-  select-file: Datei auswählen
-  uploaded-successfully: 'Datei {0} erfolgreich hochgeladen'
-</i18n>

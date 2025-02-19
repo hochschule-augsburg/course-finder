@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { useI18n } from 'vue-i18n'
 import {
   VBtn,
   VCard,
@@ -10,17 +9,15 @@ import {
   VRow,
 } from 'vuetify/components'
 
-const { t } = useI18n()
-
 const adminCoursesStore = useAdminCoursesStore()
 </script>
 
 <template>
   <div class="mx-10">
     <div class="d-flex justify-space-between">
-      <h1>{{ t('enrollment-phases') }}</h1>
+      <h1>Anmeldephasen</h1>
       <VBtn class="mr-8" color="primary" to="phases/new/edit">
-        {{ t('add') }}
+        Hinzufügen
       </VBtn>
     </div>
     <VContainer>
@@ -45,12 +42,3 @@ const adminCoursesStore = useAdminCoursesStore()
     </VContainer>
   </div>
 </template>
-
-<i18n lang="yaml">
-en:
-  enrollment-phases: Enrollment Phases
-  add: Add
-de:
-  enrollment-phases: Anmeldephasen
-  add: Hinzufügen
-</i18n>

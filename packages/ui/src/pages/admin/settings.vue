@@ -5,9 +5,6 @@ import { useAppConfStore } from '@/stores/AppConfStore'
 import { debounce } from 'lodash-es'
 import { ref } from 'vue'
 import { watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 
 const appConfigStore = useAppConfStore()
 
@@ -33,7 +30,7 @@ const update = debounce(async () => {
   <VContainer>
     <VRow>
       <VCol>
-        <h1>{{ t('global.settings') }}</h1>
+        <h1>Einstellungen</h1>
       </VCol>
     </VRow>
     <VForm v-if="formData">
@@ -41,21 +38,12 @@ const update = debounce(async () => {
         <VCol cols="12" md="4" sm="6">
           <VTextField
             v-model.number="formData.maxCredits"
-            :label="t('max-credits')"
+            label="Maximale Credits"
             @update:model-value="update"
           />
-          <small class="text-caption">{{ t('max-credits-help') }}</small>
+          <small class="text-caption">Gilt nur für neue Eingaben.</small>
         </VCol>
       </VRow>
     </VForm>
   </VContainer>
 </template>
-
-<i18n lang="yaml">
-en:
-  max-credits: 'Max Credits'
-  max-credits-help: 'Only applies to new inputs.'
-de:
-  max-credits: 'Maximale Credits'
-  max-credits-help: 'Gilt nur für neue Eingaben.'
-</i18n>

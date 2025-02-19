@@ -17,7 +17,7 @@ import {
 } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
-const { locale, t } = useI18n()
+const { locale } = useI18n()
 
 const assignStore = useAdminAssignStore()
 const coursesStore = useAdminCoursesStore()
@@ -74,7 +74,7 @@ async function newAssignment() {
           :key="i"
           :value="i"
         >
-          {{ t('iteration') }} {{ i }}
+          Iteration {{ i }}
         </VTab>
         <VSpacer />
       </VTabs>
@@ -85,7 +85,7 @@ async function newAssignment() {
           flat
           @click="publish"
         >
-          {{ t('publish', [tryNo]) }}
+          Iteration {{ tryNo }} veröffentlichen
         </VBtn>
         <VTooltip :disabled="!drawingObstacle" location="top">
           <template #activator="{ props: tipProps }">
@@ -96,18 +96,22 @@ async function newAssignment() {
                 flat
                 @click="newAssignment"
               >
-                {{ t('new-assignment') }}
+                Neue Auslosung
               </VBtn>
             </div>
           </template>
-          {{ t(`obstacles.${drawingObstacle}`) }}
+          {{
+            drawingObstacle === 'not-in-drawing'
+              ? 'Nicht im Auslosungsstatus'
+              : 'Nicht genügend Studierende'
+          }}
         </VTooltip>
       </div>
     </div>
 
     <VTabsWindow v-model="tryNo">
       <span v-if="!assignStore.assignments[phaseId]?.length">
-        {{ t('no-data') }}
+        Keine Daten
       </span>
       <VTabsWindowItem
         v-else
@@ -118,12 +122,12 @@ async function newAssignment() {
         <VTable>
           <thead>
             <tr>
-              <th>{{ t('module-code') }}</th>
-              <th>{{ t('title') }}</th>
-              <th>{{ t('min') }}</th>
-              <th>{{ t('max') }}</th>
-              <th>{{ t('assign-count') }}</th>
-              <th>{{ t('student-count') }}</th>
+              <th>Modulcode</th>
+              <th>Titel</th>
+              <th>Min</th>
+              <th>Max</th>
+              <th>Anzahl Auslosungen</th>
+              <th>Anzahl Studierende</th>
             </tr>
           </thead>
           <tbody>
@@ -152,39 +156,7 @@ async function newAssignment() {
       location="bottom left"
       rounded="pill"
     >
-      {{ t('published', [tryNo]) }}
+      Iteration {{ tryNo }} veröffentlicht
     </VSnackbar>
   </div>
 </template>
-
-<i18n lang="yaml">
-en:
-  iteration: Iteration
-  publish: Publish iteration {0}
-  new-assignment: New Assignment
-  module-code: Module Code
-  title: Title
-  assign-count: Assignment Count
-  student-count: Student Count
-  published: Published iteration {0}
-  min: Min
-  max: Max
-  obstacles:
-    not-in-drawing: Not in drawing state
-    not-enough-students: Not enough students
-
-de:
-  iteration: Iteration
-  publish: Iteration {0} veröffentlichen
-  new-assignment: Neue Auslosung
-  module-code: Modulcode
-  title: Titel
-  assign-count: Anzahl Auslosungen
-  student-count: Anzahl Studierende
-  min: Min
-  max: Max
-  published: Iteration {0} Veröffentlicht
-  obstacles:
-    not-in-drawing: Nicht im Auslosungsstatus
-    not-enough-students: Nicht genügend Studierende
-</i18n>

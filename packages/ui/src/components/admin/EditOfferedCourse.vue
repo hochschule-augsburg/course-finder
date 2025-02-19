@@ -11,7 +11,6 @@ import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
 import { format, setDay, startOfWeek } from 'date-fns'
 import { cloneDeep, isNumber } from 'lodash-es'
 import { ref, watchEffect } from 'vue'
-import { useI18n } from 'vue-i18n'
 import {
   VBtn,
   VCard,
@@ -64,8 +63,6 @@ watchEffect(() => {
     for: props.offeredCourse.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e),
   }
 })
-
-const { locale, t } = useI18n()
 
 function submit() {
   if (!formData.value) {
@@ -230,13 +227,13 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
 }
 
 const weekdayItems = [
-  { value: 'Monday', weekday: t('monday') },
-  { value: 'Tuesday', weekday: t('tuesday') },
-  { value: 'Wednesday', weekday: t('wednesday') },
-  { value: 'Thursday', weekday: t('thursday') },
-  { value: 'Friday', weekday: t('friday') },
-  { value: 'Saturday', weekday: t('saturday') },
-  { value: 'Sunday', weekday: t('sunday') },
+  { value: 'Monday', weekday: 'Montag' },
+  { value: 'Tuesday', weekday: 'Dienstag' },
+  { value: 'Wednesday', weekday: 'Mittwoch' },
+  { value: 'Thursday', weekday: 'Donnerstag' },
+  { value: 'Friday', weekday: 'Freitag' },
+  { value: 'Saturday', weekday: 'Samstag' },
+  { value: 'Sunday', weekday: 'Sonntag' },
 ]
 
 function validate(): boolean {
@@ -260,8 +257,8 @@ function validate(): boolean {
 }
 
 const minParticipantsRules = [
-  (i: number) => isNumber(i.valueOf()) || t('validation.nan'),
-  (i: number) => i.valueOf() >= 0 || t('validation.less-than-zero'),
+  (i: number) => isNumber(i.valueOf()) || 'Bitte eine Zahl eingeben',
+  (i: number) => i.valueOf() >= 0 || 'Teilnehmerzahl mindestens 0',
 ]
 </script>
 
@@ -276,16 +273,16 @@ const minParticipantsRules = [
     <VCard
       v-if="formData"
       :prepend-icon="mdiPencil"
-      :title="t('title', [offeredCourse?.Course.title[locale]])"
+      :title="`Bearbeiten - ${offeredCourse?.Course.title.de}`"
     >
       <VCardText>
         <VRow dense>
           <VCol cols="12" sm="6">
             <VTextField
               v-model.number="formData.minParticipants"
-              :label="t('minimum-participants')"
               :rules="minParticipantsRules"
               hide-details="auto"
+              label="Mindestteilnehmer"
               type="number"
               validate-on="input"
             />
@@ -293,7 +290,7 @@ const minParticipantsRules = [
           <VCol cols="12" sm="6">
             <VTextField
               v-model.number="formData.maxParticipants"
-              :label="t('maximum-participants')"
+              label="Maximale Teilnehmer"
               type="number"
               requried
             />
@@ -302,7 +299,7 @@ const minParticipantsRules = [
             <VSelect
               v-model="formData.for"
               :items="Object.keys(abbrFieldsOfStudyMap)"
-              :label="t('for-fields-of-study')"
+              label="Für Studienfelder"
               chips
               multiple
               required
@@ -318,27 +315,27 @@ const minParticipantsRules = [
           <VCol cols="12" sm="6">
             <VTextField
               v-model="formData.moodleCourse"
-              :label="t('moodle-course-link')"
+              label="Moodle-Kurslink"
               type="url"
               required
             />
           </VCol>
           <VCol>
             <VRadioGroup v-model="formData.appointments.type" inline>
-              <VRadio :label="t('weekly')" value="weekly" />
-              <VRadio :label="t('block')" value="block" />
-              <VRadio :label="t('irregular')" value="irregular" />
+              <VRadio label="wöchentlich" value="weekly" />
+              <VRadio label="Block" value="block" />
+              <VRadio label="Unregelmäßig" value="irregular" />
             </VRadioGroup>
           </VCol>
           <VCol cols="6">
             <VSwitch
               v-model="formData.externalRegistration"
-              :label="t('external-registration')"
+              label="Externe Anmeldung"
             />
           </VCol>
           <VCol cols="12">
             <VIcon :icon="mdiCalendar" />
-            <strong>{{ t('appointments') }}</strong>
+            <strong>Termin(e)</strong>
             <div v-if="formData.appointments.type === 'weekly'">
               <div
                 v-for="(interval, index) in initializeDatesArray(
@@ -354,14 +351,14 @@ const minParticipantsRules = [
                       hide-details="auto"
                       item-title="weekday"
                       item-value="value"
-                      label="Weekday"
+                      label="Wochentag"
                       @update:model-value="updateWeeklyAppointment(index)"
                     />
                   </VCol>
                   <VCol cols="12" sm="4">
                     <VTextField
                       v-model="interval.startTime"
-                      :label="t('from')"
+                      label="Von"
                       type="time"
                       hide-details
                       required
@@ -371,7 +368,7 @@ const minParticipantsRules = [
                   <VCol cols="12" sm="4">
                     <VTextField
                       v-model="interval.endTime"
-                      :label="t('to')"
+                      label="Bis"
                       type="time"
                       hide-details
                       required
@@ -392,7 +389,7 @@ const minParticipantsRules = [
                 <VDivider :thickness="2" class="mt-3 mb-3 hidden-sm-and-up" />
               </div>
               <br />
-              <VBtn @click="addDateWeekly"> {{ t('add-date') }} </VBtn>
+              <VBtn @click="addDateWeekly"> Datum hinzufügen </VBtn>
               <br />
             </div>
             <div v-else>
@@ -405,7 +402,7 @@ const minParticipantsRules = [
                     <VCol cols="12" sm="6">
                       <VTextField
                         v-model="interval.from"
-                        :label="t('from')"
+                        label="Von"
                         type="datetime-local"
                         hide-details
                         required
@@ -414,7 +411,7 @@ const minParticipantsRules = [
                     <VCol cols="12" sm="6">
                       <VTextField
                         v-model="interval.to"
-                        :label="t('to')"
+                        label="Bis"
                         type="datetime-local"
                         hide-details
                         required
@@ -434,20 +431,20 @@ const minParticipantsRules = [
                 </div>
               </div>
               <br />
-              <VBtn @click="addDate"> {{ t('add-date') }} </VBtn>
+              <VBtn @click="addDate"> Datum hinzufügen </VBtn>
             </div>
           </VCol>
           <div><br /></div>
           <VCol cols="12">
             <VTextarea
               v-model="formData.extraInfo"
-              :label="t('extra-information')"
+              label="Zusätzliche Informationen"
               required
             />
           </VCol>
         </VRow>
         <small class="text-caption text-medium-emphasis"
-          >*{{ t('multiple-elements-separation') }}</small
+          >*Trennen Sie mehrere Elemente mit Kommas</small
         >
         <br />
         <small
@@ -459,81 +456,20 @@ const minParticipantsRules = [
           class="text-caption"
           style="color: rgb(var(--v-theme-primary))"
         >
-          {{ t('validation.less-than-min') }}
+          Maximale Teilnehmerzahl muss größer sein als Mindestteilnehmerzahl
         </small>
       </VCardText>
       <VDivider />
       <template #actions>
-        <VBtn :text="t('global.cancel')" @click="cancel" />
+        <VBtn text="Abbrechen" @click="cancel" />
         <VSpacer />
         <VBtn
           v-if="enableDelete"
-          :text="t('global.delete')"
+          text="Löschen"
           @click="$emit('submit', undefined)"
         />
-        <VBtn :disabled="validate()" :text="t('global.save')" @click="submit" />
+        <VBtn :disabled="validate()" text="Speichern" @click="submit" />
       </template>
     </VCard>
   </VDialog>
 </template>
-
-<i18n lang="yaml">
-en:
-  title: 'Edit - {0}'
-  minimum-participants: Minimum participants
-  maximum-participants: Maximum participants
-  moodle-course-link: Moodle course link
-  monday: 'Monday'
-  tuesday: 'Tuesday'
-  wednesday: 'Wednesday'
-  thursday: 'Thursday'
-  friday: 'Friday'
-  saturday: 'Saturday'
-  sunday: 'Sunday'
-  appointments: Appointment(s)
-  from: From
-  to: To
-  add-date: Add Date
-  for-fields-of-study: For fields of study
-  fields-of-study-hint: E.g. IN, WIN, TI,
-  weekly: weekly
-  block: block
-  irregular: irregular
-  extra-information: Extra information
-  multiple-elements-separation: '*separate multiple elements with comma'
-  external-registration: External registration
-  validation:
-    nan: 'Please enter a number'
-    less-than-zero: 'Participant number at least 0'
-    less-than-min:
-      'Maximum participants must be greater than minimum Participants'
-de:
-  title: 'Bearbeiten - {0}'
-  minimum-participants: Mindestteilnehmer
-  maximum-participants: Maximale Teilnehmer
-  monday: 'Montag'
-  tuesday: 'Dienstag'
-  wednesday: 'Mittwoch'
-  thursday: 'Donnerstag'
-  friday: 'Freitag'
-  saturday: 'Samstag'
-  sunday: 'Sonntag'
-  moodle-course-link: Moodle-Kurslink
-  appointments: Termin(e)
-  from: Von
-  to: Bis
-  add-date: Datum hinzufügen
-  for-fields-of-study: Für Studienfelder
-  fields-of-study-hint: Z.B. IN, WIN, TI,
-  weekly: wöchentlich
-  block: Block
-  irregular: Unregelmäßig
-  extra-information: Zusätzliche Informationen
-  multiple-elements-separation: '*Trennen Sie mehrere Elemente mit Kommas'
-  external-registration: Externe Anmeldung
-  validation:
-    nan: 'Bitte eine Zahl eingeben'
-    less-than-zero: 'Teilnehmerzahl mindestens 0'
-    less-than-min:
-      'Maximalteilnehmerzahl muss größer sein als Mindestteilnehmerzahl'
-</i18n>

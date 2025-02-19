@@ -4,9 +4,7 @@ import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useIntervalFn } from '@vueuse/core'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { computed, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
-const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
 
 const props = defineProps<{
@@ -18,11 +16,11 @@ const phase = computed(() => {
   if (phase) {
     return {
       ...phase,
-      endFormatted: phase.end.toLocaleString(locale.value, {
+      endFormatted: phase.end.toLocaleString('de', {
         dateStyle: 'short',
         timeStyle: 'short',
       }),
-      startFormatted: phase.start.toLocaleString(locale.value, {
+      startFormatted: phase.start.toLocaleString('de', {
         dateStyle: 'short',
         timeStyle: 'short',
       }),
@@ -53,7 +51,7 @@ function updateRemainingTime() {
     duration.days = (duration.days ?? 0) % 7
     remainingTime.value = formatDuration(duration, {
       format: ['months', 'weeks', 'days', 'hours', 'minutes'],
-      locale: getDateFnsLocale(locale.value),
+      locale: getDateFnsLocale('de'),
     })
   }
 }
@@ -63,16 +61,16 @@ function updateRemainingTime() {
   <div>
     <div v-if="phase" class="current-phase">
       <h3>
-        {{ phase.title[locale] }}
+        {{ phase.title.de }}
       </h3>
-      <strong>{{ t('start') }}:</strong>
+      <strong>Start:</strong>
       {{ phase.startFormatted }}
       <br />
-      <strong>{{ t('end') }}:</strong>
+      <strong>Ende:</strong>
       {{ phase.endFormatted }}
       <br />
       <template v-if="remainingTime">
-        <strong>{{ t('remaining-time') }}:</strong>
+        <strong>Verbleibende Zeit:</strong>
         {{ remainingTime }}
       </template>
     </div>
@@ -85,16 +83,3 @@ function updateRemainingTime() {
   white-space: wrap;
 }
 </style>
-
-<i18n lang="yaml">
-en:
-  phase: Current phase
-  start: Start
-  end: End
-  remaining-time: Remaining Time
-de:
-  phase: Aktuelle Phase
-  start: Start
-  end: Ende
-  remaining-time: Verbleibende Zeit
-</i18n>

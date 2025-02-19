@@ -9,7 +9,6 @@ import {
   mdiTimetable,
 } from '@mdi/js'
 import { computedAsync } from '@vueuse/core'
-import { useI18n } from 'vue-i18n'
 import {
   VCard,
   VCardText,
@@ -18,7 +17,6 @@ import {
   VIcon,
   VRow,
 } from 'vuetify/components'
-const { t } = useI18n()
 
 defineOptions({
   name: 'AdminDashboard',
@@ -40,12 +38,12 @@ const phaseStats = computedAsync(async () => {
   <VContainer>
     <VRow justify="space-between">
       <VCol>
-        <h1>{{ t('dashboard') }}</h1>
+        <h1>Übersicht</h1>
       </VCol>
       <VBtn to="admin/settings" icon>
         <VIcon :icon="mdiCog" />
         <VTooltip activator="parent" location="bottom" offset="2">
-          {{ t('pages.admin.settings') }}
+          Einstellungen
         </VTooltip>
       </VBtn>
     </VRow>
@@ -54,11 +52,11 @@ const phaseStats = computedAsync(async () => {
       <template v-if="adminCourses.currentPhase">
         <VCol cols="12" md="6" xl="3">
           <VCard
-            :title="t('current-phase')"
             :to="`admin/phases/${adminCourses.currentPhase?.id}`"
             class="h-100"
             color="#ADD8E6"
             density="compact"
+            title="Aktuelle Phase"
           >
             <VCardText>
               <VRow>
@@ -77,7 +75,7 @@ const phaseStats = computedAsync(async () => {
         </VCol>
 
         <VCol cols="12" md="6" xl="3">
-          <VCard :title="t('statistics')" class="h-100" color="#FFD580" link>
+          <VCard class="h-100" color="#FFD580" title="Statistik" link>
             <VCardText>
               <VRow>
                 <VCol class="d-flex align-center justify-center">
@@ -87,9 +85,7 @@ const phaseStats = computedAsync(async () => {
                         phaseStats?.studentCount ?? '_'
                       }}</span>
                     </p>
-                    <p class="text-center mb-0">
-                      {{ t('registered-students') }}
-                    </p>
+                    <p class="text-center mb-0">Angemeldete Studierende</p>
                   </div>
                 </VCol>
                 <VCol class="d-flex align-center justify-center">
@@ -104,9 +100,9 @@ const phaseStats = computedAsync(async () => {
       <!-- Assign Students Button -->
       <VCol cols="12" md="6" xl="3">
         <VCard
-          :title="t('all-courses')"
           class="h-100"
           color="#90EE90"
+          title="Alle Kurse"
           to="admin/courses"
         >
           <VCardText>
@@ -118,9 +114,7 @@ const phaseStats = computedAsync(async () => {
                       adminCourses.courses.length
                     }}</span>
                   </p>
-                  <p class="text-center mb-0" style="color: $black">
-                    {{ t('total-courses') }}
-                  </p>
+                  <p class="text-center mb-0" style="color: $black">Kurse</p>
                 </div>
               </VCol>
 
@@ -133,9 +127,7 @@ const phaseStats = computedAsync(async () => {
       </VCol>
       <VCol cols="12" md="6" xl="3">
         <VCard class="h-100" color="#FF7F7F" to="admin/phases">
-          <VCardTitle class="black">
-            {{ t('all-phases') }}
-          </VCardTitle>
+          <VCardTitle class="black"> Alle Phasen </VCardTitle>
           <VCardText>
             <VRow>
               <VCol class="d-flex align-center justify-center">
@@ -145,9 +137,7 @@ const phaseStats = computedAsync(async () => {
                       Object.keys(adminCourses.phases).length
                     }}</span>
                   </p>
-                  <p class="text-center mb-0 black">
-                    {{ t('total-phases') }}
-                  </p>
+                  <p class="text-center mb-0 black">Phasen</p>
                 </div>
               </VCol>
 
@@ -163,6 +153,10 @@ const phaseStats = computedAsync(async () => {
 </template>
 
 <style scoped lang="scss">
+.v-icon:hover {
+  color: initial;
+}
+
 $black: #000000;
 
 .black {
@@ -177,26 +171,3 @@ $black: #000000;
   color: rgb(var(--v-theme-primary));
 }
 </style>
-
-<i18n lang="yaml">
-en:
-  dashboard: Dashboard
-  current-phase: Current Phase
-  statistics: Statistics
-  registered-students: Registered Students
-  all-courses: All Courses
-  all-phases: All Phases
-  available-courses: Available Courses
-  total-courses: Total courses
-  total-phases: Total phases
-de:
-  dashboard: Übersicht
-  current-phase: Aktuelle Phase
-  statistics: Statistik
-  registered-students: Angemeldete Studierende
-  all-courses: Alle Kurse
-  all-phases: Alle Phasen
-  available-courses: Verfügbare Kurse
-  total-courses: Kurse
-  total-phases: Phasen
-</i18n>

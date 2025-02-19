@@ -6,14 +6,11 @@ import { trpc } from '@/trpc'
 import { mdiInvoiceTextPlus, mdiPencil } from '@mdi/js'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { VBtn, VContainer, VIcon, VTable } from 'vuetify/components'
 
 import ErrorDialog from './ErrorDialog.vue'
 
 const adminStore = useAdminCoursesStore()
-
-const { locale, t } = useI18n()
 
 const showModalForm = ref(false)
 
@@ -71,7 +68,8 @@ async function createSubject(subject: Course) {
     // Perf is okay
     adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
   } catch {
-    errorDialogMessage.value = t('subject-creation-error')
+    errorDialogMessage.value =
+      'Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.'
     showErrorDialog.value = true
   }
 }
@@ -84,7 +82,8 @@ async function updateSubject(subject: Course) {
     const result = await trpc.admin.courses.update.mutate(subject)
     merge(selectedSubject.value, result)
   } catch {
-    errorDialogMessage.value = t('subject-editing-error')
+    errorDialogMessage.value =
+      'Fehler bei der Kurseditierung. Modulkürzel muss einzigartig sein und mindestens ein Titel ist erforderlich.'
     showErrorDialog.value = true
   }
 }
@@ -96,19 +95,19 @@ async function updateSubject(subject: Course) {
       <thead>
         <tr>
           <th class="text-left">
-            <strong>{{ t('no.') }}</strong>
+            <strong>Nr.</strong>
           </th>
           <th class="text-left">
-            <strong>{{ t('name') }}</strong>
+            <strong>Name</strong>
           </th>
           <th class="text-left">
-            <strong>{{ t('lecturer') }}</strong>
+            <strong>Dozent</strong>
           </th>
           <th><strong>CP</strong></th>
           <th><strong>SWS</strong></th>
           <th>
             <VBtn @click="openNewDialog">
-              {{ t('new') }} &nbsp; <VIcon :icon="mdiInvoiceTextPlus" />
+              Neu &nbsp; <VIcon :icon="mdiInvoiceTextPlus" />
             </VBtn>
           </th>
         </tr>
@@ -116,7 +115,7 @@ async function updateSubject(subject: Course) {
       <tbody>
         <tr v-for="subject in adminStore.courses" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
-          <td>{{ subject.title[locale] }}</td>
+          <td>{{ subject.title.de }}</td>
           <td>{{ subject.lecturers.join(', ') }}</td>
           <td>{{ subject.creditPoints }}</td>
           <td>{{ subject.semesterHours }}</td>
@@ -141,27 +140,3 @@ async function updateSubject(subject: Course) {
     />
   </VContainer>
 </template>
-
-<i18n lang="yaml">
-en:
-  name: Name
-  lecturer: Lecturer
-  no.: No.
-  new: New
-  subject-creation-error:
-    Error when creating subject. Entered module-code might alredy exist.
-  subject-editing-error:
-    Error when editing subject. Module code must be unique and at least one
-    title is required.
-de:
-  name: Name
-  lecturer: Dozent
-  no.: Nr.
-  new: Neu
-  subject-creation-error:
-    Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon
-    vergeben sein.
-  subject-editing-error:
-    Fehler bei der Kurseditierung. Modulkürzel muss einzigartig sein und
-    mindestens ein Titel ist erforderlich.
-</i18n>

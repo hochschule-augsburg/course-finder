@@ -1,11 +1,8 @@
 <script lang="ts" setup>
 import { usePhaseState } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
-import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router/auto'
 import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
-
-const { t } = useI18n()
 
 const route = useRoute()
 //@ts-expect-error auto type not working
@@ -34,12 +31,12 @@ async function sendMail() {
             <VRow>
               <VCol cols="4">
                 <div class="d-flex flex-column align-center ga-4">
-                  <VBtn :to="`${phaseId}/edit`">{{ t('edit') }}</VBtn>
+                  <VBtn :to="`${phaseId}/edit`">Bearbeiten</VBtn>
                   <VBtn
                     v-if="phaseState.modelValue === 'OPEN'"
                     @click="sendMail"
                   >
-                    <span class="white">{{ t('send-reminder-mail') }}</span>
+                    <span class="white">Erinnerungsmail senden</span>
                   </VBtn>
                 </div>
               </VCol>
@@ -54,7 +51,7 @@ async function sendMail() {
         >
           <VRow>
             <VCol>
-              <h2>{{ t('assignments') }}</h2>
+              <h2>Zuordnungen</h2>
             </VCol>
           </VRow>
           <VRow>
@@ -65,7 +62,7 @@ async function sendMail() {
         </template>
         <VRow>
           <VCol cols="12">
-            <h2>{{ t('available-courses') }}</h2>
+            <h2>Verfügbare Kurse</h2>
           </VCol>
           <VCol cols="36">
             <OfferedCoursesTable :phase-id />
@@ -74,25 +71,7 @@ async function sendMail() {
       </VContainer>
     </template>
     <template v-else>
-      <h1>{{ t('phase-not-found') }}</h1>
+      <h1>Phase nicht gefunden</h1>
     </template>
   </div>
 </template>
-
-<i18n lang="yaml">
-en:
-  edit: Edit
-  close: Close
-  assignments: Assignments
-  phase-not-found: Phase not found
-  available-courses: Available Courses
-  send-reminder-mail: Send Reminder Mail
-
-de:
-  edit: Bearbeiten
-  close: Schließen
-  assignments: Zuordnungen
-  phase-not-found: Phase nicht gefunden
-  available-courses: Verfügbare Kurse
-  send-reminder-mail: Erinnerungsmail senden
-</i18n>

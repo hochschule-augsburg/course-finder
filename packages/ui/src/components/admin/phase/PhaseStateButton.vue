@@ -18,7 +18,7 @@ import {
 
 const props = defineProps<{ phaseId: number }>()
 
-const { locale, t } = useI18n()
+const { t } = useI18n()
 const coursesStore = useAdminCoursesStore()
 
 const phaseState = usePhaseState(props.phaseId)
@@ -39,7 +39,7 @@ const phaseAlreadyActive = computed(() =>
 async function updateState(newValue: Phase['state']) {
   const result = await coursesStore.updatePhaseState(props.phaseId, newValue)
   if ('error' in result) {
-    error.value = t(result.error, [result.phase.title[locale.value]])
+    error.value = t(result.error, [result.phase.title.de])
   }
 }
 </script>
@@ -54,19 +54,19 @@ async function updateState(newValue: Phase['state']) {
       <template #activator="{ props: tipProps }">
         <div v-bind="tipProps">
           <VBtn :disabled="!!phaseAlreadyActive" @click="updateState('OPEN')">
-            {{ t('open-phase') }}
+            Phase eröffnen
           </VBtn>
         </div>
       </template>
-      {{ t('a-phase-is-already-active', [phaseAlreadyActive?.title[locale]]) }}
+      Die Phase {{ phaseAlreadyActive?.title.de }} ist bereits aktiv
     </VTooltip>
     <VSelect
       v-else-if="phaseState.modelValue !== 'FINISHED'"
       :item-title="(e) => t(`phase-states.${e.text}`)"
       :item-value="(e) => e.value"
       :items="phaseStates"
-      :label="t('phase-state')"
       :model-value="phaseState.modelValue"
+      label="Zustand"
       @update:model-value="(value) => updateState(value)"
     >
       <template #item="{ props: itemProps, item }">
@@ -82,7 +82,7 @@ async function updateState(newValue: Phase['state']) {
       </template>
     </VSelect>
     <VBtn v-else-if="phaseState.modelValue" @click="updateState('DRAWING')">
-      {{ t('redraw') }}
+      Neu ziehen
     </VBtn>
     <VSnackbar
       :model-value="!!error"
@@ -96,17 +96,3 @@ async function updateState(newValue: Phase['state']) {
     </VSnackbar>
   </div>
 </template>
-
-<i18n lang="yaml">
-en:
-  phase-state: Phase State
-  open-phase: Open Phase
-  redraw: Redraw
-  a-phase-is-already-active: Phase {0} is already active
-
-de:
-  phase-state: Zustand
-  open-phase: Phase eröffnen
-  redraw: Neu ziehen
-  a-phase-is-already-active: Die Phase {0} ist bereits aktiv
-</i18n>

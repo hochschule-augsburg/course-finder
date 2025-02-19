@@ -3,12 +3,9 @@ import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import { computed, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { VTable } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
-
-const { locale, t } = useI18n()
 
 const adminCoursesStore = useAdminCoursesStore()
 const adminStats = useAdminStatsStore()
@@ -36,25 +33,25 @@ watch(
       <thead>
         <tr>
           <th>
-            <strong>{{ t('module-code') }}</strong>
+            <strong>Modulcode</strong>
           </th>
           <th>
-            <strong>{{ t('title') }}</strong>
+            <strong>Titel</strong>
           </th>
           <th>
-            <strong>{{ t('fields-of-study') }}</strong>
+            <strong>Studiengänge</strong>
           </th>
           <th>
-            <strong>{{ t('min') }}</strong>
+            <strong>Min</strong>
           </th>
           <th>
-            <strong>{{ t('max') }}</strong>
+            <strong>Max</strong>
           </th>
           <th>
-            <strong>{{ t('count') }}</strong>
+            <strong>Anzahl Anmeldungen</strong>
           </th>
           <th>
-            <strong><span class="text-h6">⌀</span> {{ t('points') }}</strong>
+            <strong><span class="text-h6">⌀</span> Punkte</strong>
           </th>
         </tr>
       </thead>
@@ -73,7 +70,7 @@ watch(
         >
           <td>{{ course.moduleCode }}</td>
           <td>
-            {{ course.Course.title?.[locale] }}
+            {{ course.Course.title?.de }}
           </td>
           <td>
             {{ course.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e).join(', ') }}
@@ -83,7 +80,7 @@ watch(
             <td>{{ course.maxParticipants }}</td>
           </template>
           <template v-else>
-            <td colspan="2">{{ t('external-registration') }}</td>
+            <td colspan="2">Externe Anmeldung</td>
           </template>
           <td>{{ course.studentCount }}</td>
           <td>{{ course.avgPoints }}</td>
@@ -92,24 +89,3 @@ watch(
     </VTable>
   </div>
 </template>
-
-<i18n lang="yaml">
-en:
-  module-code: Module code
-  title: Title
-  fields-of-study: Fields of study
-  min: Min
-  max: Max
-  count: Count Registrations
-  points: Points
-  external-registration: External registration
-de:
-  module-code: Modulcode
-  title: Titel
-  fields-of-study: Studiengänge
-  min: Min
-  max: Max
-  count: Anzahl Anmeldungen
-  points: Punkte
-  external-registration: Externe Anmeldung
-</i18n>

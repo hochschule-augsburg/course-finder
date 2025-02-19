@@ -101,7 +101,8 @@ async function createSubject(subject: Course | undefined) {
     showModalForm.value = false
   } catch {
     showModalForm.value = false
-    errorDialogMessage.value = t('subject-creation-error')
+    errorDialogMessage.value =
+      'Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.'
     showErrorDialog.value = true
   }
 }
@@ -202,12 +203,12 @@ const searchOffered = ref('')
   <div>
     <VRow>
       <VCol cols="12" md="6">
-        <h3>{{ t('available-courses') }}</h3>
+        <h3>Verfügbare Kurse</h3>
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchCourses"
-          :label="t('global.search')"
           :prepend-inner-icon="mdiMagnify"
+          label="Suche"
         />
         <div class="off-course">
           <Draggable
@@ -238,9 +239,9 @@ const searchOffered = ref('')
       </VCol>
       <VCol cols="12" md="6">
         <h3>
-          {{ t('offered-courses') }}
+          Angebote Kurse
           <VIcon
-            v-tooltip="t('on-the-fly')"
+            v-tooltip="'Neues Angebot erstellen'"
             :icon="mdiInvoiceTextPlus"
             size="25"
             @click="openNewDialog"
@@ -249,8 +250,8 @@ const searchOffered = ref('')
         <VDivider opacity="0" thickness="15px" />
         <VTextField
           v-model="searchOffered"
-          :label="t('global.search')"
           :prepend-inner-icon="mdiMagnify"
+          label="Suche"
         />
         <div class="off-course">
           <Draggable
@@ -298,7 +299,7 @@ const searchOffered = ref('')
 
                   <VCardText>
                     <div>
-                      {{ t('type') }}:
+                      Type
                       {{ t(`types.${element.appointments.type}`) }}
                     </div>
                     <div
@@ -307,7 +308,7 @@ const searchOffered = ref('')
                       :key="appointIndex"
                     >
                       <div v-if="element.appointments.type !== 'weekly'">
-                        <strong>{{ t('from') }}:</strong>
+                        <strong>Von:</strong>
                         {{
                           //TODO
                           timespan.from.toLocaleString(locale, {
@@ -319,7 +320,7 @@ const searchOffered = ref('')
                             minute: '2-digit',
                           })
                         }}
-                        <strong>{{ t('to') }}:</strong>
+                        <strong>Bis:</strong>
                         {{
                           timespan.to.toLocaleString(locale, {
                             weekday: 'short',
@@ -332,7 +333,7 @@ const searchOffered = ref('')
                         }}
                       </div>
                       <div v-else>
-                        <strong>{{ t('at') }}:</strong>
+                        <strong>Am:</strong>
                         {{
                           timespan.from.toLocaleString(locale, {
                             weekday: 'long',
@@ -350,21 +351,21 @@ const searchOffered = ref('')
                       </div>
                     </div>
                     <div>
-                      {{ t('min-participants') }}: {{ element.minParticipants }}
+                      Mindestteilnehmer: {{ element.minParticipants }}
                       <template v-if="element.maxParticipants">
-                        {{ t('max-participants') }}:
+                        Maximale Teilnehmer:
                         {{ element.maxParticipants }}
                       </template>
                     </div>
                     <div v-if="element.for?.length">
-                      {{ t('for-fields-of-study') }}:
+                      Für Studienfelder:
                       {{ displayFieldsOfStudy(element.for) }}
                     </div>
                     <div v-if="element.extraInfo">
-                      {{ t('extra-info') }}: {{ element.extraInfo }}
+                      Zusätzliche Informationen: {{ element.extraInfo }}
                     </div>
                     <div v-if="element.externalRegistration">
-                      {{ t('external-registration') }}
+                      Externe Anmeldung
                     </div>
                   </VCardText>
                 </VCard>
@@ -408,45 +409,11 @@ const searchOffered = ref('')
 </template>
 
 <i18n lang="yaml">
-en:
-  on-the-fly: Create new offered course
-  available-courses: Available courses
-  offered-courses: Offered courses
-  type: Type
-  types:
-    weekly: Weekly
-    block: Block Event
-    irregular: Irregular
-  at: 'On'
-  from: From
-  to: To
-  min-participants: Min participants
-  max-participants: Max participants
-  for-fields-of-study: For fields of study
-  extra-info: Extra information
-  external-registration: External registration
-  subject-creation-error:
-    Error when creating subject. Entered module-code might alredy exist.
 de:
-  on-the-fly: Neues Angebot erstellen
-  available-courses: Verfügbare Kurse
-  offered-courses: Angebote Kurse
-  type: Typ
   types:
     weekly: Wöchentlich
     block: Blockveranstaltung
     irregular: Unregelmäßig
-  at: Am
-  from: Von
-  to: Bis
-  min-participants: Mindestteilnehmer
-  max-participants: Maximale Teilnehmer
-  for-fields-of-study: Für Studienfelder
-  extra-info: Zusätzliche Informationen
-  external-registration: Externe Anmeldung
-  subject-creation-error:
-    Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon
-    vergeben sein.
 </i18n>
 
 <style scoped lang="scss">
