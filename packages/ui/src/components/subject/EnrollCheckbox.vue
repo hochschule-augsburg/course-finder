@@ -51,7 +51,7 @@ async function handleUpdateEnroll() {
   <div
     v-else-if="!subject.offeredCourse?.externalRegistration"
     v-ripple
-    class="pa-2"
+    class="pa-2 enroll-checkbox"
     @click.stop="handleUpdateEnroll"
   >
     <VBadge v-if="enrolled" :content="enrolled.points">

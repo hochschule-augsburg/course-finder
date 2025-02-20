@@ -21,6 +21,8 @@ main()
 
 async function main() {
   const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
+
+  await prisma.appConf.create({ data: { id: 'Instance', maxCredits: 12 } })
   // Create faculties
   await prisma.faculty.createMany({
     data: [
