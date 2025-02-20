@@ -10,7 +10,7 @@ const courseSpec = z.object({
   creditPoints: z.number().int(),
   editorUsername: nullString,
   extraInfo: nullString,
-  facultyName: nullString,
+  faculty: z.string(),
   infoUrl: nullString,
   lecturers: z.array(z.string()).optional(),
   moduleCode: z.string(),

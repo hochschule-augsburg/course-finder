@@ -95,12 +95,11 @@ export const courseRouter = router({
     }),
 })
 
-export const courseFields: { [key in 'Faculty' | keyof Course]?: boolean } = {
+export const courseFields: { [key in keyof Course]?: boolean } = {
   creditPoints: true,
   editorUsername: true,
   extraInfo: true,
-  Faculty: true,
-  facultyName: true,
+  faculty: true,
   infoUrl: true,
   lecturers: true,
   moduleCode: true,

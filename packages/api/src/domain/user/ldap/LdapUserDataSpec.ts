@@ -43,7 +43,7 @@ export const resultSpec = z
     if (data.employeeType === 'Studenten') {
       return {
         ...common,
-        facultyName: data.ou,
+        faculty: data.ou,
         fieldOfStudy: data.dfnEduPersonFieldOfStudyString,
         name: data.cn,
         regNumber: data.carLicense,

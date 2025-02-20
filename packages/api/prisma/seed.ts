@@ -22,15 +22,6 @@ main()
 async function main() {
   const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
   // Create faculties
-  await prisma.faculty.createMany({
-    data: [
-      {
-        name: 'Informatik',
-        translatedName: { de: 'Informatik', en: 'ComputerScience' },
-      },
-    ],
-  })
-
   await prisma.user.create({
     data: {
       auth: {
@@ -87,7 +78,7 @@ async function main() {
           ...course,
           creditPoints: 6,
           editor: { connect: { username: 'scholz' } },
-          Faculty: { connect: { name: 'Informatik' } },
+          faculty: 'Informatik',
           lecturers: ['Scholz'],
           moduleCode: `test${i}`,
           published: true,
@@ -213,7 +204,7 @@ async function main() {
           name: `student ${abbr}`,
           Student: {
             create: {
-              facultyName: 'Informatik',
+              faculty: 'Informatik',
               fieldOfStudy: study,
               StudentPhase: {
                 create: { creditsNeeded: random(1, 10), phaseId: 3 },
@@ -228,11 +219,13 @@ async function main() {
     }),
   )
 
+  return
+
   // Not in Modulhandbuch
   await prisma.course.create({
     data: {
       creditPoints: 5,
-      Faculty: { connect: { name: 'Informatik' } },
+      faculty: 'Informatik',
       lecturers: ['Prof. Dr. Christoph Buck'],
       moduleCode: '__SES4.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
@@ -243,7 +236,7 @@ async function main() {
   await prisma.course.create({
     data: {
       creditPoints: 2,
-      Faculty: { connect: { name: 'Informatik' } },
+      faculty: 'Informatik',
       lecturers: ['Helia Hollmann', 'Philipp Schurk'],
       moduleCode: '__ISB.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
@@ -257,7 +250,7 @@ async function main() {
   await prisma.course.create({
     data: {
       creditPoints: 5,
-      Faculty: { connect: { name: 'Informatik' } },
+      faculty: 'Informatik',
       lecturers: ['Helia Hollmann'],
       moduleCode: '__CAS.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),
@@ -271,7 +264,7 @@ async function main() {
   await prisma.course.create({
     data: {
       creditPoints: 5,
-      Faculty: { connect: { name: 'Informatik' } },
+      faculty: 'Informatik',
       lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
       moduleCode: '__PRT.WP',
       pdf: Buffer.alloc(stubPdf.length, stubPdf),

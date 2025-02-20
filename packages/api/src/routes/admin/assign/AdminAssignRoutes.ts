@@ -244,7 +244,7 @@ async function buildYamlResults(
       email: true,
       Student: {
         select: {
-          facultyName: true,
+          faculty: true,
           fieldOfStudy: true,
           regNumber: true,
           term: true,

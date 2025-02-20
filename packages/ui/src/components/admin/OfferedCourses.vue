@@ -63,7 +63,7 @@ function openNewDialog() {
     creditPoints: 0,
     editorUsername: null,
     extraInfo: null,
-    facultyName: null,
+    faculty: '',
     infoUrl: null,
     lecturers: [],
     moduleCode: '',

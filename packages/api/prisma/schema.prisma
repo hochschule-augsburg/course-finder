@@ -55,16 +55,7 @@ model Student {
   term         Int?
   regNumber    String?
   StudentPhase StudentPhase[]
-  Faculty      Faculty        @relation(fields: [facultyName], references: [name], onDelete: Cascade)
-  facultyName  String
-}
-
-model Faculty {
-  name           String    @id
-  /// [I18n]
-  translatedName Json
-  Courses        Course[]
-  Student        Student[]
+  faculty      String
 }
 
 model Course {
@@ -76,8 +67,7 @@ model Course {
   editorUsername String?
   /// if lecturer is not in the system
   lecturers      String[]
-  Faculty        Faculty?        @relation(fields: [facultyName], references: [name], onDelete: SetNull)
-  facultyName    String?
+  faculty        String
   /// SWS
   semesterHours  Int
   /// CP

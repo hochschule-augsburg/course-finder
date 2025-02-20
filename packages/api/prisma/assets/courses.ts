@@ -5,7 +5,7 @@ export const data: Course[] = [
     creditPoints: 8,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Stefan Bensch'],
@@ -20,7 +20,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dr.-Ing. Matthias Niedermaier'],
@@ -38,7 +38,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Matthias Regner, M.Eng.'],
@@ -57,7 +57,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Gregor Liebermann, M.Sc.'],
@@ -76,7 +76,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
@@ -95,7 +95,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Stefan Bensch'],
@@ -114,7 +114,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Björn Steven Häckel'],
@@ -133,7 +133,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
@@ -149,7 +149,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
@@ -165,7 +165,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Philip McClenaghan'],
@@ -181,7 +181,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
@@ -200,7 +200,7 @@ export const data: Course[] = [
     creditPoints: 4,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
@@ -216,7 +216,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Rolf Winter'],
@@ -235,7 +235,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
@@ -254,7 +254,7 @@ export const data: Course[] = [
     creditPoints: 3,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
@@ -270,7 +270,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
@@ -286,7 +286,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Norbert Gerth'],
@@ -305,7 +305,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jens Lauterbach'],
@@ -320,7 +320,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Norbert Gerth'],
@@ -336,7 +336,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Peter Schulik, M.Sc.'],
@@ -355,7 +355,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dr. Phil. Alessandra Zarcone'],
@@ -374,7 +374,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Strohmeier'],
@@ -393,7 +393,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Hubert Högl'],
@@ -409,7 +409,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
@@ -428,7 +428,7 @@ export const data: Course[] = [
     creditPoints: 6,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Norbert Gerth'],
@@ -444,7 +444,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
@@ -463,7 +463,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Gundolf Kiefer'],
@@ -482,7 +482,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['M.A. Katharina Heimrath'],
@@ -498,7 +498,7 @@ export const data: Course[] = [
     creditPoints: 8,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
@@ -517,7 +517,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
@@ -533,7 +533,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Volodymyr Brovkov'],
@@ -552,7 +552,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
@@ -571,7 +571,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
@@ -590,7 +590,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
@@ -609,7 +609,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
@@ -628,7 +628,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl.-Ing. Harald Röser'],
@@ -647,7 +647,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Kipp'],
@@ -663,7 +663,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
@@ -682,7 +682,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Stephan Zimmermann'],
@@ -698,7 +698,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Lothar Braun'],
@@ -714,7 +714,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Arne Mayer'],
@@ -730,7 +730,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Johannes Ewald, M.Sc.'],
@@ -746,7 +746,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
@@ -765,7 +765,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Harry Schäfle'],
@@ -784,7 +784,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Predeschly'],
@@ -803,7 +803,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Stephan Zimmermann'],
@@ -819,7 +819,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dieter Thalmayr'],
@@ -835,7 +835,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dieter Thalmayr'],
@@ -851,7 +851,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Thomas Rist'],
@@ -867,7 +867,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Oliver Seitz M.Sc.,'],
@@ -886,7 +886,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Alexandra Teynor'],
@@ -905,7 +905,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dr. Lothar Braun'],
@@ -924,7 +924,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Kipp'],
@@ -943,7 +943,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Predeschly'],
@@ -959,7 +959,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
@@ -978,7 +978,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Hubert Högl'],
@@ -997,7 +997,7 @@ export const data: Course[] = [
     creditPoints: 7,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dipl.-Ing. Georg Stark'],
@@ -1016,7 +1016,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kratsch'],
@@ -1032,7 +1032,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
@@ -1051,7 +1051,7 @@ export const data: Course[] = [
     creditPoints: 8,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
@@ -1070,7 +1070,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Anja Metzner'],
@@ -1089,7 +1089,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Nik Klever'],
@@ -1105,7 +1105,7 @@ export const data: Course[] = [
     creditPoints: 10,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
@@ -1124,7 +1124,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Volodymyr Brovkov'],
@@ -1140,7 +1140,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Kai de Wals'],
@@ -1159,7 +1159,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
@@ -1178,7 +1178,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dr. Marc Zeller (Siemens AG, München)'],
@@ -1197,7 +1197,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Phillip Heidegger'],
@@ -1216,7 +1216,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Phillip Heidegger'],
@@ -1235,7 +1235,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl.-Wirt.-Inf. (FH) Andrea Obermeyer, MBA'],
@@ -1254,7 +1254,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
@@ -1273,7 +1273,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Christoph Baur, B.Sc.'],
@@ -1292,7 +1292,7 @@ export const data: Course[] = [
     creditPoints: 6,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Hubert Högl'],
@@ -1308,7 +1308,7 @@ export const data: Course[] = [
     creditPoints: 2,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Stefan Kaindl'],
@@ -1327,7 +1327,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Philip McClenaghan'],
@@ -1343,7 +1343,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Markus Degen'],
@@ -1362,7 +1362,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Michael Jaser, M. Sc.'],
@@ -1383,7 +1383,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Thomas Rist'],
@@ -1401,7 +1401,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
@@ -1419,7 +1419,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Matùš Mala'],
@@ -1437,7 +1437,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Honorary Doctor of ONPU Thorsten Schöler'],
@@ -1455,7 +1455,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kowarschick', 'Prof. Michael Stoll'],
@@ -1473,7 +1473,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
@@ -1491,7 +1491,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Gundolf Kiefer'],
@@ -1509,7 +1509,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Arne Mayer'],
@@ -1527,7 +1527,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Dominik Merli'],
@@ -1545,7 +1545,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
@@ -1563,7 +1563,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Johannes Ewald, M.Sc.'],
@@ -1581,7 +1581,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
@@ -1599,7 +1599,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
@@ -1617,7 +1617,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
@@ -1635,7 +1635,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jana Görmer-Redding'],
@@ -1653,7 +1653,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
@@ -1671,7 +1671,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Björn Häckel'],
@@ -1689,7 +1689,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
@@ -1707,7 +1707,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Dipl. Designer (FH) Fabian Ziegler'],
@@ -1725,7 +1725,7 @@ export const data: Course[] = [
     creditPoints: 5,
     editorUsername: null,
     extraInfo: null,
-    facultyName: 'Informatik',
+    faculty: 'Informatik',
 
     infoUrl: null,
     lecturers: ['Prof. Dr.-Phil. Alessandra Zarcone'],
