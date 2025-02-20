@@ -115,7 +115,10 @@ async function updateSubject(subject: Course) {
       <tbody>
         <tr v-for="subject in adminStore.courses" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
-          <td>{{ subject.title.de }}</td>
+          <td>
+            {{ subject.title.de }} <br />
+            {{ subject.title.en }}
+          </td>
           <td>{{ subject.lecturers.join(', ') }}</td>
           <td>{{ subject.creditPoints }}</td>
           <td>{{ subject.semesterHours }}</td>

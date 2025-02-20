@@ -163,22 +163,26 @@ const fullscreen = ref(false)
             </div>
           </template>
 
-          <div class="mb-1 d-flex align-end">
-            <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
-            <h4>{{ t('note') }}</h4>
-          </div>
-          <p
-            v-if="subject.extraInfo"
-            class="mb-4 px-3 d-flex flex-column white-space-pre-wrap"
-          >
-            {{ subject.extraInfo }}
-          </p>
-          <p
-            v-if="subject.offeredCourse?.extraInfo"
-            class="font-italic mb-4 px-3 d-flex flex-column white-space-pre-wrap"
-          >
-            {{ subject.offeredCourse.extraInfo }}
-          </p>
+          <template v-if="subject.extraInfo">
+            <div class="mb-1 d-flex align-end">
+              <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
+              <h4>{{ t('course-note') }}</h4>
+            </div>
+            <p class="mb-4 px-3 d-flex flex-column white-space-pre-wrap">
+              {{ subject.extraInfo }}
+            </p>
+          </template>
+          <template v-if="subject.offeredCourse?.extraInfo">
+            <div class="mb-1 d-flex align-end">
+              <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
+              <h4>{{ t('semester-note') }}</h4>
+            </div>
+            <p
+              class="font-italic mb-4 px-3 d-flex flex-column white-space-pre-wrap"
+            >
+              {{ subject.offeredCourse.extraInfo }}
+            </p>
+          </template>
         </VSheet>
       </VCarouselItem>
 
@@ -267,7 +271,8 @@ en:
   credit-points: CPs
   participants: Participants
   appointments: Appointments
-  note: Note
+  course-note: Note about course
+  semester-note: Note about Semester
 
 de:
   lecturers: Dozenten
@@ -276,5 +281,6 @@ de:
   credit-points: CPs
   participants: Teilnehmer
   appointments: Termine
-  note: Hinweis
+  course-note: Kurshinweis
+  semester-note: Semesterhinweis
 </i18n>
