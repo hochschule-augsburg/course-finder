@@ -4,6 +4,7 @@ import { splitModuleBook } from './split.ts'
 
 // https://cloud.hs-augsburg.de/index.php/s/e6bYJTCP4JQ5RXj/download/Modulhandbuch_WPF_Bachelor.pdf
 // https://cloud.hs-augsburg.de/index.php/s/a7TnPfxtmXbxTcD/download/Modulhandbuch_WPF_Master.pdf
+// https://cloud.hs-augsburg.de/index.php/s/X2bK5EG58JLHBTS/download/Modulhandbuch_WPF_Bachelor-ENG.pdf
 
 export async function parseCourses(pdf: Buffer) {
   const moduleMap = await splitModuleBook(pdf)

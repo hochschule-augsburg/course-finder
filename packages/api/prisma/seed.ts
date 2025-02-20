@@ -219,8 +219,6 @@ async function main() {
     }),
   )
 
-  return
-
   // Not in Modulhandbuch
   await prisma.course.create({
     data: {
