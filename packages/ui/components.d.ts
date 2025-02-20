@@ -40,5 +40,7 @@ declare module 'vue' {
     SubjectTile: typeof import('./src/components/subject/SubjectTile.vue')['default']
     SubjectTiles: typeof import('./src/components/subject/SubjectTiles.vue')['default']
     ThemeOptionsList: typeof import('./src/components/navbar/ThemeOptionsList.vue')['default']
+    Welcome: typeof import('./src/components/Welcome.vue')['default']
+    WelcomeSheet: typeof import('./src/components/WelcomeSheet.vue')['default']
   }
 }

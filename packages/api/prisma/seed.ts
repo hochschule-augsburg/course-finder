@@ -50,7 +50,7 @@ async function main() {
   await prisma.user.create({
     data: {
       auth: { method: 'ldap' },
-      email: 'juergen.scholz@hs-augsburg.de',
+      email: 'juergen.scholz@example.com',
       name: 'Jürgen Scholz',
       type: 'Professor',
       username: 'scholz',
@@ -201,6 +201,7 @@ async function main() {
       ['Business Information Systems (Master)', 'bis'],
       ['Interaktive Mediensysteme (Master)', 'ims'],
       ['Industrielle Sicherheit', 'ins'],
+      ['Informatik (Bachelor)', 'in-1'],
     ].map(async ([study, abbr]) => {
       await prisma.user.create({
         data: {
@@ -218,7 +219,7 @@ async function main() {
               StudentPhase: {
                 create: { creditsNeeded: random(1, 10), phaseId: 3 },
               },
-              term: 4,
+              term: abbr === 'in-1' ? 1 : 4,
             },
           },
           type: 'Student',

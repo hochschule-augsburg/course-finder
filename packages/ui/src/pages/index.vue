@@ -8,7 +8,6 @@ import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
@@ -16,7 +15,6 @@ defineOptions({
   name: 'CourseEnrollmentOverview',
 })
 
-const router = useRouter()
 const { t } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
@@ -50,19 +48,11 @@ watch(
     }
   },
 )
-const overviewPhase = computed(
-  () => coursesStore.currentPhase || assignStore.assignPhases.at(-1)?.Phase,
-)
 </script>
 
 <template>
   <div class="h-100">
-    <EnrollmentOverview
-      v-if="overviewPhase"
-      :phase="overviewPhase"
-      class="mx-2 mb-9 clickable"
-      @click="router.push('/results')"
-    />
+    <WelcomeSheet class="mx-2 mb-9" />
     <EnrollmentForm v-model:visible="enrollFormVisible" />
     <div class="pt-1 mx-5">
       <FilterSection />
@@ -111,10 +101,6 @@ const overviewPhase = computed(
   z-index: 1;
   bottom: var(--floating-margin);
   right: var(--floating-margin);
-}
-
-.clickable:hover {
-  background-color: rgba(var(--v-theme-primary), 0.05) !important;
 }
 </style>
 
