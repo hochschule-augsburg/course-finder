@@ -18,7 +18,7 @@
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
-    "db:reset": "prisma migrate reset",
+    "db:reset": "prisma migrate reset --skip-seed --force && prisma db seed",
     "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
@@ -60,6 +60,6 @@
     "vitest-mock-extended": "^2.0.2"
   },
   "prisma": {
-    "seed": "node --experimental-strip-types --experimental-transform-types prisma/seed.ts"
+    "seed": "node prisma/seed.ts"
   }
 }

@@ -2,13 +2,17 @@
 import { PrismaClient } from '@prisma/client'
 import { readFileSync } from 'fs'
 import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
+import { parseArgs } from 'node:util'
 
+import { parseCourses } from '../src/domain/module-book/extractData.ts'
 import { hashPassword } from '../src/domain/user/local/password-auth.ts'
 import { data as coursesData } from './assets/courses.ts'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24.ts'
 import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24.ts'
 
 const prisma = new PrismaClient()
+
+const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
 
 main()
   .catch((e) => {
@@ -20,44 +24,20 @@ main()
   })
 
 async function main() {
-  const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
-  // Create faculties
-  await prisma.user.create({
-    data: {
-      auth: {
-        method: 'local',
-        password: await hashPassword('user-2fa', 'salt'),
-        salt: 'salt',
-        twoFA: true,
-      },
-      email: 'test@test.com',
-      name: 'Niklas',
-      type: 'Professor',
-      username: 'user-2fa',
-    },
-  })
+  const options = {
+    'download-courses-pdf': { type: 'boolean' },
+    'load-old-offered-courses': { type: 'boolean' },
+  } as const
+  const { values } = parseArgs({ args: process.argv.slice(2), options })
 
   // Create professors
   await prisma.user.create({
     data: {
       auth: { method: 'ldap' },
-      email: 'juergen.scholz@hs-augsburg.de',
-      name: 'Jürgen Scholz',
+      email: 'prof@example.com',
+      name: 'Prof. Dr. Quack McDuck',
       type: 'Professor',
-      username: 'scholz',
-    },
-  })
-  await prisma.user.create({
-    data: {
-      auth: {
-        method: 'local',
-        password: await hashPassword('prof1', 'salt'),
-        salt: 'salt',
-      },
-      email: 'another.professor@example.com',
-      name: 'Another Professor',
-      type: 'Professor',
-      username: 'prof1',
+      username: 'prof',
     },
   })
 
@@ -77,9 +57,9 @@ async function main() {
         data: {
           ...course,
           creditPoints: 6,
-          editor: { connect: { username: 'scholz' } },
+          editor: { connect: { username: 'prof' } },
           faculty: 'Informatik',
-          lecturers: ['Scholz'],
+          lecturers: ['Prof. Dr. Quack McDuck'],
           moduleCode: `test${i}`,
           published: true,
           semesterHours: 4,
@@ -160,21 +140,10 @@ async function main() {
           password: await hashPassword('admin', 'salt'),
           salt: 'salt',
         },
-        email: 'niklas.sirch@tha.de',
+        email: 'admin@example.com',
         name: 'Admin',
         type: 'Admin',
         username: 'admin',
-      },
-      {
-        auth: {
-          method: 'local',
-          password: await hashPassword('prof', 'salt'),
-          salt: 'salt',
-        },
-        email: 'admin@example.com',
-        name: 'Prof',
-        type: 'Professor',
-        username: 'prof',
       },
     ],
   })
@@ -206,9 +175,6 @@ async function main() {
             create: {
               faculty: 'Informatik',
               fieldOfStudy: study,
-              StudentPhase: {
-                create: { creditsNeeded: random(1, 10), phaseId: 3 },
-              },
               term: 4,
             },
           },
@@ -219,61 +185,33 @@ async function main() {
     }),
   )
 
-  // Not in Modulhandbuch
-  await prisma.course.create({
-    data: {
-      creditPoints: 5,
-      faculty: 'Informatik',
-      lecturers: ['Prof. Dr. Christoph Buck'],
-      moduleCode: '__SES4.WP',
-      pdf: Buffer.alloc(stubPdf.length, stubPdf),
-      semesterHours: 4,
-      title: { de: 'Social Entrepreneurship', en: 'Social Entrepreneurship' },
-    },
-  })
-  await prisma.course.create({
-    data: {
-      creditPoints: 2,
-      faculty: 'Informatik',
-      lecturers: ['Helia Hollmann', 'Philipp Schurk'],
-      moduleCode: '__ISB.WP',
-      pdf: Buffer.alloc(stubPdf.length, stubPdf),
-      semesterHours: 2,
-      title: {
-        de: 'Industrial Security Basics',
-        en: 'Industrial Security Basics',
-      },
-    },
-  })
-  await prisma.course.create({
-    data: {
-      creditPoints: 5,
-      faculty: 'Informatik',
-      lecturers: ['Helia Hollmann'],
-      moduleCode: '__CAS.WP',
-      pdf: Buffer.alloc(stubPdf.length, stubPdf),
-      semesterHours: 4,
-      title: {
-        de: 'Cryptography and Security',
-        en: 'Cryptography and Security',
-      },
-    },
-  })
-  await prisma.course.create({
-    data: {
-      creditPoints: 5,
-      faculty: 'Informatik',
-      lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
-      moduleCode: '__PRT.WP',
-      pdf: Buffer.alloc(stubPdf.length, stubPdf),
-      semesterHours: 4,
-      title: {
-        de: 'Projekttechniken',
-        en: 'Project Techniques',
-      },
-    },
-  })
+  if (values['load-old-offered-courses']) {
+    await fillOldCourses()
+  }
+  if (values['download-courses-pdf']) {
+    const pdfUrl =
+      'https://cloud.hs-augsburg.de/index.php/s/e6bYJTCP4JQ5RXj/download/Modulhandbuch_WPF_Bachelor.pdf'
+    const pdf = await fetch(pdfUrl).then((res) => res.arrayBuffer())
+    const courses = await parseCourses(Buffer.from(pdf))
+    await prisma.$transaction(
+      courses.map((course) => {
+        const promise = prisma.course.upsert({
+          create: course,
+          update: course,
+          where: { moduleCode: course.moduleCode },
+        })
+        promise.catch((e) => {
+          console.log(course, e)
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return e
+        })
+        return promise
+      }),
+    )
+  }
+}
 
+async function fillOldCourses() {
   await prisma.course.createMany({
     data: coursesData.map((e) => ({
       ...e,
