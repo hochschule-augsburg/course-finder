@@ -30,6 +30,7 @@
     "v-onboarding": "^2.9.0",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.1",
+    "vue-markdown-render": "^2.2.1",
     "vue-pdf-embed": "^2.1.2",
     "vuedraggable": "^4.1.0",
     "vuetify": "^3.7.12"

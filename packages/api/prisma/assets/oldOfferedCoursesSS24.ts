@@ -316,7 +316,7 @@ export const data: OfferedCourse[] = [
       type: 'irregular',
     },
     externalRegistration: false,
-    extraInfo: '21. Juni Exkursion',
+    extraInfo: '21\\. Juni Exkursion',
     for: [
       'Informatik (Bachelor)',
       'Wirtschaftsinformatik (Bachelor)',

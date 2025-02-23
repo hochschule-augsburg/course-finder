@@ -9,10 +9,13 @@ import {
   mdiFullscreen,
   mdiFullscreenExit,
   mdiLectern,
+  mdiTypewriter,
 } from '@mdi/js'
 import { useAsyncState } from '@vueuse/core'
+import { computed } from 'vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import VueMarkdown from 'vue-markdown-render'
 import VuePdfEmbed from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/styles/annotationLayer.css'
 import 'vue-pdf-embed/dist/styles/textLayer.css'
@@ -40,149 +43,152 @@ const { state: pdfSource } = useAsyncState(
 )
 const theme = useTheme()
 const fullscreen = ref(false)
+
+const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
 </script>
 
 <template>
-  <div>
+  <div class="cf-subject-details">
     <VCarousel :show-arrows="false" height="68vh" hide-delimiter-background>
       <VCarouselItem>
-        <VSheet
-          class="px-4 py-6 overflow-y-auto"
-          color="secondary"
-          height="100%"
-          rounded="lg"
-        >
-          <div class="mb-1 d-flex align-end">
-            <VIcon :icon="mdiLectern" class="mr-3" size="32" />
-            <h4>{{ t('lecturers') }}</h4>
-          </div>
-          <div>
-            <p class="mb-4 px-3">
-              {{ subject.lecturers.join(', ') }}
-            </p>
-          </div>
-          <div class="mb-1 d-flex align-end">
-            <VIcon :icon="mdiAccountMultiple" class="mr-3" size="32" />
-            <h4>{{ t('workload') }}</h4>
-          </div>
-          <div class="mb-4 px-3 d-flex flex-column">
+        <VSheet class="information-list" color="secondary" height="100%">
+          <section>
+            <div class="icon-heading">
+              <VIcon :icon="mdiLectern" size="32" />
+              <h4>{{ t('lecturers') }}</h4>
+            </div>
+            <p>{{ subject.lecturers.join(', ') }}</p>
+          </section>
+
+          <section>
+            <div class="icon-heading">
+              <VIcon :icon="mdiAccountMultiple" size="32" />
+              <h4>{{ t('workload') }}</h4>
+            </div>
             <p>{{ subject.semesterHours }} {{ t('semester-hours') }}</p>
             <p>{{ subject.creditPoints }} {{ t('credit-points') }}</p>
-          </div>
+          </section>
+
           <template v-if="subject.offeredCourse">
-            <div class="mb-1 d-flex align-end">
-              <VIcon :icon="mdiAccountMultiple" class="mr-3" size="32" />
-              <h4>{{ t('participants') }}</h4>
-            </div>
-            <p class="mb-4 px-3">
-              {{
-                subject.offeredCourse.minParticipants +
-                ' - ' +
-                (subject.offeredCourse.maxParticipants
-                  ? +subject.offeredCourse.maxParticipants
-                  : '∞')
-              }}
-            </p>
+            <section>
+              <div class="icon-heading">
+                <VIcon :icon="mdiAccountMultiple" size="32" />
+                <h4>{{ t('participants') }}</h4>
+              </div>
+              <p>
+                {{
+                  subject.offeredCourse.minParticipants +
+                  ' - ' +
+                  (subject.offeredCourse.maxParticipants || '∞')
+                }}
+              </p>
+            </section>
 
-            <div class="mb-1 d-flex align-end">
-              <VIcon :icon="mdiCalendar" class="mr-3" size="32" />
-              <h4>{{ t('appointments') }}</h4>
-            </div>
-            <p
-              v-if="subject.offeredCourse.appointments.type === 'weekly'"
-              class="mb-4 px-3 d-flex flex-column"
-            >
+            <section>
+              <div class="icon-heading">
+                <VIcon :icon="mdiCalendar" size="32" />
+                <h4>{{ t('appointments') }}</h4>
+              </div>
               <template
-                v-for="date in subject.offeredCourse.appointments.dates"
+                v-if="subject.offeredCourse.appointments.type === 'weekly'"
               >
-                {{
-                  date.from.toLocaleDateString(locale, {
-                    weekday: 'long',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  }) +
-                  ' - ' +
-                  date.to.toLocaleTimeString(locale, {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })
-                }}
+                <p>
+                  <template
+                    v-for="date in subject.offeredCourse.appointments.dates"
+                  >
+                    {{
+                      date.from.toLocaleDateString(locale, {
+                        weekday: 'long',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                      }) +
+                      ' - ' +
+                      date.to.toLocaleTimeString(locale, {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                      })
+                    }}
+                  </template>
+                </p>
               </template>
-            </p>
 
-            <div
-              v-else-if="subject.offeredCourse.appointments.type === 'block'"
-              class="mb-4 px-3 d-flex flex-column"
-            >
-              <p
-                v-for="(date, i) in subject.offeredCourse.appointments.dates"
-                :key="subject.moduleCode + 'block' + i"
+              <template
+                v-else-if="subject.offeredCourse.appointments.type === 'block'"
               >
-                {{
-                  date.from.toLocaleDateString(locale, {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: '2-digit',
-                  }) +
-                  ' - ' +
-                  date.to.toLocaleDateString(locale, {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: '2-digit',
-                  })
-                }}
-              </p>
-            </div>
+                <p
+                  v-for="(date, i) in subject.offeredCourse.appointments.dates"
+                  :key="subject.moduleCode + 'block' + i"
+                >
+                  {{
+                    date.from.toLocaleDateString(locale, {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: '2-digit',
+                    }) +
+                    ' - ' +
+                    date.to.toLocaleDateString(locale, {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: '2-digit',
+                    })
+                  }}
+                </p>
+              </template>
 
-            <div
-              v-else-if="
-                subject.offeredCourse.appointments.type === 'irregular'
-              "
-              class="mb-4 px-3 d-flex flex-column"
-            >
-              <p
-                v-for="(date, i) in subject.offeredCourse.appointments.dates"
-                :key="subject.moduleCode + 'irregular' + i"
+              <template
+                v-else-if="
+                  subject.offeredCourse.appointments.type === 'irregular'
+                "
               >
-                {{
-                  date.from.toLocaleString(locale, {
-                    weekday: 'short',
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: '2-digit',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  }) +
-                  ' - ' +
-                  date.to.toLocaleTimeString(locale, {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })
-                }}
-              </p>
-            </div>
+                <p
+                  v-for="(date, i) in subject.offeredCourse.appointments.dates"
+                  :key="subject.moduleCode + 'irregular' + i"
+                >
+                  {{
+                    date.from.toLocaleString(locale, {
+                      weekday: 'short',
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: '2-digit',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    }) +
+                    ' - ' +
+                    date.to.toLocaleTimeString(locale, {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })
+                  }}
+                </p>
+              </template>
+            </section>
           </template>
 
-          <template v-if="subject.extraInfo">
-            <div class="mb-1 d-flex align-end">
-              <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
+          <section v-if="subject.extraInfo">
+            <div class="icon-heading">
+              <VIcon :icon="mdiAlertCircle" size="32" />
               <h4>{{ t('course-note') }}</h4>
             </div>
-            <p class="mb-4 px-3 d-flex flex-column white-space-pre-wrap">
-              {{ subject.extraInfo }}
-            </p>
-          </template>
-          <template v-if="subject.offeredCourse?.extraInfo">
-            <div class="mb-1 d-flex align-end">
-              <VIcon :icon="mdiAlertCircle" class="mr-3" size="32" />
+            <VueMarkdown :source="subject.extraInfo" class="markdown" />
+          </section>
+
+          <section v-if="subject.offeredCourse?.extraInfo">
+            <div class="icon-heading">
+              <VIcon :icon="mdiAlertCircle" size="32" />
               <h4>{{ t('semester-note') }}</h4>
             </div>
-            <p
-              class="font-italic mb-4 px-3 d-flex flex-column white-space-pre-wrap"
-            >
-              {{ subject.offeredCourse.extraInfo }}
-            </p>
-          </template>
+            <VueMarkdown
+              :source="subject.offeredCourse.extraInfo"
+              class="markdown"
+            />
+          </section>
+          <section v-if="exam">
+            <div class="icon-heading">
+              <VIcon :icon="mdiTypewriter" size="32" />
+              <h4>{{ t('exam') }}</h4>
+            </div>
+            <VueMarkdown :source="exam" class="markdown" />
+          </section>
         </VSheet>
       </VCarouselItem>
 
@@ -234,7 +240,38 @@ const fullscreen = ref(false)
   </div>
 </template>
 
+<!-- eslint-disable-next-line vue/enforce-style-attribute -->
+<style lang="scss">
+.cf-subject-details .information-list .markdown {
+  ul {
+    padding: revert;
+  }
+  ol {
+    padding: revert;
+  }
+}
+</style>
+
 <style scoped lang="scss">
+.information-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--element-spacing-m);
+  padding: var(--element-spacing-m);
+  border-radius: 4%;
+
+  section > p,
+  .markdown {
+    margin-left: var(--element-spacing-m);
+  }
+}
+
+.icon-heading {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--element-spacing-s);
+  margin-bottom: var(--element-spacing-s);
+}
 .white-space-pre-wrap {
   white-space: pre-wrap;
 }
@@ -253,14 +290,6 @@ const fullscreen = ref(false)
 .pdf-view-dark {
   filter: invert(1);
 }
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2500;
-  height: 100vh;
-  width: 100vw;
-}
 </style>
 
 <i18n lang="yaml">
@@ -273,7 +302,7 @@ en:
   appointments: Appointments
   course-note: Note about course
   semester-note: Note about Semester
-
+  exam: Exam
 de:
   lecturers: Dozenten
   workload: Arbeitsaufwand
@@ -283,4 +312,5 @@ de:
   appointments: Termine
   course-note: Kurshinweis
   semester-note: Semesterhinweis
+  exam: Prüfung
 </i18n>

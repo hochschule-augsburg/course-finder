@@ -4,9 +4,9 @@ export const data: Course[] = [
   {
     creditPoints: 8,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
     faculty: 'Informatik',
-
     infoUrl: null,
     lecturers: ['Prof. Dr. Stefan Bensch'],
     moduleCode: 'ABAPGL6.WP',
@@ -19,9 +19,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dr.-Ing. Matthias Niedermaier'],
     moduleCode: 'AST4.WP',
@@ -37,9 +38,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Matthias Regner, M.Eng.'],
     moduleCode: 'AEKDS4.WP',
@@ -56,9 +58,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Gregor Liebermann, M.Sc.'],
     moduleCode: 'SCRUM4.WP',
@@ -75,9 +78,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
     moduleCode: 'PYTHON4.WP',
@@ -94,9 +98,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Stefan Bensch'],
     moduleCode: 'BEINF4.WP',
@@ -113,9 +118,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Björn Steven Häckel'],
     moduleCode: 'CHRIMG2.WP',
@@ -132,9 +138,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
     moduleCode: 'COM4.WP',
@@ -148,9 +155,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
     moduleCode: 'COMDR.WP',
@@ -164,9 +172,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Philip McClenaghan'],
     moduleCode: 'CGDEV4.WP',
@@ -180,9 +189,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
     moduleCode: 'CES4.WP',
@@ -199,9 +209,10 @@ export const data: Course[] = [
   {
     creditPoints: 4,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
     moduleCode: 'DB3.WP',
@@ -215,9 +226,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Rolf Winter'],
     moduleCode: 'DAKO4.WP',
@@ -234,9 +246,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
     moduleCode: 'DAKOFZ4.WP',
@@ -253,9 +266,10 @@ export const data: Course[] = [
   {
     creditPoints: 3,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
     moduleCode: 'DBANW3.WP',
@@ -269,9 +283,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
     moduleCode: 'DIGINN4.WP',
@@ -285,9 +300,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Norbert Gerth'],
     moduleCode: 'DIBUS.WP',
@@ -304,9 +320,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jens Lauterbach'],
     moduleCode: 'DTO4.WP',
@@ -319,9 +336,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Norbert Gerth'],
     moduleCode: 'ECOMM6.WP',
@@ -335,9 +353,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Peter Schulik, M.Sc.'],
     moduleCode: 'ITFORE6.WP',
@@ -354,9 +373,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dr. Phil. Alessandra Zarcone'],
     moduleCode: 'EMSV4.WP',
@@ -373,9 +393,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Strohmeier'],
     moduleCode: 'EROB4.WP',
@@ -392,9 +413,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Hubert Högl'],
     moduleCode: 'LINUX6.WP',
@@ -408,9 +430,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
     moduleCode: 'EDPS2.WP',
@@ -427,9 +450,10 @@ export const data: Course[] = [
   {
     creditPoints: 6,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Norbert Gerth'],
     moduleCode: 'EXGD4.WP',
@@ -443,9 +467,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
     moduleCode: 'PROG.2',
@@ -462,9 +487,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Gundolf Kiefer'],
     moduleCode: 'FSD4.WP',
@@ -481,9 +507,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['M.A. Katharina Heimrath'],
     moduleCode: 'FGMG4.WP',
@@ -497,9 +524,10 @@ export const data: Course[] = [
   {
     creditPoints: 8,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
     moduleCode: 'FSWD6.WP',
@@ -516,9 +544,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
     moduleCode: 'DEVOPS4.WP',
@@ -532,9 +561,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Volodymyr Brovkov'],
     moduleCode: 'HARSO.WP',
@@ -551,9 +581,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
     moduleCode: 'HIP.WP',
@@ -570,9 +601,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
     moduleCode: 'INDBV4.WP',
@@ -589,9 +621,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
     moduleCode: 'INDIV4.WP',
@@ -608,9 +641,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
     moduleCode: 'INUM4.WP',
@@ -627,9 +661,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl.-Ing. Harald Röser'],
     moduleCode: 'SAPERP4.WP',
@@ -646,9 +681,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Kipp'],
     moduleCode: 'INTENG4.WP',
@@ -662,9 +698,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
     moduleCode: 'IACOGR6.WP',
@@ -681,9 +718,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Stephan Zimmermann'],
     moduleCode: 'ITC4.WP',
@@ -697,9 +735,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Lothar Braun'],
     moduleCode: 'ITSICH6.WP',
@@ -713,9 +752,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Arne Mayer'],
     moduleCode: 'ITSCT4.WP',
@@ -729,9 +769,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Johannes Ewald, M.Sc.'],
     moduleCode: 'JAVSCR2.WP',
@@ -745,9 +786,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
     moduleCode: 'KLPRO.WP',
@@ -764,9 +806,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Harry Schäfle'],
     moduleCode: 'ITSN2.WP',
@@ -783,9 +826,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Predeschly'],
     moduleCode: 'KDBT4.WP',
@@ -802,9 +846,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Stephan Zimmermann'],
     moduleCode: 'LEANIT4.WP',
@@ -818,9 +863,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dieter Thalmayr'],
     moduleCode: 'LINLPI2.WP',
@@ -834,9 +880,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dieter Thalmayr'],
     moduleCode: 'LPICAD2.WP',
@@ -850,9 +897,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Thomas Rist'],
     moduleCode: 'KI6.WP',
@@ -866,9 +914,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Oliver Seitz M.Sc.,'],
     moduleCode: 'MCODK4.WP',
@@ -885,9 +934,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Alexandra Teynor'],
     moduleCode: 'MKML4.WP',
@@ -904,9 +954,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dr. Lothar Braun'],
     moduleCode: 'NETP.WP',
@@ -923,9 +974,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Kipp'],
     moduleCode: 'NNDL4.WP',
@@ -942,9 +994,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Michael Predeschly'],
     moduleCode: 'NoSQL4.WP',
@@ -958,9 +1011,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
     moduleCode: 'OPPYTH4.WP',
@@ -977,9 +1031,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Hubert Högl'],
     moduleCode: 'OSSWE4.WP',
@@ -996,9 +1051,10 @@ export const data: Course[] = [
   {
     creditPoints: 7,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dipl.-Ing. Georg Stark'],
     moduleCode: 'PRRO.WP',
@@ -1015,9 +1071,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kratsch'],
     moduleCode: 'PRCINT4.WP',
@@ -1031,9 +1088,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
     moduleCode: 'DBP4.WP',
@@ -1050,9 +1108,10 @@ export const data: Course[] = [
   {
     creditPoints: 8,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
     moduleCode: 'PROGPY6.WP',
@@ -1069,9 +1128,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Anja Metzner'],
     moduleCode: 'PWA4.WP',
@@ -1088,9 +1148,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Nik Klever'],
     moduleCode: 'PRJU4.WP',
@@ -1104,9 +1165,10 @@ export const data: Course[] = [
   {
     creditPoints: 10,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
     moduleCode: 'FUT.WP',
@@ -1123,9 +1185,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Volodymyr Brovkov'],
     moduleCode: 'RFID3.WP',
@@ -1139,9 +1202,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Kai de Wals'],
     moduleCode: 'SEENG.WP',
@@ -1158,9 +1222,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
     moduleCode: 'SLP.WP',
@@ -1177,9 +1242,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dr. Marc Zeller (Siemens AG, München)'],
     moduleCode: 'SRASYS2.WP',
@@ -1196,9 +1262,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Phillip Heidegger'],
     moduleCode: 'TYPSCR4.WP',
@@ -1215,9 +1282,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Phillip Heidegger'],
     moduleCode: 'SECloud.WP',
@@ -1234,9 +1302,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl.-Wirt.-Inf. (FH) Andrea Obermeyer, MBA'],
     moduleCode: 'SWPJMG.WP',
@@ -1253,9 +1322,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
     moduleCode: 'START4.WP',
@@ -1272,9 +1342,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Christoph Baur, B.Sc.'],
     moduleCode: 'SUCHMA.WP',
@@ -1291,9 +1362,10 @@ export const data: Course[] = [
   {
     creditPoints: 6,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Hubert Högl'],
     moduleCode: 'SNP5.WP',
@@ -1307,9 +1379,10 @@ export const data: Course[] = [
   {
     creditPoints: 2,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Stefan Kaindl'],
     moduleCode: 'UGES2.WP',
@@ -1326,9 +1399,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Philip McClenaghan'],
     moduleCode: 'VISTH.WP',
@@ -1342,9 +1416,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Markus Degen'],
     moduleCode: 'IFPP4.WP',
@@ -1361,9 +1436,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Michael Jaser, M. Sc.'],
     moduleCode: 'NODEJS4.WP',
@@ -1382,9 +1458,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Thomas Rist'],
     moduleCode: 'AWKI.WP',
@@ -1400,9 +1477,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
     moduleCode: 'BPAP3.WP',
@@ -1418,9 +1496,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Matùš Mala'],
     moduleCode: 'BPM3.WP',
@@ -1436,9 +1515,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Honorary Doctor of ONPU Thorsten Schöler'],
     moduleCode: 'DASC4.WP',
@@ -1454,9 +1534,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Wolfgang Kowarschick', 'Prof. Michael Stoll'],
     moduleCode: 'DATVIZ2.WP',
@@ -1472,9 +1553,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
     moduleCode: 'DSDT2.WP',
@@ -1490,9 +1572,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Gundolf Kiefer'],
     moduleCode: 'EFRE.WP',
@@ -1508,9 +1591,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Arne Mayer'],
     moduleCode: 'ELHS4.WP',
@@ -1526,9 +1610,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Ing. Dominik Merli'],
     moduleCode: 'EMBSEC.WP',
@@ -1544,9 +1629,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
     moduleCode: 'F2FKOM4.WP',
@@ -1562,9 +1648,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Johannes Ewald, M.Sc.'],
     moduleCode: 'JAVASCR.WP',
@@ -1580,9 +1667,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Peter Rösch'],
     moduleCode: 'MEDIBI.WP',
@@ -1598,9 +1686,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
     moduleCode: 'OOSD.WP',
@@ -1616,9 +1705,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
     moduleCode: 'SKUP.WP',
@@ -1634,9 +1724,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jana Görmer-Redding'],
     moduleCode: 'SGP2.WP',
@@ -1652,9 +1743,9 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
     faculty: 'Informatik',
-
     infoUrl: null,
     lecturers: ['Prof. Dr. Christoph Buck'],
     moduleCode: 'SDMDT4.WP',
@@ -1670,9 +1761,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Björn Häckel'],
     moduleCode: 'S3G2.WP',
@@ -1688,9 +1780,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr. Jürgen Scholz'],
     moduleCode: 'VERINF.WP',
@@ -1706,9 +1799,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Dipl. Designer (FH) Fabian Ziegler'],
     moduleCode: 'WEBTEC4.WP', // TODO WEBTECH.WP
@@ -1724,9 +1818,10 @@ export const data: Course[] = [
   {
     creditPoints: 5,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    faculty: 'Informatik',
 
+    faculty: 'Informatik',
     infoUrl: null,
     lecturers: ['Prof. Dr.-Phil. Alessandra Zarcone'],
     moduleCode: 'WSH2.WP',

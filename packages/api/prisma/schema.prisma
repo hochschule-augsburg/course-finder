@@ -68,6 +68,7 @@ model Course {
   /// if lecturer is not in the system
   lecturers      String[]
   faculty        String
+  exam           String?
   /// SWS
   semesterHours  Int
   /// CP
