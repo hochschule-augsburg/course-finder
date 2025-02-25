@@ -29,7 +29,7 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
           where: { moduleCode: course.moduleCode },
         })
         promise.catch((e) => {
-          console.log(course, e)
+          console.error(course, e)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return e
         })

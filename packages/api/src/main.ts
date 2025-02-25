@@ -2,11 +2,12 @@ import { execSync } from 'child_process'
 
 import { startScheduledDeletion } from './domain/cascadingDeletion/deleteData.ts'
 import { startPhaseSchedulingFromDatabase } from './domain/phase/PhaseService.ts'
+import { env } from './env.ts'
 import { prisma } from './prisma/prisma.ts'
 import { createServer } from './server/server.ts'
 
 // Start database from docker container for development
-if (process.env.NODE_ENV !== 'production') {
+if (env.DEV) {
   execSync(`docker start ${process.env.DEV_DOCKER_DB}`)
 }
 
@@ -14,21 +15,14 @@ if (process.env.NODE_ENV !== 'production') {
 const server = await createServer()
 await prisma.$connect()
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.argv.slice(2).includes('master')
-) {
-  console.log('I am the master process')
-  try {
-    await prisma.appConf.create({})
-  } catch {
-    // Do nothing
-  }
-
-  // Start the registration cycle
-  await startPhaseSchedulingFromDatabase()
-  startScheduledDeletion()
+try {
+  await prisma.appConf.create({})
+} catch {
+  // Do nothing
 }
+
+await startPhaseSchedulingFromDatabase()
+startScheduledDeletion()
 
 await server.start()
 await prisma.$disconnect()
