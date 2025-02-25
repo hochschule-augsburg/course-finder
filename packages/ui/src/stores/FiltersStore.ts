@@ -64,10 +64,7 @@ export const useFiltersStore = defineStore('filters', () => {
     },
     {
       filterFn: (subjects: Subject[], options: Option[]) => {
-        const [portfolio, misc] = [
-          options.at(0)?.selected,
-          options.at(-1)?.selected,
-        ]
+        const miscSelected = options.at(-1)?.selected
 
         const selectedOptions = options
           .filter((option) => option.selected)
@@ -77,27 +74,13 @@ export const useFiltersStore = defineStore('filters', () => {
           if (selectedOptions.length === 0) {
             return true
           }
-          if (misc && !subject.examTypes.length) {
+          if (miscSelected && !subject.examTypes.length) {
             return true
           }
           if (subject.examTypes.length === 0) {
             return false
           }
-          if (portfolio && selectedOptions.length === 1) {
-            return subject.examTypes.includes('filter.ex.portfolio')
-          }
-          if (portfolio) {
-            return (
-              subject.examTypes.includes('filter.ex.portfolio') &&
-              selectedOptions.every((type) => subject.examTypes.includes(type))
-            )
-          }
-          if (selectedOptions.length === 1) {
-            return subject.examTypes.every((type) =>
-              selectedOptions.includes(type),
-            )
-          }
-          return subject.examTypes.some((type) =>
+          return subject.examTypes.every((type) =>
             selectedOptions.includes(type),
           )
         })
@@ -105,10 +88,6 @@ export const useFiltersStore = defineStore('filters', () => {
 
       name: 'filter.exam-type',
       options: [
-        {
-          option: 'filter.ex.portfolio',
-          selected: false,
-        },
         {
           option: 'filter.ex.written-exam',
           selected: false,

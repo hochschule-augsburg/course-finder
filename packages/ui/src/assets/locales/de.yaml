@@ -33,7 +33,6 @@ filter:
   irregular: Irregulär
   exam-type: Prüfung
   ex:
-    portfolio: Portfolioprüfung
     written-exam: Klausur
     project-work: Projektarbeit
     written-assignment: Studienarbeit

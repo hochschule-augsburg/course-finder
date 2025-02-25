@@ -33,7 +33,6 @@ filter:
   irregular: irregular
   exam-type: Examination
   ex:
-    portfolio: Portfolio exam
     written-exam: Written exam
     project-work: Project work
     written-assignment: Written assignment

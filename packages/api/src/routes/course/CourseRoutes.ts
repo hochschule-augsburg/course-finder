@@ -103,10 +103,6 @@ export const courseRouter = router({
 // https://gitlab.informatik.tha.de/phe/fki-modulhandbuecher/-/blob/master/SharedSources/modules.sty
 const examTypesData = [
   {
-    keywords: ['Portfolioprüfung', 'Portfolio exam'],
-    option: 'filter.ex.portfolio',
-  },
-  {
     keywords: ['Schriftliche Prüfung', 'Klausur', 'Written examination'],
     option: 'filter.ex.written-exam',
   },
@@ -129,10 +125,6 @@ const examTypesData = [
   {
     keywords: ['Mündliche Prüfung', 'Oral examination'],
     option: 'filter.ex.oral',
-  },
-  {
-    keywords: [],
-    option: 'filter.ex.misc',
   },
 ]
 
