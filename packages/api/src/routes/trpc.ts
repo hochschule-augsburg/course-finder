@@ -7,12 +7,13 @@ import type { ClientUser } from '../prisma/PrismaTypes.ts'
 import type { Context } from '../server/context.ts'
 
 import { userHasPermission } from '../domain/user/UserRoles.ts'
+import { env } from '../env.ts'
 
 const t = initTRPC.context<Context>().create({
   errorFormatter({ shape }) {
     return shape
   },
-  isDev: process.env.NODE_ENV === 'development',
+  isDev: env.DEV,
   transformer: superjson,
 })
 

@@ -10,9 +10,14 @@ const envSchema = z.object({
   MAIL_RECEIVERS: z
     .string()
     .transform((e) => e.split(',').map((e) => e.trim())),
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
   SERVER_HOSTNAME: z.string(),
   SERVER_PORT: z.coerce.number(),
 })
 
-// This line will throw an error if there’s a missing environment variable, or if its value is invalid.
-export const env = envSchema.parse(process.env)
+const envParsed = envSchema.parse(process.env)
+
+export const env = {
+  ...envParsed,
+  DEV: envParsed.NODE_ENV === 'development',
+}

@@ -23,7 +23,7 @@ export async function sendEmail(
     .replace('{{CONTENT}}', htmlContent)
   const toArray = typeof to === 'string' ? [to] : to
 
-  if (process.env.NODE_ENV === 'production') {
+  if (!env.DEV) {
     const info = await transporter.sendMail({
       attachments,
       from: {

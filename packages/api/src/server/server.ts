@@ -19,7 +19,11 @@ declare module '@fastify/jwt' {
 }
 
 export async function createServer() {
-  const server = fastify({ logger: true })
+  const server = fastify({
+    logger: {
+      level: 'warn',
+    },
+  })
 
   await server.register(fastifyMultipart)
   await server.register(fastifyCookie)
@@ -52,7 +56,6 @@ export async function createServer() {
         host: env.SERVER_HOSTNAME,
         port: env.SERVER_PORT,
       })
-      console.log('listening on port', env.SERVER_PORT)
     } catch (err) {
       server.log.error(err)
       process.exit(1)
