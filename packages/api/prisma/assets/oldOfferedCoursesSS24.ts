@@ -285,54 +285,6 @@ export const data: OfferedCourse[] = [
     appointments: {
       dates: [
         {
-          from: '2024-04-26T14:00:00',
-          to: '2024-04-26T17:10:00',
-        },
-        {
-          from: '2024-05-03T14:00:00',
-          to: '2024-05-03T17:10:00',
-        },
-        {
-          from: '2024-05-17T14:00:00',
-          to: '2024-05-17T17:10:00',
-        },
-        {
-          from: '2024-05-24T14:00:00',
-          to: '2024-05-24T17:10:00',
-        },
-        {
-          from: '2024-06-14T14:00:00',
-          to: '2024-06-14T17:10:00',
-        },
-        {
-          from: '2024-06-21T14:00:00',
-          to: '2024-06-21T17:10:00',
-        },
-        {
-          from: '2024-06-28T14:00:00',
-          to: '2024-06-28T17:10:00',
-        },
-      ],
-      type: 'irregular',
-    },
-    externalRegistration: false,
-    extraInfo: '21\\. Juni Exkursion',
-    for: [
-      'Informatik (Bachelor)',
-      'Wirtschaftsinformatik (Bachelor)',
-      'Technische Informatik (Bachelor)',
-      'International Information Systems (Bachelor)',
-    ],
-    maxParticipants: 5,
-    minParticipants: 0,
-    moduleCode: '__ISB.WP',
-    moodleCourse: null,
-    phaseId: 2,
-  },
-  {
-    appointments: {
-      dates: [
-        {
           from: '2024-04-05T08:00:00',
           to: '2024-04-05T11:20:00',
         },
@@ -887,31 +839,6 @@ export const data: OfferedCourse[] = [
       type: 'weekly',
     },
     externalRegistration: false,
-    extraInfo:
-      'Interessenten können sich direkt per E-Mail an Helia.Hollmann@hs-augsburg.de wenden',
-    for: [
-      'Applied Research (Master)',
-      'Informatik (Master)',
-      'Business Information Systems (Master)',
-      'Industrielle Sicherheit',
-    ],
-    maxParticipants: 10,
-    minParticipants: 0,
-    moduleCode: '__CAS.WP',
-    moodleCourse: null,
-    phaseId: 2,
-  },
-  {
-    appointments: {
-      dates: [
-        {
-          from: '2024-04-03T14:00:00',
-          to: '2024-04-03T17:10:00',
-        },
-      ],
-      type: 'weekly',
-    },
-    externalRegistration: false,
     extraInfo: null,
     for: [
       'Applied Research (Master)',
@@ -921,25 +848,6 @@ export const data: OfferedCourse[] = [
     maxParticipants: 20,
     minParticipants: 0,
     moduleCode: 'WSH2.WP',
-    moodleCourse: null,
-    phaseId: 2,
-  },
-  {
-    appointments: {
-      dates: [
-        {
-          from: '2024-04-03T14:00:00',
-          to: '2024-04-03T17:10:00',
-        },
-      ],
-      type: 'weekly',
-    },
-    externalRegistration: false,
-    extraInfo: null,
-    for: ['Applied Research (Master)'],
-    maxParticipants: null,
-    minParticipants: 0,
-    moduleCode: '__PRT.WP',
     moodleCourse: null,
     phaseId: 2,
   },

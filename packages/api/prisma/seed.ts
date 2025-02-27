@@ -26,7 +26,7 @@ main()
 async function main() {
   const options = {
     'download-courses-pdf': { type: 'boolean' },
-    'load-old-offered-courses': { type: 'boolean' },
+    'old-offered-courses': { type: 'boolean' },
   } as const
   const { values } = parseArgs({ args: process.argv.slice(2), options })
 
@@ -185,7 +185,7 @@ async function main() {
     }),
   )
 
-  if (values['load-old-offered-courses']) {
+  if (values['old-offered-courses']) {
     await fillOldCourses()
   }
   if (values['download-courses-pdf']) {
@@ -250,6 +250,13 @@ async function fillOldCourses() {
     }))
   })
 
+  await prisma.studentPhase.createMany({
+    data: students.map((student) => ({
+      creditsNeeded: random(1, 10),
+      phaseId: 3,
+      username: student.username,
+    })),
+  })
   await prisma.studentChoice.createMany({
     data: choices.map((choice) => ({
       moduleCode: choice.moduleCode,
