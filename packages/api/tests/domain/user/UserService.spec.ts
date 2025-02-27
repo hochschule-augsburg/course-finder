@@ -20,7 +20,7 @@ describe('UserService', () => {
     expect(result).toEqual(mockLocalResult)
   })
 
-  it.skip('should return ldap auth result if local auth is not successful', async () => {
+  it('should return ldap auth result if local auth is not successful', async () => {
     const mockLocalResult = { success: false }
     const mockLdapResult = { cause: 'service-not-available', success: false }
     vi.spyOn(localPwdAuth, 'pwdAuth').mockImplementation(() =>

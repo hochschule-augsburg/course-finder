@@ -6,6 +6,10 @@ on:
       - 'main'
   pull_request:
     types: [opened, synchronize, reopened]
+  # module book
+  schedule:
+    - cron: '0 8 15 2,9 *'
+    - cron: '0 8 1 * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,6 +32,11 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --strict-peer-dependencies
+
+      - name: Install additional dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pdftk
 
       - name: Generate prisma schema types
         run: pnpm run --filter=api db:generate
