@@ -2,6 +2,7 @@
 import { PrismaClient } from '@prisma/client'
 import { readFileSync } from 'fs'
 import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
+import * as crypto from 'node:crypto'
 import { parseArgs } from 'node:util'
 
 import { parseCourses } from '../src/domain/module-book/extractData.ts'
@@ -24,13 +25,38 @@ main()
   })
 
 async function main() {
-  await prisma.appConf.create({ data: { id: 'Instance', maxCredits: 12 } })
   const options = {
     'download-courses-pdf': { type: 'boolean' },
+    'no-test-data': { type: 'boolean' },
     'old-offered-courses': { type: 'boolean' },
   } as const
   const { values } = parseArgs({ args: process.argv.slice(2), options })
 
+  await prisma.appConf.create({ data: { id: 'Instance' } })
+
+  const adminSalt = crypto.randomBytes(16).toString('hex')
+  await prisma.user.createMany({
+    data: [
+      {
+        auth: {
+          method: 'local',
+          password: await hashPassword(
+            process.env.ADMIN_PWD ?? 'admin',
+            adminSalt,
+          ),
+          salt: adminSalt,
+        },
+        email: 'admin@example.com',
+        name: 'Admin',
+        type: 'Admin',
+        username: 'admin',
+      },
+    ],
+  })
+
+  if (values['no-test-data']) {
+    return
+  }
   // Create professors
   await prisma.user.create({
     data: {
@@ -131,22 +157,6 @@ async function main() {
         en: 'Test Registration Phase 2024',
       },
     },
-  })
-
-  await prisma.user.createMany({
-    data: [
-      {
-        auth: {
-          method: 'local',
-          password: await hashPassword('admin', 'salt'),
-          salt: 'salt',
-        },
-        email: 'admin@example.com',
-        name: 'Admin',
-        type: 'Admin',
-        username: 'admin',
-      },
-    ],
   })
 
   await Promise.all(

@@ -1,3 +1,4 @@
+import type { Course } from '@prisma/client'
 import type { FastifyInstance } from 'fastify'
 
 import { parseCourses } from '../../domain/module-book/extractData.ts'
@@ -12,17 +13,30 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
       return reply.status(401).send({ error: 'Unauthorized' })
     }
 
-    const data = await req.file()
+    const data = req.files()
 
-    if (data?.mimetype !== 'application/pdf') {
-      return reply
-        .status(400)
-        .send({ error: 'Invalid file type, only PDFs are allowed' })
+    const courses: Course[] = []
+    for await (const file of data) {
+      if (file?.mimetype !== 'application/pdf') {
+        return reply
+          .status(400)
+          .send({ error: 'Invalid file type, only PDFs are allowed' })
+      }
+
+      const parsedCourses = await parseCourses(await file.toBuffer())
+      courses.push(...parsedCourses)
     }
 
-    const courses = await parseCourses(await data.toBuffer())
-    await prisma.$transaction(
-      courses.map((course) => {
+    const oldCourses = await prisma.course.findMany({
+      select: { moduleCode: true },
+    })
+    const notFoundCourses = oldCourses.filter(
+      (oldCourse) =>
+        !courses.find((course) => oldCourse.moduleCode === course.moduleCode),
+    )
+
+    await prisma.$transaction([
+      ...courses.map((course) => {
         const promise = prisma.course.upsert({
           create: course,
           update: course,
@@ -35,7 +49,12 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
         })
         return promise
       }),
-    )
+      prisma.course.deleteMany({
+        where: {
+          moduleCode: { in: notFoundCourses.map((e) => e.moduleCode) },
+        },
+      }),
+    ])
 
     reply.send({ status: 'success' })
   })
