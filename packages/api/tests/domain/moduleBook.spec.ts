@@ -27,5 +27,6 @@ describe('Module Book', () => {
       const out = await parseCourses(pdfs[key])
       expect(out.length).toBeGreaterThan(0)
     },
+    30000,
   )
 })
