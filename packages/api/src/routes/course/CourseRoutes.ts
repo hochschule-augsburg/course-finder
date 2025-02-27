@@ -11,7 +11,8 @@ export type CourseExtended = {
   examTypes: string[]
   offeredCourse: {
     appointments: CourseAppointmentsJson<Date>
-  } & Omit<OfferedCourse, 'appointments'>
+    minParticipants: null | number
+  } & Omit<OfferedCourse, 'appointments' | 'minParticipants'>
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
@@ -79,6 +80,9 @@ export const courseRouter = router({
                 to: new Date(d.to),
               })),
             },
+            minParticipants: offeredCourse.hideMinParticipants
+              ? null
+              : offeredCourse.minParticipants,
           },
         }
       })

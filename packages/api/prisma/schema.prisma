@@ -107,13 +107,14 @@ enum PhaseState {
 }
 
 model OfferedCourse {
-  Phase           Enrollphase     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
-  phaseId         Int
-  Course          Course          @relation(fields: [moduleCode], references: [moduleCode], onDelete: Cascade)
-  moduleCode      String
-  minParticipants Int             @default(0)
-  maxParticipants Int?
-  StudentChoice   StudentChoice[]
+  Phase               Enrollphase     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  phaseId             Int
+  Course              Course          @relation(fields: [moduleCode], references: [moduleCode], onDelete: Cascade)
+  moduleCode          String
+  minParticipants     Int             @default(0)
+  maxParticipants     Int?
+  hideMinParticipants Boolean         @default(false)
+  StudentChoice       StudentChoice[]
 
   extraInfo            String?
   moodleCourse         String?

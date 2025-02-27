@@ -327,10 +327,16 @@ const minParticipantsRules = [
               <VRadio label="Unregelmäßig" value="irregular" />
             </VRadioGroup>
           </VCol>
-          <VCol cols="6">
+          <VCol cols="3">
             <VSwitch
               v-model="formData.externalRegistration"
               label="Externe Anmeldung"
+            />
+          </VCol>
+          <VCol cols="3">
+            <VSwitch
+              v-model="formData.hideMinParticipants"
+              label="Mindestteilnehmerzahl verbergen"
             />
           </VCol>
           <VCol cols="12">

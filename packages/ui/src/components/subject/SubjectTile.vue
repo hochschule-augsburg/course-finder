@@ -84,6 +84,15 @@ const dev = import.meta.env.DEV
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  -webkit-line-clamp: 3;
+}
+::v-deep(.v-card-subtitle) {
+  white-space: wrap;
+  line-height: 1.3;
+  padding-bottom: var(--element-spacing-xs);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   -webkit-line-clamp: 2;
 }
 .align-bot-right {

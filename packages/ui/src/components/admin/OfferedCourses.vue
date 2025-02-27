@@ -94,8 +94,9 @@ async function createSubject(subject: Course | undefined) {
       externalRegistration: false,
       extraInfo: null,
       for: [],
+      hideMinParticipants: false,
       maxParticipants: null,
-      minParticipants: 0,
+      minParticipants: 16,
       moduleCode: subject.moduleCode,
       moodleCourse: null,
     })
@@ -153,8 +154,9 @@ function convertToOfferedCourseData(course: Course): OfferedCourseData {
       externalRegistration: false,
       extraInfo: null,
       for: [],
+      hideMinParticipants: false,
       maxParticipants: null,
-      minParticipants: 0,
+      minParticipants: 16,
       moduleCode: course.moduleCode,
       moodleCourse: null,
     }

@@ -77,11 +77,19 @@ const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
               </div>
               <p>
                 {{
-                  subject.offeredCourse.minParticipants +
+                  (subject.offeredCourse.minParticipants ?? '?') +
                   ' - ' +
                   (subject.offeredCourse.maxParticipants || '∞')
                 }}
               </p>
+            </section>
+
+            <section v-if="exam">
+              <div class="icon-heading">
+                <VIcon :icon="mdiTypewriter" size="32" />
+                <h4>{{ t('exam') }}</h4>
+              </div>
+              <VueMarkdown :source="exam" class="markdown" />
             </section>
 
             <section>
@@ -181,13 +189,6 @@ const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
               :source="subject.offeredCourse.extraInfo"
               class="markdown"
             />
-          </section>
-          <section v-if="exam">
-            <div class="icon-heading">
-              <VIcon :icon="mdiTypewriter" size="32" />
-              <h4>{{ t('exam') }}</h4>
-            </div>
-            <VueMarkdown :source="exam" class="markdown" />
           </section>
         </VSheet>
       </VCarouselItem>

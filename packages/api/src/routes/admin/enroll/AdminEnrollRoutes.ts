@@ -95,6 +95,7 @@ export const enrollRouter = router({
                 externalRegistration: true,
                 extraInfo: true,
                 for: true,
+                hideMinParticipants: true,
                 maxParticipants: true,
                 minParticipants: true,
                 moduleCode: true,
