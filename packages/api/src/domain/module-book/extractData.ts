@@ -2,12 +2,21 @@ import type { Course } from '@prisma/client'
 
 import { splitModuleBook } from './split.ts'
 
+// https://cloud.hs-augsburg.de/index.php/s/e6bYJTCP4JQ5RXj/download/Modulhandbuch_WPF_Bachelor.pdf
+// https://cloud.hs-augsburg.de/index.php/s/a7TnPfxtmXbxTcD/download/Modulhandbuch_WPF_Master.pdf
+// https://cloud.hs-augsburg.de/index.php/s/X2bK5EG58JLHBTS/download/Modulhandbuch_WPF_Bachelor-ENG.pdf
+
 export async function parseCourses(pdf: Buffer) {
   const moduleMap = await splitModuleBook(pdf)
-  console.log('extracting data')
+  console.debug('extracting data')
 
   const result = moduleMap.map(([moduleCode, data]) => {
-    return extractData(moduleCode, data)
+    try {
+      return extractData(moduleCode, data)
+    } catch (e) {
+      console.error(`Error extracting data for module ${moduleCode}`)
+      throw e
+    }
   })
   return result
 }
@@ -20,86 +29,124 @@ function extractData(
   },
 ): Course {
   const lines = data.content.split('\n')
-  //@ts-expect-error only for this phase
-  // eslint-disable-next-line no-unsafe-optional-chaining
-  const [titleDe, titleEn] = getData(
-    lines.findIndex(
-      (e) => e.startsWith('Name / engl.') || e.startsWith('engl. Name'),
-    ),
-    lines,
-  )?.split('/')
-  const facultyName = getData(
-    lines.findIndex((e) => e.startsWith('Fakultät') || e.startsWith('Faculty')),
-    lines,
-  )
-    ?.replace('Fakultät für ', '')
-    .replace('Faculty of Computer Science', 'Informatik')
-    .replace('Informatik / Faculty of Computer Science', 'Informatik')
-    .replace('Computer Science', 'Informatik')
-    .replace('Informatik / Informatik', 'Informatik')
-  if (!facultyName) {
+
+  const [titleDe, titleEn] = parseTitle(lines)
+  const faculty = parseFaculty(lines)
+  if (!faculty) {
     throw new Error(`Faculty name not found for module ${moduleCode}`)
   }
-
-  const lecturers = getLecturer(
-    lines.findLastIndex(
-      (e) => e.startsWith('Verantwortlicher') || e.startsWith('Coordinator'),
-    ),
-    lines,
-  )
+  const lecturers = parseLecturers(lines)
+  const creditPoints = parseCreditPoints(data.content)
+  const semesterHours = parseSemesterHours(data.content)
+  const exam = parseExam(lines, moduleCode)
 
   return {
-    creditPoints: parseInt(nc(data.content.match(/(?:credits|CPs):\s(\d+)/))),
+    creditPoints,
     editorUsername: null,
+    exam,
     extraInfo: null,
-    facultyName,
+    faculty,
     infoUrl: null,
     lecturers,
     moduleCode,
     pdf: data.buffer,
     published: true,
-    semesterHours: parseInt(
-      nc(data.content.match(/(?:Credit hours|SWS):\s(\d+)/)),
-    ),
+    semesterHours,
     title: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       de: titleDe ?? titleEn,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       en: titleEn ?? titleDe,
     },
     varyingCP: null,
   }
 }
 
-function getData(titleIndex: number, lines: string[]) {
-  if (titleIndex !== -1) {
-    return lines[titleIndex + 1]?.trim()
-  }
+function parseTitle(lines: string[]) {
+  const titleIndex = lines.findIndex(
+    (e) => e.startsWith('Name / engl.') || e === 'Name',
+  )
+  const nextTitleIndex = lines.findIndex((e) => e === 'Kürzel' || e === 'Code')
+  return lines
+    .slice(titleIndex + 1, nextTitleIndex)
+    .join(' ')
+    .split('/')
+    .map((e) => e.trim())
 }
 
-function getLecturer(titleIndex: number, lines: string[]) {
+function parseFaculty(lines: string[]) {
+  const titleIndex = lines.findIndex(
+    (e) => e.startsWith('Fakultät') || e.startsWith('Faculty'),
+  )
+  return lines
+    .at(titleIndex + 1)
+    ?.replace('Fakultät für ', '')
+    .replace('Faculty of Computer Science', 'Informatik')
+    .replace('Informatik / Faculty of Computer Science', 'Informatik')
+    .replace('Computer Science', 'Informatik')
+    .replace('Informatik / Informatik', 'Informatik')
+    .trim()
+}
+
+function parseLecturers(lines: string[]) {
+  const titleIndex = lines.findIndex(
+    (e) => e.startsWith('Verantwortlicher') || e.startsWith('Coordinator'),
+  )
   const lecturers = []
   for (const line of lines.slice(titleIndex + 1)) {
-    if (line.startsWith('Fakultät') || line.startsWith('Faculty')) {
+    if (
+      line.startsWith('Fakultät') ||
+      line.startsWith('Faculty') ||
+      line.startsWith('Lehrsprache') ||
+      line.startsWith('Teaching language')
+    ) {
       break
     }
-    lecturers.push(line)
+    lecturers.push(line.trim())
   }
   return lecturers
 }
 
-function nc(searchRes: null | RegExpMatchArray): string {
-  if (searchRes) {
-    return searchRes[1]
-      .trim()
-      .replace('•', '\t•')
-      .replace('–', '\t\t–')
-      .replace('Fakultät für ', '')
-      .replace('Faculty of Computer Science', 'Informatik')
-      .replace('Informatik / Faculty of Computer Science', 'Informatik')
-      .replace('Computer Science', 'Informatik')
-      .replace('Informatik / Informatik', 'Informatik')
-      .trim()
+function parseCreditPoints(content: string) {
+  return Number(content.match(/(?:credits|CPs):\s(\d+)/)?.[1])
+}
+function parseSemesterHours(content: string) {
+  return Number(content.match(/(?:Credit hours|SWS):\s(\d+)/)?.[1])
+}
+
+function parseExam(lines: string[], moduleCode: string) {
+  const titleIndex = lines.findIndex(
+    (e) => e.startsWith('Type of exam') || e.startsWith('Prüfungsform'),
+  )
+  const nextTitleIndex = findIndexFrom(
+    lines,
+    titleIndex,
+    (e) =>
+      e === 'Zusätzliche Informationen' ||
+      e.startsWith('Module Catalogue »Wahlpflichtfächer«') ||
+      e.startsWith('Modulhandbuch »Wahlpflichtfächer«'),
+  )
+
+  let exam = ''
+  for (const line of lines.slice(titleIndex + 1, nextTitleIndex)) {
+    // Workaround for LaTeX quirk.
+    if (line.includes(' ') || line.includes(':') || line.includes('\t')) {
+      exam += line + '\n'
+    } else {
+      exam += line + ' '
+    }
   }
-  return ''
+  exam = exam.trim()
+  if (!exam.length) {
+    return null
+  }
+  if (exam.length > 600) {
+    console.warn(
+      `Exam description for module ${moduleCode} is longer than 600 characters`,
+    )
+    return null
+  }
+  return exam
+}
+
+function findIndexFrom<T>(lines: T[], from: number, search: (e: T) => boolean) {
+  return lines.slice(from + 1).findIndex(search) + from + 1
 }

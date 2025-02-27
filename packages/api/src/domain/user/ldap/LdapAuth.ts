@@ -65,16 +65,7 @@ export async function pwdAuth(
   if (result.type === 'Student') {
     const studentInput = {
       ...(pick(result, Object.keys(prisma.student.fields)) as typeof result),
-      Faculty: {
-        connectOrCreate: {
-          create: {
-            name: result.facultyName,
-            translatedName: { de: result.facultyName },
-          },
-          where: { name: result.facultyName },
-        },
-      },
-      facultyName: undefined,
+      faculty: result.faculty,
       User: { connect: { username: result.username } },
       username: undefined,
     }

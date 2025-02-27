@@ -23,8 +23,9 @@ function openNewDialog() {
   selectedSubject.value = {
     creditPoints: 0,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    facultyName: null,
+    faculty: '',
     infoUrl: null,
     lecturers: [],
     moduleCode: '',
@@ -115,7 +116,10 @@ async function updateSubject(subject: Course) {
       <tbody>
         <tr v-for="subject in adminStore.courses" :key="subject.moduleCode">
           <td>{{ subject.moduleCode }}</td>
-          <td>{{ subject.title.de }}</td>
+          <td>
+            {{ subject.title.de }} <br />
+            {{ subject.title.en }}
+          </td>
           <td>{{ subject.lecturers.join(', ') }}</td>
           <td>{{ subject.creditPoints }}</td>
           <td>{{ subject.semesterHours }}</td>

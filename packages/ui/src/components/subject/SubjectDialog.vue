@@ -36,12 +36,10 @@ async function copyLinkToClipboard() {
     <VCard v-if="subject" class="pa-3" color="background">
       <VCardTitle class="px-2">
         <div class="d-flex align-center">
-          <span class="text-truncate">
+          <span class="wrap-ellipsis">
             <strong>
               {{ subject.title[locale] }}
             </strong>
-            -
-            {{ subject.lecturers.join(', ') }}
           </span>
           <VSpacer />
           <VBtn
@@ -85,6 +83,17 @@ async function copyLinkToClipboard() {
     </VCard>
   </VDialog>
 </template>
+
+<style lang="scss" scoped>
+.wrap-ellipsis {
+  white-space: wrap;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+}
+</style>
 
 <!-- eslint-disable-next-line vue/enforce-style-attribute -->
 <style lang="scss">

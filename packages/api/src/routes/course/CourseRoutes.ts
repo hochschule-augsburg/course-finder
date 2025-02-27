@@ -8,18 +8,20 @@ import { prisma } from '../../prisma/prisma.ts'
 import { publicProcedure, router, studentOnlyProcedure } from '../trpc.ts'
 
 export type CourseExtended = {
+  examTypes: string[]
   offeredCourse: {
     appointments: CourseAppointmentsJson<Date>
   } & Omit<OfferedCourse, 'appointments'>
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
-  getCourses: publicProcedure.query(() => {
-    return prisma.course.findMany({
+  getCourses: publicProcedure.query(async () => {
+    const courses = await prisma.course.findMany({
       orderBy: { moduleCode: 'asc' },
       select: courseFields,
       where: { published: true },
     })
+    return courses.map(processCourse)
   }),
   getCurrentPhase: studentOnlyProcedure.query(() => {
     return prisma.enrollphase.findFirst({
@@ -35,29 +37,31 @@ export const courseRouter = router({
       }),
     )
     .query(async ({ ctx, input }): Promise<CourseExtended[]> => {
-      return (
-        await prisma.course.findMany({
-          orderBy: { moduleCode: 'asc' },
-          select: {
-            ...courseFields,
-            offeredCourse: {
-              // include only the offeredCourses that are indicated by input
-              where: {
-                phaseId: { equals: input.phaseId },
-              },
+      const courses = await prisma.course.findMany({
+        orderBy: { moduleCode: 'asc' },
+        select: {
+          ...courseFields,
+          offeredCourse: {
+            // include only the offeredCourses that are indicated by input
+            where: {
+              phaseId: { equals: input.phaseId },
             },
           },
-          // select only the courses that have an offeredCourse included
-          where: {
-            offeredCourse: {
-              some: {
-                for: { has: ctx.user.Student.fieldOfStudy },
-                phaseId: { equals: input.phaseId },
-              },
+        },
+        // select only the courses that have an offeredCourse included
+        where: {
+          offeredCourse: {
+            some: {
+              for: { has: ctx.user.Student.fieldOfStudy },
+              phaseId: { equals: input.phaseId },
             },
           },
-        })
-      ).map((e) => {
+        },
+      })
+
+      const processedCourses = courses.map(processCourse)
+
+      const parsedCourses = processedCourses.map((e) => {
         const offeredCourse = e.offeredCourse[0]
         if (!offeredCourse) {
           throw new Error(
@@ -78,6 +82,7 @@ export const courseRouter = router({
           },
         }
       })
+      return parsedCourses
     }),
   getPdf: publicProcedure
     .input(z.object({ moduleCode: z.string() }))
@@ -95,12 +100,54 @@ export const courseRouter = router({
     }),
 })
 
-export const courseFields: { [key in 'Faculty' | keyof Course]?: boolean } = {
+// https://gitlab.informatik.tha.de/phe/fki-modulhandbuecher/-/blob/master/SharedSources/modules.sty
+const examTypesData = [
+  {
+    keywords: ['Schriftliche Prüfung', 'Klausur', 'Written examination'],
+    option: 'filter.ex.written-exam',
+  },
+  {
+    keywords: ['Projektarbeit', 'Project work'],
+    option: 'filter.ex.project-work',
+  },
+  {
+    keywords: ['Studienarbeit', 'Written assignment'],
+    option: 'filter.ex.written-assignment',
+  },
+  {
+    keywords: ['Präsentation', 'Presentation'],
+    option: 'filter.ex.presentation',
+  },
+  {
+    keywords: ['Elektronische Prüfung', 'Electronic examination'],
+    option: 'filter.ex.e-written',
+  },
+  {
+    keywords: ['Mündliche Prüfung', 'Oral examination'],
+    option: 'filter.ex.oral',
+  },
+]
+
+function processCourse<T extends { exam: null | string }>(
+  course: T,
+): { examTypes: string[] } & T {
+  const examTypes = examTypesData
+    .filter((type) => {
+      return type.keywords.find((keyword) => {
+        return course.exam?.includes(keyword)
+      })
+    })
+    .map((e) => e.option)
+
+  return { ...course, examTypes: examTypes }
+}
+
+const courseFields: { [key in keyof Course]?: boolean } = {
   creditPoints: true,
   editorUsername: true,
+  exam: true,
   extraInfo: true,
-  Faculty: true,
-  facultyName: true,
+  faculty: true,
   infoUrl: true,
   lecturers: true,
   moduleCode: true,

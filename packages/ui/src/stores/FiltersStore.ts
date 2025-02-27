@@ -5,16 +5,16 @@ import { computed, reactive, ref, watch } from 'vue'
 import { type Subject, useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'
 
-export type Options = {
+export type Option = {
   option: string
   selected: boolean
 }
 
 export type OptionsFilter = {
-  filterFn: (subjects: Subject[], options: Options[]) => Subject[]
+  filterFn: (subjects: Subject[], options: Option[]) => Subject[]
   hidden?: boolean
   name: string
-  options: Options[]
+  options: Option[]
 }
 export type RangeFilter = {
   filterFn: (
@@ -37,7 +37,7 @@ export const useFiltersStore = defineStore('filters', () => {
   )
   const optionsFilters: OptionsFilter[] = reactive([
     {
-      filterFn: (subjects: Subject[], options: Options[]) =>
+      filterFn: (subjects: Subject[], options: Option[]) =>
         subjects.filter((e) => {
           if (!e.offeredCourse) {
             return true
@@ -57,9 +57,65 @@ export const useFiltersStore = defineStore('filters', () => {
       hidden: hideNonStudentFilters,
       name: 'filter.type-of-event',
       options: [
-        { option: 'filter.weekly', selected: false }, // Updated to use i18n key
-        { option: 'filter.block-event', selected: false }, // Updated to use i18n key
-        { option: 'filter.irregular', selected: false }, // Updated to use i18n key
+        { option: 'filter.weekly', selected: false },
+        { option: 'filter.block-event', selected: false },
+        { option: 'filter.irregular', selected: false },
+      ],
+    },
+    {
+      filterFn: (subjects: Subject[], options: Option[]) => {
+        const miscSelected = options.at(-1)?.selected
+
+        const selectedOptions = options
+          .filter((option) => option.selected)
+          .map((option) => option.option)
+
+        return subjects.filter((subject) => {
+          if (selectedOptions.length === 0) {
+            return true
+          }
+          if (miscSelected && !subject.examTypes.length) {
+            return true
+          }
+          if (subject.examTypes.length === 0) {
+            return false
+          }
+          return subject.examTypes.every((type) =>
+            selectedOptions.includes(type),
+          )
+        })
+      },
+
+      name: 'filter.exam-type',
+      options: [
+        {
+          option: 'filter.ex.written-exam',
+          selected: false,
+        },
+        {
+          option: 'filter.ex.project-work',
+          selected: false,
+        },
+        {
+          option: 'filter.ex.written-assignment',
+          selected: false,
+        },
+        {
+          option: 'filter.ex.presentation',
+          selected: false,
+        },
+        {
+          option: 'filter.ex.e-written',
+          selected: false,
+        },
+        {
+          option: 'filter.ex.oral',
+          selected: false,
+        },
+        {
+          option: 'filter.ex.misc',
+          selected: false,
+        },
       ],
     },
     {
@@ -153,7 +209,7 @@ export const useFiltersStore = defineStore('filters', () => {
   )
 
   const activeOptions = computed(() => {
-    const activeOptions: Options[] = []
+    const activeOptions: Option[] = []
     activeOptionsFilters.value.forEach((filter) => {
       activeOptions.push(...filter.options.filter((o) => o.selected))
     })

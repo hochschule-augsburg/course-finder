@@ -342,34 +342,6 @@ export const data: OfferedCourse[] = [
     appointments: {
       dates: [
         {
-          from: '2024-04-05T14:00:00',
-          to: '2024-04-05T17:10:00',
-        },
-      ],
-      type: 'weekly',
-    },
-    externalRegistration: false,
-    extraInfo: null,
-    for: [
-      'Informatik (Bachelor)',
-      'Wirtschaftsinformatik (Bachelor)',
-      'Technische Informatik (Bachelor)',
-      'International Information Systems (Bachelor)',
-      'Applied Research (Master)',
-      'Informatik (Master)',
-      'Business Information Systems (Master)',
-      'Industrielle Sicherheit',
-    ],
-    maxParticipants: 36,
-    minParticipants: 0,
-    moduleCode: '__SES4.WP',
-    moodleCourse: null,
-    phaseId: 1,
-  },
-  {
-    appointments: {
-      dates: [
-        {
           from: '2024-04-05T15:40:00',
           to: '2024-04-05T18:50:00',
         },

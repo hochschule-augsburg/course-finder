@@ -62,8 +62,9 @@ function openNewDialog() {
   selectedSubject.value = {
     creditPoints: 0,
     editorUsername: null,
+    exam: null,
     extraInfo: null,
-    facultyName: null,
+    faculty: '',
     infoUrl: null,
     lecturers: [],
     moduleCode: '',

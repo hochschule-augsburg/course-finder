@@ -1,16 +1,17 @@
+import type { Course } from '@prisma/client'
+
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import { prisma } from '../../../prisma/prisma.ts'
 import { i18nInput, nullString } from '../../../prisma/PrismaZod.ts'
-import { courseFields } from '../../course/CourseRoutes.ts'
 import { adminProcedure, router } from '../../trpc.ts'
 
 const courseSpec = z.object({
   creditPoints: z.number().int(),
   editorUsername: nullString,
   extraInfo: nullString,
-  facultyName: nullString,
+  faculty: z.string(),
   infoUrl: nullString,
   lecturers: z.array(z.string()).optional(),
   moduleCode: z.string(),
@@ -69,3 +70,19 @@ export const coursesRoutes = router({
     })
   }),
 })
+
+const courseFields: { [key in keyof Course]: boolean } = {
+  creditPoints: true,
+  editorUsername: true,
+  exam: false,
+  extraInfo: true,
+  faculty: true,
+  infoUrl: true,
+  lecturers: true,
+  moduleCode: true,
+  pdf: false,
+  published: true,
+  semesterHours: true,
+  title: true,
+  varyingCP: true,
+}

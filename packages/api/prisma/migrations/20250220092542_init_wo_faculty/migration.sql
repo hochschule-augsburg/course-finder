@@ -2,7 +2,18 @@
 CREATE TYPE "UserRole" AS ENUM ('Student', 'Professor', 'User', 'Admin');
 
 -- CreateEnum
+CREATE TYPE "Singleton" AS ENUM ('Instance');
+
+-- CreateEnum
 CREATE TYPE "PhaseState" AS ENUM ('NOT_STARTED', 'OPEN', 'CLOSED', 'DRAWING', 'FINISHED');
+
+-- CreateTable
+CREATE TABLE "AppConf" (
+    "id" "Singleton" NOT NULL DEFAULT 'Instance',
+    "maxCredits" INTEGER NOT NULL DEFAULT 30,
+
+    CONSTRAINT "AppConf_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -23,17 +34,9 @@ CREATE TABLE "Student" (
     "fieldOfStudy" TEXT NOT NULL,
     "term" INTEGER,
     "regNumber" TEXT,
-    "facultyName" TEXT NOT NULL,
+    "faculty" TEXT NOT NULL,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("username")
-);
-
--- CreateTable
-CREATE TABLE "Faculty" (
-    "name" TEXT NOT NULL,
-    "translatedName" JSONB NOT NULL,
-
-    CONSTRAINT "Faculty_pkey" PRIMARY KEY ("name")
 );
 
 -- CreateTable
@@ -43,7 +46,7 @@ CREATE TABLE "Course" (
     "published" BOOLEAN NOT NULL DEFAULT false,
     "editorUsername" TEXT,
     "lecturers" TEXT[],
-    "facultyName" TEXT,
+    "faculty" TEXT NOT NULL,
     "semesterHours" INTEGER NOT NULL,
     "creditPoints" INTEGER NOT NULL,
     "varyingCP" JSONB,
@@ -117,13 +120,7 @@ CREATE TABLE "PhaseAssignment" (
 ALTER TABLE "Student" ADD CONSTRAINT "Student_username_fkey" FOREIGN KEY ("username") REFERENCES "User"("username") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Student" ADD CONSTRAINT "Student_facultyName_fkey" FOREIGN KEY ("facultyName") REFERENCES "Faculty"("name") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Course" ADD CONSTRAINT "Course_editorUsername_fkey" FOREIGN KEY ("editorUsername") REFERENCES "User"("username") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Course" ADD CONSTRAINT "Course_facultyName_fkey" FOREIGN KEY ("facultyName") REFERENCES "Faculty"("name") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OfferedCourse" ADD CONSTRAINT "OfferedCourse_phaseId_fkey" FOREIGN KEY ("phaseId") REFERENCES "Enrollphase"("id") ON DELETE CASCADE ON UPDATE CASCADE;

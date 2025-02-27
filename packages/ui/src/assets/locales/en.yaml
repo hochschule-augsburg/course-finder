@@ -31,6 +31,16 @@ filter:
   credit-points: credit points
   participants: participants
   irregular: irregular
+  exam-type: Examination
+  ex:
+    written-exam: Written exam
+    project-work: Project work
+    written-assignment: Written assignment
+    presentation: Presentation
+    e-written: Electronic Exam
+    oral: Oral exam
+    misc: Miscellaneous
+
 
 phase-states:
   not-started: Not started

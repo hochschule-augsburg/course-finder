@@ -31,6 +31,15 @@ filter:
   credit-points: CP
   participants: Teilnehmer
   irregular: Irregulär
+  exam-type: Prüfung
+  ex:
+    written-exam: Klausur
+    project-work: Projektarbeit
+    written-assignment: Studienarbeit
+    presentation: Präsentation
+    e-written: Elektronische Klausur
+    oral: Mündlich
+    misc: Sonstige
 
 phase-states:
   not-started: Nicht gestartet
