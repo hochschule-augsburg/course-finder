@@ -9,11 +9,6 @@
     "VITE",
     "vuetify"
   ],
-  "css.validate": false, // Disable built-in lint
-  "less.validate": false, // Disable built-in lint
-  "scss.validate": false, // Disable built-in lint
-  "stylelint.enable": true, // Enable stylelint
-  "stylelint.validate": ["css", "less", "postcss", "vue"],
   "eslint.workingDirectories": ["./packages/api", "./packages/ui"],
   "terminal.integrated.persistentSessionReviveProcess": "never"
 }

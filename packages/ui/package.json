@@ -12,8 +12,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:update": "vitest run -u",
-    "lint": "eslint --no-warn-ignored src/ tests/",
-    "stylelint": "stylelint **/*.{vue,scss}"
+    "lint": "eslint --no-warn-ignored src/ tests/"
   },
   "dependencies": {
     "@date-io/date-fns": "^3.2.0",
@@ -46,10 +45,6 @@
     "postcss-html": "^1.8.0",
     "resize-observer-polyfill": "^1.5.1",
     "sass-embedded": "^1.85.0",
-    "stylelint": "^16.14.1",
-    "stylelint-config-recommended-scss": "^14.1.0",
-    "stylelint-config-recommended-vue": "^1.6.0",
-    "stylelint-declaration-strict-value": "^1.10.7",
     "typescript": "^5.7.3",
     "unplugin-fonts": "^1.3.1",
     "unplugin-vue-components": "^28.2.0",
