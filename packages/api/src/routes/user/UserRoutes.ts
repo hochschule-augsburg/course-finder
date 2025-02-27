@@ -81,7 +81,7 @@ export const authRouter = router({
           httpOnly: true,
           path: '/',
           sameSite: true,
-          secure: process.env.NODE_ENV === 'production',
+          secure: !env.DEV,
         })
         return result.user
       },
@@ -92,7 +92,7 @@ export const authRouter = router({
       httpOnly: true,
       path: '/',
       sameSite: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: !env.DEV,
     })
   }),
   // only works with local users
@@ -134,7 +134,7 @@ export const authRouter = router({
           httpOnly: true,
           path: '/',
           sameSite: true,
-          secure: process.env.NODE_ENV === 'production',
+          secure: !env.DEV,
         })
         return clientUser
       },
