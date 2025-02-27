@@ -33,21 +33,20 @@ describe('pwdAuth', () => {
     expect(result).toEqual({ cause: 'invalid-credentials', success: false })
   })
 
-  it('should return success and twoFA status if password is correct', async () => {
+  it('should return success status if password is correct', async () => {
     const salt = 'salt'
     const password = 'password'
     const hashedPassword = await hashPassword(password, salt)
 
     // @ts-ignore
     prismaMock.user.findUnique.mockResolvedValue({
-      auth: { method: 'local', password: hashedPassword, salt, twoFA: true },
+      auth: { method: 'local', password: hashedPassword, salt },
     })
 
     const result = await pwdAuth('username', password)
 
     expect(result).toEqual({
       success: true,
-      twoFA: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       user: expect.any(Object),
     })

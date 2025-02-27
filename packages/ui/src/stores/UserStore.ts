@@ -25,23 +25,8 @@ export const useUserStore = defineStore('user', () => {
   return { initPromise, login, logout, mayEnroll, user }
 
   async function login(username: string, password: string, otp?: string) {
-    if (otp) {
-      return twoFA(username, otp)
-    }
     const result = await trpc.auth.login.mutate({
       password,
-      username,
-    })
-    if (typeof result === 'object') {
-      user.value = result
-    }
-
-    return result
-  }
-
-  async function twoFA(username: string, otp: string) {
-    const result = await trpc.auth.twoFA.mutate({
-      otp,
       username,
     })
     if (typeof result === 'object') {

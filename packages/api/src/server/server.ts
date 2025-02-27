@@ -14,7 +14,10 @@ import { createContext } from './context.ts'
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {
-    payload: ClientUserExtended
+    payload: {
+      ctxHash: string
+      user: ClientUserExtended
+    }
   }
 }
 

@@ -23,7 +23,7 @@ export type AppConf = Omit<PAppConf, 'id'>
 
 export type Course = Omit<PCourse, 'pdf'>
 
-export type ClientUser = { auth: { twoFA?: boolean } } & Omit<PUser, 'auth'>
+export type ClientUser = { auth: object } & Omit<PUser, 'auth'>
 export type ClientUserExtended = {
   Student?: null | PStudent
 } & ClientUser
@@ -62,12 +62,11 @@ declare global {
     type Otp = { expires: number; otp: string }
     type I18n = I18nJson
     type CourseAppointments = CourseAppointmentsJson<string>
-    type Auth = { twoFA?: true } & (
+    type Auth =
       | {
           method: 'ldap'
         }
       | { method: 'local'; password: string; salt: string }
-    )
   }
 }
 

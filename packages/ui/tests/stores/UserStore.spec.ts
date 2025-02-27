@@ -35,20 +35,6 @@ describe.skip('UserStore', () => {
     expect(store.user).toBeNull()
   })
 
-  it('handles two-factor authentication', async () => {
-    const mockUser = mock<ClientUserExtended>()
-    trpcMock.auth.twoFA.mutate.mockResolvedValue(mockUser)
-
-    const { result: store } = setupComposable(useUserStore)
-    await store.login('test', '', '123456')
-
-    expect(trpcMock.auth.twoFA.mutate).toHaveBeenCalledWith({
-      otp: '123456',
-      username: 'test',
-    })
-    expect(store.user).toEqual(mockUser)
-  })
-
   it('logs out a user', async () => {
     trpcMock.auth.logout.mutate.mockResolvedValue()
 

@@ -23,31 +23,10 @@ const userStore = useUserStore()
 
 const username = ref('')
 const password = ref('')
-const otp = ref('')
 
 const isValid = computed(() => !!(username.value && password.value))
-const twoFANeeded = ref(false)
 const pending = ref(false)
 const error = ref<string>()
-
-async function twoFALogin() {
-  pending.value = true
-  let result: 'unknown-error' | Awaited<ReturnType<typeof userStore.login>>
-  try {
-    result = await userStore.login(username.value, password.value, otp.value)
-  } catch (e) {
-    console.error(e)
-    error.value = 'global.unknown-error'
-    return
-  } finally {
-    pending.value = false
-  }
-  if (typeof result === 'object') {
-    emit('success')
-    return
-  }
-  error.value = `error.two-fa.${result}`
-}
 
 async function login() {
   pending.value = true
@@ -66,10 +45,6 @@ async function login() {
     emit('success')
     return
   }
-  if (result === 'two-fa-required') {
-    twoFANeeded.value = true
-    return
-  }
   error.value = `error.${result}`
 }
 
@@ -85,7 +60,7 @@ function validUsername(input: string) {
   <VCard class="login-dialog-host">
     <VCardTitle>Login</VCardTitle>
     <VCardText>
-      <VForm v-if="!twoFANeeded" @submit="login">
+      <VForm @submit="login">
         <VTextField
           v-model="username"
           :error="!!error"
@@ -105,14 +80,6 @@ function validUsername(input: string) {
           @update:model-value="error = undefined"
         />
       </VForm>
-      <VTextField
-        v-model="otp"
-        v-if="twoFANeeded"
-        :label="t('two-fa-code')"
-        type="number"
-        hide-spin-buttons
-        @keyup.enter="twoFALogin"
-      />
     </VCardText>
     <VCardActions>
       <VSpacer />
@@ -121,7 +88,7 @@ function validUsername(input: string) {
         :loading="pending"
         color="primary"
         variant="tonal"
-        @click="!twoFANeeded ? login() : twoFALogin()"
+        @click="login()"
       >
         {{ t('login') }}
       </VBtn>
@@ -140,10 +107,8 @@ en:
   login: Login
   username: Username
   password: Password
-  two-fa-code: Two-factor code
   error:
     service-not-available: Service not available
-    two-fa-required: Two-factor authentication required
     invalid-credentials: Invalid credentials
     already-logged-in: Already logged in
     invalid-characters: Invalid characters
@@ -154,10 +119,8 @@ de:
   login: Einloggen
   username: Benutzername
   password: Passwort
-  two-fa-code: Zwei-Faktor-Code
   error:
     service-not-available: Dienst nicht verfügbar
-    two-fa-required: Zwei-Faktor-Authentifizierung erforderlich
     invalid-credentials: Ungültige Anmeldeinformationen
     already-logged-in: Bereits angemeldet
     invalid-characters: Ungültige Zeichen

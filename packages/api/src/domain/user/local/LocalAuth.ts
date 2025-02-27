@@ -16,15 +16,12 @@ export async function pwdAuth(
   if (!user || user.auth.method !== 'local') {
     return { cause: 'invalid-credentials', success: false }
   }
-  const clientUser = { ...user, auth: { twoFA: user.auth.twoFA } }
+  const clientUser = { ...user, auth: {} }
 
   const hashedPassword = await hashPassword(password, user.auth.salt)
 
   if (comparePasswords(hashedPassword, user.auth.password)) {
-    if (user.auth.twoFA) {
-      return { success: true, twoFA: true, user: clientUser }
-    }
-    return { success: true, twoFA: false, user: clientUser }
+    return { success: true, user: clientUser }
   }
 
   return { cause: 'invalid-credentials', success: false }

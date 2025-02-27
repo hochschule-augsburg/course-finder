@@ -58,10 +58,7 @@ export async function pwdAuth(
     update: userInput,
     where: { username: result.username },
   })
-  const clientUser = { ...user, auth: { twoFA: user.auth.twoFA } }
-  if (user.auth.twoFA) {
-    return { success: true, twoFA: true, user: clientUser }
-  }
+  const clientUser = { ...user, auth: {} }
   if (result.type === 'Student') {
     const studentInput = {
       ...(pick(result, Object.keys(prisma.student.fields)) as typeof result),
@@ -76,11 +73,10 @@ export async function pwdAuth(
     })
     return {
       success: true,
-      twoFA: false,
       user: { Student: student, ...clientUser },
     }
   }
-  return { success: true, twoFA: false, user: clientUser }
+  return { success: true, user: clientUser }
 }
 
 const getConfiguration = once(() => {
