@@ -67,6 +67,7 @@ function openNewDialog() {
     faculty: '',
     infoUrl: null,
     lecturers: [],
+    maExam: null,
     moduleCode: '',
     published: false,
     semesterHours: 0,

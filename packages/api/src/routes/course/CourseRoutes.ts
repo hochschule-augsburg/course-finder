@@ -1,4 +1,4 @@
-import type { Course, OfferedCourse } from '@prisma/client'
+import type { Course, OfferedCourse, Student } from '@prisma/client'
 
 import { z } from 'zod'
 
@@ -16,13 +16,13 @@ export type CourseExtended = {
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
-  getCourses: publicProcedure.query(async () => {
+  getCourses: publicProcedure.query(async ({ ctx }) => {
     const courses = await prisma.course.findMany({
       orderBy: { moduleCode: 'asc' },
       select: courseFields,
       where: { published: true },
     })
-    return courses.map(processCourse)
+    return courses.map((e) => processCourse(e, ctx.user?.Student))
   }),
   getCurrentPhase: studentOnlyProcedure.query(() => {
     return prisma.enrollphase.findFirst({
@@ -60,7 +60,9 @@ export const courseRouter = router({
         },
       })
 
-      const processedCourses = courses.map(processCourse)
+      const processedCourses = courses.map((e) =>
+        processCourse(e, ctx.user.Student),
+      )
 
       const parsedCourses = processedCourses.map((e) => {
         const offeredCourse = e.offeredCourse[0]
@@ -92,7 +94,7 @@ export const courseRouter = router({
     .input(z.object({ moduleCode: z.string() }))
     .query(async ({ input }) => {
       const course = await prisma.course.findFirst({
-        select: { pdf: true },
+        select: { maPdf: true, pdf: true },
         where: {
           moduleCode: input.moduleCode,
         },
@@ -100,7 +102,10 @@ export const courseRouter = router({
       if (!course) {
         throw new Error(`Course with moduleCode ${input.moduleCode} not found`)
       }
-      return { pdf: course.pdf ? new Int8Array(course.pdf) : null }
+      return {
+        maPdf: course.maPdf ? new Int8Array(course.maPdf) : null,
+        pdf: course.pdf ? new Int8Array(course.pdf) : null,
+      }
     }),
 })
 
@@ -132,13 +137,17 @@ const examTypesData = [
   },
 ]
 
-function processCourse<T extends { exam: null | string }>(
-  course: T,
-): { examTypes: string[] } & T {
+function processCourse<
+  T extends { exam: null | string; maExam: null | string },
+>(course: T, student: null | Student | undefined): { examTypes: string[] } & T {
+  let exam = course.exam
+  if (student?.finalDegree === 'Master') {
+    exam = course.maExam || course.exam
+  }
   const examTypes = examTypesData
     .filter((type) => {
       return type.keywords.find((keyword) => {
-        return course.exam?.includes(keyword)
+        return exam?.includes(keyword)
       })
     })
     .map((e) => e.option)
@@ -146,7 +155,7 @@ function processCourse<T extends { exam: null | string }>(
   return { ...course, examTypes: examTypes }
 }
 
-const courseFields: { [key in keyof Course]?: boolean } = {
+const courseFields: { [key in keyof Course]: boolean } = {
   creditPoints: true,
   editorUsername: true,
   exam: true,
@@ -154,6 +163,8 @@ const courseFields: { [key in keyof Course]?: boolean } = {
   faculty: true,
   infoUrl: true,
   lecturers: true,
+  maExam: true,
+  maPdf: false,
   moduleCode: true,
   pdf: false,
   published: true,

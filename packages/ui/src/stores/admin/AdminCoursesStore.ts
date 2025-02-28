@@ -11,7 +11,7 @@ import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-export type Course = Omit<ApiCourse, 'pdf'>
+export type Course = Omit<ApiCourse, 'maPdf' | 'pdf'>
 
 export type Phase = EnrollPhase
 

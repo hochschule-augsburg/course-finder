@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Subject } from '@/stores/CoursesStore'
 
+import { useUserStore } from '@/stores/UserStore'
 import { trpc } from '@/trpc'
 import {
   mdiAccountMultiple,
@@ -35,16 +36,33 @@ const props = defineProps<{
 
 const { locale, t } = useI18n()
 
+const userStore = useUserStore()
+
 const { state: pdfSource } = useAsyncState(
   async () =>
-    (await trpc.course.getPdf.query({ moduleCode: props.subject.moduleCode }))
-      .pdf,
+    await trpc.course.getPdf.query({ moduleCode: props.subject.moduleCode }),
   undefined,
 )
 const theme = useTheme()
-const fullscreen = ref(false)
+const fullscreen = ref<'infoUrl' | 'maPdf' | 'pdf' | undefined>()
 
-const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
+const userDegree = computed(() => userStore.user?.Student?.finalDegree)
+
+const exam = computed(() => {
+  let exam: null | string = props.subject.exam
+  if (!userDegree.value && props.subject.exam && props.subject.maExam) {
+    exam = `
+#### Bachelor
+${props.subject.exam}
+#### Master
+${props.subject.maExam}
+    `
+  }
+  if (userDegree.value === 'Master') {
+    exam = props.subject.maExam || props.subject.exam
+  }
+  return exam?.replaceAll('•', '-')
+})
 </script>
 
 <template>
@@ -69,6 +87,14 @@ const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
             <p>{{ subject.creditPoints }} {{ t('credit-points') }}</p>
           </section>
 
+          <section v-if="exam">
+            <div class="icon-heading">
+              <VIcon :icon="mdiTypewriter" size="32" />
+              <h4>{{ t('exam') }}</h4>
+            </div>
+            <VueMarkdown :source="exam" class="markdown" />
+          </section>
+
           <template v-if="subject.offeredCourse">
             <section>
               <div class="icon-heading">
@@ -82,14 +108,6 @@ const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
                   (subject.offeredCourse.maxParticipants || '∞')
                 }}
               </p>
-            </section>
-
-            <section v-if="exam">
-              <div class="icon-heading">
-                <VIcon :icon="mdiTypewriter" size="32" />
-                <h4>{{ t('exam') }}</h4>
-              </div>
-              <VueMarkdown :source="exam" class="markdown" />
             </section>
 
             <section>
@@ -193,47 +211,71 @@ const exam = computed(() => props.subject.exam?.replaceAll('•', '-'))
         </VSheet>
       </VCarouselItem>
 
-      <VCarouselItem v-if="subject.infoUrl || pdfSource">
+      <VCarouselItem
+        v-if="(userDegree !== 'Master' || !pdfSource?.maPdf) && pdfSource?.pdf"
+      >
         <VBtn
           :icon="mdiFullscreen"
           class="floating"
-          @click="fullscreen = true"
+          @click="fullscreen = 'pdf'"
         />
         <VuePdfEmbed
-          v-if="pdfSource"
           :class="{
             'pdf-view-dark': theme.global.name.value === 'customDarkTheme',
           }"
-          :source="pdfSource"
+          :source="pdfSource?.pdf"
           class="pdf-view"
           annotation-layer
           text-layer
         />
-        <iframe
-          v-else-if="subject.infoUrl"
-          :src="subject.infoUrl"
+      </VCarouselItem>
+      <VCarouselItem v-if="userDegree !== 'Bachelor' && pdfSource?.maPdf">
+        <VBtn
+          :icon="mdiFullscreen"
+          class="floating"
+          @click="fullscreen = 'maPdf'"
+        />
+        <VuePdfEmbed
+          :class="{
+            'pdf-view-dark': theme.global.name.value === 'customDarkTheme',
+          }"
+          :source="pdfSource?.maPdf"
           class="pdf-view"
+          annotation-layer
+          text-layer
         />
       </VCarouselItem>
+      <VCarouselItem v-if="subject.infoUrl">
+        <VBtn
+          :icon="mdiFullscreen"
+          class="floating"
+          @click="fullscreen = 'infoUrl'"
+        />
+        <iframe :src="subject.infoUrl" class="pdf-view" />
+      </VCarouselItem>
     </VCarousel>
-    <VDialog v-model:model-value="fullscreen" fullscreen>
+    <VDialog
+      :model-value="!!fullscreen"
+      fullscreen
+      @update:model-value="fullscreen = undefined"
+    >
       <VBtn
         :icon="mdiFullscreenExit"
         class="floating"
-        @click="fullscreen = false"
+        @click="fullscreen = undefined"
       />
       <VuePdfEmbed
-        v-if="pdfSource"
+        v-if="fullscreen === 'pdf' || fullscreen === 'maPdf'"
         :class="{
           'pdf-view-dark': theme.global.name.value === 'customDarkTheme',
         }"
-        :source="pdfSource"
+        :source="pdfSource?.[fullscreen]"
         class="pdf-view"
         annotation-layer
         text-layer
       />
       <iframe
-        v-else-if="subject.infoUrl"
+        v-else-if="fullscreen === 'infoUrl' && subject.infoUrl"
         :src="subject.infoUrl"
         class="pdf-view"
       />

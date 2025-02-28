@@ -44,6 +44,8 @@ function extractData(
     faculty,
     infoUrl: null,
     lecturers,
+    maExam: null,
+    maPdf: null,
     moduleCode,
     pdf: data.buffer,
     published: true,
