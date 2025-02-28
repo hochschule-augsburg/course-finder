@@ -45,16 +45,24 @@ export const enrollRouter = router({
             orderBy: [{ externalRegistration: 'asc' }, { moduleCode: 'asc' }],
             where: { phaseId: input.phaseId },
           })
-        ).map((course) => ({
-          ...course,
-          appointments: {
-            dates: course.appointments.dates.map((date) => ({
-              from: new Date(date.from),
-              to: new Date(date.to),
-            })),
-            type: course.appointments.type,
-          },
-        }))
+        )
+          .map((course) => ({
+            ...course,
+            appointments: {
+              dates: course.appointments.dates.map((date) => ({
+                from: new Date(date.from),
+                to: new Date(date.to),
+              })),
+              type: course.appointments.type,
+            },
+          }))
+          .toSorted((a, b) => {
+            if (a.externalRegistration && !b.externalRegistration) return 1
+            if (!a.externalRegistration && b.externalRegistration) return -1
+            return (a.Course.title.de ?? '').localeCompare(
+              b.Course.title.de ?? '',
+            )
+          })
       }),
     update: adminProcedure
       .input(
@@ -110,17 +118,25 @@ export const enrollRouter = router({
 
         return {
           ...result,
-          offeredCourses: result.offeredCourses.map((course) => ({
-            ...course,
-            appointments: {
-              dates: course.appointments.dates.map(({ from, to }) => ({
-                from: new Date(from),
-                to: new Date(to),
-              })),
-              type: course.appointments.type,
-            },
-            moodleCourse: null,
-          })),
+          offeredCourses: result.offeredCourses
+            .map((course) => ({
+              ...course,
+              appointments: {
+                dates: course.appointments.dates.map(({ from, to }) => ({
+                  from: new Date(from),
+                  to: new Date(to),
+                })),
+                type: course.appointments.type,
+              },
+              moodleCourse: null,
+            }))
+            .toSorted((a, b) => {
+              if (a.externalRegistration && !b.externalRegistration) return 1
+              if (!a.externalRegistration && b.externalRegistration) return -1
+              return (a.Course.title.de ?? '').localeCompare(
+                b.Course.title.de ?? '',
+              )
+            }),
         }
       }),
     list: adminProcedure.query(async () => {

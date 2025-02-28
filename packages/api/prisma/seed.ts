@@ -28,7 +28,7 @@ async function main() {
   const options = {
     'download-courses-pdf': { type: 'boolean' },
     'no-test-data': { type: 'boolean' },
-    'old-offered-courses': { type: 'boolean' },
+    'old-courses': { type: 'boolean' },
   } as const
   const { values } = parseArgs({ args: process.argv.slice(2), options })
 
@@ -196,7 +196,7 @@ async function main() {
     }),
   )
 
-  if (values['old-offered-courses']) {
+  if (values['old-courses']) {
     await fillOldCourses()
   }
   if (values['download-courses-pdf']) {

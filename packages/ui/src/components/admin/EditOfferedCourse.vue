@@ -4,6 +4,7 @@ import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTyp
 
 import {
   abbrFieldsOfStudyMap,
+  fieldsOfStudy,
   fieldsOfStudyAbbrMap,
 } from '@/helper/enums/fieldsOfStudy'
 import { getLocalISOString } from '@/helper/LocaleDateFormat'
@@ -260,6 +261,29 @@ const minParticipantsRules = [
   (i: number) => isNumber(i.valueOf()) || 'Bitte eine Zahl eingeben',
   (i: number) => i.valueOf() >= 0 || 'Teilnehmerzahl mindestens 0',
 ]
+
+function forBaStudy() {
+  if (!formData.value) {
+    return
+  }
+  formData.value.for = Object.entries(fieldsOfStudy)
+    .filter((e) => e[1].degree === 'Bachelor')
+    .map((e) => e[1].abbr)
+}
+function forMaStudy() {
+  if (!formData.value) {
+    return
+  }
+  formData.value.for = Object.entries(fieldsOfStudy)
+    .filter((e) => e[1].degree === 'Master')
+    .map((e) => e[1].abbr)
+}
+function forAllStudy() {
+  if (!formData.value) {
+    return
+  }
+  formData.value.for = Object.values(fieldsOfStudy).map((e) => e.abbr)
+}
 </script>
 
 <template>
@@ -300,10 +324,18 @@ const minParticipantsRules = [
               v-model="formData.for"
               :items="Object.keys(abbrFieldsOfStudyMap)"
               label="Für Studienfelder"
+              style="height: 3.5rem"
               chips
               multiple
               required
             >
+              <template #append>
+                <div class="inner-btn">
+                  <VBtn @click.stop="forBaStudy">BA</VBtn>
+                  <VBtn @click.stop="forMaStudy">MA</VBtn>
+                  <VBtn @click.stop="forAllStudy">All</VBtn>
+                </div>
+              </template>
               <template #item="{ props: itemProps, item }">
                 <VListItem
                   v-bind="itemProps"
@@ -479,3 +511,17 @@ const minParticipantsRules = [
     </VCard>
   </VDialog>
 </template>
+
+<style lang="scss" scoped>
+.inner-btn {
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+  margin-left: -1rem;
+  .v-btn {
+    min-width: 1rem;
+    width: 1rem;
+    margin-left: var(--element-spacing-s);
+  }
+}
+</style>

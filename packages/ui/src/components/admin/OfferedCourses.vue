@@ -94,7 +94,7 @@ async function createSubject(subject: Course | undefined) {
       externalRegistration: false,
       extraInfo: null,
       for: [],
-      hideMinParticipants: false,
+      hideMinParticipants: true,
       maxParticipants: null,
       minParticipants: 16,
       moduleCode: subject.moduleCode,
@@ -154,7 +154,7 @@ function convertToOfferedCourseData(course: Course): OfferedCourseData {
       externalRegistration: false,
       extraInfo: null,
       for: [],
-      hideMinParticipants: false,
+      hideMinParticipants: true,
       maxParticipants: null,
       minParticipants: 16,
       moduleCode: course.moduleCode,
@@ -355,6 +355,7 @@ const searchOffered = ref('')
                     </div>
                     <div>
                       Mindestteilnehmer: {{ element.minParticipants }}
+                      {{ element.hideMinParticipants ? '(hidden)' : '' }}
                       <template v-if="element.maxParticipants">
                         Maximale Teilnehmer:
                         {{ element.maxParticipants }}
