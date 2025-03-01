@@ -57,6 +57,7 @@ const overviewPhase = computed(
 
 <template>
   <div class="h-100">
+    <WelcomeBox :logged-in="userStore.user !== undefined" class="mx-2 mb-6" />
     <EnrollmentOverview
       v-if="overviewPhase"
       :phase="overviewPhase"
