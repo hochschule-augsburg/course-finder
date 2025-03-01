@@ -21,12 +21,12 @@
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
-    "@fastify/cors": "^10.0.2",
+    "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.0.4",
     "@fastify/multipart": "^9.0.3",
-    "@prisma/adapter-pg": "^6.3.1",
-    "@prisma/client": "^6.3.1",
-    "@trpc/server": "11.0.0-rc.781",
+    "@prisma/adapter-pg": "^6.4.1",
+    "@prisma/client": "^6.4.1",
+    "@trpc/server": "11.0.0-rc.819",
     "date-fns": "^4.1.0",
     "fastify": "^5.2.1",
     "ldapts": "^7.3.1",
@@ -37,7 +37,7 @@
     "pdf.js-extract": "^0.2.1",
     "pg": "^8.13.3",
     "pm2": "^5.4.3",
-    "prisma": "^6.3.1",
+    "prisma": "^6.4.1",
     "prisma-json-types-generator": "^3.2.2",
     "superjson": "^2.2.2",
     "totp-generator": "^1.0.0",
@@ -53,9 +53,9 @@
     "@types/pg": "^8.11.11",
     "esbuild": "^0.25.0",
     "pino-pretty": "^13.0.0",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.6",
-    "vitest-mock-extended": "^2.0.2"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7",
+    "vitest-mock-extended": "^3.0.1"
   },
   "prisma": {
     "seed": "node prisma/seed.ts"
