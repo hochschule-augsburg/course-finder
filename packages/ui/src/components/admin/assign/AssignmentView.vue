@@ -2,6 +2,9 @@
 import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
+import { trpc } from '@/trpc'
+import { mdiDownload } from '@mdi/js'
+import { saveAs } from 'file-saver'
 import { computed, nextTick, onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -58,6 +61,18 @@ async function publish() {
   }
 }
 
+async function download() {
+  const yaml = await trpc.admin.assign.yaml.query({
+    phaseId: props.phaseId,
+    tryNo: tryNo.value,
+  })
+  const phase = coursesStore.phases[props.phaseId]
+  saveAs(
+    new Blob([yaml], { type: 'text/yaml' }),
+    `results-${phase.title.de}-${tryNo.value}.yml`,
+  )
+}
+
 async function newAssignment() {
   const newTryNo = await assignStore.newAssignment(props.phaseId)
   await nextTick()
@@ -78,15 +93,29 @@ async function newAssignment() {
         </VTab>
         <VSpacer />
       </VTabs>
-      <div class="d-flex">
-        <VBtn
-          v-if="assignStore.assignments[phaseId]?.length"
-          class="mr-4"
-          flat
-          @click="publish"
-        >
-          Iteration {{ tryNo }} veröffentlichen
-        </VBtn>
+      <div class="d-flex ga-2">
+        <VTooltip location="top">
+          <template #activator="{ props: tipProps }">
+            <VBtn
+              v-bind="tipProps"
+              v-if="assignStore.assignments[phaseId]?.length"
+              flat
+              @click="publish"
+            >
+              Iteration {{ tryNo }} veröffentlichen
+            </VBtn>
+          </template>
+          Sendet Mails an Studenten und Verteiler <br />
+          und zeigt die Auslosung Studenten
+        </VTooltip>
+        <VTooltip location="top">
+          <template #activator="{ props: tipProps }">
+            <VBtn v-bind="tipProps" flat @click="download">
+              <VIcon :icon="mdiDownload" />
+            </VBtn>
+          </template>
+          Download results.yml
+        </VTooltip>
         <VTooltip :disabled="!drawingObstacle" location="top">
           <template #activator="{ props: tipProps }">
             <div v-bind="tipProps">
@@ -109,7 +138,7 @@ async function newAssignment() {
       </div>
     </div>
 
-    <VTabsWindow v-model="tryNo">
+    <VTabsWindow v-model="tryNo" class="mt-1">
       <span v-if="!assignStore.assignments[phaseId]?.length">
         Keine Daten
       </span>
