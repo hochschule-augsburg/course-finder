@@ -32,11 +32,6 @@
   color: rgb(var(--v-theme-primary));
 }
 
-.v-card:hover .v-badge__badge {
-  background-color: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
-}
-
 .v-breadcrumbs {
   .v-icon:hover {
     color: initial;

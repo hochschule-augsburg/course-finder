@@ -45,6 +45,8 @@ const showSubjectDialog = ref<boolean>(false)
 const selectedSubject = ref<Subject | undefined>(undefined)
 const creditsNeeded = ref<number | undefined>(undefined)
 
+const formDisabled = computed(() => coursesStore.currentPhase?.state !== 'OPEN')
+
 const isFormUntouched = computed(
   () =>
     formData.value.filter(
@@ -188,6 +190,7 @@ async function validate() {
         <VForm ref="form">
           <VTextField
             v-model.number="creditsNeeded"
+            :disabled="formDisabled"
             :label="t('credits-wanted')"
             :rules="[integerInputRule, creditsRule]"
             class="mb-3"
@@ -198,6 +201,7 @@ async function validate() {
           <template v-for="subject in formData" :key="subject.moduleCode">
             <VTextField
               v-model.number="subject.points"
+              :disabled="formDisabled"
               :label="subject.title[locale]"
               class="mb-3"
               color="primary"
@@ -240,13 +244,21 @@ async function validate() {
       <VCardActions class="mb-1 mx-2">
         <VBtn :text="t('autofill')" variant="plain" @click="autoFill" />
         <VSpacer />
-        <VBtn
-          :loading="loading"
-          :text="t('register')"
-          color="primary"
-          variant="tonal"
-          @click="validate"
-        />
+        <VTooltip :disabled="!formDisabled" location="top">
+          <template #activator="{ props: toolTipProps }">
+            <div v-bind="toolTipProps">
+              <VBtn
+                :disabled="formDisabled"
+                :loading="loading"
+                :text="t('register')"
+                color="primary"
+                variant="tonal"
+                @click="validate"
+              />
+            </div>
+          </template>
+          {{ t('no-regs-accepted') }}
+        </VTooltip>
       </VCardActions>
     </VCard>
   </VDialog>
@@ -267,6 +279,7 @@ de:
   subtitle: Automatische Priorisierung mit 'Autofill' möglich
   too-many-credits:
     Zu viele Credit Points. Maximal erlaubt sind {maxCredits} Credit Points.
+  no-regs-accepted: Keine Anmeldungen akzeptiert
 en:
   register: Register
   field-required: This field is required!
@@ -281,4 +294,5 @@ en:
   subtitle: Automatic prioritization possible with 'Autofill'
   too-many-credits:
     Too many credit points. Maximum allowed are {maxCredits} credit points.
+  no-regs-accepted: Keine Anmeldungen akzeptiert
 </i18n>

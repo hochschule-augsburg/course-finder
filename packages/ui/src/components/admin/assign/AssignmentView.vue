@@ -67,7 +67,7 @@ async function newAssignment() {
 
 <template>
   <div>
-    <div class="d-flex">
+    <div class="d-flex justify-space-between">
       <VTabs v-model="tryNo" class="position-relative">
         <VTab
           v-for="(assignment, i) in assignStore.assignments[props.phaseId]"

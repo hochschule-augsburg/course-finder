@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { type Subject } from '@/stores/CoursesStore'
 import { useI18n } from 'vue-i18n'
 import {
   VCol,
@@ -13,19 +13,13 @@ import EnrollCheckbox from './EnrollCheckbox.vue'
 defineProps<{ subject: Subject }>()
 
 const { locale, t } = useI18n()
-
-const coursesStore = useCoursesStore()
 </script>
 
 <template>
   <div>
     <VExpansionPanelTitle class="subject-element" color="secondary">
-      <EnrollCheckbox
-        v-if="coursesStore.currentPhase?.state === 'OPEN'"
-        :subject
-        class="checkbox"
-      />
-      <VContainer class="ma-0 ml-2">
+      <EnrollCheckbox :subject class="checkbox" />
+      <VContainer class="ma-0 ml-6">
         <VRow no-gutters>
           <VCol cols="5">
             <strong class="v-card-title pl-0">
@@ -109,6 +103,7 @@ const coursesStore = useCoursesStore()
   position: absolute;
   top: var(--element-spacing-s);
   left: var(--element-spacing-xs);
+  font-size: 1rem;
 }
 </style>
 
