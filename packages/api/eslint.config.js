@@ -17,7 +17,9 @@ export default ts.config(
   },
   ...sharedRules,
   {
-    rules: {},
+    rules: {
+      'no-underscore-dangle': 'off',
+    },
   },
   eslintPluginPrettierRecommended,
 )
