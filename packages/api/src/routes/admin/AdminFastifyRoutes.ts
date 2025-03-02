@@ -33,8 +33,8 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
           maPdf = buffer
         }
       }
-      const resp = await loadCourses({ baPdf, maPdf })
-      reply.send(resp)
     }
+    const resp = await loadCourses({ baPdf, maPdf })
+    reply.send(resp)
   })
 }
