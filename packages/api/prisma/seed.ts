@@ -5,7 +5,7 @@ import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
 import * as crypto from 'node:crypto'
 import { parseArgs } from 'node:util'
 
-import { parseCourses } from '../src/domain/module-book/extractData.ts'
+import { parseCourses } from '../src/domain/module-book/parseModuleBook.ts'
 import { hashPassword } from '../src/domain/user/local/password-auth.ts'
 import { data as coursesData } from './assets/courses.ts'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24.ts'
@@ -186,6 +186,7 @@ async function main() {
             create: {
               faculty: 'Informatik',
               fieldOfStudy: study,
+              finalDegree: study.includes('Master') ? 'Master' : 'Bachelor',
               term: 4,
             },
           },

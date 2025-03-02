@@ -1,10 +1,6 @@
-import type { Course } from '@prisma/client'
 import type { FastifyInstance } from 'fastify'
 
-import { isEqual } from 'lodash-es'
-
-import { parseCourses } from '../../domain/module-book/extractData.ts'
-import { prisma } from '../../prisma/prisma.ts'
+import { loadCourses } from '../../domain/module-book/loadCourses.ts'
 
 export function adminFastifyRoutes(fastify: FastifyInstance) {
   fastify.post('/api/admin/courses/upload-module-book', async (req, reply) => {
@@ -15,18 +11,11 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
       return reply.status(401).send({ error: 'Unauthorized' })
     }
 
-    const messages: string[] = []
-
-    type CourseFiles = {
-      baCourses?: Course[]
-      maCourses?: Course[]
-    }
-
-    const courseFiles: CourseFiles = {}
+    let maPdf: Buffer | undefined
+    let baPdf: Buffer | undefined
 
     const parts = req.parts()
     for await (const part of parts) {
-      console.log(part.fieldname)
       if (
         part.type === 'file' &&
         (part.fieldname === 'baFile' || part.fieldname === 'maFile')
@@ -37,121 +26,15 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
             .send({ error: 'Invalid file type, only PDFs are allowed' })
         }
 
-        const courses = await parseCourses(await part.toBuffer())
+        const buffer = await part.toBuffer()
         if (part.fieldname === 'baFile') {
-          courseFiles.baCourses = courses
+          baPdf = buffer
         } else if (part.fieldname === 'maFile') {
-          courseFiles.maCourses = courses
+          maPdf = buffer
         }
       }
+      const resp = await loadCourses({ baPdf, maPdf })
+      reply.send(resp)
     }
-
-    const baMaCourses = createMaBaCourses(
-      courseFiles.baCourses ?? [],
-      courseFiles.maCourses ?? [],
-    )
-
-    messages.push(...checkDifferences(baMaCourses))
-
-    const dupFree = [
-      ...(courseFiles.baCourses ?? []),
-      ...(courseFiles.maCourses ?? []),
-    ].filter(
-      (course) =>
-        !baMaCourses.find(([a]) => a.moduleCode === course.moduleCode),
-    )
-
-    const mergedBaMa = baMaCourses.map(([a, b]) => mergeBaMa(a, b))
-
-    const courses: Course[] = [...dupFree, ...mergedBaMa]
-
-    const oldCourses = await prisma.course.findMany({
-      select: { moduleCode: true },
-    })
-    const notFoundCourses = oldCourses.filter(
-      (oldCourse) =>
-        !courses.find((course) => oldCourse.moduleCode === course.moduleCode),
-    )
-
-    await prisma.$transaction([
-      ...courses.map((course) => {
-        const promise = prisma.course.upsert({
-          create: course,
-          update: course,
-          where: { moduleCode: course.moduleCode },
-        })
-        promise.catch((e) => {
-          console.error(course, e)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return e
-        })
-        return promise
-      }),
-      prisma.course.deleteMany({
-        where: {
-          moduleCode: { in: notFoundCourses.map((e) => e.moduleCode) },
-        },
-      }),
-    ])
-
-    reply.send({ messages: messages, status: 'success' })
   })
-  return Promise.resolve()
-}
-
-function createMaBaCourses(
-  baCourses: Course[],
-  maCourses: Course[],
-): [Course, Course][] {
-  const maBaCourses: [Course, Course][] = []
-  for (const a of baCourses) {
-    for (const b of maCourses) {
-      if (a.moduleCode === b.moduleCode) {
-        maBaCourses.push([a, b])
-      }
-    }
-  }
-  return maBaCourses
-}
-
-function checkDifferences(maBaCourses: [Course, Course][]): string[] {
-  const messages: string[] = []
-  for (const [a, b] of maBaCourses) {
-    const differences = Object.keys(a).reduce(
-      (diff, key) => {
-        if (
-          !['exam', 'pdf'].includes(key) &&
-          //@ts-expect-error keys are from obj
-          !isEqual(a[key], b[key])
-        ) {
-          diff[key] =
-            //@ts-expect-error keys are from obj
-            { a: a[key], b: b[key] }
-        }
-        return diff
-      },
-      {} as Record<string, { a: unknown; b: unknown }>,
-    )
-    const differencesEntries = Object.entries(differences)
-    if (differencesEntries.length > 0) {
-      messages.push(
-        `Module ${a.moduleCode} has unsupported differences in master ${differencesEntries
-          .map(
-            ([key, { a, b }]) =>
-              `${key} (${JSON.stringify(a)} vs ${JSON.stringify(b)})`,
-          )
-          .join(', ')}`,
-      )
-    }
-  }
-  return messages
-}
-
-function mergeBaMa(ba: Course, ma: Course): Course {
-  const course = {
-    ...ba,
-  }
-  course.maExam = ma.exam
-  course.maPdf = ma.pdf
-  return course
 }

@@ -32,6 +32,7 @@ filter:
   participants: participants
   irregular: irregular
   exam-type: Examination
+  exam-type-stud: Examination for your degree
   ex:
     written-exam: Written exam
     project-work: Project work
