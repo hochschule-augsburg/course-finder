@@ -90,3 +90,4 @@ pages:
       phaseId:
         index: '{phaseId}'
         edit: Edit
+  gdpr: Data Privacy

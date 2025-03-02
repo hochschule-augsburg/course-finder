@@ -94,3 +94,4 @@ pages:
       '[phaseId]':
         index: '{phaseId}'
         edit: Bearbeiten
+  gdpr: Datenschutz

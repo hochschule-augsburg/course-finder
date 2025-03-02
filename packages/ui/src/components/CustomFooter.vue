@@ -18,6 +18,9 @@ const { t } = useI18n()
       >
         {{ t('imprint') }}
       </VBtn>
+      <VBtn class="mx-2" color="primary" rounded="xl" to="gdpr" variant="text">
+        {{ t('gdpr') }}
+      </VBtn>
     </VRow>
   </VFooter>
 </template>
@@ -31,6 +34,8 @@ const { t } = useI18n()
 <i18n lang="yaml">
 en:
   imprint: imprint
+  gdpr: Data Privacy
 de:
   imprint: Impressum
+  gdpr: Datenschutz
 </i18n>
