@@ -28,6 +28,7 @@ export const offeredCourseSpec = z.object({
   externalRegistration: z.boolean().optional(),
   extraInfo: nullString,
   for: z.array(z.string()),
+  hideMinParticipants: z.boolean().optional(),
   maxParticipants: z.number().nullable().optional(),
   minParticipants: z.number(),
   moduleCode: z.string(),

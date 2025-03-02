@@ -61,6 +61,7 @@ declare global {
   namespace PrismaJson {
     type Otp = { expires: number; otp: string }
     type I18n = I18nJson
+    type Degrees = 'Bachelor' | 'Master'
     type CourseAppointments = CourseAppointmentsJson<string>
     type Auth = { twoFA?: true } & (
       | {

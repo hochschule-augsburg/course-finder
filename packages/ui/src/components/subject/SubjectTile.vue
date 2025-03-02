@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { type Subject } from '@/stores/CoursesStore'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VCard, VCardText } from 'vuetify/components'
@@ -9,8 +9,6 @@ import EnrollCheckbox from './EnrollCheckbox.vue'
 const props = defineProps<{ subject: Subject }>()
 
 const { locale, t } = useI18n()
-
-const coursesStore = useCoursesStore()
 
 const lecturers = computed(() => {
   if (props.subject.lecturers.length < 2) {
@@ -32,8 +30,11 @@ const dev = import.meta.env.DEV
     width="300"
     hover
   >
-    <template v-if="coursesStore.currentPhase?.state === 'OPEN'" #append>
-      <EnrollCheckbox :subject="subject" />
+    <template #append>
+      <div style="height: 40px; width: 45px"></div>
+      <div class="position-absolute top-0 right-0 pa-3 pr-5">
+        <EnrollCheckbox :subject="subject" />
+      </div>
     </template>
     <VCardText>
       <span v-if="dev" class="font-italic font-weight-thin">{{
@@ -78,6 +79,15 @@ const dev = import.meta.env.DEV
 
 <style lang="scss" scoped>
 ::v-deep(.v-card-title) {
+  white-space: wrap;
+  line-height: 1.3;
+  padding-bottom: var(--element-spacing-xs);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+}
+::v-deep(.v-card-subtitle) {
   white-space: wrap;
   line-height: 1.3;
   padding-bottom: var(--element-spacing-xs);

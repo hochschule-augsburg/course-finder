@@ -23,7 +23,7 @@ const coursesStore = useAdminCoursesStore()
 
 const phaseState = usePhaseState(props.phaseId)
 const phaseStates = orgPhaseStates.filter(
-  (e) => !['FINISHED', 'NOT_STARTED'].includes(e.value),
+  (e) => !['FINISHED'].includes(e.value),
 )
 const error = ref<string>()
 const phaseAlreadyActive = computed(() =>

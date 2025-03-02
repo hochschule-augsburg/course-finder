@@ -1,7 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 
-import { parseCourses } from '../../domain/module-book/extractData.ts'
-import { prisma } from '../../prisma/prisma.ts'
+import { loadCourses } from '../../domain/module-book/loadCourses.ts'
 
 export function adminFastifyRoutes(fastify: FastifyInstance) {
   fastify.post('/api/admin/courses/upload-module-book', async (req, reply) => {
@@ -12,32 +11,30 @@ export function adminFastifyRoutes(fastify: FastifyInstance) {
       return reply.status(401).send({ error: 'Unauthorized' })
     }
 
-    const data = await req.file()
+    let maPdf: Buffer | undefined
+    let baPdf: Buffer | undefined
 
-    if (data?.mimetype !== 'application/pdf') {
-      return reply
-        .status(400)
-        .send({ error: 'Invalid file type, only PDFs are allowed' })
+    const parts = req.parts()
+    for await (const part of parts) {
+      if (
+        part.type === 'file' &&
+        (part.fieldname === 'baFile' || part.fieldname === 'maFile')
+      ) {
+        if (part?.mimetype !== 'application/pdf') {
+          return reply
+            .status(400)
+            .send({ error: 'Invalid file type, only PDFs are allowed' })
+        }
+
+        const buffer = await part.toBuffer()
+        if (part.fieldname === 'baFile') {
+          baPdf = buffer
+        } else if (part.fieldname === 'maFile') {
+          maPdf = buffer
+        }
+      }
+      const resp = await loadCourses({ baPdf, maPdf })
+      reply.send(resp)
     }
-
-    const courses = await parseCourses(await data.toBuffer())
-    await prisma.$transaction(
-      courses.map((course) => {
-        const promise = prisma.course.upsert({
-          create: course,
-          update: course,
-          where: { moduleCode: course.moduleCode },
-        })
-        promise.catch((e) => {
-          console.error(course, e)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return e
-        })
-        return promise
-      }),
-    )
-
-    reply.send({ status: 'success' })
   })
-  return Promise.resolve()
 }

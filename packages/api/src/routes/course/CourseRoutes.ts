@@ -6,22 +6,24 @@ import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes.ts'
 
 import { prisma } from '../../prisma/prisma.ts'
 import { publicProcedure, router, studentOnlyProcedure } from '../trpc.ts'
+import { processCourse } from './CourseUtils.ts'
 
 export type CourseExtended = {
   examTypes: string[]
   offeredCourse: {
     appointments: CourseAppointmentsJson<Date>
-  } & Omit<OfferedCourse, 'appointments'>
+    minParticipants: null | number
+  } & Omit<OfferedCourse, 'appointments' | 'minParticipants'>
 } & Omit<Course, 'pdf'>
 
 export const courseRouter = router({
-  getCourses: publicProcedure.query(async () => {
+  getCourses: publicProcedure.query(async ({ ctx }) => {
     const courses = await prisma.course.findMany({
       orderBy: { moduleCode: 'asc' },
       select: courseFields,
       where: { published: true },
     })
-    return courses.map(processCourse)
+    return courses.map((e) => processCourse(e, ctx.user?.Student))
   }),
   getCurrentPhase: studentOnlyProcedure.query(() => {
     return prisma.enrollphase.findFirst({
@@ -59,7 +61,9 @@ export const courseRouter = router({
         },
       })
 
-      const processedCourses = courses.map(processCourse)
+      const processedCourses = courses.map((e) =>
+        processCourse(e, ctx.user.Student),
+      )
 
       const parsedCourses = processedCourses.map((e) => {
         const offeredCourse = e.offeredCourse[0]
@@ -79,6 +83,9 @@ export const courseRouter = router({
                 to: new Date(d.to),
               })),
             },
+            minParticipants: offeredCourse.hideMinParticipants
+              ? null
+              : offeredCourse.minParticipants,
           },
         }
       })
@@ -88,7 +95,7 @@ export const courseRouter = router({
     .input(z.object({ moduleCode: z.string() }))
     .query(async ({ input }) => {
       const course = await prisma.course.findFirst({
-        select: { pdf: true },
+        select: { maPdf: true, pdf: true },
         where: {
           moduleCode: input.moduleCode,
         },
@@ -96,53 +103,14 @@ export const courseRouter = router({
       if (!course) {
         throw new Error(`Course with moduleCode ${input.moduleCode} not found`)
       }
-      return { pdf: course.pdf ? new Int8Array(course.pdf) : null }
+      return {
+        maPdf: course.maPdf ? new Int8Array(course.maPdf) : null,
+        pdf: course.pdf ? new Int8Array(course.pdf) : null,
+      }
     }),
 })
 
-// https://gitlab.informatik.tha.de/phe/fki-modulhandbuecher/-/blob/master/SharedSources/modules.sty
-const examTypesData = [
-  {
-    keywords: ['Schriftliche Prüfung', 'Klausur', 'Written examination'],
-    option: 'filter.ex.written-exam',
-  },
-  {
-    keywords: ['Projektarbeit', 'Project work'],
-    option: 'filter.ex.project-work',
-  },
-  {
-    keywords: ['Studienarbeit', 'Written assignment'],
-    option: 'filter.ex.written-assignment',
-  },
-  {
-    keywords: ['Präsentation', 'Presentation'],
-    option: 'filter.ex.presentation',
-  },
-  {
-    keywords: ['Elektronische Prüfung', 'Electronic examination'],
-    option: 'filter.ex.e-written',
-  },
-  {
-    keywords: ['Mündliche Prüfung', 'Oral examination'],
-    option: 'filter.ex.oral',
-  },
-]
-
-function processCourse<T extends { exam: null | string }>(
-  course: T,
-): { examTypes: string[] } & T {
-  const examTypes = examTypesData
-    .filter((type) => {
-      return type.keywords.find((keyword) => {
-        return course.exam?.includes(keyword)
-      })
-    })
-    .map((e) => e.option)
-
-  return { ...course, examTypes: examTypes }
-}
-
-const courseFields: { [key in keyof Course]?: boolean } = {
+const courseFields: { [key in keyof Course]: boolean } = {
   creditPoints: true,
   editorUsername: true,
   exam: true,
@@ -150,6 +118,8 @@ const courseFields: { [key in keyof Course]?: boolean } = {
   faculty: true,
   infoUrl: true,
   lecturers: true,
+  maExam: true,
+  maPdf: false,
   moduleCode: true,
   pdf: false,
   published: true,

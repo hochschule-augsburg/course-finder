@@ -1,4 +1,5 @@
-import { parseCourses } from '../../src/domain/module-book/extractData'
+import { loadCourses } from '../../src/domain/module-book/loadCourses'
+import { prismaMock } from '../setup/prisma'
 
 const urls = {
   ba: 'https://cloud.hs-augsburg.de/index.php/s/e6bYJTCP4JQ5RXj/download/Modulhandbuch_WPF_Bachelor.pdf',
@@ -8,25 +9,36 @@ const urls = {
 }
 
 describe('Module Book', () => {
-  let pdfs: Record<string, Buffer> = {}
+  let pdfs: { ba: Buffer; ma: Buffer }
   beforeAll(async () => {
-    pdfs = Object.fromEntries(
-      await Promise.all(
-        Object.entries(urls).map(
-          async ([key, url]): Promise<[string, Buffer<ArrayBufferLike>]> => {
-            const pdf = await fetch(url).then((res) => res.arrayBuffer())
-            return [key, Buffer.from(pdf)]
-          },
-        ),
+    const pdfEntries = await Promise.all(
+      (['ba', 'ma'] as const).map(
+        async (key): Promise<[string, Buffer<ArrayBufferLike>]> => {
+          const pdf = await fetch(urls[key]).then((res) => res.arrayBuffer())
+          return [key, Buffer.from(pdf)]
+        },
       ),
     )
+    pdfs = Object.fromEntries(pdfEntries) as { ba: Buffer; ma: Buffer }
   })
-  it.skipIf(!process.env.CI).each(Object.keys(urls))(
-    'should parse module book from %s',
-    async (key) => {
-      const out = await parseCourses(pdfs[key])
-      expect(out.length).toBeGreaterThan(0)
+  it.skipIf(!process.env.CI)(
+    'should parse module books',
+    async () => {
+      prismaMock.course.findMany.mockResolvedValue([])
+      prismaMock.course.upsert.mockRejectedValue(null)
+      prismaMock.course.deleteMany.mockRejectedValue(null)
+      prismaMock.$transaction.mockImplementation(
+        () => new Promise((r) => r(null)),
+      )
+
+      const out = await loadCourses({ baPdf: pdfs.ba, maPdf: pdfs.ma })
+      expect(out.status).toBe('success')
+      expect(out.messages).toHaveLength(0)
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(prismaMock.$transaction).toHaveBeenCalledWith(
+        expect.arrayContaining([expect.any(Promise)]),
+      )
     },
-    30000,
+    60000,
   )
 })

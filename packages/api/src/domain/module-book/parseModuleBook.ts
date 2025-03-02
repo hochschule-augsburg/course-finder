@@ -1,10 +1,9 @@
 import type { Course } from '@prisma/client'
 
-import { splitModuleBook } from './split.ts'
+import { splitModuleBook } from './splitBook.ts'
 
 export async function parseCourses(pdf: Buffer) {
   const moduleMap = await splitModuleBook(pdf)
-  console.debug('extracting data')
 
   const result = moduleMap.map(([moduleCode, data]) => {
     try {
@@ -44,6 +43,8 @@ function extractData(
     faculty,
     infoUrl: null,
     lecturers,
+    maExam: null,
+    maPdf: null,
     moduleCode,
     pdf: data.buffer,
     published: true,

@@ -2,9 +2,10 @@
 import { PrismaClient } from '@prisma/client'
 import { readFileSync } from 'fs'
 import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
+import * as crypto from 'node:crypto'
 import { parseArgs } from 'node:util'
 
-import { parseCourses } from '../src/domain/module-book/extractData.ts'
+import { parseCourses } from '../src/domain/module-book/parseModuleBook.ts'
 import { hashPassword } from '../src/domain/user/local/password-auth.ts'
 import { data as coursesData } from './assets/courses.ts'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24.ts'
@@ -24,13 +25,38 @@ main()
   })
 
 async function main() {
-  await prisma.appConf.create({ data: { id: 'Instance', maxCredits: 12 } })
   const options = {
     'download-courses-pdf': { type: 'boolean' },
-    'old-offered-courses': { type: 'boolean' },
+    'no-test-data': { type: 'boolean' },
+    'old-courses': { type: 'boolean' },
   } as const
   const { values } = parseArgs({ args: process.argv.slice(2), options })
 
+  await prisma.appConf.create({ data: { id: 'Instance' } })
+
+  const adminSalt = crypto.randomBytes(16).toString('hex')
+  await prisma.user.createMany({
+    data: [
+      {
+        auth: {
+          method: 'local',
+          password: await hashPassword(
+            process.env.ADMIN_PWD ?? 'admin',
+            adminSalt,
+          ),
+          salt: adminSalt,
+        },
+        email: 'admin@example.com',
+        name: 'Admin',
+        type: 'Admin',
+        username: 'admin',
+      },
+    ],
+  })
+
+  if (values['no-test-data']) {
+    return
+  }
   // Create professors
   await prisma.user.create({
     data: {
@@ -133,22 +159,6 @@ async function main() {
     },
   })
 
-  await prisma.user.createMany({
-    data: [
-      {
-        auth: {
-          method: 'local',
-          password: await hashPassword('admin', 'salt'),
-          salt: 'salt',
-        },
-        email: 'admin@example.com',
-        name: 'Admin',
-        type: 'Admin',
-        username: 'admin',
-      },
-    ],
-  })
-
   await Promise.all(
     [
       ...range(20).map((i) => ['Informatik (Bachelor)', i.toString()]),
@@ -176,6 +186,7 @@ async function main() {
             create: {
               faculty: 'Informatik',
               fieldOfStudy: study,
+              finalDegree: study.includes('Master') ? 'Master' : 'Bachelor',
               term: 4,
             },
           },
@@ -186,7 +197,7 @@ async function main() {
     }),
   )
 
-  if (values['old-offered-courses']) {
+  if (values['old-courses']) {
     await fillOldCourses()
   }
   if (values['download-courses-pdf']) {

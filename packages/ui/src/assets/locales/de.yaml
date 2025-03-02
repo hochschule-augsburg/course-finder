@@ -32,6 +32,7 @@ filter:
   participants: Teilnehmer
   irregular: Irregulär
   exam-type: Prüfung
+  exam-type-stud: Prüfung für deinen Studiengang
   ex:
     written-exam: Klausur
     project-work: Projektarbeit

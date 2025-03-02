@@ -93,13 +93,18 @@ const overviewPhase = computed(
         class="floating"
         id="enroll-button"
       >
-        <VBadge :model-value="pendingEnroll" color="primary" dot>
-          <VBtn icon @click="enrollFormVisible = true">
-            <VIcon :icon="mdiPenLock" />
-            <VTooltip activator="parent" location="top">
-              Einschreiben
-            </VTooltip>
-          </VBtn>
+        <VBadge
+          :content="`${enrollmentStore.creditsNeeded}CP`"
+          location="top start"
+        >
+          <VBadge :model-value="pendingEnroll" color="primary" dot>
+            <VBtn icon @click="enrollFormVisible = true">
+              <VIcon :icon="mdiPenLock" />
+              <VTooltip activator="parent" location="top">
+                {{ t('enroll') }}
+              </VTooltip>
+            </VBtn>
+          </VBadge>
         </VBadge>
       </div>
     </div>
@@ -124,8 +129,10 @@ en:
   your-courses-for: Your courses for {0}
   courses-from-module-book: Courses from the current module book
   not-all-offered-each: Not all courses are offered each semester.
+  enroll: Enroll
 de:
   your-courses-for: Deine Kurse für {0}
   courses-from-module-book: Kurse aus dem aktellen Modulbuch
   not-all-offered-each: Nicht alle Kurse werden in jedem Semester angeboten.
+  enroll: Einschreiben
 </i18n>

@@ -22,9 +22,6 @@ async function extractPDFSections(
   const lastSubjectIndex =
     lines.findLastIndex((e) => e.startsWith('BookmarkTitle: 2.')) + 3
 
-  console.debug('Chapters:')
-  console.debug(lines.slice(startSubjectIndex, lastSubjectIndex).join('\n'))
-
   const moduleBookmarksArrays: {
     bookmarkPageNumber: string
     bookmarkTitle: string
@@ -34,8 +31,6 @@ async function extractPDFSections(
       bookmarkTitle: e[1].split(':')[1].trim(),
     }
   })
-
-  console.debug('read metadata')
 
   return Promise.all(
     moduleBookmarksArrays.map(

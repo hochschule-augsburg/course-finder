@@ -9,6 +9,7 @@ export type OfferedCourseData = {
   externalRegistration: boolean
   extraInfo: null | string
   for: string[]
+  hideMinParticipants: boolean
   maxParticipants: null | number
   minParticipants: number
   moduleCode: string

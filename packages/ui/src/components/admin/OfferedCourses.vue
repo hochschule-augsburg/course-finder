@@ -67,6 +67,7 @@ function openNewDialog() {
     faculty: '',
     infoUrl: null,
     lecturers: [],
+    maExam: null,
     moduleCode: '',
     published: false,
     semesterHours: 0,
@@ -94,8 +95,9 @@ async function createSubject(subject: Course | undefined) {
       externalRegistration: false,
       extraInfo: null,
       for: [],
+      hideMinParticipants: true,
       maxParticipants: null,
-      minParticipants: 0,
+      minParticipants: 16,
       moduleCode: subject.moduleCode,
       moodleCourse: null,
     })
@@ -153,8 +155,9 @@ function convertToOfferedCourseData(course: Course): OfferedCourseData {
       externalRegistration: false,
       extraInfo: null,
       for: [],
+      hideMinParticipants: true,
       maxParticipants: null,
-      minParticipants: 0,
+      minParticipants: 16,
       moduleCode: course.moduleCode,
       moodleCourse: null,
     }
@@ -353,6 +356,7 @@ const searchOffered = ref('')
                     </div>
                     <div>
                       Mindestteilnehmer: {{ element.minParticipants }}
+                      {{ element.hideMinParticipants ? '(hidden)' : '' }}
                       <template v-if="element.maxParticipants">
                         Maximale Teilnehmer:
                         {{ element.maxParticipants }}

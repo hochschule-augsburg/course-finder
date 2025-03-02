@@ -16,22 +16,27 @@ const { t } = useI18n()
 const pending = ref(false)
 const status = refThrottled(ref<'error' | 'success'>())
 const statusMsg = ref('')
-const file = ref<File>()
-const oldFile = ref<File>()
+const baFile = ref<File>()
+const maFile = ref<File>()
 
 async function uploadFile() {
   pending.value = true
-  if (!file.value) {
-    return
-  }
   try {
     const formData = new FormData()
-    formData.append('file', file.value)
+    if (baFile.value) {
+      formData.append('baFile', baFile.value)
+    }
+    if (maFile.value) {
+      formData.append('maFile', maFile.value)
+    }
 
     await fetchFastify('/admin/courses/upload-module-book', formData)
-    oldFile.value = file.value
-    file.value = undefined
-    statusMsg.value = `Datei ${oldFile.value.name} erfolgreich hochgeladen`
+    statusMsg.value = `Dateien ${[baFile.value, maFile.value]
+      .filter((f) => f)
+      .map((e) => e?.name)
+      .join(', ')} erfolgreich hochgeladen`
+    baFile.value = undefined
+    maFile.value = undefined
     status.value = 'success'
   } catch (e) {
     console.error(e)
@@ -48,15 +53,22 @@ async function uploadFile() {
     <VContainer>
       <VCol justify="space-between">
         <VFileInput
-          v-model="file"
+          v-model="baFile"
           accept=".pdf"
-          label="Datei auswählen"
+          label="Bachelor Modulhandbuch (de) auswählen"
+          placeholder="Datei auswählen"
+          outlined
+        />
+        <VFileInput
+          v-model="maFile"
+          accept=".pdf"
+          label="Master Modulhandbuch auswählen"
           placeholder="Datei auswählen"
           outlined
         />
         <VRow class="pr-3" justify="end">
           <VBtn
-            :disabled="!file"
+            :disabled="!baFile || !maFile"
             :loading="pending"
             text="Upload"
             @click="uploadFile"

@@ -86,7 +86,9 @@ export const useFiltersStore = defineStore('filters', () => {
         })
       },
 
-      name: 'filter.exam-type',
+      name: computed(() =>
+        userStore.user?.Student ? 'filter.exam-type-stud' : 'filter.exam-type',
+      ),
       options: [
         {
           option: 'filter.ex.written-exam',

@@ -26,7 +26,6 @@ export const useAdminAssignStore = defineStore('admin-assign', () => {
         const offeredCoursesNotExtern = coursesStore.phaseOfferedCourses[
           Number(phaseId)
         ].filter((e) => !e.externalRegistration)
-        console.log({ offeredCoursesNotExtern })
         return [
           phaseId,
           tries.map((tryNo) => {

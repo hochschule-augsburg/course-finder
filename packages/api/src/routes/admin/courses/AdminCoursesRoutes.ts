@@ -79,6 +79,8 @@ const courseFields: { [key in keyof Course]: boolean } = {
   faculty: true,
   infoUrl: true,
   lecturers: true,
+  maExam: true,
+  maPdf: false,
   moduleCode: true,
   pdf: false,
   published: true,
