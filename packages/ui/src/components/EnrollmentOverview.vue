@@ -17,7 +17,7 @@ const stateText = computed(
 <template>
   <VSheet
     v-if="phase"
-    class="sheet px-4 py-3"
+    class="px-4 py-3"
     color="secondary"
     id="enrollment-overview"
     rounded="lg"
@@ -38,9 +38,3 @@ const stateText = computed(
     </p>
   </VSheet>
 </template>
-
-<style lang="scss" scoped>
-.sheet {
-  cursor: pointer;
-}
-</style>

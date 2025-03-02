@@ -62,7 +62,11 @@ async function handleUpdateEnroll() {
         </VBadge>
         <VIcon v-else :icon="mdiCheckboxBlankOutline" size="large" />
       </div>
-      <div v-else class="pa-2 enroll-checkbox disabled" click.stop>
+      <div
+        v-else-if="coursesStore.currentPhase"
+        class="pa-2 enroll-checkbox disabled"
+        click.stop
+      >
         <VTooltip location="top">
           <template #activator="{ props: toolTipProps }">
             <div v-bind="toolTipProps">

@@ -119,6 +119,10 @@ const overviewPhase = computed(
   right: var(--floating-margin);
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .clickable:hover {
   background-color: rgba(var(--v-theme-primary), 0.05) !important;
 }
@@ -127,12 +131,12 @@ const overviewPhase = computed(
 <i18n lang="yaml">
 en:
   your-courses-for: Your courses for {0}
-  courses-from-module-book: Courses from the current module book
+  courses-from-module-book: Courses from the current module books
   not-all-offered-each: Not all courses are offered each semester.
   enroll: Enroll
 de:
   your-courses-for: Deine Kurse für {0}
-  courses-from-module-book: Kurse aus dem aktellen Modulbuch
+  courses-from-module-book: Kurse aus den aktellen Modulhandbüchern
   not-all-offered-each: Nicht alle Kurse werden in jedem Semester angeboten.
   enroll: Einschreiben
 </i18n>
