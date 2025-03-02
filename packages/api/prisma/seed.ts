@@ -60,7 +60,11 @@ async function main() {
   // Create professors
   await prisma.user.create({
     data: {
-      auth: { method: 'ldap' },
+      auth: {
+        method: 'local',
+        password: await hashPassword('prof', 'salt'),
+        salt: 'salt',
+      },
       email: 'prof@example.com',
       name: 'Prof. Dr. Quack McDuck',
       type: 'Professor',
@@ -161,7 +165,7 @@ async function main() {
 
   await Promise.all(
     [
-      ...range(20).map((i) => ['Informatik (Bachelor)', i.toString()]),
+      ...range(20).map((i) => ['Informatik (Bachelor)', (i + 1).toString()]),
       ['Informatik (Bachelor)', 'in'],
       ['Wirtschaftsinformatik (Bachelor)', 'win'],
       ['Technische Informatik (Bachelor)', 'ti'],
@@ -187,7 +191,7 @@ async function main() {
               faculty: 'Informatik',
               fieldOfStudy: study,
               finalDegree: study.includes('Master') ? 'Master' : 'Bachelor',
-              term: 4,
+              term: parseInt(abbr.match(/\d+$/)?.[0] ?? '0') || 4,
             },
           },
           type: 'Student',

@@ -53,8 +53,8 @@ phase-states:
     not-started: The phase will automatically start soon.
     open: Registrations are being accepted.
     closed: Temporally no registrations are accepted.
-    drawing: Drawing in progress.
-    finished: The enrollment phase is finished. Results are available.
+    drawing: Drawing in progress. Results will be published soon.
+    finished: The enrollment phase is finished. Results are available. (Click here!)
 
 tour:
   prev: Back

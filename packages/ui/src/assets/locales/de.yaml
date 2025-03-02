@@ -52,8 +52,8 @@ phase-states:
     not-started: Die Phase wird in Kürze automatisch starten.
     open: Anmeldungen werden akzeptiert.
     closed: Temporär werden keine Anmeldungen akzeptiert.
-    drawing: Ziehung läuft.
-    finished: Die Anmeldephase ist beendet. Ergebnisse sind verfügbar.
+    drawing: Ziehung läuft. Die Ergebnisse werden in Kürze veröffentlicht.
+    finished: Die Anmeldephase ist beendet. Ergebnisse sind verfügbar. (Klicke hier!)
 
 tour:
   prev: Zurück
