@@ -3,7 +3,7 @@ import { useAssignStore } from '@/stores/AssignStore'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
-import { computed, onBeforeMount, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { definePage } from 'vue-router/auto'
 import {
@@ -41,10 +41,6 @@ const selectedModuleCode = ref<string>()
 const selectedSubject = computed(() =>
   coursesStore.subjects.find((s) => s.moduleCode === selectedModuleCode.value),
 )
-
-onBeforeMount(() => {
-  void assignStore.fetch()
-})
 </script>
 
 <template>

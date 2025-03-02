@@ -14,7 +14,9 @@ export const useAppConfStore = defineStore('app-conf', () => {
     () => userStore.user,
     async () => {
       try {
-        await read()
+        if (userStore.user?.Student) {
+          await fetch()
+        }
       } catch {
         // do nothing
       }
@@ -32,7 +34,7 @@ export const useAppConfStore = defineStore('app-conf', () => {
     conf.value = Object.assign({}, conf.value, input)
   }
 
-  async function read() {
+  async function fetch() {
     conf.value = await trpc.appConf.read.query()
   }
 })

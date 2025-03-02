@@ -24,8 +24,6 @@ const coursesStore = useCoursesStore()
 const userStore = useUserStore()
 const assignStore = useAssignStore()
 
-void assignStore.fetch()
-
 const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
 )
