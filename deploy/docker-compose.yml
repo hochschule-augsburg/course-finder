@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   database:
-    image: postgres:alpine
+    image: postgres:17.4-alpine3.21
     env_file:
       - ./.env
     volumes:
