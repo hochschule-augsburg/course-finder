@@ -1,5 +1,6 @@
 /* eslint-disable perfectionist/sort-objects */
 
+// keep in sync with packages/api/src/domain/enroll/enrollUtils.ts
 export const fieldsOfStudy: Record<
   string,
   { abbr: string; degree: 'Bachelor' | 'Master' }
@@ -11,6 +12,7 @@ export const fieldsOfStudy: Record<
     abbr: 'IIS',
     degree: 'Bachelor',
   },
+  'Systems Engineering (Bachelor)': { abbr: 'SE', degree: 'Bachelor' },
   // 'Interaktive Medien (Bachelor)': { abbr: 'IA', academicRank: 'Bachelor' },
   'Applied Research (Master)': { abbr: 'MAPR', degree: 'Master' },
   'Informatik (Master)': { abbr: 'MIN', degree: 'Master' },

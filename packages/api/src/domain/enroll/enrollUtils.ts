@@ -2,6 +2,7 @@ import type { Student } from '@prisma/client'
 
 import type { ClientUser } from '../../prisma/PrismaTypes.ts'
 
+// keep in sync with packages/ui/src/helper/enums/fieldsOfStudy.ts
 const fieldsOfStudy: Record<
   string,
   { abbr: string; degree: 'Bachelor' | 'Master' }
