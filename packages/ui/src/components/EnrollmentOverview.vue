@@ -4,6 +4,7 @@ import type { EnrollPhase } from '@workspace/api/src/prisma/PrismaTypes'
 import { phaseStates } from '@/helper/enums/phaseStates'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import VueMarkdown from 'vue-markdown-render'
 import { VSheet } from 'vuetify/components'
 
 const props = defineProps<{ phase: EnrollPhase | null | undefined }>()
@@ -30,9 +31,7 @@ const stateText = computed(
         `${phase.start.toLocaleDateString(locale)} - ${phase.end.toLocaleDateString(locale)}`
       }}
     </p>
-    <p>
-      {{ phase.description[locale] }}
-    </p>
+    <VueMarkdown :source="phase.description[locale]" />
     <p>
       {{ $t(`phase-states.long.${stateText}`) }}
     </p>
