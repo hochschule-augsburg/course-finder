@@ -15,6 +15,7 @@ import {
   zodEnumFromObjKeys,
 } from '../../prisma/PrismaZod.ts'
 import { sendEmail } from '../mail/Mail.ts'
+import { openingMail } from './openingMail.ts'
 import {
   cancelPhase,
   reschedulePhase,
@@ -120,6 +121,45 @@ async function updatePhase(
   return updatedPhase
 }
 
+async function sendOpeningMail(phaseId: number) {
+  const phase = await prisma.enrollphase.findUnique({
+    select: {
+      end: true,
+      state: true,
+      title: true,
+    },
+    where: { id: phaseId },
+  })
+  if (!phase) {
+    throw new Error('Phase not found')
+  }
+  if (phase.state !== 'OPEN') {
+    throw new Error('Phase is not open')
+  }
+  await sendEmail(
+    env.MAIL_RECEIVERS,
+    `${phase.title.de} geöffnet | ${phase.title.en} started`,
+    openingMail({
+      contactEmail: env.CONTACT_EMAIL,
+      dateDe: phase.end.toLocaleString('de-DE', {
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        month: 'numeric',
+        year: 'numeric',
+      }),
+      dateEn: phase.end.toLocaleString('en-GB', {
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        month: 'numeric',
+        year: 'numeric',
+      }),
+      url: env.FRONTEND_ORIGIN,
+    }),
+  )
+}
+
 async function sendReminderMail(phaseId: number) {
   const phase = await prisma.enrollphase.findUnique({
     select: {
@@ -133,19 +173,20 @@ async function sendReminderMail(phaseId: number) {
   if (!phase) {
     throw new Error('Phase not found')
   }
-  env.FRONTEND_ORIGIN = 'https://course-finder.informatik.tha.de/'
   await sendEmail(
     env.MAIL_RECEIVERS,
     'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
-    `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
+    `Sehr geehrte Studierende,<br>
+    die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
       'de-DE',
     )}.<br>
           Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
           Die Anmeldung erfolgt über folgender Seite:
           <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
           <br>
+          Dear students,<br>
           Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
-            'en-US',
+            'en-GB',
           )}.<br>
           Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
           Registrations can be made on the following website:<br>
@@ -156,6 +197,7 @@ async function sendReminderMail(phaseId: number) {
 export const phaseService = {
   createPhase,
   deletePhase,
+  sendOpeningMail,
   sendReminderMail,
   updatePhase,
 }

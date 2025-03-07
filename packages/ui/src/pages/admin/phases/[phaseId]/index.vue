@@ -10,8 +10,12 @@ const phaseId = Number(route.params.phaseId)
 
 const phaseState = usePhaseState(phaseId)
 
-async function sendMail() {
+async function sendReminderMail() {
   await trpc.admin.enroll.phase.sendReminderMail.mutate({ phaseId })
+}
+
+async function sendOpeningMail() {
+  await trpc.admin.enroll.phase.sendOpeningMail.mutate({ phaseId })
 }
 </script>
 
@@ -34,7 +38,13 @@ async function sendMail() {
                   <VBtn :to="`${phaseId}/edit`">Bearbeiten</VBtn>
                   <VBtn
                     v-if="phaseState.modelValue === 'OPEN'"
-                    @click="sendMail"
+                    @click="sendOpeningMail"
+                  >
+                    <span class="white">Eröffnungsmail senden</span>
+                  </VBtn>
+                  <VBtn
+                    v-if="phaseState.modelValue === 'OPEN'"
+                    @click="sendReminderMail"
                   >
                     <span class="white">Erinnerungsmail senden</span>
                   </VBtn>

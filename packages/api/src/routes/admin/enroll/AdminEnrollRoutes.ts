@@ -150,6 +150,11 @@ export const enrollRouter = router({
         ).map((phase) => [phase.id, phase]),
       )
     }),
+    sendOpeningMail: adminProcedure
+      .input(z.object({ phaseId: z.number() }))
+      .mutation(async ({ input }) => {
+        await phaseService.sendOpeningMail(input.phaseId)
+      }),
     sendReminderMail: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .mutation(async ({ input }) => {

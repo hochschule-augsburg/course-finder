@@ -32,7 +32,7 @@ export async function sendEmail(
       },
       html,
       replyTo: env.CONTACT_EMAIL,
-      subject: `⛵ ${subject} ⛵`,
+      subject: `${subject} ⛵`,
       to: toArray,
     })
     return info

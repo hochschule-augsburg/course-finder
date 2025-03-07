@@ -49,7 +49,7 @@ Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
 Deine Zuweisungen:<br>
 ${formattedResults[username]['de']}<br><br>
 Sie können die Ergebnisse auch auf <a href="${env.FRONTEND_ORIGIN}/results">der Website</a> einsehen.<br>
---<br>
+---<br>
 <br><br>
 The results of the ${phase.title['en']} have been published.<br>
 Your assignments:<br>
@@ -68,7 +68,7 @@ export async function emailToLists(phase: EnrollPhase) {
     `
 Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
 Sie können die Ergebnisse auf <a href="${env.FRONTEND_ORIGIN}/results">der Website</a> einsehen.<br>
---<br>
+---<br>
 <br><br>
 The results of the ${phase.title['en']} have been published.<br>
 You can view the results on <a href="${env.FRONTEND_ORIGIN}/results">the website</a>.

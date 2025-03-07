@@ -1,5 +1,6 @@
 /* cSpell:disable */
 import { PrismaClient } from '@prisma/client'
+import { addMonths } from 'date-fns'
 import { readFileSync } from 'fs'
 import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
 import * as crypto from 'node:crypto'
@@ -110,13 +111,11 @@ async function main() {
         de: 'Anmeldung zu den Wahlpflichtfächern für das Wintersemester 2023/24',
         en: 'Registration for the elective courses for the winter semester 2023/24',
       },
-      emailNotificationAt: getHalfTime(
-        new Date('2023-09-29'),
-        new Date('2023-10-06'),
-      ),
-      end: new Date('2023-10-06'),
+      emailNotificationAt: getHalfTime(new Date(), addMonths(new Date(), 2)),
+      end: addMonths(new Date(), 2),
       id: 1,
-      start: new Date('2023-09-29'),
+      publishedTry: 1,
+      start: new Date(),
       state: 'FINISHED',
       title: {
         de: 'FWP Anmeldung Wintersemester 2023/24',
