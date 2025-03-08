@@ -3,6 +3,7 @@ import { useAssignStore } from '@/stores/AssignStore'
 import { useCoursesStore } from '@/stores/CoursesStore'
 import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
+import { watch } from 'vue'
 import { computed, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { definePage } from 'vue-router/auto'
@@ -41,9 +42,26 @@ const selectedModuleCode = ref<string>()
 const selectedSubject = computed(() =>
   coursesStore.subjects.find((s) => s.moduleCode === selectedModuleCode.value),
 )
+
+const noData = ref<boolean>()
+watch(
+  () => [coursesStore.currentPhase, assignStore.assignPhases],
+  () => {
+    if (!coursesStore.currentPhase && !assignStore.assignPhases.length) {
+      setTimeout(() => {
+        noData.value =
+          !coursesStore.currentPhase && !assignStore.assignPhases.length
+      }, 50)
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
+  <VSheet v-if="noData" class="px-4 py-3" color="secondary" rounded="lg">
+    {{ t('no-data') }}
+  </VSheet>
   <VTabs v-model="phaseIndex" class="mx-2 mb-6" show-arrows>
     <VTab
       v-if="coursesStore.currentPhase"
@@ -128,6 +146,8 @@ const selectedSubject = computed(() =>
 <i18n lang="yaml">
 de:
   empty-state: Keine Anmeldungen
+  no-data: Keine Daten. Noch hast du an keiner Anmeldung teilgenommen.
 en:
   empty-state: No Enrollments
+  no-data: No data. You have not participated in any enrollment yet.
 </i18n>

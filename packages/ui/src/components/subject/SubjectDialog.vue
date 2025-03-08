@@ -24,7 +24,7 @@ const showSubjectDialog = defineModel<boolean>('visible')
 const { locale, t } = useI18n()
 const route = useRoute()
 
-const { mobile} = useDisplay()
+const { mobile } = useDisplay()
 
 const showLinkCopied = ref(false)
 
@@ -35,8 +35,17 @@ async function copyLinkToClipboard() {
 </script>
 
 <template>
-  <VDialog v-model:model-value="showSubjectDialog" max-width="750" :fullscreen="mobile">
-    <VCard v-if="subject" class="pa-3" color="background" :style="mobile ? 'height: 100vh; display: flex;' : undefined">
+  <VDialog
+    v-model:model-value="showSubjectDialog"
+    :fullscreen="mobile"
+    max-width="750"
+  >
+    <VCard
+      v-if="subject"
+      :style="mobile ? 'height: 100vh; display: flex;' : undefined"
+      class="pa-3"
+      color="background"
+    >
       <VCardTitle class="px-2">
         <div class="d-flex align-center">
           <span class="wrap-ellipsis">
@@ -70,7 +79,7 @@ async function copyLinkToClipboard() {
           </VBtn>
         </div>
       </VCardTitle>
-      <VCardText class="pa-0 pb-3 px-2" style="overflow-y: auto; flex: 1;">
+      <VCardText class="pa-0 pb-3 px-2" style="overflow-y: auto; flex: 1">
         <SubjectDetails :subject="subject" />
       </VCardText>
 

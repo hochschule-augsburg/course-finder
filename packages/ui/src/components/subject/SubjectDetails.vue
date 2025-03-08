@@ -35,7 +35,7 @@ const props = defineProps<{
 }>()
 
 const { locale, t } = useI18n()
-const {mobile } = useDisplay()
+const { mobile } = useDisplay()
 
 const userStore = useUserStore()
 
@@ -68,7 +68,11 @@ ${props.subject.maExam}
 
 <template>
   <div class="cf-subject-details">
-    <VCarousel :show-arrows="false" :height="mobile? '100%' :'68vh'" hide-delimiter-background>
+    <VCarousel
+      :height="mobile ? '100%' : '68vh'"
+      :show-arrows="false"
+      hide-delimiter-background
+    >
       <VCarouselItem>
         <VSheet class="information-list" color="secondary" height="100%">
           <section>
@@ -216,7 +220,7 @@ ${props.subject.maExam}
         v-if="(userDegree !== 'Master' || !pdfSource?.maPdf) && pdfSource?.pdf"
       >
         <VBtn
-        v-if="!mobile"
+          v-if="!mobile"
           :icon="mdiFullscreen"
           class="floating"
           @click="fullscreen = 'pdf'"
@@ -233,7 +237,7 @@ ${props.subject.maExam}
       </VCarouselItem>
       <VCarouselItem v-if="userDegree !== 'Bachelor' && pdfSource?.maPdf">
         <VBtn
-        v-if="!mobile"
+          v-if="!mobile"
           :icon="mdiFullscreen"
           class="floating"
           @click="fullscreen = 'maPdf'"
@@ -250,7 +254,7 @@ ${props.subject.maExam}
       </VCarouselItem>
       <VCarouselItem v-if="subject.infoUrl">
         <VBtn
-        v-if="!mobile"
+          v-if="!mobile"
           :icon="mdiFullscreen"
           class="floating"
           @click="fullscreen = 'infoUrl'"
@@ -259,7 +263,7 @@ ${props.subject.maExam}
       </VCarouselItem>
     </VCarousel>
     <VDialog
-    v-if="!mobile"
+      v-if="!mobile"
       :model-value="!!fullscreen"
       fullscreen
       @update:model-value="fullscreen = undefined"
@@ -311,7 +315,7 @@ ${props.subject.maExam}
   padding: var(--element-spacing-m);
   border-radius: 4%;
   padding-bottom: 50px;
-  overflow-y: auto;;
+  overflow-y: auto;
 
   section > p,
   .markdown {
