@@ -170,6 +170,7 @@ const template = `
             <div class="image-bg"></div>
             <img
               class="VPImage"
+              width="150"
               onerror="this.style.display='none';"
               src="https://hochschule-augsburg.github.io/course-finder/logo.svg"
               alt="CourseFinder Logo"
