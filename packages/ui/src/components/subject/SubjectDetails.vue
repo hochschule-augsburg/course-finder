@@ -20,7 +20,7 @@ import VueMarkdown from 'vue-markdown-render'
 import VuePdfEmbed from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/styles/annotationLayer.css'
 import 'vue-pdf-embed/dist/styles/textLayer.css'
-import { useTheme } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify'
 import {
   VBtn,
   VCarousel,
@@ -35,6 +35,7 @@ const props = defineProps<{
 }>()
 
 const { locale, t } = useI18n()
+const {mobile } = useDisplay()
 
 const userStore = useUserStore()
 
@@ -67,7 +68,7 @@ ${props.subject.maExam}
 
 <template>
   <div class="cf-subject-details">
-    <VCarousel :show-arrows="false" height="68vh" hide-delimiter-background>
+    <VCarousel :show-arrows="false" :height="mobile? '100%' :'68vh'" hide-delimiter-background>
       <VCarouselItem>
         <VSheet class="information-list" color="secondary" height="100%">
           <section>
@@ -215,6 +216,7 @@ ${props.subject.maExam}
         v-if="(userDegree !== 'Master' || !pdfSource?.maPdf) && pdfSource?.pdf"
       >
         <VBtn
+        v-if="!mobile"
           :icon="mdiFullscreen"
           class="floating"
           @click="fullscreen = 'pdf'"
@@ -231,6 +233,7 @@ ${props.subject.maExam}
       </VCarouselItem>
       <VCarouselItem v-if="userDegree !== 'Bachelor' && pdfSource?.maPdf">
         <VBtn
+        v-if="!mobile"
           :icon="mdiFullscreen"
           class="floating"
           @click="fullscreen = 'maPdf'"
@@ -247,6 +250,7 @@ ${props.subject.maExam}
       </VCarouselItem>
       <VCarouselItem v-if="subject.infoUrl">
         <VBtn
+        v-if="!mobile"
           :icon="mdiFullscreen"
           class="floating"
           @click="fullscreen = 'infoUrl'"
@@ -255,6 +259,7 @@ ${props.subject.maExam}
       </VCarouselItem>
     </VCarousel>
     <VDialog
+    v-if="!mobile"
       :model-value="!!fullscreen"
       fullscreen
       @update:model-value="fullscreen = undefined"
@@ -296,12 +301,17 @@ ${props.subject.maExam}
 </style>
 
 <style scoped lang="scss">
+.cf-subject-details {
+  height: 100%;
+}
 .information-list {
   display: flex;
   flex-direction: column;
   gap: var(--element-spacing-m);
   padding: var(--element-spacing-m);
   border-radius: 4%;
+  padding-bottom: 50px;
+  overflow-y: auto;;
 
   section > p,
   .markdown {
