@@ -14,7 +14,9 @@ export const useAppConfStore = defineStore('app-conf', () => {
     () => userStore.user,
     async () => {
       try {
-        await fetch()
+        if (userStore.user) {
+          await fetch()
+        }
       } catch {
         // do nothing
       }

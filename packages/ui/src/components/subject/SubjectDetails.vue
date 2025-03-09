@@ -16,7 +16,6 @@ import { useAsyncState } from '@vueuse/core'
 import { computed } from 'vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import VueMarkdown from 'vue-markdown-render'
 import VuePdfEmbed from 'vue-pdf-embed'
 import 'vue-pdf-embed/dist/styles/annotationLayer.css'
 import 'vue-pdf-embed/dist/styles/textLayer.css'
@@ -97,7 +96,7 @@ ${props.subject.maExam}
               <VIcon :icon="mdiTypewriter" size="32" />
               <h4>{{ t('exam') }}</h4>
             </div>
-            <VueMarkdown :source="exam" class="markdown" />
+            <CfMarkdown :source="exam" class="markdown" />
           </section>
 
           <template v-if="subject.offeredCourse">
@@ -200,7 +199,7 @@ ${props.subject.maExam}
               <VIcon :icon="mdiAlertCircle" size="32" />
               <h4>{{ t('course-note') }}</h4>
             </div>
-            <VueMarkdown :source="subject.extraInfo" class="markdown" />
+            <CfMarkdown :source="subject.extraInfo" class="markdown" />
           </section>
 
           <section v-if="subject.offeredCourse?.extraInfo">
@@ -208,7 +207,7 @@ ${props.subject.maExam}
               <VIcon :icon="mdiAlertCircle" size="32" />
               <h4>{{ t('semester-note') }}</h4>
             </div>
-            <VueMarkdown
+            <CfMarkdown
               :source="subject.offeredCourse.extraInfo"
               class="markdown"
             />
@@ -291,18 +290,6 @@ ${props.subject.maExam}
     </VDialog>
   </div>
 </template>
-
-<!-- eslint-disable-next-line vue/enforce-style-attribute -->
-<style lang="scss">
-.cf-subject-details .information-list .markdown {
-  ul {
-    padding: revert;
-  }
-  ol {
-    padding: revert;
-  }
-}
-</style>
 
 <style scoped lang="scss">
 .cf-subject-details {
