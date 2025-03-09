@@ -70,6 +70,7 @@ ${props.subject.maExam}
     <VCarousel
       :height="mobile ? '100%' : '68vh'"
       :show-arrows="false"
+      :touch="false"
       hide-delimiter-background
     >
       <VCarouselItem>
