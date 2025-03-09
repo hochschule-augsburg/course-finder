@@ -23,7 +23,6 @@ export const useAppConfStore = defineStore('app-conf', () => {
     },
     { immediate: true },
   )
-  console.log('app conf store created')
 
   return {
     conf,
@@ -36,7 +35,6 @@ export const useAppConfStore = defineStore('app-conf', () => {
   }
 
   async function fetch() {
-    console.log('fetching app conf')
     conf.value = await trpc.appConf.read.query()
   }
 })

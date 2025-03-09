@@ -181,7 +181,6 @@ function updateWeeklyAppointment(index: number) {
         from: fromTime,
         to: toTime,
       }
-      console.log({ from: fromTime, to: toTime })
     }
   }
 }

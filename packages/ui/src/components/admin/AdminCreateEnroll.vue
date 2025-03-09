@@ -117,7 +117,6 @@ async function updateEnrollment() {
       title: { de: formData.value.title.de, en: formData.value.title.en },
     })
     adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
-    // console.log('Success updating enroll phase')
     router.back()
   } catch {
     errorDialogMessage.value = t(
@@ -162,7 +161,6 @@ async function createEnrollment() {
       title: { de: formData.value.title.de, en: formData.value.title.en },
     }
     adminCoursesStore.phaseOfferedCourses[newPhase.id] = sharedObject.value
-    // console.log('Success creating enroll phase')
     router.back()
   } catch {
     errorDialogMessage.value = t(
