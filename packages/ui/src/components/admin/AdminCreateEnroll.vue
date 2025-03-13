@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Phase } from '@/stores/admin/AdminCoursesStore'
 
+import { fetchFastify } from '@/fastify'
 import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
@@ -227,6 +228,19 @@ function validate(): boolean {
 const requiredFieldRule = [
   (i: string | undefined) => !!i || t('validation.field-required'),
 ]
+const excelFile = ref<File>()
+
+async function uploadExcel() {
+  if (!excelFile.value) {
+    return
+  }
+  const fetchData = new FormData()
+  fetchData.append('file', excelFile.value)
+  const res = await fetchFastify('/admin/enroll/offeredCourses', fetchData)
+  console.log(res.offeredCourses)
+  console.log(sharedObject.value)
+  sharedObject.value = res.offeredCourses
+}
 </script>
 
 <template>
@@ -347,6 +361,20 @@ const requiredFieldRule = [
         </VCol>
         <VCol sm="4">
           <VBtn :text="t('clear')" @click="clearSelection" />
+        </VCol>
+      </VRow>
+      <VRow>
+        <VCol sm="8">
+          <VFileInput
+            v-model="excelFile"
+            accept=".xls,.xlsx,.ods"
+            label="WPF Excel auswählen"
+            placeholder="Datei auswählen"
+            outlined
+          />
+        </VCol>
+        <VCol sm="4">
+          <VBtn text="Daten übernehmen" @click="uploadExcel" />
         </VCol>
       </VRow>
       <VRow>

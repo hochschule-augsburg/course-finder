@@ -3,7 +3,7 @@ import type { Student } from '@prisma/client'
 import type { ClientUser } from '../../prisma/PrismaTypes.ts'
 
 // keep in sync with packages/ui/src/helper/enums/fieldsOfStudy.ts
-const fieldsOfStudy: Record<
+export const fieldsOfStudy: Record<
   string,
   { abbr: string; degree: 'Bachelor' | 'Master' }
 > = {
@@ -21,6 +21,7 @@ const fieldsOfStudy: Record<
     abbr: 'IIS',
     degree: 'Bachelor',
   },
+  'Systems Engineering (Bachelor)': { abbr: 'SE', degree: 'Bachelor' },
   'Technische Informatik (Bachelor)': { abbr: 'TI', degree: 'Bachelor' },
   'Wirtschaftsinformatik (Bachelor)': { abbr: 'WI', degree: 'Bachelor' },
 }
