@@ -19,6 +19,8 @@ import {
   VSelect,
   VTextarea,
   VTextField,
+  VFileInput,
+  VSpacer,
 } from 'vuetify/components'
 
 import type { OfferedCourseData } from './types'
@@ -229,6 +231,7 @@ const requiredFieldRule = [
   (i: string | undefined) => !!i || t('validation.field-required'),
 ]
 const excelFile = ref<File>()
+const isUploading = ref(false)
 
 async function uploadExcel() {
   if (!excelFile.value) {
@@ -236,10 +239,20 @@ async function uploadExcel() {
   }
   const fetchData = new FormData()
   fetchData.append('file', excelFile.value)
-  const res = await fetchFastify('/admin/enroll/offeredCourses', fetchData)
-  console.log(res.offeredCourses)
-  console.log(sharedObject.value)
-  sharedObject.value = res.offeredCourses
+  isUploading.value = true
+  try {
+    const res = await fetchFastify('/admin/enroll/offeredCourses', fetchData)
+    if (res.errors) {
+      showErrorDialog.value = true
+      errorDialogMessage.value = res.errors.join('\n--\n\n')
+    }
+    sharedObject.value = res.offeredCourses
+  } catch (e) {
+    showErrorDialog.value = true
+    errorDialogMessage.value = 'Unbekannter Fehler' + e
+  } finally {
+    isUploading.value = false
+  }
 }
 </script>
 
@@ -374,7 +387,7 @@ async function uploadExcel() {
           />
         </VCol>
         <VCol sm="4">
-          <VBtn text="Daten übernehmen" @click="uploadExcel" />
+          <VBtn :loading="isUploading" text="Daten übernehmen" @click="uploadExcel" />
         </VCol>
       </VRow>
       <VRow>
@@ -402,7 +415,6 @@ async function uploadExcel() {
       @close="
         () => {
           showErrorDialog = false
-          router.back()
         }
       "
     />

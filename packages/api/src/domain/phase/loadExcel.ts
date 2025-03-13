@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { parse } from 'date-fns'
 import { de } from 'date-fns/locale'
-import { chunk, template } from 'lodash-es'
+import { chunk, template, uniqBy } from 'lodash-es'
 import XLSX from 'xlsx'
 import { z, ZodError } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
@@ -68,7 +68,7 @@ export async function loadExcel(file: Buffer) {
             errors.push(...res.errors)
           } catch (err) {
             if (err instanceof Error && 'message' in err) {
-              errors.push(err.message)
+              errors.push(`${err.message} ${JSON.stringify(chunk)}`)
             }
           }
         }
@@ -76,11 +76,17 @@ export async function loadExcel(file: Buffer) {
     ),
   )
 
-  console.log(errors)
+  const uniqueCourses = uniqBy(offeredCourses, 'moduleCode')
+  const removedCourses = offeredCourses.filter(
+    (course) => !uniqueCourses.includes(course),
+  )
+  removedCourses.forEach((course) => {
+    errors.push(`Duplicate course removed: ${course.moduleCode}`)
+  })
 
   return {
     errors,
-    offeredCourses,
+    offeredCourses: uniqueCourses,
   }
 }
 
@@ -141,8 +147,14 @@ async function parseCourses(
         moodleCourse: offeredCourse.moodleCourse ?? null,
       })
     } catch (err) {
+      //@ts-expect-error hinting
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const hint = e?.moduleCode
       if (err instanceof ZodError) {
-        errors.push(err.message)
+        return errors.push(`${hint} ${err.message}`)
+      }
+      if (err instanceof DateError) {
+        return errors.push(`${hint} ${err.message}`)
       }
       throw err
     }
@@ -151,17 +163,31 @@ async function parseCourses(
   return { errors, offeredCourses }
 }
 
+class DateError extends Error {
+  constructor(str: string) {
+    super(`Invalid date format: ${str}`)
+  }
+}
+
 function parseDate(dateStr: string): Date {
   if (dateStr.includes('|')) {
-    const parsed =
-      parse<Date, Date>(dateStr, 'EEEE| HH:mm', new Date()) ??
-      parse<Date, Date>(dateStr, 'EEEE| HH:mm', new Date(), { locale: de })
-    if (!parsed) {
-      throw new Error('Invalid date format')
+    let parsed = parse<Date, Date>(dateStr, 'EEEEEE | HH:mm', new Date())
+    if (!parsed || isNaN(parsed.getTime())) {
+      parsed = parse<Date, Date>(dateStr, 'EEEEEE | HH:mm', new Date(), {
+        locale: de,
+      })
+
+      if (!parsed || isNaN(parsed.getTime())) {
+        throw new DateError(dateStr)
+      }
     }
     return parsed
   }
-  return new Date(dateStr)
+  const parsed = new Date(dateStr)
+  if (isNaN(parsed.getTime())) {
+    throw new DateError(dateStr)
+  }
+  return parsed
 }
 
 const promptTemplate: (data: { courses: string; data: string }) => string =
@@ -179,8 +205,8 @@ ${JSON.stringify(zodToJsonSchema(offeredCourseSpec))}
 Hinweise können in common-mark in "extraInfo" hinterlegt werden.
 "for" sind die Studiengänge für die das Fach angeboten wird, diese werden als
  langform angegeben.
-Gibt "from" und "to" im Format "EEEEEE| HH:mm" für "weekly" an, für "block" und "irregular"
- in ISO-Dates EEEEEE="Mo, Tu, We, Th, Fr, Sa, Su".
+Gibt "from" und "to" im Format "EEEEEE | HH:mm" für "weekly" an, für "block" und "irregular"
+ in ISO-Dates EEEEEE eines von [Mo, Tu, We, Th, Fr, Sa, Su].
 Falls unsicher bei Booleans, benutze "false". Versuche, dem JSON-Schema zu entsprechen.
 Wenn keine minimale Teilnehmerzahl angegeben ist wähle "16" und setze "hideMinParticipants"
  auf "true".
