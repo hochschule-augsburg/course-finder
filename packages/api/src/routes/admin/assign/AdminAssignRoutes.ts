@@ -8,7 +8,7 @@ import {
   emailToLists,
   emailToStudents,
 } from '../../../domain/mail/EmailFunctions.ts'
-import { phaseService } from '../../../domain/phase/PhaseService.ts'
+import { PhaseService } from '../../../domain/phase/PhaseService.ts'
 import { prisma } from '../../../prisma/prisma.ts'
 import { adminProcedure, router } from '../../trpc.ts'
 
@@ -95,7 +95,7 @@ export const assignRouter = router({
     .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
     .mutation(async ({ input }) => {
       await Promise.all([
-        phaseService.updatePhase(input.phaseId, { state: 'FINISHED' }),
+        PhaseService.updatePhase(input.phaseId, { state: 'FINISHED' }),
         prisma.enrollphase.update({
           data: {
             publishedTry: input.tryNo,
