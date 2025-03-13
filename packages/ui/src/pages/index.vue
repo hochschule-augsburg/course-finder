@@ -134,7 +134,7 @@ en:
   enroll: Enroll
 de:
   your-courses-for: Deine Kurse für {0}
-  courses-from-module-book: Kurse aus den aktellen Modulhandbüchern
+  courses-from-module-book: Kurse aus den aktuellen Modulhandbüchern
   not-all-offered-each: Nicht alle Kurse werden in jedem Semester angeboten.
   enroll: Einschreiben
 </i18n>

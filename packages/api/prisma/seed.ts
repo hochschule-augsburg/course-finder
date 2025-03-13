@@ -169,6 +169,7 @@ async function main() {
       ['Wirtschaftsinformatik (Bachelor)', 'win'],
       ['Technische Informatik (Bachelor)', 'ti'],
       ['International Information Systems (Bachelor)', 'iis'],
+      ['Systems Engineering (Bachelor)', 'se'],
       ['Interaktive Medien (Bachelor)', 'ia'],
       ['Applied Research (Master)', 'mapr'],
       ['Informatik (Master)', 'min'],

@@ -1,6 +1,5 @@
 import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { fieldsOfStudy } from '@/helper/enums/fieldsOfStudy'
 import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
@@ -15,11 +14,13 @@ export const useUserStore = defineStore('user', () => {
     if (!user.value?.Student) {
       return false
     }
-    const fieldOfStudy = fieldsOfStudy[user.value?.Student?.fieldOfStudy]
-    if (fieldOfStudy.degree === 'Master') {
+    if (
+      user.value?.Student.finalDegree === 'Master' ||
+      user.value?.Student.fieldOfStudy === 'Systems Engineering (Bachelor)'
+    ) {
       return true
     }
-    return (user.value?.Student?.term ?? 0) > 2
+    return (user.value.Student.term ?? 0) > 2
   })
 
   return { initPromise, login, logout, mayEnroll, user }
