@@ -1,5 +1,7 @@
 import { uniqBy } from 'lodash-es'
 
+import type { EnrollPhase } from '../../prisma/PrismaTypes.ts'
+
 import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
 import { sendEmail } from '../mail/Mail.ts'
@@ -45,45 +47,56 @@ export async function sendOpeningMail(phaseId: number) {
 
 export async function sendReminderMails(phaseId: number) {
   const phase = await prisma.enrollphase.findUnique({
-    select: {
-      emailNotificationAt: true,
-      end: true,
-      state: true,
-      title: true,
-    },
     where: { id: phaseId },
   })
   if (!phase) {
     throw new Error('Phase not found')
   }
 
-  const studData = {
-    Student: {
-      select: {
-        User: {
-          select: {
-            email: true,
-            name: true,
-            username: true,
-          },
+  const zeroPointsStudents = await getZeroPointsStudents()
+  const zeroCreditsStudents = await getZeroCreditsStudents()
+
+  const unfinishedStudents = uniqBy(
+    [...zeroCreditsStudents, ...zeroPointsStudents],
+    (e) => e?.Student.User.username,
+  )
+
+  await sendEmailsToUnfinishedStudents(unfinishedStudents, phase)
+
+  await sendEmail(
+    env.MAIL_RECEIVERS,
+    `${phase.title.de} endet bald | ${phase.title.en} will be closing soon`,
+    getClosingEmailContent(phase),
+  )
+}
+
+const studentSelectionData = {
+  Student: {
+    select: {
+      User: {
+        select: {
+          email: true,
+          name: true,
+          username: true,
         },
       },
     },
-  }
+  },
+}
 
+async function getZeroPointsStudents() {
   const zeroPointChoices = await prisma.studentChoice.findMany({
     select: {
       points: true,
       StudentPhase: {
-        select: studData,
+        select: studentSelectionData,
       },
     },
     where: {
       points: 0,
     },
   })
-
-  const zeroPointsStudents = Object.values(
+  return Object.values(
     Object.groupBy(
       zeroPointChoices,
       (e) => e.StudentPhase?.Student.User.username,
@@ -95,25 +108,36 @@ export async function sendReminderMails(phaseId: number) {
         choices.every((choice) => choice.points === 0),
     )
     .map((choices) => choices?.[0]?.StudentPhase)
+}
 
-  const zeroCreditsStudents = await prisma.studentPhase.findMany({
-    select: studData,
+async function getZeroCreditsStudents() {
+  return await prisma.studentPhase.findMany({
+    select: studentSelectionData,
     where: {
       creditsNeeded: 0,
     },
   })
+}
 
-  const unfinishedStudents = uniqBy(
-    [...zeroCreditsStudents, ...zeroPointsStudents],
-    (e) => e?.Student.User.username,
-  )
-
+async function sendEmailsToUnfinishedStudents(
+  unfinishedStudents: { Student: { User: { email: string; name: string } } }[],
+  phase: EnrollPhase,
+) {
   await Promise.all(
     unfinishedStudents.map(async (studentPhase) => {
       await sendEmail(
         studentPhase.Student.User.email,
         `${phase.title.de} unvollständig | ${phase.title.en} incomplete`,
-        `Hallo ${studentPhase.Student.User.name},<br>
+        getReminderEmailContent(studentPhase),
+      )
+    }),
+  )
+}
+
+function getReminderEmailContent(studentPhase: {
+  Student: { User: { email: string; name: string } }
+}) {
+  return `Hallo ${studentPhase.Student.User.name},<br>
 
         deine Wahl ist noch nicht vollständig. Bitte stelle sicher, dass du
         für jedes gewählte Fach eine Priorisierung festgelegt hast und die
@@ -138,15 +162,11 @@ export async function sendReminderMails(phaseId: number) {
 
         You can find instructions here:
         <a href="https://hochschule-augsburg.github.io/course-finder/student#_3-2-wahlpflichtfach-anmeldung">Instructions</a>
-        `,
-      )
-    }),
-  )
+        `
+}
 
-  await sendEmail(
-    env.MAIL_RECEIVERS,
-    `${phase.title.de} endet bald | ${phase.title.en} will be closing soon`,
-    `Sehr geehrte Studierende,<br>
+function getClosingEmailContent(phase: EnrollPhase) {
+  return `Sehr geehrte Studierende,<br>
     die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
       'de-DE',
     )}.<br>
@@ -160,8 +180,7 @@ export async function sendReminderMails(phaseId: number) {
           )}.<br>
           Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
           Registrations can be made on the following website:<br>
-          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`,
-  )
+          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`
 }
 
 function openingMail(data: {

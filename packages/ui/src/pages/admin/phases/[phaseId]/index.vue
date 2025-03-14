@@ -61,7 +61,7 @@ function sendOpeningMail() {
                     v-if="phaseState.modelValue === 'OPEN'"
                     @click="sendReminderMail"
                   >
-                    Erinnerungsmail senden
+                    Erinnerungsmails senden
                   </VBtn>
                 </div>
               </VCol>
