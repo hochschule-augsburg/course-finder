@@ -53,8 +53,8 @@ export async function sendReminderMails(phaseId: number) {
     throw new Error('Phase not found')
   }
 
-  const zeroPointsStudents = await getZeroPointsStudents()
-  const zeroCreditsStudents = await getZeroCreditsStudents()
+  const zeroPointsStudents = await getZeroPointsStudents(phase)
+  const zeroCreditsStudents = await getZeroCreditsStudents(phase)
 
   const unfinishedStudents = uniqBy(
     [...zeroCreditsStudents, ...zeroPointsStudents],
@@ -84,7 +84,7 @@ const studentSelectionData = {
   },
 }
 
-async function getZeroPointsStudents() {
+async function getZeroPointsStudents(phase: EnrollPhase) {
   const zeroPointChoices = await prisma.studentChoice.findMany({
     select: {
       points: true,
@@ -93,6 +93,7 @@ async function getZeroPointsStudents() {
       },
     },
     where: {
+      phaseId: phase.id,
       points: 0,
     },
   })
@@ -110,11 +111,12 @@ async function getZeroPointsStudents() {
     .map((choices) => choices?.[0]?.StudentPhase)
 }
 
-async function getZeroCreditsStudents() {
+async function getZeroCreditsStudents(phase: EnrollPhase) {
   return await prisma.studentPhase.findMany({
     select: studentSelectionData,
     where: {
       creditsNeeded: 0,
+      phaseId: phase.id,
     },
   })
 }
