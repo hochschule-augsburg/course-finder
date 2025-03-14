@@ -170,17 +170,18 @@ function getClosingEmailContent(phase: EnrollPhase) {
     die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
       'de-DE',
     )}.<br>
-          Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
-          Die Anmeldung erfolgt über folgender Seite:
-          <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
-          <br>
-          Dear students,<br>
-          Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
-            'en-GB',
-          )}.<br>
-          Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
-          Registrations can be made on the following website:<br>
-          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`
+    Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
+    Die Anmeldung erfolgt über folgender Seite:
+    <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
+    ---<br><br>
+
+    Dear students,<br>
+    Registrations for elective courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
+      'en-GB',
+    )}.<br>
+    Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
+    Registrations can be made on the following website:<br>
+    <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`
 }
 
 function openingMail(data: {

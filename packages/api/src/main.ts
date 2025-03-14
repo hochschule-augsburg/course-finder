@@ -9,10 +9,9 @@ import { createServer } from './server/server.ts'
 // Start database from docker container for development
 if (env.DEV) {
   execSync(`docker start ${process.env.DEV_DOCKER_DB}`)
-} else {
-  console.log('Production mode')
-  console.log(env.MAIL_RECEIVERS, env.CONTACT_EMAIL)
 }
+console.log(env.DEV ? 'Dev Mode' : 'Production mode')
+console.log(env.MAIL_RECEIVERS, env.CONTACT_EMAIL)
 
 // Start the server
 const server = await createServer()
