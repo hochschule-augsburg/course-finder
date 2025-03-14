@@ -2,7 +2,7 @@ import type { EnrollPhase } from '../../prisma/PrismaTypes.ts'
 
 import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
-import { sendEmail } from './Mail.ts'
+import { sendEmail } from '../mail/Mail.ts'
 
 export async function emailToStudents(
   phase: EnrollPhase,

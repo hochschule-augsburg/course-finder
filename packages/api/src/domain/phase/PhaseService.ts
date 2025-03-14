@@ -4,18 +4,16 @@
  * It manages the scheduling of the phases and provides methods for manipulation.
  */
 import { type Enrollphase, PhaseState } from '@prisma/client'
-import { groupBy, uniqBy } from 'lodash-es'
+import { groupBy } from 'lodash-es'
 import { z } from 'zod'
 
-import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
 import {
   i18nInput,
   offeredCourseSpec,
   zodEnumFromObjKeys,
 } from '../../prisma/PrismaZod.ts'
-import { sendEmail } from '../mail/Mail.ts'
-import { openingMail } from './openingMail.ts'
+import { sendOpeningMail, sendReminderMails } from './PhaseMailService.ts'
 import {
   cancelPhase,
   reschedulePhase,
@@ -79,164 +77,12 @@ export class PhaseService {
     cancelPhase(phaseId)
   }
 
-  static async sendOpeningMail(phaseId: number) {
-    const phase = await prisma.enrollphase.findUnique({
-      select: {
-        end: true,
-        state: true,
-        title: true,
-      },
-      where: { id: phaseId },
-    })
-    if (!phase) {
-      throw new Error('Phase not found')
-    }
-    if (phase.state !== 'OPEN') {
-      throw new Error('Phase is not open')
-    }
-    await sendEmail(
-      env.MAIL_RECEIVERS,
-      `${phase.title.de} geöffnet | ${phase.title.en} started`,
-      openingMail({
-        contactEmail: env.CONTACT_EMAIL,
-        dateDe: phase.end.toLocaleString('de-DE', {
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          month: 'numeric',
-          year: 'numeric',
-        }),
-        dateEn: phase.end.toLocaleString('en-GB', {
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          month: 'numeric',
-          year: 'numeric',
-        }),
-        url: env.FRONTEND_ORIGIN,
-      }),
-    )
+  static sendOpeningMail(phaseId: number) {
+    return sendOpeningMail(phaseId)
   }
 
-  static async sendReminderMails(phaseId: number) {
-    const phase = await prisma.enrollphase.findUnique({
-      select: {
-        emailNotificationAt: true,
-        end: true,
-        state: true,
-        title: true,
-      },
-      where: { id: phaseId },
-    })
-    if (!phase) {
-      throw new Error('Phase not found')
-    }
-
-    const studData = {
-      Student: {
-        select: {
-          User: {
-            select: {
-              email: true,
-              name: true,
-              username: true,
-            },
-          },
-        },
-      },
-    }
-
-    const zeroPointChoices = await prisma.studentChoice.findMany({
-      select: {
-        points: true,
-        StudentPhase: {
-          select: studData,
-        },
-      },
-      where: {
-        points: 0,
-      },
-    })
-
-    const zeroPointsStudents = Object.values(
-      Object.groupBy(
-        zeroPointChoices,
-        (e) => e.StudentPhase?.Student.User.username,
-      ),
-    )
-      .filter(
-        (choices): choices is NonNullable<typeof zeroPointChoices> =>
-          Array.isArray(choices) &&
-          choices.every((choice) => choice.points === 0),
-      )
-      .map((choices) => choices?.[0]?.StudentPhase)
-
-    const zeroCreditsStudents = await prisma.studentPhase.findMany({
-      select: studData,
-      where: {
-        creditsNeeded: 0,
-      },
-    })
-
-    const unfinishedStudents = uniqBy(
-      [...zeroCreditsStudents, ...zeroPointsStudents],
-      (e) => e?.Student.User.username,
-    )
-
-    await Promise.all(
-      unfinishedStudents.map(async (studentPhase) => {
-        await sendEmail(
-          studentPhase.Student.User.email,
-          `${phase.title.de} unvollständig | ${phase.title.en} incomplete`,
-          `Hallo ${studentPhase.Student.User.name},<br>
-
-          deine Wahl ist noch nicht vollständig. Bitte stelle sicher, dass du
-          für jedes gewählte Fach eine Priorisierung festgelegt hast und die
-          Anmeldung durch das Festlegen der gewünschten Credit Points (CP)
-          abgeschlossen ist.<br>
-
-          Du kannst deine Wahl hier korrigieren:<br>
-          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
-
-          Eine Anleitung findest du hier:
-          <a href="https://hochschule-augsburg.github.io/course-finder/student#_3-2-wahlpflichtfach-anmeldung">Anleitung</a><br>
-          ---<br><br>
-
-          Hello ${studentPhase.Student.User.name},<br>
-
-          your choice is still incomplete. Please make sure that you have set a
-          prioritization for each selected course and completed the registration
-          by setting the desired credit points (CP).<br>
-
-          You can correct your choice here:<br>
-          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
-
-          You can find instructions here:
-          <a href="https://hochschule-augsburg.github.io/course-finder/student#_3-2-wahlpflichtfach-anmeldung">Instructions</a>
-          `,
-        )
-      }),
-    )
-
-    await sendEmail(
-      env.MAIL_RECEIVERS,
-      `${phase.title.de} endet bald | ${phase.title.en} will be closing soon`,
-      `Sehr geehrte Studierende,<br>
-      die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
-        'de-DE',
-      )}.<br>
-            Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
-            Die Anmeldung erfolgt über folgender Seite:
-            <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
-            <br>
-            Dear students,<br>
-            Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
-              'en-GB',
-            )}.<br>
-            Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
-            Registrations can be made on the following website:<br>
-            <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`,
-    )
+  static sendReminderMails(phaseId: number) {
+    return sendReminderMails(phaseId)
   }
 
   static async startPhaseSchedulingFromDatabase() {

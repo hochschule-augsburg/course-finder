@@ -2,12 +2,12 @@ import { TRPCError } from '@trpc/server'
 import { groupBy, sortBy } from 'lodash-es'
 import { z } from 'zod'
 
-import { assign } from '../../../domain/assign/AssignmentAlgorithm.ts'
-import { buildYamlResults } from '../../../domain/assign/ResultsYaml.ts'
 import {
   emailToLists,
   emailToStudents,
-} from '../../../domain/mail/EmailFunctions.ts'
+} from '../../../domain/assign/AssignMails.ts'
+import { assign } from '../../../domain/assign/AssignmentAlgorithm.ts'
+import { buildYamlResults } from '../../../domain/assign/ResultsYaml.ts'
 import { PhaseService } from '../../../domain/phase/PhaseService.ts'
 import { prisma } from '../../../prisma/prisma.ts'
 import { adminProcedure, router } from '../../trpc.ts'
