@@ -158,7 +158,7 @@ export const enrollRouter = router({
     sendReminderMail: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .mutation(async ({ input }) => {
-        await PhaseService.sendReminderMail(input.phaseId)
+        await PhaseService.sendReminderMails(input.phaseId)
       }),
     update: adminProcedure
       .input(phaseSpec.partial().extend({ id: z.number() }))

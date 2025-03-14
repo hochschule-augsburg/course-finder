@@ -4,7 +4,7 @@
  * It manages the scheduling of the phases and provides methods for manipulation.
  */
 import { type Enrollphase, PhaseState } from '@prisma/client'
-import { groupBy } from 'lodash-es'
+import { groupBy, uniqBy } from 'lodash-es'
 import { z } from 'zod'
 
 import { env } from '../../env.ts'
@@ -118,7 +118,7 @@ export class PhaseService {
     )
   }
 
-  static async sendReminderMail(phaseId: number) {
+  static async sendReminderMails(phaseId: number) {
     const phase = await prisma.enrollphase.findUnique({
       select: {
         emailNotificationAt: true,
@@ -131,9 +131,96 @@ export class PhaseService {
     if (!phase) {
       throw new Error('Phase not found')
     }
+
+    const studData = {
+      Student: {
+        select: {
+          User: {
+            select: {
+              email: true,
+              name: true,
+              username: true,
+            },
+          },
+        },
+      },
+    }
+
+    const zeroPointChoices = await prisma.studentChoice.findMany({
+      select: {
+        points: true,
+        StudentPhase: {
+          select: studData,
+        },
+      },
+      where: {
+        points: 0,
+      },
+    })
+
+    const zeroPointsStudents = Object.values(
+      Object.groupBy(
+        zeroPointChoices,
+        (e) => e.StudentPhase?.Student.User.username,
+      ),
+    )
+      .filter(
+        (choices): choices is NonNullable<typeof zeroPointChoices> =>
+          Array.isArray(choices) &&
+          choices.every((choice) => choice.points === 0),
+      )
+      .map((choices) => choices?.[0]?.StudentPhase)
+
+    const zeroCreditsStudents = await prisma.studentPhase.findMany({
+      select: studData,
+      where: {
+        creditsNeeded: 0,
+      },
+    })
+
+    const unfinishedStudents = uniqBy(
+      [...zeroCreditsStudents, ...zeroPointsStudents],
+      (e) => e?.Student.User.username,
+    )
+
+    await Promise.all(
+      unfinishedStudents.map(async (studentPhase) => {
+        await sendEmail(
+          studentPhase.Student.User.email,
+          `${phase.title.de} unvollständig | ${phase.title.en} incomplete`,
+          `Hallo ${studentPhase.Student.User.name},<br>
+
+          deine Wahl ist noch nicht vollständig. Bitte stelle sicher, dass du
+          für jedes gewählte Fach eine Priorisierung festgelegt hast und die
+          Anmeldung durch das Festlegen der gewünschten Credit Points (CP)
+          abgeschlossen ist.<br>
+
+          Du kannst deine Wahl hier korrigieren:<br>
+          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
+
+          Eine Anleitung findest du hier:
+          <a href="https://hochschule-augsburg.github.io/course-finder/student#_3-2-wahlpflichtfach-anmeldung">Anleitung</a><br>
+          ---<br><br>
+
+          Hello ${studentPhase.Student.User.name},<br>
+
+          your choice is still incomplete. Please make sure that you have set a
+          prioritization for each selected course and completed the registration
+          by setting the desired credit points (CP).<br>
+
+          You can correct your choice here:<br>
+          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
+
+          You can find instructions here:
+          <a href="https://hochschule-augsburg.github.io/course-finder/student#_3-2-wahlpflichtfach-anmeldung">Instructions</a>
+          `,
+        )
+      }),
+    )
+
     await sendEmail(
       env.MAIL_RECEIVERS,
-      'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
+      `${phase.title.de} endet bald | ${phase.title.en} will be closing soon`,
       `Sehr geehrte Studierende,<br>
       die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
         'de-DE',

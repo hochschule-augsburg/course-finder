@@ -43,7 +43,7 @@ export function schedulePhase(phase: Enrollphase) {
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
       async () => {
-        await PhaseService.sendReminderMail(phase.id)
+        await PhaseService.sendReminderMails(phase.id)
         console.info('Sent mail for phase', phase.id, 'from scheduled job')
       },
     ),
