@@ -45,3 +45,21 @@ watch(selectedModuleCode, () => {
     </VContainer>
   </div>
 </template>
+
+<style lang="scss" scoped>
+@media (min-width: 1280px) {
+  .v-container {
+    max-width: 100%;
+  }
+}
+@media (min-width: 2560px) {
+  .v-container {
+    max-width: 2400px;
+  }
+}
+@media (min-width: 960px) {
+  .v-container {
+    max-width: 100%;
+  }
+}
+</style>

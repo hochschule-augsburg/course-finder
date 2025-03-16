@@ -26,8 +26,8 @@ const dev = import.meta.env.DEV
     :title="subject.title[locale]"
     class="subject-element"
     color="secondary"
-    height="200"
-    width="300"
+    height="12.5rem"
+    width="18.75rem"
     hover
   >
     <template #append>

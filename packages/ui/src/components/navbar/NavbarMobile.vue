@@ -39,7 +39,13 @@ const userStore = useUserStore()
 
     <VMenu transition="slide-y-transition">
       <template #activator="{ props }">
-        <VBtn :icon="mdiMenu" class="mr-1" size="large" v-bind="props" />
+        <VBtn
+          :aria-label="t('menu')"
+          :icon="mdiMenu"
+          class="mr-1"
+          size="large"
+          v-bind="props"
+        />
       </template>
 
       <VList>
@@ -132,6 +138,7 @@ const userStore = useUserStore()
 
 <i18n lang="yaml">
 en:
+  menu: Menu
   help: Help
   change-lang: Select Language
   change-theme: Select Theme
@@ -141,6 +148,7 @@ en:
   my-courses: My courses
 
 de:
+  menu: Menü
   help: Hilfe
   change-lang: Sprache wählen
   change-theme: Theme wählen

@@ -81,8 +81,18 @@ const overviewPhase = computed(
         id="subject-view-toggle"
         mandatory
       >
-        <VBtn :icon="mdiFormatListBulleted" text="list" value="list" />
-        <VBtn :icon="mdiDotsGrid" text="grid" value="grid" />
+        <VBtn
+          :aria-label="t('table-view')"
+          :icon="mdiFormatListBulleted"
+          text="list"
+          value="list"
+        />
+        <VBtn
+          :aria-label="t('tile-view')"
+          :icon="mdiDotsGrid"
+          text="grid"
+          value="grid"
+        />
       </VBtnToggle>
       <SubjectTiles v-if="subjectView === 'grid'" />
       <SubjectTable v-if="subjectView === 'list'" />
@@ -132,9 +142,13 @@ en:
   courses-from-module-book: Courses from the current module books
   not-all-offered-each: Not all courses are offered each semester.
   enroll: Enroll
+  table-view: Use table view
+  tile-view: Use tile view
 de:
   your-courses-for: Deine Kurse für {0}
   courses-from-module-book: Kurse aus den aktuellen Modulhandbüchern
   not-all-offered-each: Nicht alle Kurse werden in jedem Semester angeboten.
   enroll: Einschreiben
+  table-view: Benutze Tabellenansicht
+  tile-view: Benutze Kästchenansicht
 </i18n>

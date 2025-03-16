@@ -33,6 +33,7 @@ const userStore = useUserStore()
     <div class="d-flex flex-row pr-4">
       <VBtn
         v-if="userStore.user?.type === 'Admin'"
+        aria-label="Admin Panel"
         text="Admin"
         to="/admin"
         icon
@@ -45,7 +46,7 @@ const userStore = useUserStore()
 
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
-          <VBtn v-bind="props" icon>
+          <VBtn v-bind="props" :aria-label="t('change-theme')" icon>
             <VIcon :icon="mdiThemeLightDark" />
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-theme') }}
@@ -60,7 +61,7 @@ const userStore = useUserStore()
 
       <VMenu transition="slide-y-transition">
         <template #activator="{ props }">
-          <VBtn v-bind="props" icon>
+          <VBtn v-bind="props" :aria-label="t('change-lang')" icon>
             <VIcon :icon="mdiEarth" />
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('change-lang') }}
@@ -72,7 +73,7 @@ const userStore = useUserStore()
 
       <VMenu transition="slied-y-transition">
         <template #activator="{ props }">
-          <VBtn v-bind="props" icon>
+          <VBtn v-bind="props" :aria-label="t('global.help')" icon>
             <VIcon :icon="mdiHelpCircleOutline" />
             <VTooltip activator="parent" location="left" open-delay="500">
               {{ t('global.help') }}
@@ -85,6 +86,7 @@ const userStore = useUserStore()
       <div v-if="userStore.user" class="align-self-center">
         <VBtn
           v-if="userStore.user.type === 'Student'"
+          :aria-label="t('my-courses')"
           :prepend-icon="mdiAccountCircle"
           :ripple="false"
           class="pr-1 pl-2"
@@ -102,14 +104,14 @@ const userStore = useUserStore()
           :text="userStore.user?.name"
           class="pr-1 pl-2"
         />
-        <VBtn icon @click="userStore.logout">
+        <VBtn :aria-label="t('logout')" icon @click="userStore.logout">
           <VIcon :icon="mdiLogoutVariant" />
           <VTooltip activator="parent" location="left" open-delay="500">
             {{ t('logout') }}
           </VTooltip>
         </VBtn>
       </div>
-      <VBtn v-else icon>
+      <VBtn v-else :aria-label="t('login')" icon>
         <VIcon :icon="mdiLoginVariant" />
         <VTooltip activator="parent" location="left" open-delay="500">
           {{ t('login') }}
