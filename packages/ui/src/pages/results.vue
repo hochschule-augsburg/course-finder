@@ -45,7 +45,7 @@ const selectedSubject = computed(() =>
 
 const noData = ref<boolean>()
 watch(
-  [() => coursesStore.currentPhase, ()=> assignStore.assignPhases],
+  [() => coursesStore.currentPhase, () => assignStore.assignPhases],
   () => {
     if (!coursesStore.currentPhase && !assignStore.assignPhases.length) {
       setTimeout(() => {
