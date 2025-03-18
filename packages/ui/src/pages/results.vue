@@ -45,13 +45,15 @@ const selectedSubject = computed(() =>
 
 const noData = ref<boolean>()
 watch(
-  () => [coursesStore.currentPhase, assignStore.assignPhases],
+  [() => coursesStore.currentPhase, ()=> assignStore.assignPhases],
   () => {
     if (!coursesStore.currentPhase && !assignStore.assignPhases.length) {
       setTimeout(() => {
         noData.value =
           !coursesStore.currentPhase && !assignStore.assignPhases.length
       }, 50)
+    } else {
+      noData.value = false
     }
   },
   { immediate: true },
