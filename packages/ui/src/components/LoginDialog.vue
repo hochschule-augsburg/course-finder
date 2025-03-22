@@ -30,25 +30,6 @@ const twoFANeeded = ref(false)
 const pending = ref(false)
 const error = ref<string>()
 
-async function twoFALogin() {
-  pending.value = true
-  let result: 'unknown-error' | Awaited<ReturnType<typeof userStore.login>>
-  try {
-    result = await userStore.login(username.value, password.value, otp.value)
-  } catch (e) {
-    console.error(e)
-    error.value = 'global.unknown-error'
-    return
-  } finally {
-    pending.value = false
-  }
-  if (typeof result === 'object') {
-    emit('success')
-    return
-  }
-  error.value = `error.two-fa.${result}`
-}
-
 async function login() {
   pending.value = true
   let result: 'unknown-error' | Awaited<ReturnType<typeof userStore.login>>
@@ -71,6 +52,25 @@ async function login() {
     return
   }
   error.value = `error.${result}`
+}
+
+async function twoFALogin() {
+  pending.value = true
+  let result: 'unknown-error' | Awaited<ReturnType<typeof userStore.login>>
+  try {
+    result = await userStore.login(username.value, password.value, otp.value)
+  } catch (e) {
+    console.error(e)
+    error.value = 'global.unknown-error'
+    return
+  } finally {
+    pending.value = false
+  }
+  if (typeof result === 'object') {
+    emit('success')
+    return
+  }
+  error.value = `error.two-fa.${result}`
 }
 
 function validUsername(input: string) {
@@ -106,8 +106,8 @@ function validUsername(input: string) {
         />
       </VForm>
       <VTextField
-        v-model="otp"
         v-if="twoFANeeded"
+        v-model="otp"
         :label="t('two-fa-code')"
         type="number"
         hide-spin-buttons

@@ -84,56 +84,23 @@ const studentSelectionData = {
   },
 }
 
-async function getZeroPointsStudents(phase: EnrollPhase) {
-  const zeroPointChoices = await prisma.studentChoice.findMany({
-    select: {
-      points: true,
-      StudentPhase: {
-        select: studentSelectionData,
-      },
-    },
-    where: {
-      phaseId: phase.id,
-      points: 0,
-    },
-  })
-  return Object.values(
-    Object.groupBy(
-      zeroPointChoices,
-      (e) => e.StudentPhase?.Student.User.username,
-    ),
-  )
-    .filter(
-      (choices): choices is NonNullable<typeof zeroPointChoices> =>
-        Array.isArray(choices) &&
-        choices.every((choice) => choice.points === 0),
-    )
-    .map((choices) => choices?.[0]?.StudentPhase)
-}
+function getClosingEmailContent(phase: EnrollPhase) {
+  return `Sehr geehrte Studierende,<br>
+    die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
+      'de-DE',
+    )}.<br>
+    Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
+    Die Anmeldung erfolgt über folgender Seite:
+    <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
+    ---<br><br>
 
-async function getZeroCreditsStudents(phase: EnrollPhase) {
-  return await prisma.studentPhase.findMany({
-    select: studentSelectionData,
-    where: {
-      creditsNeeded: 0,
-      phaseId: phase.id,
-    },
-  })
-}
-
-async function sendEmailsToUnfinishedStudents(
-  unfinishedStudents: { Student: { User: { email: string; name: string } } }[],
-  phase: EnrollPhase,
-) {
-  await Promise.all(
-    unfinishedStudents.map(async (studentPhase) => {
-      await sendEmail(
-        studentPhase.Student.User.email,
-        `${phase.title.de} unvollständig | ${phase.title.en} incomplete`,
-        getReminderEmailContent(studentPhase),
-      )
-    }),
-  )
+    Dear students,<br>
+    Registrations for elective courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
+      'en-GB',
+    )}.<br>
+    Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
+    Registrations can be made on the following website:<br>
+    <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`
 }
 
 function getReminderEmailContent(studentPhase: {
@@ -167,23 +134,41 @@ function getReminderEmailContent(studentPhase: {
         `
 }
 
-function getClosingEmailContent(phase: EnrollPhase) {
-  return `Sehr geehrte Studierende,<br>
-    die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
-      'de-DE',
-    )}.<br>
-    Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
-    Die Anmeldung erfolgt über folgender Seite:
-    <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
-    ---<br><br>
+async function getZeroCreditsStudents(phase: EnrollPhase) {
+  return await prisma.studentPhase.findMany({
+    select: studentSelectionData,
+    where: {
+      creditsNeeded: 0,
+      phaseId: phase.id,
+    },
+  })
+}
 
-    Dear students,<br>
-    Registrations for elective courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
-      'en-GB',
-    )}.<br>
-    Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
-    Registrations can be made on the following website:<br>
-    <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`
+async function getZeroPointsStudents(phase: EnrollPhase) {
+  const zeroPointChoices = await prisma.studentChoice.findMany({
+    select: {
+      points: true,
+      StudentPhase: {
+        select: studentSelectionData,
+      },
+    },
+    where: {
+      phaseId: phase.id,
+      points: 0,
+    },
+  })
+  return Object.values(
+    Object.groupBy(
+      zeroPointChoices,
+      (e) => e.StudentPhase?.Student.User.username,
+    ),
+  )
+    .filter(
+      (choices): choices is NonNullable<typeof zeroPointChoices> =>
+        Array.isArray(choices) &&
+        choices.every((choice) => choice.points === 0),
+    )
+    .map((choices) => choices?.[0]?.StudentPhase)
 }
 
 function openingMail(data: {
@@ -250,4 +235,19 @@ However, they can already take a look at the available courses and start plannin
 If you encounter any issues with the registration, please send an email to 
 <a href="mailto:${data.contactEmail}">${data.contactEmail}</a>.<br>
 `
+}
+
+async function sendEmailsToUnfinishedStudents(
+  unfinishedStudents: { Student: { User: { email: string; name: string } } }[],
+  phase: EnrollPhase,
+) {
+  await Promise.all(
+    unfinishedStudents.map(async (studentPhase) => {
+      await sendEmail(
+        studentPhase.Student.User.email,
+        `${phase.title.de} unvollständig | ${phase.title.en} incomplete`,
+        getReminderEmailContent(studentPhase),
+      )
+    }),
+  )
 }

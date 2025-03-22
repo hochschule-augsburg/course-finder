@@ -70,10 +70,6 @@ const autoFillOptions = {
   prio: mdiAlphaPCircle,
 }
 
-function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
-  return currentOption === 'fallback' ? 'prio' : 'fallback'
-}
-
 async function autoFill() {
   await form.value?.validate()
 
@@ -112,6 +108,10 @@ async function autoFill() {
       remPoints--
     }
   })
+}
+
+function getNextAutoFillOption(currentOption?: 'fallback' | 'prio') {
+  return currentOption === 'fallback' ? 'prio' : 'fallback'
 }
 
 const integerInputRule = (i: string) =>
@@ -163,9 +163,9 @@ async function validate() {
 
 <template>
   <VDialog
+    id="enroll-form"
     v-model:model-value="visible"
     :persistent="!isFormUntouched"
-    id="enroll-form"
     max-width="500"
   >
     <SubjectDialog

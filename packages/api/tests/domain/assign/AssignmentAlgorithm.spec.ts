@@ -99,7 +99,7 @@ describe('AssignmentAlgorithm', () => {
       { Course: { creditPoints: 4 }, maxParticipants: 2, moduleCode: '3' },
       { Course: { creditPoints: 3 }, moduleCode: '4' },
       { Course: { creditPoints: 3 }, moduleCode: '5' },
-    ] as Partial<{ Course: Course } & OfferedCourse>[])
+    ] as Partial<OfferedCourse & { Course: Course }>[])
 
     // @ts-ignore
     prismaMock.studentPhase.findMany.mockResolvedValue(input)

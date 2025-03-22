@@ -19,7 +19,7 @@ const { finish } = registerTour(onboardingWrapper, props.name)
 </script>
 
 <template>
-  <VOnboardingWrapper :steps ref="onboardingWrapper">
+  <VOnboardingWrapper ref="onboardingWrapper" :steps>
     <template #default="{ previous, next, step, isFirst, isLast }">
       <VOnboardingStep>
         <VCard

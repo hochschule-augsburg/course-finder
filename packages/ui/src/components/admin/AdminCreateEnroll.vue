@@ -31,15 +31,15 @@ const showErrorDialog = ref(false)
 const errorDialogMessage = ref('')
 
 const formData = ref<
-  {
+  Omit<
+    Phase,
+    'emailNotificationAt' | 'end' | 'id' | 'publishedTry' | 'start' | 'state'
+  > & {
     emailNotificationAt: string
     end: string
     id?: number
     start: string
-  } & Omit<
-    Phase,
-    'emailNotificationAt' | 'end' | 'id' | 'publishedTry' | 'start' | 'state'
-  >
+  }
 >()
 
 void initFormData()
@@ -61,6 +61,11 @@ const oldPhasesSelect = computed(() =>
 
 const loadedOldPhase = ref<string>()
 
+function clearSelection() {
+  sharedObject.value = []
+  loadedOldPhase.value = undefined
+}
+
 async function loadOldPhase(phaseId: string) {
   const phase = await trpc.admin.enroll.phase.get.query({
     phaseId: Number(phaseId),
@@ -69,63 +74,7 @@ async function loadOldPhase(phaseId: string) {
   loadedOldPhase.value = phaseId
 }
 
-function clearSelection() {
-  sharedObject.value = []
-  loadedOldPhase.value = undefined
-}
-
 const sharedObject = ref<OfferedCourseData[]>([])
-
-async function submit() {
-  if (props.phaseId) {
-    await updateEnrollment()
-  } else {
-    await createEnrollment()
-  }
-}
-
-async function updateEnrollment() {
-  if (!formData.value || !props.phaseId) {
-    return
-  }
-  try {
-    await trpc.admin.enroll.phase.update.mutate({
-      description: {
-        de: formData.value.description.de,
-        en: formData.value.description.en,
-      },
-      emailNotificationAt: formData.value.emailNotificationAt
-        ? new Date(formData.value.emailNotificationAt)
-        : undefined,
-      end: new Date(formData.value.end),
-      id: props.phaseId,
-      offeredCourses: sharedObject.value,
-      start: new Date(formData.value.start),
-      title: { de: formData.value.title.de, en: formData.value.title.en },
-    })
-    Object.assign(adminCoursesStore.phases[props.phaseId], {
-      description: {
-        de: formData.value.description.de,
-        en: formData.value.description.en,
-      },
-      emailNotificationAt: formData.value.emailNotificationAt
-        ? new Date(formData.value.emailNotificationAt)
-        : new Date(0), // todo: this should be set to whatever the db defaults to
-      end: new Date(formData.value.end),
-      id: props.phaseId,
-      start: new Date(formData.value.start),
-      title: { de: formData.value.title.de, en: formData.value.title.en },
-    })
-    adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
-    router.back()
-  } catch {
-    errorDialogMessage.value = t(
-      'validation.backend-enroll-phase-updating-error',
-    )
-    showErrorDialog.value = true
-  }
-  sharedObject.value = []
-}
 
 async function createEnrollment() {
   if (!formData.value) {
@@ -197,6 +146,57 @@ async function initFormData() {
     start: getLocalISOString(new Date()),
     title: { de: '', en: '' },
   }
+}
+
+async function submit() {
+  if (props.phaseId) {
+    await updateEnrollment()
+  } else {
+    await createEnrollment()
+  }
+}
+
+async function updateEnrollment() {
+  if (!formData.value || !props.phaseId) {
+    return
+  }
+  try {
+    await trpc.admin.enroll.phase.update.mutate({
+      description: {
+        de: formData.value.description.de,
+        en: formData.value.description.en,
+      },
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : undefined,
+      end: new Date(formData.value.end),
+      id: props.phaseId,
+      offeredCourses: sharedObject.value,
+      start: new Date(formData.value.start),
+      title: { de: formData.value.title.de, en: formData.value.title.en },
+    })
+    Object.assign(adminCoursesStore.phases[props.phaseId], {
+      description: {
+        de: formData.value.description.de,
+        en: formData.value.description.en,
+      },
+      emailNotificationAt: formData.value.emailNotificationAt
+        ? new Date(formData.value.emailNotificationAt)
+        : new Date(0), // todo: this should be set to whatever the db defaults to
+      end: new Date(formData.value.end),
+      id: props.phaseId,
+      start: new Date(formData.value.start),
+      title: { de: formData.value.title.de, en: formData.value.title.en },
+    })
+    adminCoursesStore.phaseOfferedCourses[props.phaseId] = sharedObject.value
+    router.back()
+  } catch {
+    errorDialogMessage.value = t(
+      'validation.backend-enroll-phase-updating-error',
+    )
+    showErrorDialog.value = true
+  }
+  sharedObject.value = []
 }
 
 function validate(): boolean {
@@ -352,8 +352,8 @@ const requiredFieldRule = [
       <VRow>
         <VCol cols="12">
           <OfferedCourses
-            v-model="sharedObject"
             v-if="adminCoursesStore.isInit"
+            v-model="sharedObject"
           />
         </VCol>
       </VRow>

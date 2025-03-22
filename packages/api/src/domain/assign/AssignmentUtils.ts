@@ -4,6 +4,22 @@ import { range, shuffle, sumBy } from 'lodash-es'
 
 import type { AssignmentStudentController } from './AssignmentControllers.ts'
 
+export function normalizeChoices(
+  phase: (StudentPhase & { StudentChoice: StudentChoice[] })[],
+) {
+  return phase.map((student) => {
+    const totalPoints = sumBy(student.StudentChoice, (e) => e.points)
+    const scale = 1000 / totalPoints
+    return {
+      ...student,
+      StudentChoice: student.StudentChoice.map((choice) => ({
+        ...choice,
+        points: Math.round(choice.points * scale),
+      })),
+    }
+  })
+}
+
 export function shuffleFirsts(students: AssignmentStudentController[]) {
   if (students.length <= 1) {
     return students
@@ -26,20 +42,4 @@ export function shuffleFirsts(students: AssignmentStudentController[]) {
     students[newI] = students[oldI]
     students[oldI] = tmp
   }
-}
-
-export function normalizeChoices(
-  phase: ({ StudentChoice: StudentChoice[] } & StudentPhase)[],
-) {
-  return phase.map((student) => {
-    const totalPoints = sumBy(student.StudentChoice, (e) => e.points)
-    const scale = 1000 / totalPoints
-    return {
-      ...student,
-      StudentChoice: student.StudentChoice.map((choice) => ({
-        ...choice,
-        points: Math.round(choice.points * scale),
-      })),
-    }
-  })
 }

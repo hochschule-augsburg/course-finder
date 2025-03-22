@@ -33,7 +33,7 @@ export const studentOnlyProcedure = t.procedure.use(function isAuthed(opts) {
   if (ctx.user?.type === 'Student') {
     return opts.next({
       ctx: {
-        user: ctx.user as { Student: Student } & ClientUser,
+        user: ctx.user as ClientUser & { Student: Student },
       },
     })
   }

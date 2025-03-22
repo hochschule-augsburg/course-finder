@@ -61,6 +61,10 @@ export const sharedRules = [
       eqeqeq: 'error',
       curly: 'error',
 
+      ...{
+        'perfectionist/sort-intersection-types': 'off'
+      },
+
       'no-restricted-properties': [
         'error',
         {

@@ -8,13 +8,13 @@ import { prisma } from '../../prisma/prisma.ts'
 import { publicProcedure, router, studentOnlyProcedure } from '../trpc.ts'
 import { processCourse } from './CourseUtils.ts'
 
-export type CourseExtended = {
+export type CourseExtended = Omit<Course, 'pdf'> & {
   examTypes: string[]
-  offeredCourse: {
+  offeredCourse: Omit<OfferedCourse, 'appointments' | 'minParticipants'> & {
     appointments: CourseAppointmentsJson<Date>
     minParticipants: null | number
-  } & Omit<OfferedCourse, 'appointments' | 'minParticipants'>
-} & Omit<Course, 'pdf'>
+  }
+}
 
 export const courseRouter = router({
   getCourses: publicProcedure.query(async ({ ctx }) => {

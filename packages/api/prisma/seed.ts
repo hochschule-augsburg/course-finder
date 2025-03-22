@@ -25,6 +25,106 @@ main()
     void prisma.$disconnect()
   })
 
+async function fillOldCourses() {
+  await prisma.course.createMany({
+    data: coursesData.map((e) => ({
+      ...e,
+      pdf: Buffer.alloc(stubPdf.length, stubPdf),
+      title: { de: e.title.de ?? e.title.en, en: e.title.en ?? e.title.de },
+    })),
+  })
+  await prisma.offeredCourse.createMany({
+    data: offeredCoursesSS24Data,
+  })
+  await prisma.offeredCourse.createMany({
+    data: offeredCoursesWS2324Data,
+  })
+
+  const testPhaseCourses = uniqBy(
+    [...offeredCoursesSS24Data, ...offeredCoursesWS2324Data],
+    (e) => e.moduleCode,
+  )
+  await prisma.offeredCourse.createMany({
+    data: testPhaseCourses.map((e) => ({ ...e, phaseId: 3 })),
+  })
+
+  const students = await prisma.student.findMany()
+  const choices = students.flatMap((student) => {
+    const choices = sampleSize(testPhaseCourses, random(0, 6)).map(
+      (course) => ({
+        moduleCode: course.moduleCode,
+        points: Math.random(),
+      }),
+    )
+    const scale = 100 / sumBy(choices, 'points')
+    return choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      points: Math.round(choice.points * scale),
+      username: student.username,
+    }))
+  })
+
+  await prisma.studentPhase.createMany({
+    data: students.map((student) => ({
+      creditsNeeded: random(1, 10),
+      phaseId: 3,
+      username: student.username,
+    })),
+  })
+  await prisma.studentChoice.createMany({
+    data: choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      phaseId: 3,
+      points: choice.points,
+      username: choice.username,
+    })),
+  })
+
+  const choicesAssign = students.flatMap((student) => {
+    const choices = sampleSize(offeredCoursesSS24Data, random(0, 6)).map(
+      (course) => ({
+        moduleCode: course.moduleCode,
+        points: Math.random(),
+      }),
+    )
+    const scale = 100 / sumBy(choices, 'points')
+    return choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      points: Math.round(choice.points * scale),
+      username: student.username,
+    }))
+  })
+  await prisma.studentPhase.createMany({
+    data: students.map((student) => ({
+      creditsNeeded: random(1, 10),
+      phaseId: 2,
+      username: student.username,
+    })),
+  })
+  await prisma.studentChoice.createMany({
+    data: choicesAssign.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      phaseId: 2,
+      points: choice.points,
+      username: choice.username,
+    })),
+  })
+  await prisma.phaseAssignment.createMany({
+    data: sampleSize(choicesAssign, random(0, choicesAssign.length)).map(
+      (e) => ({
+        moduleCode: e.moduleCode,
+        phaseId: 2,
+        tryNo: 1,
+        username: e.username,
+      }),
+    ),
+  })
+}
+
+function getHalfTime(date1: Date, date2: Date) {
+  return new Date((date1.getTime() + date2.getTime()) / 2)
+}
+
 async function main() {
   const options = {
     'download-courses-pdf': { type: 'boolean' },
@@ -225,104 +325,4 @@ async function main() {
       }),
     )
   }
-}
-
-async function fillOldCourses() {
-  await prisma.course.createMany({
-    data: coursesData.map((e) => ({
-      ...e,
-      pdf: Buffer.alloc(stubPdf.length, stubPdf),
-      title: { de: e.title.de ?? e.title.en, en: e.title.en ?? e.title.de },
-    })),
-  })
-  await prisma.offeredCourse.createMany({
-    data: offeredCoursesSS24Data,
-  })
-  await prisma.offeredCourse.createMany({
-    data: offeredCoursesWS2324Data,
-  })
-
-  const testPhaseCourses = uniqBy(
-    [...offeredCoursesSS24Data, ...offeredCoursesWS2324Data],
-    (e) => e.moduleCode,
-  )
-  await prisma.offeredCourse.createMany({
-    data: testPhaseCourses.map((e) => ({ ...e, phaseId: 3 })),
-  })
-
-  const students = await prisma.student.findMany()
-  const choices = students.flatMap((student) => {
-    const choices = sampleSize(testPhaseCourses, random(0, 6)).map(
-      (course) => ({
-        moduleCode: course.moduleCode,
-        points: Math.random(),
-      }),
-    )
-    const scale = 100 / sumBy(choices, 'points')
-    return choices.map((choice) => ({
-      moduleCode: choice.moduleCode,
-      points: Math.round(choice.points * scale),
-      username: student.username,
-    }))
-  })
-
-  await prisma.studentPhase.createMany({
-    data: students.map((student) => ({
-      creditsNeeded: random(1, 10),
-      phaseId: 3,
-      username: student.username,
-    })),
-  })
-  await prisma.studentChoice.createMany({
-    data: choices.map((choice) => ({
-      moduleCode: choice.moduleCode,
-      phaseId: 3,
-      points: choice.points,
-      username: choice.username,
-    })),
-  })
-
-  const choicesAssign = students.flatMap((student) => {
-    const choices = sampleSize(offeredCoursesSS24Data, random(0, 6)).map(
-      (course) => ({
-        moduleCode: course.moduleCode,
-        points: Math.random(),
-      }),
-    )
-    const scale = 100 / sumBy(choices, 'points')
-    return choices.map((choice) => ({
-      moduleCode: choice.moduleCode,
-      points: Math.round(choice.points * scale),
-      username: student.username,
-    }))
-  })
-  await prisma.studentPhase.createMany({
-    data: students.map((student) => ({
-      creditsNeeded: random(1, 10),
-      phaseId: 2,
-      username: student.username,
-    })),
-  })
-  await prisma.studentChoice.createMany({
-    data: choicesAssign.map((choice) => ({
-      moduleCode: choice.moduleCode,
-      phaseId: 2,
-      points: choice.points,
-      username: choice.username,
-    })),
-  })
-  await prisma.phaseAssignment.createMany({
-    data: sampleSize(choicesAssign, random(0, choicesAssign.length)).map(
-      (e) => ({
-        moduleCode: e.moduleCode,
-        phaseId: 2,
-        tryNo: 1,
-        username: e.username,
-      }),
-    ),
-  })
-}
-
-function getHalfTime(date1: Date, date2: Date) {
-  return new Date((date1.getTime() + date2.getTime()) / 2)
 }

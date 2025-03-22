@@ -41,10 +41,9 @@ const emits = defineEmits<{
 }>()
 
 const formData = ref<
-  { appointments: CourseAppointmentsJson<string> } & Omit<
-    AdminOfferedCourse,
-    'appointments'
-  >
+  Omit<AdminOfferedCourse, 'appointments'> & {
+    appointments: CourseAppointmentsJson<string>
+  }
 >()
 
 watchEffect(() => {
@@ -64,32 +63,6 @@ watchEffect(() => {
     for: props.offeredCourse.for.map((e) => fieldsOfStudyAbbrMap[e] ?? e),
   }
 })
-
-function submit() {
-  if (!formData.value) {
-    return
-  }
-  formData.value.appointments.dates = formData.value.appointments.dates.filter(
-    (data) => data !== undefined,
-  )
-  emits('submit', {
-    ...formData.value,
-    appointments: {
-      ...formData.value.appointments,
-      dates: formData.value.appointments.dates.map((e) => ({
-        from: new Date(e.from),
-        to: new Date(e.to),
-      })),
-    },
-    for: formData.value.for.map((e) => abbrFieldsOfStudyMap[e] ?? e),
-  })
-  datesArray.value = []
-}
-
-function cancel() {
-  emits('cancel')
-  datesArray.value = []
-}
 
 function addDate() {
   const lastTo = formData.value?.appointments.dates.at(-1)?.to ?? new Date()
@@ -115,6 +88,11 @@ function addDateWeekly() {
       weekday: '',
     })
   }
+}
+
+function cancel() {
+  emits('cancel')
+  datesArray.value = []
 }
 
 function removeDate(index: number) {
@@ -149,6 +127,27 @@ function removeDateWeekly(index: number) {
     },
   )
   datesArray.value.splice(index, 1)
+}
+
+function submit() {
+  if (!formData.value) {
+    return
+  }
+  formData.value.appointments.dates = formData.value.appointments.dates.filter(
+    (data) => data !== undefined,
+  )
+  emits('submit', {
+    ...formData.value,
+    appointments: {
+      ...formData.value.appointments,
+      dates: formData.value.appointments.dates.map((e) => ({
+        from: new Date(e.from),
+        to: new Date(e.to),
+      })),
+    },
+    for: formData.value.for.map((e) => abbrFieldsOfStudyMap[e] ?? e),
+  })
+  datesArray.value = []
 }
 
 function updateWeeklyAppointment(index: number) {
@@ -261,6 +260,12 @@ const minParticipantsRules = [
   (i: number) => i.valueOf() >= 0 || 'Teilnehmerzahl mindestens 0',
 ]
 
+function forAllStudy() {
+  if (!formData.value) {
+    return
+  }
+  formData.value.for = Object.values(fieldsOfStudy).map((e) => e.abbr)
+}
 function forBaStudy() {
   if (!formData.value) {
     return
@@ -276,12 +281,6 @@ function forMaStudy() {
   formData.value.for = Object.entries(fieldsOfStudy)
     .filter((e) => e[1].degree === 'Master')
     .map((e) => e[1].abbr)
-}
-function forAllStudy() {
-  if (!formData.value) {
-    return
-  }
-  formData.value.for = Object.values(fieldsOfStudy).map((e) => e.abbr)
 }
 </script>
 

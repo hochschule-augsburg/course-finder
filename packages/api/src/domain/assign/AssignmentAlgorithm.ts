@@ -4,9 +4,9 @@ import { prisma } from '../../prisma/prisma.ts'
 import { AssignmentStudentController } from './AssignmentControllers.ts'
 import { normalizeChoices, shuffleFirsts } from './AssignmentUtils.ts'
 
-type AssignCourse = {
+type AssignCourse = OfferedCourse & {
   studentCount: number
-} & OfferedCourse
+}
 
 /**
  * @returns Record<username, moduleCode[]>

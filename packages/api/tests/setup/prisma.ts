@@ -14,4 +14,4 @@ beforeEach(() => {
   mockReset(prismaMock)
 })
 
-export const prismaMock = prisma as DeepMockProxy<PrismaClient>
+export const prismaMock: DeepMockProxy<PrismaClient> = prisma
