@@ -164,6 +164,7 @@ model PhaseAssignment {
   phaseId       Int
   username      String
   StudentPhase  StudentPhase  @relation(fields: [username, phaseId], references: [username, phaseId], onDelete: Cascade)
+  // todo if course is deleted the assignment is deleted too so the student cannot look at their last assignment
   offeredCourse OfferedCourse @relation(fields: [phaseId, moduleCode], references: [phaseId, moduleCode], onDelete: Cascade)
   moduleCode    String
 

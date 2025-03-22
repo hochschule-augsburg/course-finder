@@ -135,7 +135,7 @@ function removeDateWeekly(index: number) {
       const dateFrom = new Date(data.from)
       const dateTo = new Date(data.to)
 
-      const dayOfWeek = dateFrom.toLocaleDateString('en-US', {
+      const dayOfWeek = dateFrom.toLocaleDateString('en-GB', {
         weekday: 'long',
       })
 
@@ -181,7 +181,6 @@ function updateWeeklyAppointment(index: number) {
         from: fromTime,
         to: toTime,
       }
-      console.log({ from: fromTime, to: toTime })
     }
   }
 }
@@ -202,7 +201,7 @@ function initializeDatesArray(dates: Array<{ from: string; to: string }>) {
     if (!isNaN(fromDate.getTime()) && !isNaN(toDate.getTime())) {
       const startTime = fromDate.toTimeString().split(' ')[0].slice(0, -3)
       const endTime = toDate.toTimeString().split(' ')[0].slice(0, -3)
-      const weekday = fromDate.toLocaleDateString('en-US', {
+      const weekday = fromDate.toLocaleDateString('en-GB', {
         weekday: 'long',
       })
 

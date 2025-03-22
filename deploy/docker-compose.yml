@@ -27,14 +27,14 @@ services:
       - ${CERTS_PRIVKEY}:/prod/certs/privkey.pem
       - ${CERTS_CHAIN}:/prod/certs/chain.pem
       - ${CERTS_FULLCHAIN}:/prod/certs/fullchain.pem
-      - ./nginx-course-finder.conf.local:/etc/nginx/conf.d/nginx-course-finder.conf
+      - ./nginx-course-finder.conf:/etc/nginx/conf.d/nginx-course-finder.conf
     depends_on:
       - api
 
     restart: unless-stopped
 
   database:
-    image: postgres:alpine
+    image: postgres:17.4-alpine3.21
     env_file:
       - ./.env
     volumes:

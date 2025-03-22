@@ -5,11 +5,13 @@ import type {
 
 import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import { useCoursesStore } from './CoursesStore'
+import { useUserStore } from './UserStore'
 
 export const useAssignStore = defineStore('assign', () => {
+  const userStore = useUserStore()
   const coursesStore = useCoursesStore()
   const assignPhases = ref<
     Array<{
@@ -32,7 +34,21 @@ export const useAssignStore = defineStore('assign', () => {
     }>
   >([])
 
-  return { assignPhases, fetch }
+  watch(
+    () => userStore.user,
+    async () => {
+      try {
+        if (userStore.user?.Student) {
+          await fetch()
+        }
+      } catch {
+        // do nothing
+      }
+    },
+    { immediate: true },
+  )
+
+  return { assignPhases }
 
   async function fetch() {
     const phaseAssignments = await trpc.assign.list.query()

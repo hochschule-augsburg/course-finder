@@ -117,9 +117,15 @@ async function autoFill() {
 const integerInputRule = (i: string) =>
   /^[0-9]\d*$/.test(i) || t('integer-input')
 
-const creditsRule = (i: string) =>
-  Number(i) <= (appConfStore.conf?.maxCredits ?? 0) ||
-  t('too-many-credits', { maxCredits: appConfStore.conf?.maxCredits })
+function creditsRule(i: string) {
+  if (Number(i) > (appConfStore.conf?.maxCredits ?? 0)) {
+    return t('too-many-credits', { maxCredits: appConfStore.conf?.maxCredits })
+  }
+  if (Number(i) === 0) {
+    return t('field-required')
+  }
+  return true
+}
 
 async function validate() {
   const formValidation = await form.value?.validate()

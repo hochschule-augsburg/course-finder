@@ -4,7 +4,7 @@ import { type Enrollphase, PhaseState } from '@prisma/client'
 import { scheduleJob } from 'node-schedule'
 
 import { prisma } from '../../prisma/prisma.ts'
-import { phaseService } from './PhaseService.ts'
+import { PhaseService } from './PhaseService.ts'
 
 const phaseJobs: Record<number, Job[] | undefined> = {}
 
@@ -43,7 +43,7 @@ export function schedulePhase(phase: Enrollphase) {
       `phase-${phase.id}:send-mail`,
       phase.emailNotificationAt,
       async () => {
-        await phaseService.sendReminderMail(phase.id)
+        await PhaseService.sendReminderMails(phase.id)
         console.info('Sent mail for phase', phase.id, 'from scheduled job')
       },
     ),

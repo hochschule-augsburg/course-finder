@@ -32,7 +32,7 @@ export async function sendEmail(
       },
       html,
       replyTo: env.CONTACT_EMAIL,
-      subject: `⛵ ${subject} ⛵`,
+      subject: `${subject} ⛵`,
       to: toArray,
     })
     return info
@@ -170,6 +170,7 @@ const template = `
             <div class="image-bg"></div>
             <img
               class="VPImage"
+              width="150"
               onerror="this.style.display='none';"
               src="https://hochschule-augsburg.github.io/course-finder/logo.svg"
               alt="CourseFinder Logo"

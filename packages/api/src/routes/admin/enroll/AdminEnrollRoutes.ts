@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import {
   ACTIVE_PHASE_STATES,
-  phaseService,
+  PhaseService,
   phaseSpec,
 } from '../../../domain/phase/PhaseService.ts'
 import { prisma } from '../../../prisma/prisma.ts'
@@ -82,12 +82,12 @@ export const enrollRouter = router({
   },
   phase: {
     create: adminProcedure.input(phaseSpec).mutation(({ input }) => {
-      return phaseService.createPhase(input)
+      return PhaseService.createPhase(input)
     }),
     delete: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .mutation(({ input }) => {
-        return phaseService.deletePhase(input.phaseId)
+        return PhaseService.deletePhase(input.phaseId)
       }),
     get: adminProcedure
       .input(z.object({ phaseId: z.number() }))
@@ -150,15 +150,20 @@ export const enrollRouter = router({
         ).map((phase) => [phase.id, phase]),
       )
     }),
+    sendOpeningMail: adminProcedure
+      .input(z.object({ phaseId: z.number() }))
+      .mutation(async ({ input }) => {
+        await PhaseService.sendOpeningMail(input.phaseId)
+      }),
     sendReminderMail: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .mutation(async ({ input }) => {
-        await phaseService.sendReminderMail(input.phaseId)
+        await PhaseService.sendReminderMails(input.phaseId)
       }),
     update: adminProcedure
       .input(phaseSpec.partial().extend({ id: z.number() }))
       .mutation(({ input }) => {
-        return phaseService.updatePhase(input.id, input)
+        return PhaseService.updatePhase(input.id, input)
       }),
     updateState: adminProcedure
       .input(

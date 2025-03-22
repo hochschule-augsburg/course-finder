@@ -17,7 +17,7 @@ const stateText = computed(
 <template>
   <VSheet
     v-if="phase"
-    class="sheet px-4 py-3"
+    class="px-4 py-3"
     color="secondary"
     id="enrollment-overview"
     rounded="lg"
@@ -30,17 +30,9 @@ const stateText = computed(
         `${phase.start.toLocaleDateString(locale)} - ${phase.end.toLocaleDateString(locale)}`
       }}
     </p>
-    <p>
-      {{ phase.description[locale] }}
-    </p>
+    <CfMarkdown :source="phase.description[locale]" />
     <p>
       {{ $t(`phase-states.long.${stateText}`) }}
     </p>
   </VSheet>
 </template>
-
-<style lang="scss" scoped>
-.sheet {
-  cursor: pointer;
-}
-</style>

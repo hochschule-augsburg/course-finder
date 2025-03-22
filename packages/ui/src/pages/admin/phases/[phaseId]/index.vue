@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { dialogService } from '@/components/DialogService'
 import { usePhaseState } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
 import { useRoute } from 'vue-router/auto'
@@ -10,8 +11,26 @@ const phaseId = Number(route.params.phaseId)
 
 const phaseState = usePhaseState(phaseId)
 
-async function sendMail() {
-  await trpc.admin.enroll.phase.sendReminderMail.mutate({ phaseId })
+function sendReminderMail() {
+  dialogService.showDialog({
+    onCancel: () => {},
+    onConfirm: () => {
+      void trpc.admin.enroll.phase.sendReminderMail.mutate({ phaseId })
+    },
+    text: '',
+    title: 'Wirklich senden?',
+  })
+}
+
+function sendOpeningMail() {
+  dialogService.showDialog({
+    onCancel: () => {},
+    onConfirm: () => {
+      void trpc.admin.enroll.phase.sendOpeningMail.mutate({ phaseId })
+    },
+    text: '',
+    title: 'Wirklich senden?',
+  })
 }
 </script>
 
@@ -29,14 +48,20 @@ async function sendMail() {
           </VCol>
           <VCol cols="12" md="6">
             <VRow>
-              <VCol cols="4">
+              <VCol cols="5">
                 <div class="d-flex flex-column align-center ga-4">
                   <VBtn :to="`${phaseId}/edit`">Bearbeiten</VBtn>
                   <VBtn
                     v-if="phaseState.modelValue === 'OPEN'"
-                    @click="sendMail"
+                    @click="sendOpeningMail"
                   >
-                    <span class="white">Erinnerungsmail senden</span>
+                    Eröffnungsmail senden
+                  </VBtn>
+                  <VBtn
+                    v-if="phaseState.modelValue === 'OPEN'"
+                    @click="sendReminderMail"
+                  >
+                    Erinnerungsmails senden
                   </VBtn>
                 </div>
               </VCol>
