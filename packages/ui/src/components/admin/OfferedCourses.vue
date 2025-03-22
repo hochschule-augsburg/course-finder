@@ -49,32 +49,37 @@ watch(
   { immediate: true },
 )
 
-function removeLoadedCourses() {
-  tableOne.value = [...coursesStore.courses]
-  return tableOne.value.filter((data) => {
-    return !offeredCoursesArray.value.some(
-      (offData) => offData.moduleCode === data.moduleCode,
-    )
-  })
+function convertToCourse(offeredCourse: OfferedCourseData): Course | undefined {
+  const convertedItem = coursesStore.courses.find(
+    (item) => item.moduleCode === offeredCourse.moduleCode,
+  )
+  if (convertedItem !== undefined) {
+    handlePuttingBackLogic(convertedItem)
+    return convertedItem
+  }
+  console.log('no matching course object found')
 }
 
-function openNewDialog() {
-  selectedSubject.value = {
-    creditPoints: 0,
-    editorUsername: null,
-    exam: null,
-    extraInfo: null,
-    faculty: '',
-    infoUrl: null,
-    lecturers: [],
-    maExam: null,
-    moduleCode: '',
-    published: false,
-    semesterHours: 0,
-    title: { de: '', en: '' },
-    varyingCP: {},
+function convertToOfferedCourseData(course: Course): OfferedCourseData {
+  const removeStoreData = handlePuttingInAgainLogic(course)
+  if (removeStoreData === undefined) {
+    return {
+      appointments: { dates: [], type: 'weekly' },
+      Course: {
+        lecturers: course.lecturers,
+        title: course.title,
+      },
+      externalRegistration: false,
+      extraInfo: null,
+      for: [],
+      hideMinParticipants: true,
+      maxParticipants: null,
+      minParticipants: 16,
+      moduleCode: course.moduleCode,
+      moodleCourse: null,
+    }
   }
-  showModalForm.value = true
+  return removeStoreData
 }
 
 async function createSubject(subject: Course | undefined) {
@@ -110,6 +115,19 @@ async function createSubject(subject: Course | undefined) {
   }
 }
 
+function displayFieldsOfStudy(fields: string[]) {
+  return fields.map((e: string): string => fieldsOfStudyAbbrMap[e]).join(', ')
+}
+
+function filterCourse(course: Course) {
+  return (
+    !!course.title.de
+      ?.toLowerCase()
+      .includes(searchCourses.value.toLowerCase()) ||
+    !!course.title.en?.toLowerCase().includes(searchCourses.value.toLowerCase())
+  )
+}
+
 function handlePuttingBackLogic(subject: Course) {
   //Retrieve the data from the shared object
   const offeredCourseData = offeredCoursesArray.value.filter(
@@ -143,50 +161,32 @@ function handlePuttingInAgainLogic(
   return retrievedObject
 }
 
-function convertToOfferedCourseData(course: Course): OfferedCourseData {
-  const removeStoreData = handlePuttingInAgainLogic(course)
-  if (removeStoreData === undefined) {
-    return {
-      appointments: { dates: [], type: 'weekly' },
-      Course: {
-        lecturers: course.lecturers,
-        title: course.title,
-      },
-      externalRegistration: false,
-      extraInfo: null,
-      for: [],
-      hideMinParticipants: true,
-      maxParticipants: null,
-      minParticipants: 16,
-      moduleCode: course.moduleCode,
-      moodleCourse: null,
-    }
+function openNewDialog() {
+  selectedSubject.value = {
+    creditPoints: 0,
+    editorUsername: null,
+    exam: null,
+    extraInfo: null,
+    faculty: '',
+    infoUrl: null,
+    lecturers: [],
+    maExam: null,
+    moduleCode: '',
+    published: false,
+    semesterHours: 0,
+    title: { de: '', en: '' },
+    varyingCP: {},
   }
-  return removeStoreData
+  showModalForm.value = true
 }
 
-function convertToCourse(offeredCourse: OfferedCourseData): Course | undefined {
-  const convertedItem = coursesStore.courses.find(
-    (item) => item.moduleCode === offeredCourse.moduleCode,
-  )
-  if (convertedItem !== undefined) {
-    handlePuttingBackLogic(convertedItem)
-    return convertedItem
-  }
-  console.log('no matching course object found')
-}
-
-function displayFieldsOfStudy(fields: string[]) {
-  return fields.map((e: string): string => fieldsOfStudyAbbrMap[e]).join(', ')
-}
-
-function filterCourse(course: Course) {
-  return (
-    !!course.title.de
-      ?.toLowerCase()
-      .includes(searchCourses.value.toLowerCase()) ||
-    !!course.title.en?.toLowerCase().includes(searchCourses.value.toLowerCase())
-  )
+function removeLoadedCourses() {
+  tableOne.value = [...coursesStore.courses]
+  return tableOne.value.filter((data) => {
+    return !offeredCoursesArray.value.some(
+      (offData) => offData.moduleCode === data.moduleCode,
+    )
+  })
 }
 const searchCourses = ref('')
 

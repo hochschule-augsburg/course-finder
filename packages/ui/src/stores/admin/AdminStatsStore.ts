@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAdminStatsStore = defineStore('admin-stats', () => {
-  const phase = ref<Record<number, { studentCount: number } | undefined>>({})
+  const phase = ref<Record<number, undefined | { studentCount: number }>>({})
   const course = ref<
     Record<
       number,
-      | Record<string, { avgPoints: number; studentCount: number } | undefined>
+      | Record<string, undefined | { avgPoints: number; studentCount: number }>
       | undefined
     >
   >({})

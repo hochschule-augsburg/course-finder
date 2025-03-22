@@ -58,6 +58,7 @@ watch(
       <tbody>
         <tr
           v-for="course in sortedCourses"
+          :key="course.moduleCode"
           :class="{
             'bg-red-lighten-5':
               !course.externalRegistration &&
@@ -66,7 +67,6 @@ watch(
               course.maxParticipants &&
               (course.studentCount ?? 0) > course.maxParticipants,
           }"
-          :key="course.moduleCode"
         >
           <td>{{ course.moduleCode }}</td>
           <td>

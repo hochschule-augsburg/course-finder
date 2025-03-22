@@ -34,6 +34,7 @@ describe('Module Book', () => {
       const out = await loadCourses({ baPdf: pdfs.ba, maPdf: pdfs.ma })
       expect(out.status).toBe('success')
       expect(out.messages).toHaveLength(0)
+
       // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(prismaMock.$transaction).toHaveBeenCalledWith(
         expect.arrayContaining([expect.any(Promise)]),

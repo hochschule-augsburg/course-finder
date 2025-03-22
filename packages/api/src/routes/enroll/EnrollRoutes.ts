@@ -188,21 +188,21 @@ export const enrollRouter = router({
     }),
 })
 
-function checkIfPhaseIsOpen(phase: Enrollphase) {
-  if (phase.state !== 'OPEN') {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'phase not active',
-    })
-  }
-}
-
 async function checkCreditsNeeded(creditsNeeded: number) {
   const conf = (await prisma.appConf.findFirst())!
   if (creditsNeeded > conf.maxCredits) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: 'invalid credits needed',
+    })
+  }
+}
+
+function checkIfPhaseIsOpen(phase: Enrollphase) {
+  if (phase.state !== 'OPEN') {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'phase not active',
     })
   }
 }

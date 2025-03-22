@@ -83,6 +83,39 @@ async function deletePhase(phaseId: number): Promise<void> {
   cancelPhase(phaseId)
 }
 
+async function sendReminderMail(phaseId: number) {
+  const phase = await prisma.enrollphase.findUnique({
+    select: {
+      emailNotificationAt: true,
+      end: true,
+      state: true,
+      title: true,
+    },
+    where: { id: phaseId },
+  })
+  if (!phase) {
+    throw new Error('Phase not found')
+  }
+  env.FRONTEND_ORIGIN = 'https://course-finder.informatik.tha.de/'
+  await sendEmail(
+    env.MAIL_RECEIVERS,
+    'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
+    `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
+      'de-DE',
+    )}.<br>
+          Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
+          Die Anmeldung erfolgt über folgender Seite:
+          <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
+          <br>
+          Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
+            'en-US',
+          )}.<br>
+          Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
+          Registrations can be made on the following website:<br>
+          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`,
+  )
+}
+
 async function updatePhase(
   phaseId: number,
   data: Partial<phaseSpecType>,
@@ -118,39 +151,6 @@ async function updatePhase(
     reschedulePhase(updatedPhase)
   }
   return updatedPhase
-}
-
-async function sendReminderMail(phaseId: number) {
-  const phase = await prisma.enrollphase.findUnique({
-    select: {
-      emailNotificationAt: true,
-      end: true,
-      state: true,
-      title: true,
-    },
-    where: { id: phaseId },
-  })
-  if (!phase) {
-    throw new Error('Phase not found')
-  }
-  env.FRONTEND_ORIGIN = 'https://course-finder.informatik.tha.de/'
-  await sendEmail(
-    env.MAIL_RECEIVERS,
-    'WPF Anmeldephase endet bald | WPF registrations will be closing soon',
-    `Die Anmeldung für Wahlpflichtfächer [${phase.title.de}] endet am ${phase.end.toLocaleString(
-      'de-DE',
-    )}.<br>
-          Bitte stelle sicher, dass Du Ersatzwahlen getroffen hast, falls ein Kurs aufgrund der Teilnehmerzahl nicht stattfindet.<br>
-          Die Anmeldung erfolgt über folgender Seite:
-          <br><a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>
-          <br>
-          Registrations for optional courses (Wahlpflichtfächer) for [${phase.title.en}] will be closing on ${phase.end.toLocaleString(
-            'en-US',
-          )}.<br>
-          Please make sure you have made backup choices in case a course does not take place due to the number of participants.<br
-          Registrations can be made on the following website:<br>
-          <a href="${env.FRONTEND_ORIGIN}">${env.FRONTEND_ORIGIN}</a><br>`,
-  )
 }
 
 export const phaseService = {

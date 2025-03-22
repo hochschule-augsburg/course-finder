@@ -71,10 +71,10 @@ function resetFilters() {
               <template v-if="optionsFilter.name === 'filter.weekday'">
                 <VChip
                   v-for="i in range(weekStartIndex, weekStartIndex + 7)"
+                  :key="optionsFilter.options[i % 7].option"
                   :class="
                     optionsFilter.options[i % 7].selected ? 'text-primary' : ''
                   "
-                  :key="optionsFilter.options[i % 7].option"
                   @click="
                     optionsFilter.options[i % 7].selected =
                       !optionsFilter.options[i % 7].selected
@@ -85,10 +85,10 @@ function resetFilters() {
               </template>
 
               <VChip
-                v-else
                 v-for="option in optionsFilter.options"
-                :class="option.selected ? 'text-primary' : ''"
+                v-else
                 :key="option.option"
+                :class="option.selected ? 'text-primary' : ''"
                 @click="option.selected = !option.selected"
               >
                 {{ t(option.option) }}

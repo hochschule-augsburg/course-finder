@@ -24,7 +24,7 @@ const fieldsOfStudy: Record<
   'Wirtschaftsinformatik (Bachelor)': { abbr: 'WI', degree: 'Bachelor' },
 }
 
-export function mayEnroll(user: { Student: Student } & ClientUser) {
+export function mayEnroll(user: ClientUser & { Student: Student }) {
   if (!user.Student) {
     return false
   }

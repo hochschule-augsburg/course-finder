@@ -8,7 +8,7 @@ export const UserRoles = Object.freeze({
 })
 
 export function userHasPermission(
-  user: { type: string } | undefined,
+  user: undefined | { type: string },
   role: keyof typeof UserRoles,
 ) {
   return (

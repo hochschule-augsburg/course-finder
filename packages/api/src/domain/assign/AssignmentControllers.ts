@@ -7,8 +7,12 @@ export class AssignmentStudentController {
   public readonly gained: StudentChoice[] = []
   public readonly lost: StudentChoice[] = []
 
+  get username() {
+    return this.phase.username
+  }
+
   constructor(
-    private readonly phase: { StudentChoice: StudentChoice[] } & StudentPhase,
+    private readonly phase: StudentPhase & { StudentChoice: StudentChoice[] },
     private readonly offeredCourses: {
       Course: { creditPoints: number }
       moduleCode: string
@@ -74,9 +78,5 @@ export class AssignmentStudentController {
       this.choices.forEach((e) => (e.points = e.points + floorComp))
       this.choices[0].points += compensation === floorComp ? 0 : 1
     }
-  }
-
-  get username() {
-    return this.phase.username
   }
 }

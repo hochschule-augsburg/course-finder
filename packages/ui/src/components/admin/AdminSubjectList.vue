@@ -19,6 +19,25 @@ let dialogAction: ((e: Course) => Promise<void>) | undefined = undefined
 const showErrorDialog = ref(false)
 const errorDialogMessage = ref('')
 
+async function createSubject(subject: Course) {
+  try {
+    const result = await trpc.admin.courses.create.mutate(subject)
+    adminStore.courses.push(result)
+    // Perf is okay
+    adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
+  } catch {
+    errorDialogMessage.value =
+      'Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.'
+    showErrorDialog.value = true
+  }
+}
+
+function openEditDialog(subject: Course) {
+  selectedSubject.value = subject
+  dialogAction = updateSubject
+  showModalForm.value = true
+}
+
 function openNewDialog() {
   selectedSubject.value = {
     creditPoints: 0,
@@ -39,12 +58,6 @@ function openNewDialog() {
   showModalForm.value = true
 }
 
-function openEditDialog(subject: Course) {
-  selectedSubject.value = subject
-  dialogAction = updateSubject
-  showModalForm.value = true
-}
-
 async function processSubject(subject: Course | undefined) {
   if (!subject) {
     showModalForm.value = false
@@ -61,19 +74,6 @@ async function processSubject(subject: Course | undefined) {
     await dialogAction?.(subject)
   }
   showModalForm.value = false
-}
-
-async function createSubject(subject: Course) {
-  try {
-    const result = await trpc.admin.courses.create.mutate(subject)
-    adminStore.courses.push(result)
-    // Perf is okay
-    adminStore.courses.sort((a, b) => a.moduleCode.localeCompare(b.moduleCode))
-  } catch {
-    errorDialogMessage.value =
-      'Fehler bei der Kurserstellung. Eingegebenes Modulkürzel könnte schon vergeben sein.'
-    showErrorDialog.value = true
-  }
 }
 
 async function updateSubject(subject: Course) {

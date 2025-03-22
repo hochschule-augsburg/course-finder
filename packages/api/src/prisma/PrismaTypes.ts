@@ -8,27 +8,14 @@ import type {
   User as PUser,
 } from '@prisma/client'
 
-/**
- * None should be undefined it just help programming
- */
-export type I18nJson = {
-  de?: string
-  en?: string
-}
-
-export type EnrollPhase = PPhase
-
-export type EnrolledCourse = PStudentChoice
 export type AppConf = Omit<PAppConf, 'id'>
 
-export type Course = Omit<PCourse, 'pdf'>
+export type ClientUser = Omit<PUser, 'auth'> & { auth: { twoFA?: boolean } }
 
-export type ClientUser = { auth: { twoFA?: boolean } } & Omit<PUser, 'auth'>
-export type ClientUserExtended = {
+export type ClientUserExtended = ClientUser & {
   Student?: null | PStudent
-} & ClientUser
-
-type TimeInterval<T> = { from: T; to: T }
+}
+export type Course = Omit<PCourse, 'pdf'>
 
 export type CourseAppointmentsJson<T> =
   | {
@@ -53,22 +40,35 @@ export type CourseAppointmentsJson<T> =
       type: 'block'
     }
 
-export type OfferedCourse = {
+export type EnrolledCourse = PStudentChoice
+export type EnrollPhase = PPhase
+
+/**
+ * None should be undefined it just help programming
+ */
+export type I18nJson = {
+  de?: string
+  en?: string
+}
+
+export type OfferedCourse = Omit<POfferedCourse, 'appointments' | 'phaseId'> & {
   appointments: CourseAppointmentsJson<Date>
-} & Omit<POfferedCourse, 'appointments' | 'phaseId'>
+}
+
+type TimeInterval<T> = { from: T; to: T }
 
 declare global {
   namespace PrismaJson {
-    type Otp = { expires: number; otp: string }
-    type I18n = I18nJson
-    type Degrees = 'Bachelor' | 'Master'
-    type CourseAppointments = CourseAppointmentsJson<string>
     type Auth = { twoFA?: true } & (
       | {
           method: 'ldap'
         }
       | { method: 'local'; password: string; salt: string }
     )
+    type CourseAppointments = CourseAppointmentsJson<string>
+    type Degrees = 'Bachelor' | 'Master'
+    type I18n = I18nJson
+    type Otp = { expires: number; otp: string }
   }
 }
 

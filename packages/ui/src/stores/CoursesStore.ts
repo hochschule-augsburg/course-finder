@@ -10,9 +10,9 @@ import { useEnrollmentStore } from './EnrollmentStore'
 import { useFiltersStore } from './FiltersStore'
 import { useUserStore } from './UserStore'
 
-export type Subject = {
+export type Subject = Omit<CourseExtended, 'offeredCourse'> & {
   offeredCourse?: CourseExtended['offeredCourse']
-} & Omit<CourseExtended, 'offeredCourse'>
+}
 
 export const useCoursesStore = defineStore('courses', () => {
   const userStore = useUserStore()

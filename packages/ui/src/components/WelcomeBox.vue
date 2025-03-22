@@ -9,9 +9,9 @@ const userStore = useUserStore()
 
 <template>
   <VSheet
+    id="enrollment-overview"
     class="px-4 py-3"
     color="secondary"
-    id="enrollment-overview"
     rounded="lg"
   >
     <h2>{{ t('welcome-title') }} {{ userStore.user?.name }}</h2>
