@@ -11,22 +11,22 @@ const phaseId = Number(route.params.phaseId)
 
 const phaseState = usePhaseState(phaseId)
 
-function sendReminderMail() {
+function sendOpeningMail() {
   dialogService.showDialog({
     onCancel: () => {},
     onConfirm: () => {
-      void trpc.admin.enroll.phase.sendReminderMail.mutate({ phaseId })
+      void trpc.admin.enroll.phase.sendOpeningMail.mutate({ phaseId })
     },
     text: '',
     title: 'Wirklich senden?',
   })
 }
 
-function sendOpeningMail() {
+function sendReminderMail() {
   dialogService.showDialog({
     onCancel: () => {},
     onConfirm: () => {
-      void trpc.admin.enroll.phase.sendOpeningMail.mutate({ phaseId })
+      void trpc.admin.enroll.phase.sendReminderMail.mutate({ phaseId })
     },
     text: '',
     title: 'Wirklich senden?',

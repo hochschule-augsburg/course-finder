@@ -28,7 +28,7 @@ export const fieldsOfStudy: Record<
   'Industrielle Sicherheit': { abbr: 'INS', degree: 'Master' },
 }
 
-export function mayEnroll(user: { Student: Student } & ClientUser) {
+export function mayEnroll(user: ClientUser & { Student: Student }) {
   if (!user.Student) {
     return false
   }

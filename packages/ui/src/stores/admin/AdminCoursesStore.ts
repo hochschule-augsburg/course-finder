@@ -11,13 +11,13 @@ import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+export type AdminOfferedCourse = OfferedCourse & {
+  Course: { lecturers: string[]; title: I18nJson }
+}
+
 export type Course = Omit<ApiCourse, 'maPdf' | 'pdf'>
 
 export type Phase = EnrollPhase
-
-export type AdminOfferedCourse = {
-  Course: { lecturers: string[]; title: I18nJson }
-} & OfferedCourse
 
 export function usePhaseState(phaseId: number) {
   const coursesStore = useAdminCoursesStore()
@@ -94,7 +94,7 @@ export const useAdminCoursesStore = defineStore('admin-courses', () => {
 
   function extendOfferedCourse<
     T extends { Course: object; moduleCode: string },
-  >(offeredCourse: T): { Course: { lecturers: string[] } } & T {
+  >(offeredCourse: T): T & { Course: { lecturers: string[] } } {
     const course = courses.value.find(
       (e) => e.moduleCode === offeredCourse.moduleCode,
     )

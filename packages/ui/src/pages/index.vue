@@ -75,10 +75,10 @@ const overviewPhase = computed(
         </template>
       </div>
       <VBtnToggle
-        v-model="lastSubjectView"
         v-if="!mobile"
-        class="px-3 d-flex justify-end"
         id="subject-view-toggle"
+        v-model="lastSubjectView"
+        class="px-3 d-flex justify-end"
         mandatory
       >
         <VBtn
@@ -98,8 +98,8 @@ const overviewPhase = computed(
       <SubjectTable v-if="subjectView === 'list'" />
       <div
         v-if="enrollmentStore.enrolledSubjects.length > 0"
-        class="floating"
         id="enroll-button"
+        class="floating"
       >
         <VBadge
           :content="`${enrollmentStore.creditsNeeded}CP`"

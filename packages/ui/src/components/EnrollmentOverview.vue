@@ -17,9 +17,9 @@ const stateText = computed(
 <template>
   <VSheet
     v-if="phase"
+    id="enrollment-overview"
     class="px-4 py-3"
     color="secondary"
-    id="enrollment-overview"
     rounded="lg"
   >
     <h2>

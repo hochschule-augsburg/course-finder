@@ -4,7 +4,7 @@ import { AssignmentStudentController } from '../../../src/domain/assign/Assignme
 
 describe('AssignmentStudentController', () => {
   let controller: AssignmentStudentController
-  let phase: { StudentChoice: StudentChoice[] } & StudentPhase
+  let phase: StudentPhase & { StudentChoice: StudentChoice[] }
   let offeredCourses: {
     Course: { creditPoints: number }
     moduleCode: string

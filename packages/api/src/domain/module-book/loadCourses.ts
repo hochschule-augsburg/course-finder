@@ -63,21 +63,6 @@ export async function loadCourses(pdfs: { baPdf?: Buffer; maPdf?: Buffer }) {
   return { messages: messages, status: 'success' }
 }
 
-function createMaBaCourses(
-  baCourses: Course[],
-  maCourses: Course[],
-): [Course, Course][] {
-  const maBaCourses: [Course, Course][] = []
-  for (const a of baCourses) {
-    for (const b of maCourses) {
-      if (a.moduleCode === b.moduleCode) {
-        maBaCourses.push([a, b])
-      }
-    }
-  }
-  return maBaCourses
-}
-
 function checkDifferences(maBaCourses: [Course, Course][]): string[] {
   const messages: string[] = []
   for (const [a, b] of maBaCourses) {
@@ -109,6 +94,21 @@ function checkDifferences(maBaCourses: [Course, Course][]): string[] {
     }
   }
   return messages
+}
+
+function createMaBaCourses(
+  baCourses: Course[],
+  maCourses: Course[],
+): [Course, Course][] {
+  const maBaCourses: [Course, Course][] = []
+  for (const a of baCourses) {
+    for (const b of maCourses) {
+      if (a.moduleCode === b.moduleCode) {
+        maBaCourses.push([a, b])
+      }
+    }
+  }
+  return maBaCourses
 }
 
 function mergeBaMa(ba: Course, ma: Course): Course {

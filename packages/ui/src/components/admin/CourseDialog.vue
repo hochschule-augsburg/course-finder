@@ -26,10 +26,10 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ cancel: []; submit: [Course | undefined] }>()
 const formData = ref<
-  { lecturers: string; varyingCP: string } & Omit<
-    Course,
-    'lecturers' | 'varyingCP'
-  >
+  Omit<Course, 'lecturers' | 'varyingCP'> & {
+    lecturers: string
+    varyingCP: string
+  }
 >()
 
 watchEffect(() => {
@@ -42,20 +42,13 @@ watchEffect(() => {
   }
 })
 
-function varyingCPToString(varyingCP: unknown) {
-  if (
-    typeof varyingCP === 'object' &&
-    varyingCP !== null &&
-    !Array.isArray(varyingCP)
-  ) {
-    const keyValuePairs = Object.entries(varyingCP).map(([key, value]) => {
-      return `${key}: ${value}`
-    })
-
-    const resultString = keyValuePairs.join(', ')
-    return resultString
-  }
-  return ''
+function deleteSubject() {
+  dialogService.showDialog({
+    onCancel: () => {},
+    onConfirm: () => emit('submit', undefined),
+    text: 'Möchten Sie diesen Kurs wirklich löschen?',
+    title: 'Bestätigung',
+  })
 }
 
 function parseVaryingCP(input: string) {
@@ -88,13 +81,20 @@ function submit() {
   })
 }
 
-function deleteSubject() {
-  dialogService.showDialog({
-    onCancel: () => {},
-    onConfirm: () => emit('submit', undefined),
-    text: 'Möchten Sie diesen Kurs wirklich löschen?',
-    title: 'Bestätigung',
-  })
+function varyingCPToString(varyingCP: unknown) {
+  if (
+    typeof varyingCP === 'object' &&
+    varyingCP !== null &&
+    !Array.isArray(varyingCP)
+  ) {
+    const keyValuePairs = Object.entries(varyingCP).map(([key, value]) => {
+      return `${key}: ${value}`
+    })
+
+    const resultString = keyValuePairs.join(', ')
+    return resultString
+  }
+  return ''
 }
 
 const moduleCodeRequiredRule = [(i: string) => !!i || 'Feld erforderlich']
@@ -210,8 +210,8 @@ const moduleCodeRequiredRule = [(i: string) => !!i || 'Feld erforderlich']
         <VBtn text="Abbrechen" @click="$emit('cancel')" />
         <VSpacer />
         <VSwitch
-          v-model="formData.published"
           v-if="props.onTheFly !== true"
+          v-model="formData.published"
           color="primary"
           label="veröffentlicht"
           hide-details

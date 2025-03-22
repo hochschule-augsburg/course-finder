@@ -4,8 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { useDisplay, useLocale, useTheme } from 'vuetify'
 import { VAppBar } from 'vuetify/components'
 
-export type ThemeOptions = 'auto' | 'dark' | 'light'
 export type LocaleOptions = 'de' | 'en'
+export type ThemeOptions = 'auto' | 'dark' | 'light'
 
 const { mobile } = useDisplay()
 
@@ -23,11 +23,9 @@ const themes = {
   light: 'customLightTheme',
 }
 
-function getPreferredColorScheme() {
-  const prefersDarkMode = window.matchMedia(
-    '(prefers-color-scheme: dark)',
-  ).matches
-  return prefersDarkMode ? 'customDarkTheme' : 'customLightTheme'
+function changeLocale(newLocale: LocaleOptions) {
+  locale.value = newLocale
+  window.localStorage.setItem('locale', newLocale)
 }
 
 function changeTheme(newTheme: ThemeOptions) {
@@ -36,9 +34,11 @@ function changeTheme(newTheme: ThemeOptions) {
   localStorage.setItem('theme', newTheme)
 }
 
-function changeLocale(newLocale: LocaleOptions) {
-  locale.value = newLocale
-  window.localStorage.setItem('locale', newLocale)
+function getPreferredColorScheme() {
+  const prefersDarkMode = window.matchMedia(
+    '(prefers-color-scheme: dark)',
+  ).matches
+  return prefersDarkMode ? 'customDarkTheme' : 'customLightTheme'
 }
 
 watch(

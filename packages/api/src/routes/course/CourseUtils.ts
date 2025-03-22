@@ -30,7 +30,7 @@ const examTypesData = [
 
 export function processCourse<
   T extends { exam: null | string; maExam: null | string },
->(course: T, student: null | Student | undefined): { examTypes: string[] } & T {
+>(course: T, student: null | Student | undefined): T & { examTypes: string[] } {
   let exam = course.exam
   if (student?.finalDegree === 'Master') {
     exam = course.maExam || course.exam

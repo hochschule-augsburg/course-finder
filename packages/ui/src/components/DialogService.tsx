@@ -17,7 +17,7 @@ export type DialogOptions = {
   title: string
 }
 
-let dialog: { open: (options: DialogOptions) => void } | undefined
+let dialog: undefined | { open: (options: DialogOptions) => void }
 
 export const dialogService = {
   showDialog(options: DialogOptions) {

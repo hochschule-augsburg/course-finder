@@ -49,18 +49,6 @@ onBeforeMount(async () => {
   void statsStore.fetchPhase(props.phaseId)
 })
 
-async function publish() {
-  publishing.value = true
-  try {
-    await assignStore.publish(props.phaseId, tryNo.value)
-    published.value = true
-  } catch (e) {
-    console.error(e)
-  } finally {
-    publishing.value = false
-  }
-}
-
 async function download() {
   const yaml = await trpc.admin.assign.yaml.query({
     phaseId: props.phaseId,
@@ -77,6 +65,18 @@ async function newAssignment() {
   const newTryNo = await assignStore.newAssignment(props.phaseId)
   await nextTick()
   tryNo.value = newTryNo
+}
+
+async function publish() {
+  publishing.value = true
+  try {
+    await assignStore.publish(props.phaseId, tryNo.value)
+    published.value = true
+  } catch (e) {
+    console.error(e)
+  } finally {
+    publishing.value = false
+  }
 }
 </script>
 
@@ -97,8 +97,8 @@ async function newAssignment() {
         <VTooltip location="top">
           <template #activator="{ props: tipProps }">
             <VBtn
-              v-bind="tipProps"
               v-if="assignStore.assignments[phaseId]?.length"
+              v-bind="tipProps"
               flat
               @click="publish"
             >
@@ -143,8 +143,8 @@ async function newAssignment() {
         Keine Daten
       </span>
       <VTabsWindowItem
-        v-else
         v-for="(assignment, i) in assignStore.assignments[phaseId]"
+        v-else
         :key="i"
         :value="i"
       >
@@ -162,8 +162,8 @@ async function newAssignment() {
           <tbody>
             <tr
               v-for="course in assignment"
-              :class="{ 'bg-red-lighten-4': !course.assignCount }"
               :key="course.moduleCode"
+              :class="{ 'bg-red-lighten-4': !course.assignCount }"
             >
               <td>{{ course.moduleCode }}</td>
               <td>

@@ -4,6 +4,21 @@ import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
 import { sendEmail } from '../mail/Mail.ts'
 
+export async function emailToLists(phase: EnrollPhase) {
+  await sendEmail(
+    env.MAIL_RECEIVERS,
+    `${phase.title['de']} - Results/Ergebnisse`,
+    `
+Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
+Sie können die Ergebnisse auf <a href="${env.FRONTEND_ORIGIN}results">der Website</a> einsehen.<br>
+---<br>
+<br><br>
+The results of the ${phase.title['en']} have been published.<br>
+You can view the results on <a href="${env.FRONTEND_ORIGIN}results">the website</a>.
+    `,
+  )
+}
+
 export async function emailToStudents(
   phase: EnrollPhase,
   results: { moduleCode: string; username: string }[],
@@ -59,21 +74,6 @@ You can also view the results on <a href="${url}">the website</a>.
       `,
       ),
     ),
-  )
-}
-
-export async function emailToLists(phase: EnrollPhase) {
-  await sendEmail(
-    env.MAIL_RECEIVERS,
-    `${phase.title['de']} - Results/Ergebnisse`,
-    `
-Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
-Sie können die Ergebnisse auf <a href="${env.FRONTEND_ORIGIN}results">der Website</a> einsehen.<br>
----<br>
-<br><br>
-The results of the ${phase.title['en']} have been published.<br>
-You can view the results on <a href="${env.FRONTEND_ORIGIN}results">the website</a>.
-    `,
   )
 }
 
