@@ -53,22 +53,6 @@ const vueRules = {
   'vue/no-useless-v-bind': 'warn',
   'vue/no-v-text': 'warn',
   'vue/eqeqeq': ['error', 'always'],
-  ...{
-    'vue/attributes-order': 'off',
-    'perfectionist/sort-vue-attributes': [
-      'error',
-      {
-        type: 'natural',
-        order: 'asc',
-        groups: ['v-model', 'v-', 'multiline', 'unknown', 'shorthand', 'v-on'],
-        customGroups: {
-          'v-model': 'v-model*',
-          'v-': 'v-*',
-          'v-on': '@*',
-        },
-      },
-    ],
-  },
 }
 
 export default ts.config(
