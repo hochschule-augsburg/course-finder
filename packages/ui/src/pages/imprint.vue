@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { mdiDomain, mdiGithub } from '@mdi/js';
-import { useI18n } from 'vue-i18n';
-import  logo  from '../../../docs/public/logo.svg';
+import { mdiDomain, mdiGithub } from '@mdi/js'
+import { useI18n } from 'vue-i18n'
 
-const {t} = useI18n();
+import logo from '../../../docs/public/logo.svg'
 
-
-
+const { t } = useI18n()
 </script>
 
 <template>
@@ -24,10 +22,7 @@ const {t} = useI18n();
         <p class="text-body-1">{{ t('imprint.developedBy') }}</p>
 
         <v-list dense>
-          <v-list-item
-            :href="'https://www.tha.de/impressum'"
-            target="_blank"
-          >
+          <v-list-item href="https://www.tha.de/impressum" target="_blank">
             <v-list-item>
               <v-icon :icon="mdiDomain" />
             </v-list-item>
@@ -37,7 +32,7 @@ const {t} = useI18n();
           </v-list-item>
 
           <v-list-item
-            :href="'https://github.com/hochschule-augsburg/course-finder'"
+            href="https://github.com/hochschule-augsburg/course-finder"
             target="_blank"
           >
             <v-list-item>
@@ -56,17 +51,17 @@ const {t} = useI18n();
 <i18n lang="yaml">
 de:
   imprint:
-    title: "Impressum"
-    developedBy: "CourseFinder ist eine App von Studierenden für Studierende."
-    university: "Impressum der THA"
-    github: "GitHub Repository"
+    title: 'Impressum'
+    developedBy: 'CourseFinder ist eine App von Studierenden für Studierende.'
+    university: 'Impressum der THA'
+    github: 'GitHub Repository'
 
 en:
   imprint:
-    title: "Imprint"
-    developedBy: "CourseFinder is an app developed by students for students."
-    university: "University Imprint"
-    github: "GitHub Repository"
+    title: 'Imprint'
+    developedBy: 'CourseFinder is an app developed by students for students.'
+    university: 'University Imprint'
+    github: 'GitHub Repository'
 </i18n>
 
 <style lang="scss" scoped></style>

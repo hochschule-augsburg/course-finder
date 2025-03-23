@@ -6,7 +6,6 @@ import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
 import { watch } from 'vue'
 import { computed, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { definePage } from 'vue-router/auto'
 import {
   VEmptyState,
   VList,

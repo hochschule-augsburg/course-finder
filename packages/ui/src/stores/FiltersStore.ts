@@ -1,6 +1,7 @@
 import { maxBy, minBy } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { type Subject, useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'
@@ -29,6 +30,7 @@ export type RangeFilter = {
 }
 
 export const useFiltersStore = defineStore('filters', () => {
+  const { locale } = useI18n()
   const userStore = useUserStore()
   const coursesStore = useCoursesStore()
   const search = ref<string>('')
@@ -248,15 +250,22 @@ export const useFiltersStore = defineStore('filters', () => {
 
   function searchSubjects(subjects: Subject[]): Subject[] {
     const searchString = search.value.trim().toLowerCase()
-    if (!search.value.trim()) {
+    if (!searchString) {
       return subjects
     }
-    return subjects.filter(
-      (subject) =>
-        !!subject.title.de?.toLowerCase().includes(searchString) ||
-        !!subject.title.en?.toLowerCase().includes(searchString) ||
-        subject.lecturers.some((e) => e.toLowerCase().includes(searchString)),
-    )
+    return subjects.filter((subject) => {
+      const initials = subject.title[locale.value]
+        ?.toLowerCase()
+        .split(' ')
+        .flatMap((e) => e.split('-'))
+        .map((e) => e[0])
+        .join('')
+      return (
+        initials?.includes(searchString) ||
+        !!subject.title[locale.value]?.toLowerCase().includes(searchString) ||
+        subject.lecturers.some((e) => e.toLowerCase().includes(searchString))
+      )
+    })
   }
 
   function resetRange(filter: RangeFilter) {
