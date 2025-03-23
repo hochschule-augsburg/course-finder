@@ -11,9 +11,8 @@ const { t } = useI18n()
       <VBtn
         class="mx-2"
         color="primary"
-        href="https://www.tha.de/Service/Impressum.html"
+        to="imprint"
         rounded="xl"
-        target="_blank"
         variant="text"
       >
         {{ t('imprint') }}

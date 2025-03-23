@@ -8,7 +8,16 @@ import { createServer } from './server/server.ts'
 
 // Start database from docker container for development
 if (env.DEV) {
-  execSync(`docker start ${process.env.DEV_DOCKER_DB}`)
+  if (
+    execSync(
+      `docker container inspect -f '{{.State.Running}}' ${process.env.DEV_DOCKER_DB}`,
+    )
+      .toString()
+      .trim() === 'false'
+  ) {
+    execSync(`docker start ${process.env.DEV_DOCKER_DB}`)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+  }
 }
 console.log(env.DEV ? 'Dev Mode' : 'Production mode')
 console.log(env.MAIL_RECEIVERS, env.CONTACT_EMAIL)

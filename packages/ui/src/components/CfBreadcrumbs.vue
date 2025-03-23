@@ -9,11 +9,12 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-const routeItems = computed(() => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const routeItems = computed<any>(() => {
   if (route.path === '/') {
     return []
   }
-  const pathArray = route.path.split('/').slice(1, -1)
+  const pathArray = route.path.split('/').slice(0, -1)
   const breadcrumbItems = pathArray.map((path, index) => {
     const fullPath = '/' + pathArray.slice(0, index + 1).join('/')
     const routeMatch = router.resolve(fullPath)
@@ -48,7 +49,6 @@ const routeItems = computed(() => {
 </script>
 
 <template>
-  <!-- @vue-expect-error -->
   <VBreadcrumbs :items="routeItems" class="ml-9">
     <template #divider>
       <VIcon :icon="mdiChevronRight" />

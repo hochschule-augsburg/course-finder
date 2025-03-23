@@ -79,6 +79,7 @@ tour:
       logging in or out. If you need help, click on the help icon.
 
 pages:
+  index: Home
   admin:
     index: Dashboard
     settings: Settings
@@ -91,3 +92,4 @@ pages:
         index: '{phaseId}'
         edit: Edit
   gdpr: Data Privacy
+  imprint: Imprint

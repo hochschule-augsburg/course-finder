@@ -17,12 +17,6 @@ import {
   VTabsWindowItem,
 } from 'vuetify/components'
 
-definePage({
-  meta: {
-    noBreadcrumbs: true,
-  },
-})
-
 const { locale, t } = useI18n()
 
 const coursesStore = useCoursesStore()

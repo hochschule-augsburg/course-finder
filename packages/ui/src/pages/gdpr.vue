@@ -5,7 +5,7 @@ const { locale } = useI18n()
 </script>
 
 <template>
-  <div class="mx-10">
+  <div class="mx-6">
     <template v-if="locale === 'de'">
       <h1>
         Datenschutzerklärung der Fakultät Informatik der Technischen Hochschule

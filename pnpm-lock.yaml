@@ -150,7 +150,7 @@ importers:
     devDependencies:
       vitepress:
         specifier: ^1.6.3
-        version: 1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.11)(postcss@8.5.3)(sass-embedded@1.85.1)(search-insights@2.17.3)(sortablejs@1.14.0)(typescript@5.8.2)
+        version: 1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.11)(fuse.js@7.1.0)(postcss@8.5.3)(sass-embedded@1.85.1)(search-insights@2.17.3)(sortablejs@1.14.0)(typescript@5.8.2)
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.2)
@@ -2669,6 +2669,10 @@ packages:
 
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
+
+  fuse.js@7.1.0:
+    resolution: {integrity: sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==}
+    engines: {node: '>=10'}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -6194,13 +6198,14 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/integrations@12.7.0(focus-trap@7.6.4)(sortablejs@1.14.0)(typescript@5.8.2)':
+  '@vueuse/integrations@12.7.0(focus-trap@7.6.4)(fuse.js@7.1.0)(sortablejs@1.14.0)(typescript@5.8.2)':
     dependencies:
       '@vueuse/core': 12.7.0(typescript@5.8.2)
       '@vueuse/shared': 12.7.0(typescript@5.8.2)
       vue: 3.5.13(typescript@5.8.2)
     optionalDependencies:
       focus-trap: 7.6.4
+      fuse.js: 7.1.0
       sortablejs: 1.14.0
     transitivePeerDependencies:
       - typescript
@@ -7020,6 +7025,9 @@ snapshots:
     optional: true
 
   function-bind@1.1.2: {}
+
+  fuse.js@7.1.0:
+    optional: true
 
   gensync@1.0.0-beta.2: {}
 
@@ -8748,7 +8756,7 @@ snapshots:
       sass-embedded: 1.85.1
       yaml: 2.7.0
 
-  vitepress@1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.11)(postcss@8.5.3)(sass-embedded@1.85.1)(search-insights@2.17.3)(sortablejs@1.14.0)(typescript@5.8.2):
+  vitepress@1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.11)(fuse.js@7.1.0)(postcss@8.5.3)(sass-embedded@1.85.1)(search-insights@2.17.3)(sortablejs@1.14.0)(typescript@5.8.2):
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.20.3)(search-insights@2.17.3)
@@ -8761,7 +8769,7 @@ snapshots:
       '@vue/devtools-api': 7.7.2
       '@vue/shared': 3.5.13
       '@vueuse/core': 12.7.0(typescript@5.8.2)
-      '@vueuse/integrations': 12.7.0(focus-trap@7.6.4)(sortablejs@1.14.0)(typescript@5.8.2)
+      '@vueuse/integrations': 12.7.0(focus-trap@7.6.4)(fuse.js@7.1.0)(sortablejs@1.14.0)(typescript@5.8.2)
       focus-trap: 7.6.4
       mark.js: 8.11.1
       minisearch: 7.1.1

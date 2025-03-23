@@ -27,6 +27,7 @@ declare module 'vue-router/auto-routes' {
     '/admin/phases/[phaseId]/edit': RouteRecordInfo<'/admin/phases/[phaseId]/edit', '/admin/phases/:phaseId/edit', { phaseId: ParamValue<true> }, { phaseId: ParamValue<false> }>,
     '/admin/settings': RouteRecordInfo<'/admin/settings', '/admin/settings', Record<never, never>, Record<never, never>>,
     '/gdpr': RouteRecordInfo<'/gdpr', '/gdpr', Record<never, never>, Record<never, never>>,
+    '/imprint': RouteRecordInfo<'/imprint', '/imprint', Record<never, never>, Record<never, never>>,
     '/results': RouteRecordInfo<'/results', '/results', Record<never, never>, Record<never, never>>,
   }
 }

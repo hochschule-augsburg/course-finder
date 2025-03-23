@@ -83,6 +83,8 @@ tour:
       das Hilfesymbol.
 
 pages:
+  index: Home
+  results: Ergebnisse
   admin:
     index: Dashboard
     settings: Einstellungen
@@ -95,3 +97,4 @@ pages:
         index: '{phaseId}'
         edit: Bearbeiten
   gdpr: Datenschutz
+  imprint: Impressum
