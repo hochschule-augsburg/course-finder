@@ -1,8 +1,9 @@
+import { chunk } from 'lodash-es'
+import { onMounted, ref, watch } from 'vue'
+
 import type { Subject } from '@/stores/CoursesStore'
 
 import { useCoursesStore } from '@/stores/CoursesStore'
-import { chunk } from 'lodash-es'
-import { onMounted, ref, watch } from 'vue'
 
 export function useSubjectChunks() {
   const coursesStore = useCoursesStore()

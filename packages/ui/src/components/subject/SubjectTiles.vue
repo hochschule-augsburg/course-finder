@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useSubjectChunks } from '@/composables/subjectChunks'
-import { useCoursesStore } from '@/stores/CoursesStore'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { VCol, VContainer, VRow } from 'vuetify/components'
+
+import { useSubjectChunks } from '@/composables/subjectChunks'
+import { useCoursesStore } from '@/stores/CoursesStore'
 
 const route = useRoute()
 const router = useRouter()

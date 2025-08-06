@@ -1,12 +1,13 @@
 import type { ClientUserExtended } from '@workspace/api/src/prisma/PrismaTypes'
 import type { Mock } from 'vitest'
 
-import { useUserStore } from '@/stores/UserStore'
 import { setupComposable } from '@tests/test-setup/composable'
 import { trpcMock } from '@tests/test-setup/trpcMock'
 import { storeToRefs } from 'pinia'
 import { mock } from 'vitest-mock-extended'
 import { useRouter } from 'vue-router'
+
+import { useUserStore } from '@/stores/UserStore'
 
 vi.mock('vue-router')
 

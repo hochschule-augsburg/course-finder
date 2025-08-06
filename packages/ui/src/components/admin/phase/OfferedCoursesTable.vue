@@ -1,9 +1,10 @@
 <script lang="ts" setup>
+import { computed, watch } from 'vue'
+import { VTable } from 'vuetify/components'
+
 import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
-import { computed, watch } from 'vue'
-import { VTable } from 'vuetify/components'
 
 const props = defineProps<{ phaseId: number }>()
 

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { Course } from '@/stores/admin/AdminCoursesStore'
-
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { trpc } from '@/trpc'
 import { mdiInvoiceTextPlus, mdiPencil } from '@mdi/js'
 import { merge } from 'lodash-es'
 import { ref } from 'vue'
 import { VBtn, VContainer, VIcon, VTable } from 'vuetify/components'
+
+import type { Course } from '@/stores/admin/AdminCoursesStore'
+
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 
 import ErrorDialog from './ErrorDialog.vue'
 

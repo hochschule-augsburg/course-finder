@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import {
   VBtn,
   VCard,
@@ -8,6 +7,8 @@ import {
   VContainer,
   VRow,
 } from 'vuetify/components'
+
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 
 const adminCoursesStore = useAdminCoursesStore()
 </script>

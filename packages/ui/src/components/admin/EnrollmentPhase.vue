@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { useIntervalFn } from '@vueuse/core'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { computed, ref, watch } from 'vue'
+
+import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 
 const adminCoursesStore = useAdminCoursesStore()
 

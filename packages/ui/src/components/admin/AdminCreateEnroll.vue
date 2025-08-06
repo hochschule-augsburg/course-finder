@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import type { Phase } from '@/stores/admin/AdminCoursesStore'
-
-import { getLocalISOString } from '@/helper/LocaleDateFormat'
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { trpc } from '@/trpc'
 import { isWithinInterval } from 'date-fns'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref } from 'vue'
@@ -19,6 +14,12 @@ import {
   VTextarea,
   VTextField,
 } from 'vuetify/components'
+
+import type { Phase } from '@/stores/admin/AdminCoursesStore'
+
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 
 import type { OfferedCourseData } from './types'
 

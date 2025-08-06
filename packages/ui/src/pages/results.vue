@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useAssignStore } from '@/stores/AssignStore'
-import { useCoursesStore } from '@/stores/CoursesStore'
-import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 import { mdiCheck, mdiClose, mdiHelp } from '@mdi/js'
 import { watch } from 'vue'
 import { computed, ref, watchEffect } from 'vue'
@@ -15,6 +12,10 @@ import {
   VTabsWindow,
   VTabsWindowItem,
 } from 'vuetify/components'
+
+import { useAssignStore } from '@/stores/AssignStore'
+import { useCoursesStore } from '@/stores/CoursesStore'
+import { useEnrollmentStore } from '@/stores/EnrollmentStore'
 
 const { locale, t } = useI18n()
 

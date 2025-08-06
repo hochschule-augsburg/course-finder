@@ -1,13 +1,6 @@
 <script lang="ts" setup>
-import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
 import type { CourseAppointmentsJson } from '@workspace/api/src/prisma/PrismaTypes'
 
-import {
-  abbrFieldsOfStudyMap,
-  fieldsOfStudy,
-  fieldsOfStudyAbbrMap,
-} from '@/helper/enums/fieldsOfStudy'
-import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import { mdiCalendar, mdiPencil, mdiTrashCanOutline } from '@mdi/js'
 import { format, setDay, startOfWeek } from 'date-fns'
 import { cloneDeep, isNumber } from 'lodash-es'
@@ -29,6 +22,15 @@ import {
   VTextarea,
   VTextField,
 } from 'vuetify/components'
+
+import type { AdminOfferedCourse } from '@/stores/admin/AdminCoursesStore'
+
+import {
+  abbrFieldsOfStudyMap,
+  fieldsOfStudy,
+  fieldsOfStudyAbbrMap,
+} from '@/helper/enums/fieldsOfStudy'
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
 
 const props = defineProps<{
   enableDelete?: boolean

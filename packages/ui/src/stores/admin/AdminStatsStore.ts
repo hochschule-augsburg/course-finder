@@ -1,6 +1,7 @@
-import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+
+import { trpc } from '@/trpc'
 
 export const useAdminStatsStore = defineStore('admin-stats', () => {
   const phase = ref<Record<number, undefined | { studentCount: number }>>({})

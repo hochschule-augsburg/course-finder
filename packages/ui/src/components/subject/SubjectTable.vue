@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useSubjectChunks } from '@/composables/subjectChunks'
 import { VExpansionPanel, VExpansionPanels } from 'vuetify/components'
+
+import { useSubjectChunks } from '@/composables/subjectChunks'
 
 const { subjects } = useSubjectChunks()
 </script>

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/CoursesStore'
-
-import { useUserStore } from '@/stores/UserStore'
-import { trpc } from '@/trpc'
 import {
   mdiAccountMultiple,
   mdiAlertCircle,
@@ -17,8 +13,6 @@ import { computed } from 'vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import VuePdfEmbed from 'vue-pdf-embed'
-import 'vue-pdf-embed/dist/styles/annotationLayer.css'
-import 'vue-pdf-embed/dist/styles/textLayer.css'
 import { useDisplay, useTheme } from 'vuetify'
 import {
   VBtn,
@@ -28,6 +22,13 @@ import {
   VIcon,
   VSheet,
 } from 'vuetify/components'
+
+import type { Subject } from '@/stores/CoursesStore'
+import 'vue-pdf-embed/dist/styles/annotationLayer.css'
+import 'vue-pdf-embed/dist/styles/textLayer.css'
+
+import { useUserStore } from '@/stores/UserStore'
+import { trpc } from '@/trpc'
 
 const props = defineProps<{
   subject: Subject

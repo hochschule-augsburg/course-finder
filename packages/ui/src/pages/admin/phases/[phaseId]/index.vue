@@ -1,9 +1,10 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router/auto'
+import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
+
 import { dialogService } from '@/components/DialogService'
 import { usePhaseState } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
-import { useRoute } from 'vue-router/auto'
-import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
 
 const route = useRoute()
 //@ts-expect-error auto type not working

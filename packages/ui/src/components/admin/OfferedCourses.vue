@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import type { Course } from '@/stores/admin/AdminCoursesStore'
 import type { Ref } from 'vue'
 
-import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { trpc } from '@/trpc'
 import { mdiInvoiceTextPlus, mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
 import { ref, watch } from 'vue'
@@ -21,6 +17,12 @@ import {
   VRow,
   VTextField,
 } from 'vuetify/components'
+
+import type { Course } from '@/stores/admin/AdminCoursesStore'
+
+import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 
 import type { OfferedCourseData } from './types'
 const adminStore = useAdminCoursesStore()

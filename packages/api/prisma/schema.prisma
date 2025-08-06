@@ -27,8 +27,9 @@ enum Singleton {
 }
 
 model AppConf {
-  id         Singleton @id @default(Instance)
-  maxCredits Int       @default(30)
+  id                    Singleton @id @default(Instance)
+  maxCredits            Int       @default(30)
+  moduleBookLastUpdated DateTime? @default(now())
 }
 
 model User {

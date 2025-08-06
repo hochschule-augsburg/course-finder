@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/UserStore'
 import {
   mdiAccount,
   mdiEarth,
@@ -19,6 +18,8 @@ import {
   VMenu,
   VToolbarTitle,
 } from 'vuetify/components'
+
+import { useUserStore } from '@/stores/UserStore'
 
 import type { LocaleOptions, ThemeOptions } from './CustomNavbar.vue'
 

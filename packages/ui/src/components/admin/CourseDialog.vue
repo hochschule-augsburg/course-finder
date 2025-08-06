@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { Course } from '@/stores/admin/AdminCoursesStore'
-
 import { mdiPencil } from '@mdi/js'
 import { ref, toRaw, watchEffect } from 'vue'
 import {
@@ -16,6 +14,8 @@ import {
   VTextarea,
   VTextField,
 } from 'vuetify/components'
+
+import type { Course } from '@/stores/admin/AdminCoursesStore'
 
 import { dialogService } from '../DialogService'
 

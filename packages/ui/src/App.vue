@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { homeTour } from '@/stores/TourStore'
-import 'v-onboarding/dist/style.css'
 import { computed } from 'vue'
+import 'v-onboarding/dist/style.css'
 import { useI18n } from 'vue-i18n'
 import { VApp, VMain } from 'vuetify/components'
+
+import { homeTour } from '@/stores/TourStore'
 
 import CustomOnboarding from './components/CustomOnboarding.vue'
 import { ModalDialog } from './components/DialogService'

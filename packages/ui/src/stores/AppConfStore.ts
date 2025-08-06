@@ -1,8 +1,9 @@
 import type { AppConf } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
+
+import { trpc } from '@/trpc'
 
 import { useUserStore } from './UserStore'
 

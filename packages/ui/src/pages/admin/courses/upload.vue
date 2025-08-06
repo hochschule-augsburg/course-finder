@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { fetchFastify } from '@/fastify'
 import { refThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -11,6 +10,8 @@ import {
   VRow,
   VSnackbar,
 } from 'vuetify/components'
+
+import { fetchFastify } from '@/fastify'
 
 const { t } = useI18n()
 const pending = ref(false)

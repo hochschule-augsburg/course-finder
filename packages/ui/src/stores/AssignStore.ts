@@ -3,9 +3,10 @@ import type {
   I18nJson,
 } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
+
+import { trpc } from '@/trpc'
 
 import { useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'

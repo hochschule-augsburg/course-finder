@@ -1,6 +1,7 @@
-import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
+
+import { trpc } from '@/trpc'
 
 import type { Subject } from './CoursesStore'
 
