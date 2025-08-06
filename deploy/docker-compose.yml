@@ -1,5 +1,3 @@
-# keep in sync with prod
-
 services:
   api:
     build:
@@ -11,6 +9,33 @@ services:
     restart: unless-stopped
     depends_on:
       - database
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api.rule=Host(`course-finder.informatik.tha.de`)
+        && PathPrefix(`/api`)'
+      - 'traefik.http.routers.api.priority=10' # explicit lower priority than login but higher than ui
+      - 'traefik.http.routers.api.entrypoints=websecure'
+      - 'traefik.http.routers.api.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.api.loadbalancer.server.port=2022'
+      - 'traefik.http.middlewares.api-ratelimit.ratelimit.average=40'
+      - 'traefik.http.middlewares.api-ratelimit.ratelimit.burst=20'
+      - 'traefik.http.routers.api.middlewares=api-ratelimit,security-headers,gzip'
+      # Stricter rate limit for login endpoint
+      - 'traefik.http.routers.api-login.rule=Host(`course-finder.informatik.tha.de`)
+        && PathRegexp(`/api/trpc/.*auth\\.login`)'
+      - 'traefik.http.routers.api-login.priority=100'
+      - 'traefik.http.routers.api-login.entrypoints=websecure'
+      - 'traefik.http.routers.api-login.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.api-login.loadbalancer.server.port=2022'
+      - 'traefik.http.middlewares.api-login-ratelimit.ratelimit.average=1'
+      - 'traefik.http.middlewares.api-login-ratelimit.ratelimit.burst=5'
+      - 'traefik.http.routers.api-login.middlewares=api-login-ratelimit,security-headers,gzip'
+
+      # http->https redirect
+      - 'traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)'
+      - 'traefik.http.routers.http-catchall.entrypoints=web'
+      - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+      - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
 
   ui:
     build:
@@ -19,17 +44,31 @@ services:
       target: ui
       args:
         VITE_API_URL: ${VITE_API_URL}
-    ports:
-      - '80:80'
-      - '443:443'
-      - '443:443/udp'
-    volumes:
-      - ${CERTS_PRIVKEY}:/prod/certs/privkey.pem
-      - ${CERTS_CHAIN}:/prod/certs/chain.pem
-      - ${CERTS_FULLCHAIN}:/prod/certs/fullchain.pem
-      - ./nginx-course-finder.conf:/etc/nginx/conf.d/nginx-course-finder.conf
     depends_on:
       - api
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ui.rule=Host(`course-finder.informatik.tha.de`)'
+      - 'traefik.http.routers.ui.priority=1' # explicit lower than api
+      - 'traefik.http.routers.ui.entrypoints=websecure'
+      - 'traefik.http.routers.ui.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.ui.loadbalancer.server.port=80'
+      - 'traefik.http.routers.ui.middlewares=security-headers,gzip'
+
+      # http->https redirect
+      - 'traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)'
+      - 'traefik.http.routers.http-catchall.entrypoints=web'
+      - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+      - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
+
+      ## Global middlewares
+      # Security Headers
+      - 'traefik.http.middlewares.security-headers.headers.stsSeconds=63072000' # 2 years HSTS
+      - 'traefik.http.middlewares.security-headers.headers.stsIncludeSubdomains=true'
+      - 'traefik.http.middlewares.security-headers.headers.stsPreload=true'
+      - 'traefik.http.middlewares.security-headers.headers.accessControlAllowOriginList=https://course-finder.informatik.tha.de'
+      # Gzip
+      - 'traefik.http.middlewares.gzip.compress=true'
 
     restart: unless-stopped
 
@@ -42,5 +81,4 @@ services:
     ports:
       # only development
       - '127.0.0.1:5432:5432'
-
     restart: unless-stopped

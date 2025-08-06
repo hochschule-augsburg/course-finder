@@ -1,0 +1,22 @@
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.leresolver.acme.httpchallenge=true'
+      - '--certificatesresolvers.leresolver.acme.httpchallenge.entrypoint=web'
+      - '--certificatesresolvers.leresolver.acme.email=you@example.com'
+      - '--certificatesresolvers.leresolver.acme.storage=/letsencrypt/acme.json'
+      - --api.dashboard=true
+      - --log.level=INFO
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    restart: unless-stopped

@@ -16,6 +16,7 @@ COPY --from=build /build/packages/ui/dist /prod/ui
 WORKDIR /prod/ui
 
 RUN rm -rf /etc/nginx/conf.d/*
+COPY ./packages/ui/nginx.conf /etc/nginx/conf.d/nginx-course-finder.conf
 
 EXPOSE 80
 EXPOSE 443
