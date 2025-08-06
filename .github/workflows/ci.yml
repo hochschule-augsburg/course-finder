@@ -3,14 +3,14 @@ name: CI
 on:
   push:
     branches:
-      - 'main'
-      - 'deploy'
+      - "main"
+      - "deploy"
   pull_request:
     types: [opened, synchronize, reopened]
   # module book
   schedule:
-    - cron: '0 8 15 2,9 *'
-    - cron: '0 8 1 * *'
+    - cron: "0 8 15 2,9 *"
+    - cron: "0 8 1 * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 23
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --strict-peer-dependencies
@@ -42,6 +42,7 @@ jobs:
       - name: Generate prisma schema types
         run: pnpm run --filter=api db:generate
 
+      - run: pnpm -r typecheck
       - run: pnpm -r build
       - run: pnpm -r lint
       - run: pnpm -r prettier

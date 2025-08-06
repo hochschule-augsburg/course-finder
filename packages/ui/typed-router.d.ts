@@ -30,4 +30,72 @@ declare module 'vue-router/auto-routes' {
     '/imprint': RouteRecordInfo<'/imprint', '/imprint', Record<never, never>, Record<never, never>>,
     '/results': RouteRecordInfo<'/results', '/results', Record<never, never>, Record<never, never>>,
   }
+
+  /**
+   * Route file to route info map by unplugin-vue-router.
+   * Used by the volar plugin to automatically type useRoute()
+   *
+   * Each key is a file path relative to the project root with 2 properties:
+   * - routes: union of route names of the possible routes when in this page (passed to useRoute<...>())
+   * - views: names of nested views (can be passed to <RouterView name="...">)
+   *
+   * @internal
+   */
+  export interface _RouteFileInfoMap {
+    'src/pages/index.vue': {
+      routes: '/'
+      views: never
+    }
+    'src/pages/admin/index.vue': {
+      routes: '/admin/'
+      views: never
+    }
+    'src/pages/admin/courses/index.vue': {
+      routes: '/admin/courses/'
+      views: never
+    }
+    'src/pages/admin/courses/upload.vue': {
+      routes: '/admin/courses/upload'
+      views: never
+    }
+    'src/pages/admin/phases/index.vue': {
+      routes: '/admin/phases/'
+      views: never
+    }
+    'src/pages/admin/phases/[phaseId]/index.vue': {
+      routes: '/admin/phases/[phaseId]/'
+      views: never
+    }
+    'src/pages/admin/phases/[phaseId]/edit.vue': {
+      routes: '/admin/phases/[phaseId]/edit'
+      views: never
+    }
+    'src/pages/admin/settings.vue': {
+      routes: '/admin/settings'
+      views: never
+    }
+    'src/pages/gdpr.vue': {
+      routes: '/gdpr'
+      views: never
+    }
+    'src/pages/imprint.vue': {
+      routes: '/imprint'
+      views: never
+    }
+    'src/pages/results.vue': {
+      routes: '/results'
+      views: never
+    }
+  }
+
+  /**
+   * Get a union of possible route names in a certain route component file.
+   * Used by the volar plugin to automatically type useRoute()
+   *
+   * @internal
+   */
+  export type _RouteNamesForFilePath<FilePath extends string> =
+    _RouteFileInfoMap extends Record<FilePath, infer Info>
+      ? Info['routes']
+      : keyof RouteNamedMap
 }

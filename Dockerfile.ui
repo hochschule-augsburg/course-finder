@@ -9,7 +9,7 @@ FROM base AS build
 COPY . /build
 WORKDIR /build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run --filter=ui bundle
+RUN pnpm run --filter=ui build
 
 FROM nginx:stable-alpine AS ui
 COPY --from=build /build/packages/ui/dist /prod/ui
