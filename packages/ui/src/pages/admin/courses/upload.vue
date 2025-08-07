@@ -12,6 +12,7 @@ import {
 } from 'vuetify/components'
 
 import { fetchFastify } from '@/fastify'
+import { trpc } from '@/trpc'
 
 const { t } = useI18n()
 const pendingMB = ref(false)
@@ -23,7 +24,17 @@ const maFile = ref<File>()
 const pendingMin = ref(false)
 const minFocusPdf = ref<File>()
 
-function deleteMinFocus() {}
+async function deleteMinFocus() {
+  try {
+    await trpc.admin.courses.deleteMinFocus.mutate()
+    statusMsg.value = 'MIN Schwerpunkte erfolgreich gelöscht'
+    status.value = 'success'
+  } catch (e) {
+    console.error(e)
+    statusMsg.value = t('global.unknown-error')
+    status.value = 'error'
+  }
+}
 
 async function uploadMinFocusPdf() {
   pendingMin.value = true

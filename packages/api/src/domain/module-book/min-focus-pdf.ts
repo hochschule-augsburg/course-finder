@@ -7,17 +7,24 @@ import { promisify } from 'util'
 import { prisma } from '../../prisma/prisma.ts'
 const exec = promisify(execOriginal)
 
-const TABLE_COLUMNS = [
-  'Name',
-  'SWS',
-  'CP',
-  'Dozent',
+const TABLE_COLUMNS = ['Name', 'SWS', 'CP', 'Dozent'] as const
+const TABLE_COLUMNS_FOCUS = [
   'Medieninformatik',
   'SW-Engineering',
   'IT-Sicherheit',
   'Technische Informatik',
   'Data Science',
 ] as const
+
+const TABLE_COLUMNS_LEN = TABLE_COLUMNS.length + TABLE_COLUMNS_FOCUS.length
+
+type CourseFocus = {
+  CP: string
+  Dozent: string
+  focuses: Record<string, string[]>
+  Name: string
+  SWS: string
+}
 
 export async function loadMinFocusPdf(pdfBuffer: Buffer) {
   const dir = tmpdir()
@@ -31,23 +38,37 @@ export async function loadMinFocusPdf(pdfBuffer: Buffer) {
     const courses = await prisma.course.findMany({
       select: {
         lecturers: true,
+        moduleCode: true,
         title: true,
       },
     })
 
-    console.log(courses)
+    const notFoundCourses: CourseFocus[] = []
+    const updates = tableRows
+      .map((row) => {
+        const course = courses.find((course) => course.title.de === row.Name)
+        if (!course) {
+          notFoundCourses.push(row)
+          return undefined
+        }
+        return prisma.course.update({
+          data: {
+            minFocus: row.focuses,
+          },
+          where: { moduleCode: course.moduleCode },
+        })
+      })
+      .filter((e) => !!e)
+    await prisma.$transaction([
+      ...updates,
+      prisma.appConf.updateMany({
+        data: { hasMinFocuses: true },
+      }),
+    ])
 
-    let notFoundCount = 0
-    tableRows.forEach((row) => {
-      const course = courses.find((course) => course.title.de === row.Name)
-      if (!course) {
-        notFoundCount++
-        console.log(`Course not found: ${row.Name}`)
-      }
-    })
-    console.log(
-      `Total courses not found: ${notFoundCount} out of ${tableRows.length}`,
-    )
+    return {
+      notFoundCourses,
+    }
   } finally {
     await unlink(pdfPath)
   }
@@ -110,7 +131,7 @@ async function parseTable(pdfPath: string, tooLongNames: string[]) {
     .flatMap((page) =>
       page
         .split('\n\n')
-        .slice(TABLE_COLUMNS.length)
+        .slice(TABLE_COLUMNS_LEN)
         .map((e) => e.trim()),
     )
     .filter((cell) => cell.length)
@@ -124,16 +145,32 @@ async function parseTable(pdfPath: string, tooLongNames: string[]) {
     }
     return [cell]
   })
-  const tableRawRows = chunk(fixedTooLongCells, TABLE_COLUMNS.length)
+  const tableRawRows = chunk(fixedTooLongCells, TABLE_COLUMNS_LEN)
   const tableRows = tableRawRows.map((row) => {
-    const rowData: Record<string, string> = {}
+    const rowData: CourseFocus = {
+      CP: '',
+      Dozent: '',
+      focuses: {},
+      Name: '',
+      SWS: '',
+    }
     row.forEach((cell, index) => {
+      if (index > TABLE_COLUMNS.length - 1) {
+        const columnName = TABLE_COLUMNS_FOCUS[index - TABLE_COLUMNS.length]
+        if (cell === '-') {
+          return []
+        }
+        if (columnName) {
+          rowData.focuses[columnName] = cell.split('oder').map((e) => e.trim())
+        }
+        return
+      }
       const columnName = TABLE_COLUMNS[index]
       if (columnName) {
         rowData[columnName] = cell.trim()
       }
     })
-    return rowData as Record<(typeof TABLE_COLUMNS)[number], string>
+    return rowData
   })
   return tableRows.map((row) => ({
     ...row,

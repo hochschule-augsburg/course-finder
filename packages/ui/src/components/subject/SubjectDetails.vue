@@ -2,6 +2,7 @@
 import {
   mdiAccountMultiple,
   mdiAlertCircle,
+  mdiBullseyeArrow,
   mdiCalendar,
   mdiFullscreen,
   mdiFullscreenExit,
@@ -27,6 +28,7 @@ import type { Subject } from '@/stores/CoursesStore'
 import 'vue-pdf-embed/dist/styles/annotationLayer.css'
 import 'vue-pdf-embed/dist/styles/textLayer.css'
 
+import { useAppConfStore } from '@/stores/AppConfStore'
 import { useUserStore } from '@/stores/UserStore'
 import { trpc } from '@/trpc'
 
@@ -38,6 +40,7 @@ const { locale, t } = useI18n()
 const { mobile } = useDisplay()
 
 const userStore = useUserStore()
+const appConfStore = useAppConfStore()
 
 const { state: pdfSource } = useAsyncState(
   async () =>
@@ -63,6 +66,17 @@ ${props.subject.maExam}
     exam = props.subject.maExam || props.subject.exam
   }
   return exam?.replaceAll('•', '-')
+})
+const minFocusFiltered = computed(() => {
+  if (!props.subject.minFocus) {
+    return []
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.entries(props.subject.minFocus)
+    .filter(([_, focus]) => {
+      return focus.length > 0
+    })
+    .sort()
 })
 </script>
 
@@ -99,6 +113,24 @@ ${props.subject.maExam}
               <h4>{{ t('exam') }}</h4>
             </div>
             <CfMarkdown :source="exam" class="markdown" />
+          </section>
+
+          <section
+            v-if="
+              userStore.user?.Student?.fieldOfStudy !== 'Informatik (Master)' &&
+              appConfStore.hasMinFocuses &&
+              subject.minFocus
+            "
+          >
+            <div class="icon-heading">
+              <VIcon :icon="mdiBullseyeArrow" size="32" />
+              <h4>{{ t('min-focus') }}</h4>
+            </div>
+            <ul>
+              <li v-for="[field, focus] in minFocusFiltered" :key="field">
+                {{ field }}: {{ focus.join(' oder ') }}
+              </li>
+            </ul>
           </section>
 
           <template v-if="subject.offeredCourse">
@@ -349,6 +381,7 @@ en:
   course-note: Note about course
   semester-note: Note about Semester
   exam: Exam
+  min-focus: Master Computer Science Focus
 de:
   lecturers: Dozenten
   workload: Arbeitsaufwand
@@ -359,4 +392,5 @@ de:
   course-note: Kurshinweis
   semester-note: Semesterhinweis
   exam: Prüfung
+  min-focus: Master Informatik Schwerpunkt
 </i18n>

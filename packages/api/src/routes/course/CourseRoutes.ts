@@ -120,6 +120,7 @@ const courseFields: { [key in keyof Course]: boolean } = {
   lecturers: true,
   maExam: true,
   maPdf: false,
+  minFocus: true,
   moduleCode: true,
   pdf: false,
   published: true,

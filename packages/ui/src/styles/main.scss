@@ -8,6 +8,13 @@
   --v-onboarding-step-arrow-background: rgb(var(--v-theme-primary));
 }
 
+ul {
+  padding: revert;
+}
+ol {
+  padding: revert;
+}
+
 .v-card:hover .v-card-title {
   color: rgb(var(--v-theme-primary));
 }

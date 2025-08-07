@@ -35,15 +35,3 @@ const plugins = [newTabLinkPlugin]
     class="cf-markdown-component"
   />
 </template>
-
-<!-- eslint-disable-next-line vue/enforce-style-attribute -->
-<style lang="scss">
-.cf-markdown-component {
-  ul {
-    padding: revert;
-  }
-  ol {
-    padding: revert;
-  }
-}
-</style>

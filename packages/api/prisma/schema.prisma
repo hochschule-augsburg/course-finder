@@ -30,6 +30,7 @@ model AppConf {
   id                    Singleton @id @default(Instance)
   maxCredits            Int       @default(30)
   moduleBookLastUpdated DateTime? @default(now())
+  hasMinFocuses         Boolean   @default(false)
 }
 
 model User {

@@ -48,6 +48,15 @@ export const coursesRoutes = router({
         },
       })
     }),
+  deleteMinFocus: adminProcedure.mutation(async () => {
+    await prisma.course.updateMany({
+      data: { minFocus: null },
+    })
+    await prisma.appConf.updateMany({
+      data: { hasMinFocuses: false },
+    })
+    return true
+  }),
   list: adminProcedure.query(() => {
     return prisma.course.findMany({
       orderBy: {
@@ -81,6 +90,7 @@ const courseFields: { [key in keyof Course]: boolean } = {
   lecturers: true,
   maExam: true,
   maPdf: false,
+  minFocus: true,
   moduleCode: true,
   pdf: false,
   published: true,
