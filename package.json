@@ -20,7 +20,12 @@
   "version": "0.0.0",
   "pnpm": {
     "onlyBuiltDependencies": [
-      "esbuild"
+      "@prisma/client",
+      "@prisma/engines",
+      "core-js",
+      "esbuild",
+      "prisma",
+      "vue-demi"
     ]
   },
   "packageManager": "pnpm@10.2.0",

@@ -1,13 +1,14 @@
 import { z } from 'zod'
 
 import { prisma } from '../prisma/prisma.ts'
-import { adminProcedure, router, studentProcedure } from './trpc.ts'
+import { adminProcedure, publicProcedure, router } from './trpc.ts'
 
 export const appConfRoutes = router({
-  read: studentProcedure.query(async () => {
+  read: publicProcedure.query(async () => {
     return await prisma.appConf.findFirst({
       select: {
         maxCredits: true,
+        moduleBookLastUpdated: true,
       },
     })
   }),

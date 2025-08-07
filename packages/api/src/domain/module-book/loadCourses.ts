@@ -58,6 +58,9 @@ export async function loadCourses(pdfs: { baPdf?: Buffer; maPdf?: Buffer }) {
         moduleCode: { in: notFoundCourses.map((e) => e.moduleCode) },
       },
     }),
+    prisma.appConf.updateMany({
+      data: { moduleBookLastUpdated: new Date() },
+    }),
   ])
 
   return { messages: messages, status: 'success' }
