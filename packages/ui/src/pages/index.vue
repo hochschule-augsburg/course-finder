@@ -171,7 +171,7 @@ en:
   enroll: Enroll
   table-view: Use table view
   tile-view: Use tile view
-  module-book-info: Data last updated on {0}.
+  module-book-info: Data in CourseFinder last updated on {0}.
 
     For the most up-to-date and reliable information, please visit your study's
     website.
@@ -182,7 +182,7 @@ de:
   enroll: Einschreiben
   table-view: Benutze Tabellenansicht
   tile-view: Benutze Kästchenansicht
-  module-book-info: Daten zuletzt am {0} aktualisiert.
+  module-book-info: Zuletzt in CourseFinder am {0} aktualisiert.
 
     Auf der Website des Studiengangs findest du die aktuellsten und
     verlässlichsten Informationen.

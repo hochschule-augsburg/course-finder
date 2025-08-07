@@ -127,7 +127,7 @@ function getHalfTime(date1: Date, date2: Date) {
 
 async function main() {
   const options = {
-    'download-courses-pdf': { type: 'boolean' },
+    'download-ba-courses': { type: 'boolean' },
     'no-test-data': { type: 'boolean' },
     'old-courses': { type: 'boolean' },
   } as const
@@ -304,7 +304,7 @@ async function main() {
   if (values['old-courses']) {
     await fillOldCourses()
   }
-  if (values['download-courses-pdf']) {
+  if (values['download-ba-courses']) {
     const pdfUrl =
       'https://cloud.hs-augsburg.de/index.php/s/e6bYJTCP4JQ5RXj/download/Modulhandbuch_WPF_Bachelor.pdf'
     const pdf = await fetch(pdfUrl).then((res) => res.arrayBuffer())

@@ -14,7 +14,7 @@ FROM base AS api
 COPY --from=build /prod/api /prod/api
 WORKDIR /prod/api
 EXPOSE 2022
-RUN apt-get update && apt-get install -y pdftk
+RUN apt-get update && apt-get install -y pdftk poppler-utils
 # strangely this is not done by the build script
 RUN pnpm run db:generate
 CMD [ "pnpm", "start" ]

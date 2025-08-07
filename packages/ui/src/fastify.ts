@@ -19,6 +19,7 @@ export async function fetchFastify<T extends keyof FastifyRoutesBody>(
     ...assign({}, init, fastifyRoutes[input]),
     body: data,
     credentials: 'include',
+    method: 'POST',
   })
 
   if (!result.ok) {
