@@ -13,12 +13,12 @@ const emits = defineEmits<{
 <template>
   <VDialog
     :model-value="props.visible"
-    max-width="600px"
+    max-width="60rem"
     @update:model-value="$emit('close')"
   >
     <VCard>
       <VCardTitle> Fehler </VCardTitle>
-      <VCardText>
+      <VCardText class="error-text">
         {{ props.message }}
       </VCardText>
       <VCardActions>
@@ -27,3 +27,10 @@ const emits = defineEmits<{
     </VCard>
   </VDialog>
 </template>
+
+<style lang="scss" scoped>
+.error-text {
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+</style>
