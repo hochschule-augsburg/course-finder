@@ -118,7 +118,7 @@ const minFocusFiltered = computed(() => {
           <section
             v-if="
               userStore.user?.Student?.fieldOfStudy !== 'Informatik (Master)' &&
-              appConfStore.hasMinFocuses &&
+              appConfStore.conf?.hasMinFocuses &&
               subject.minFocus
             "
           >

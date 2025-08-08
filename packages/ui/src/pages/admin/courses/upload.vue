@@ -40,6 +40,9 @@ async function uploadMinFocusPdf() {
   pendingMin.value = true
   try {
     const formData = new FormData()
+    if (!minFocusPdf.value) {
+      throw new Error('No file selected')
+    }
     formData.append('file', minFocusPdf.value)
 
     await fetchFastify('/admin/courses/update-min-focus', formData)

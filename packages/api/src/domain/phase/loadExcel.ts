@@ -6,8 +6,7 @@ import XLSX from 'xlsx'
 import { z, ZodError } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
 
-import type { OfferedCourseData } from '../../../../ui/src/components/admin/types.ts'
-import type { I18nJson } from '../../prisma/PrismaTypes.ts'
+import type { I18nJson, OfferedCourseData } from '../../prisma/PrismaTypes.ts'
 
 import { env } from '../../env.ts'
 import { prisma } from '../../prisma/prisma.ts'
@@ -20,6 +19,12 @@ import { fieldsOfStudy } from '../enroll/enrollUtils.ts'
 const genAi = new GoogleGenerativeAI(env.AI_API_KEY)
 
 const model = genAi.getGenerativeModel({ model: 'gemini-2.0-flash' })
+
+class DateError extends Error {
+  constructor(str: string) {
+    super(`Invalid date format: ${str}`)
+  }
+}
 
 export async function loadExcel(file: Buffer) {
   const courses = await prisma.course.findMany({
@@ -161,12 +166,6 @@ async function parseCourses(
   })
 
   return { errors, offeredCourses }
-}
-
-class DateError extends Error {
-  constructor(str: string) {
-    super(`Invalid date format: ${str}`)
-  }
 }
 
 function parseDate(dateStr: string): Date {

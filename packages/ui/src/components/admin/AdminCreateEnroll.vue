@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { OfferedCourseData } from '@workspace/api/src/prisma/PrismaTypes'
+
 import { isWithinInterval } from 'date-fns'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref } from 'vue'
@@ -23,8 +25,6 @@ import { fetchFastify } from '@/fastify'
 import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
-
-import type { OfferedCourseData } from './types'
 
 const props = defineProps<{ phaseId?: number }>()
 

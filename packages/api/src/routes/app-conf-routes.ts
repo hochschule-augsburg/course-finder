@@ -7,6 +7,7 @@ export const appConfRoutes = router({
   read: publicProcedure.query(async () => {
     return await prisma.appConf.findFirst({
       select: {
+        hasMinFocuses: true,
         maxCredits: true,
         moduleBookLastUpdated: true,
       },
