@@ -290,7 +290,10 @@ async function main() {
             create: {
               faculty: 'Informatik',
               fieldOfStudy: study,
-              finalDegree: study.includes('Master') ? 'Master' : 'Bachelor',
+              finalDegree:
+                study.includes('Master') || abbr === 'ins'
+                  ? 'Master'
+                  : 'Bachelor',
               term: parseInt(abbr.match(/\d+$/)?.[0] ?? '0') || 4,
             },
           },
