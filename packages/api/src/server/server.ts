@@ -21,7 +21,7 @@ declare module '@fastify/jwt' {
 export async function createServer() {
   const server = fastify({
     logger: {
-      level: 'warn',
+      level: env.LOG_LEVEL,
     },
   })
 

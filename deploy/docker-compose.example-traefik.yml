@@ -19,4 +19,16 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
+    labels:
+      - 'traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)'
+      - 'traefik.http.routers.http-catchall.entrypoints=web'
+      - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+      - 'traefik.http.routers.http-catchall.service=httpnoop@internal'
+      - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
     restart: unless-stopped
+    networks:
+      - traefik-net
+
+networks:
+  traefik-net:
+    external: true

@@ -10,6 +10,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32),
   LDAP_BASE_DN: z.string(),
   LDAP_URL: z.string().url(),
+  LOG_LEVEL: z.string().default('warn'),
   MAIL_RECEIVERS: z
     .string()
     .transform((e) => e.split(',').map((e) => e.trim())),
