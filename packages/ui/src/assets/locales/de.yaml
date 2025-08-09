@@ -93,7 +93,7 @@ pages:
       upload: Hochladen
     phases:
       index: Phasen
-      "[phaseId]":
+      ":phaseId":
         index: "{phaseId}"
         edit: Bearbeiten
   gdpr: Datenschutz

@@ -87,7 +87,7 @@ pages:
       upload: Upload
     phases:
       index: Phases
-      phaseId:
+      :phaseId:
         index: "{phaseId}"
         edit: Edit
   gdpr: Data Privacy

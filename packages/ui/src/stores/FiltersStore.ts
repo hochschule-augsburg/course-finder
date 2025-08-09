@@ -181,7 +181,7 @@ export const useFiltersStore = defineStore('filters', () => {
           if (!subject.minFocus) {
             return false
           }
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
           const options = Object.entries(subject.minFocus).flatMap(
             ([key, value]: [string, string[]]) => {
               return value.map((v) => `${key}#${v}`)

@@ -71,9 +71,10 @@ const minFocusFiltered = computed(() => {
   if (!props.subject.minFocus) {
     return []
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
   return Object.entries(props.subject.minFocus)
     .filter(([_, focus]) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return focus.length > 0
     })
     .sort()

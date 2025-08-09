@@ -250,7 +250,7 @@ async function uploadExcel() {
     sharedObject.value = res.offeredCourses
   } catch (e) {
     showErrorDialog.value = true
-    errorDialogMessage.value = 'Unbekannter Fehler' + e
+    errorDialogMessage.value = 'Unbekannter Fehler' + String(e)
   } finally {
     isUploading.value = false
   }
