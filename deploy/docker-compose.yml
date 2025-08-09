@@ -11,31 +11,40 @@ services:
       - database
     labels:
       - 'traefik.enable=true'
+
+      # API router
       - 'traefik.http.routers.api.rule=Host(`course-finder.informatik.tha.de`)
         && PathPrefix(`/api`)'
-      - 'traefik.http.routers.api.priority=10' # explicit lower priority than login but higher than ui
+      - 'traefik.http.routers.api.priority=10'
       - 'traefik.http.routers.api.entrypoints=websecure'
       - 'traefik.http.routers.api.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.api.service=api'
       - 'traefik.http.services.api.loadbalancer.server.port=2022'
       - 'traefik.http.middlewares.api-ratelimit.ratelimit.average=40'
       - 'traefik.http.middlewares.api-ratelimit.ratelimit.burst=20'
       - 'traefik.http.routers.api.middlewares=api-ratelimit,security-headers,gzip'
+
       # Stricter rate limit for login endpoint
       - 'traefik.http.routers.api-login.rule=Host(`course-finder.informatik.tha.de`)
         && PathRegexp(`/api/trpc/.*auth\\.login`)'
       - 'traefik.http.routers.api-login.priority=100'
       - 'traefik.http.routers.api-login.entrypoints=websecure'
       - 'traefik.http.routers.api-login.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.api-login.service=api'
       - 'traefik.http.services.api-login.loadbalancer.server.port=2022'
       - 'traefik.http.middlewares.api-login-ratelimit.ratelimit.average=1'
       - 'traefik.http.middlewares.api-login-ratelimit.ratelimit.burst=5'
       - 'traefik.http.routers.api-login.middlewares=api-login-ratelimit,security-headers,gzip'
 
-      # http->https redirect
+      # HTTP -> HTTPS redirect
       - 'traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)'
       - 'traefik.http.routers.http-catchall.entrypoints=web'
       - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+      - 'traefik.http.routers.http-catchall.service=api'
       - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
+
+    networks:
+      - traefik-net
 
   ui:
     build:
@@ -48,17 +57,21 @@ services:
       - api
     labels:
       - 'traefik.enable=true'
+
+      # UI router
       - 'traefik.http.routers.ui.rule=Host(`course-finder.informatik.tha.de`)'
-      - 'traefik.http.routers.ui.priority=1' # explicit lower than api
+      - 'traefik.http.routers.ui.priority=1'
       - 'traefik.http.routers.ui.entrypoints=websecure'
       - 'traefik.http.routers.ui.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.ui.service=ui'
       - 'traefik.http.services.ui.loadbalancer.server.port=80'
       - 'traefik.http.routers.ui.middlewares=security-headers,gzip'
 
-      # http->https redirect
+      # HTTP -> HTTPS redirect
       - 'traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)'
       - 'traefik.http.routers.http-catchall.entrypoints=web'
       - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+      - 'traefik.http.routers.http-catchall.service=ui'
       - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
 
       ## Global middlewares
@@ -71,6 +84,8 @@ services:
       - 'traefik.http.middlewares.gzip.compress=true'
 
     restart: unless-stopped
+    networks:
+      - traefik-net
 
   database:
     image: postgres:17.4-alpine3.21
@@ -79,6 +94,9 @@ services:
     volumes:
       - /var/lib/data:/var/lib/postgresql/data
     ports:
-      # only development
       - '127.0.0.1:5432:5432'
     restart: unless-stopped
+
+networks:
+  traefik-net:
+    external: true
