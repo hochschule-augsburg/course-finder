@@ -73,13 +73,15 @@ export async function buildExcelResults(
     const registration = registrations.find((e) => e.moduleCode === module)
 
     return {
-      Title: `${course.Course.title.de} (${module})`,
-      Lecturers: course.Course.lecturers.toSorted().join(', '),
-      AssignedCount: assignedStuds.length,
-      StudentEmails: emails.join(', '),
-      Min: course.minParticipants,
-      Max: course.maxParticipants,
-      RegistrationCount: registration?._count.moduleCode ?? 0,
+      Kürzel: module,
+      Titel: course.Course.title.de,
+      Dozenten: course.Course.lecturers.toSorted().join(', '),
+      Minimum: course.minParticipants,
+      Maximum: course.maxParticipants,
+      'Anzahl Interessenten': registration?._count.moduleCode ?? 0,
+      'Anzahl Zugewiesene': assignedStuds.length,
+      StudentenEmails: emails.join(', '),
+      Zusatzinfo: course.extraInfo ?? '',
     }
   })
 
@@ -110,13 +112,14 @@ export async function buildExcelResults(
   })
 
   const notEnoughSheet = notEnoughRegistrations.map((course) => ({
-    Title: `${course.Course.title.de} (${course.moduleCode})`,
-    Lecturers: course.Course.lecturers.toSorted().join(', '),
-    RegistrationCount:
+    Kürzel: course.moduleCode,
+    Titel: course.Course.title.de,
+    Dozenten: course.Course.lecturers.toSorted().join(', '),
+    Minimum: course.minParticipants,
+    Maximum: course.maxParticipants,
+    'Anzahl Interessenten':
       registrations.find((e) => e.moduleCode === course.moduleCode)?._count
         .moduleCode ?? 0,
-    Min: course.minParticipants,
-    Max: course.maxParticipants,
   }))
 
   const StudentSheet = sortedAssignments.flatMap(([module, assignedStuds]) => {
@@ -130,88 +133,117 @@ export async function buildExcelResults(
         throw new Error(`User not found for username: ${stud.username}`)
 
       return {
+        Kürzel: module,
+        Titel: offeredCourse?.Course.title.de ?? 'Unbekannt',
+        Dozenten:
+          offeredCourse?.Course.lecturers.toSorted().join(', ') ?? 'Unbekannt',
         Name: user.name,
         Email: user.email,
-        FieldOfStudy: user.Student!.fieldOfStudy,
-        Term: user.Student!.term,
-        RegNumber: user.Student!.regNumber,
-        Username: user.username,
+        Studiengang: user.Student!.fieldOfStudy,
+        Semester: user.Student!.term,
+        Matrikelnummer: user.Student!.regNumber,
+        Benutzername: user.username,
       }
     })
     return [
       {
-        Titel: offeredCourse?.Course.title.de ?? 'Unknown',
-        ModuleCode: module,
+        Kürzel: module,
+        Titel: offeredCourse?.Course.title.de ?? 'Unbekannt',
         Dozenten:
-          offeredCourse?.Course.lecturers.toSorted().join(', ') ?? 'Unknown',
+          offeredCourse?.Course.lecturers.toSorted().join(', ') ?? 'Unbekannt',
+        Name: '-', // prevent overflowing cell
+        Email: '',
+        Studiengang: '',
+        Semester: '',
+        Matrikelnummer: '',
+        Benutzername: '',
       },
-      studentsData,
+      ...studentsData,
     ]
   })
+  console.log(StudentSheet)
 
   // Generate Excel workbook
   const workbook = XLSX.utils.book_new()
 
   const assignmentSheetWs = XLSX.utils.json_to_sheet(assignmentSheet, {
     header: [
+      'Kürzel',
       'Titel',
       'Dozenten',
-      'StudentEmails',
-      'Min',
-      'Max',
-      'RegistrationCount',
-      'AssignedCount',
-      'ExtraInfo',
+      'Minimum',
+      'Maximum',
+      'Anzahl Interessenten',
+      'Anzahl Zugewiesene',
+      'StudentenEmails',
+      'Zusatzinfo',
     ],
   })
   assignmentSheetWs['!cols'] = [
-    { wch: 30 }, // Title
-    { wch: 20 }, // Lecturers
-    { wch: 20 }, // StudentEmails
-    { wch: 10 }, // Min
-    { wch: 10 }, // Max
-    { wch: 10 }, // RegistrationCount
-    { wch: 10 }, // AssignedCount
-    { wch: 50 }, // ExtraInfo
+    { wch: 13 }, // Kürzel
+    { wch: 30 }, // Titel
+    { wch: 25 }, // Dozenten
+    { wch: 10 }, // Minimum
+    { wch: 10 }, // Maximum
+    { wch: 20 }, // Anzahl Interessenten
+    { wch: 20 }, // Anzahl Zugewiesene
+    { wch: 20 }, // StudentenEmails
+    { wch: 50 }, // Zusatzinfo
   ]
   const notEnoughSheetWs = XLSX.utils.json_to_sheet(notEnoughSheet, {
     header: [
+      'Kürzel',
       'Titel',
-      'ModuleCode',
       'Dozenten',
-      'RegistrationCount',
-      'Min',
-      'Max',
+      'Minimum',
+      'Maximum',
+      'Anzahl Interessenten',
     ],
   })
   notEnoughSheetWs['!cols'] = [
-    { wch: 30 }, // Title
-    { wch: 20 }, // Lecturers
-    { wch: 10 }, // RegistrationCount
-    { wch: 10 }, // Min
-    { wch: 10 }, // Max
+    { wch: 13 }, // Kürzel
+    { wch: 30 }, // Titel
+    { wch: 25 }, // Dozenten
+    { wch: 10 }, // Minimum
+    { wch: 10 }, // Maximum
+    { wch: 20 }, // Anzahl Interessenten
   ]
   const studentSheetWs = XLSX.utils.json_to_sheet(StudentSheet, {
     header: [
+      'Kürzel',
       'Titel',
-      'ModuleCode',
       'Dozenten',
       'Name',
       'Email',
-      'FieldOfStudy',
-      'Term',
-      'RegNumber',
-      'Username',
+      'Studiengang',
+      'Semester',
+      'Matrikelnummer',
+      'Benutzername',
     ],
   })
+  studentSheetWs['!cols'] = [
+    { wch: 13 }, // Kürzel
+    { wch: 30 }, // Titel
+    { wch: 25 }, // Dozenten
+    { wch: 30 }, // Name
+    { wch: 34 }, // Email
+    { wch: 25 }, // Studiengang
+    { wch: 10 }, // Semester
+    { wch: 15 }, // Matrikelnummer
+    { wch: 14 }, // Benutzername
+  ]
 
-  XLSX.utils.book_append_sheet(workbook, assignmentSheetWs, `Assignments`)
+  XLSX.utils.book_append_sheet(
+    workbook,
+    assignmentSheetWs,
+    `Auslosung pro Modul`,
+  )
   XLSX.utils.book_append_sheet(
     workbook,
     notEnoughSheetWs,
-    `NotEnoughRegistrations`,
+    `Nicht Genug Anmeldungen`,
   )
-  XLSX.utils.book_append_sheet(workbook, studentSheetWs, `Students`)
+  XLSX.utils.book_append_sheet(workbook, studentSheetWs, `Studenten in Modulen`)
 
   const buffer = new Uint8Array(
     XLSX.write(workbook, {
