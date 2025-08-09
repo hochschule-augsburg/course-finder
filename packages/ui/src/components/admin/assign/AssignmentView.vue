@@ -51,14 +51,16 @@ onBeforeMount(async () => {
 })
 
 async function download() {
-  const yaml = await trpc.admin.assign.yaml.query({
+  const xlsx = await trpc.admin.assign.yaml.query({
     phaseId: props.phaseId,
     tryNo: tryNo.value,
   })
   const phase = coursesStore.phases[props.phaseId]
   saveAs(
-    new Blob([yaml], { type: 'text/yaml' }),
-    `results-${phase.title.de}-${tryNo.value}.yml`,
+    new Blob([xlsx], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    }),
+    `results-${phase.title.de}-${tryNo.value}.xlsx`,
   )
 }
 
