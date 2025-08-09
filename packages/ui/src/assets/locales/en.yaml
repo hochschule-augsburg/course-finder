@@ -33,6 +33,7 @@ filter:
   irregular: irregular
   exam-type: Examination
   exam-type-stud: Examination for your degree
+  min-focus: Master Computer Science focus
   ex:
     written-exam: Written exam
     project-work: Project work
@@ -41,7 +42,6 @@ filter:
     e-written: Electronic Exam
     oral: Oral exam
     misc: Miscellaneous
-
 
 phase-states:
   not-started: Not started
@@ -70,8 +70,7 @@ tour:
   desc:
     enrollment-overview: Here is an overview of the current enrollment phase.
     filter-section: Here you can filter the courses.
-    subject-element:
-      Each element represents a course. Click to see more details.
+    subject-element: Each element represents a course. Click to see more details.
     enroll-checkbox: Click here to select a course.
     enroll-button: Click here to prioritize and enroll in the selected courses.
     nav-bar:
@@ -89,7 +88,7 @@ pages:
     phases:
       index: Phases
       phaseId:
-        index: '{phaseId}'
+        index: "{phaseId}"
         edit: Edit
   gdpr: Data Privacy
   imprint: Imprint

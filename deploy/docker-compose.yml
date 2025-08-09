@@ -11,6 +11,7 @@ services:
       - database
     labels:
       - 'traefik.enable=true'
+      - 'traefik.docker.network=traefik-net' # as api is in two networks, we need to specify the traefik network explicitly
 
       # API router
       - 'traefik.http.routers.api.rule=Host(`course-finder.informatik.tha.de`)
