@@ -123,7 +123,7 @@ async function uploadModuleBooks() {
         <VFileInput
           v-model="minFocusPdf"
           accept=".pdf"
-          label="Master Modulhandbuch auswählen"
+          label="MIN Schwerpunkt PDF auswählen"
           placeholder="Datei auswählen"
           outlined
         />
