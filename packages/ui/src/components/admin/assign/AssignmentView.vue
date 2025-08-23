@@ -51,7 +51,7 @@ onBeforeMount(async () => {
 })
 
 async function download() {
-  const xlsx = await trpc.admin.assign.yaml.query({
+  const xlsx = await trpc.admin.assign.export.query({
     phaseId: props.phaseId,
     tryNo: tryNo.value,
   })

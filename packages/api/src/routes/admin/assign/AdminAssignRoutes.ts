@@ -64,6 +64,20 @@ export const assignRouter = router({
         tryNo,
       }
     }),
+  export: adminProcedure
+    .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
+    .query(async ({ input }) => {
+      const results = await prisma.phaseAssignment.findMany({
+        select: { moduleCode: true, username: true },
+        where: { phaseId: input.phaseId, tryNo: input.tryNo },
+      })
+
+      const phase = (await prisma.enrollphase.findUnique({
+        where: { id: input.phaseId },
+      }))!
+
+      return await buildExcelResults(phase, results)
+    }),
   list: adminProcedure
     .input(z.object({ phaseId: z.number() }))
     .query(
@@ -113,19 +127,5 @@ export const assignRouter = router({
       }))!
       await emailToLists(phase)
       await emailToStudents(phase, results)
-    }),
-  yaml: adminProcedure
-    .input(z.object({ phaseId: z.number(), tryNo: z.number() }))
-    .query(async ({ input }) => {
-      const results = await prisma.phaseAssignment.findMany({
-        select: { moduleCode: true, username: true },
-        where: { phaseId: input.phaseId, tryNo: input.tryNo },
-      })
-
-      const phase = (await prisma.enrollphase.findUnique({
-        where: { id: input.phaseId },
-      }))!
-
-      return await buildExcelResults(phase, results)
     }),
 })
