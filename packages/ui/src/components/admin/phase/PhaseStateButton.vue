@@ -1,11 +1,4 @@
 <script lang="ts" setup>
-import type { Phase } from '@/stores/admin/AdminCoursesStore'
-
-import { phaseStates as orgPhaseStates } from '@/helper/enums/phaseStates'
-import {
-  useAdminCoursesStore,
-  usePhaseState,
-} from '@/stores/admin/AdminCoursesStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -15,6 +8,14 @@ import {
   VSnackbar,
   VTooltip,
 } from 'vuetify/components'
+
+import type { Phase } from '@/stores/admin/AdminCoursesStore'
+
+import { phaseStates as orgPhaseStates } from '@/helper/enums/phaseStates'
+import {
+  useAdminCoursesStore,
+  usePhaseState,
+} from '@/stores/admin/AdminCoursesStore'
 
 const props = defineProps<{ phaseId: number }>()
 

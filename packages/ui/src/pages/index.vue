@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useAssignStore } from '@/stores/AssignStore'
-import { useCoursesStore } from '@/stores/CoursesStore'
-import { useEnrollmentStore } from '@/stores/EnrollmentStore'
-import { homeTour, useTourStore } from '@/stores/TourStore'
-import { useUserStore } from '@/stores/UserStore'
-import { mdiDotsGrid, mdiFormatListBulleted, mdiPenLock } from '@mdi/js'
+import {
+  mdiDotsGrid,
+  mdiFormatListBulleted,
+  mdiInformation,
+  mdiPenLock,
+} from '@mdi/js'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -12,17 +12,26 @@ import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 import { VBadge, VBtn, VBtnToggle, VIcon, VTooltip } from 'vuetify/components'
 
+import { useAppConfStore } from '@/stores/AppConfStore'
+import { useAssignStore } from '@/stores/AssignStore'
+import { useCoursesStore } from '@/stores/CoursesStore'
+import { useEnrollmentStore } from '@/stores/EnrollmentStore'
+import { homeTour, useTourStore } from '@/stores/TourStore'
+import { useUserStore } from '@/stores/UserStore'
+
 defineOptions({
   name: 'CourseEnrollmentOverview',
 })
 
 const router = useRouter()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 
 const enrollmentStore = useEnrollmentStore()
 const coursesStore = useCoursesStore()
 const userStore = useUserStore()
 const assignStore = useAssignStore()
+
+const appConfigStore = useAppConfStore()
 
 const pendingEnroll = computed(() =>
   enrollmentStore.enrolledSubjects.some((e) => !e.points),
@@ -66,11 +75,29 @@ const overviewPhase = computed(
     <div class="pt-1 mx-5">
       <FilterSection />
       <div class="mt-5">
-        <h2 v-if="coursesStore.currentPhase">
-          {{ t('your-courses-for', [userStore.user?.Student?.fieldOfStudy]) }}
-        </h2>
-        <template v-else>
-          <h2>{{ t('courses-from-module-book') }}</h2>
+        <div class="d-flex align-center">
+          <h2 v-if="coursesStore.currentPhase">
+            {{ t('your-courses-for', [userStore.user?.Student?.fieldOfStudy]) }}
+          </h2>
+          <template v-else>
+            <h2>{{ t('courses-from-module-book') }}</h2>
+          </template>
+          <VTooltip location="top" offset="2" max-width="300rem">
+            <span class="text-pre-wrap">
+              {{
+                t('module-book-info', [
+                  appConfigStore.conf?.moduleBookLastUpdated?.toLocaleDateString(
+                    locale,
+                  ) ?? 'unknown',
+                ])
+              }}
+            </span>
+            <template #activator="{ props }">
+              <VIcon v-bind="props" class="ml-2" :icon="mdiInformation" />
+            </template>
+          </VTooltip>
+        </div>
+        <template v-if="!coursesStore.currentPhase">
           <span class="text-subtitle-1">{{ t('not-all-offered-each') }}</span>
         </template>
       </div>
@@ -144,6 +171,10 @@ en:
   enroll: Enroll
   table-view: Use table view
   tile-view: Use tile view
+  module-book-info: Data in CourseFinder last updated on {0}.
+
+    For the most up-to-date and reliable information, please visit your study's
+    website.
 de:
   your-courses-for: Deine Kurse für {0}
   courses-from-module-book: Kurse aus den aktuellen Modulhandbüchern
@@ -151,4 +182,8 @@ de:
   enroll: Einschreiben
   table-view: Benutze Tabellenansicht
   tile-view: Benutze Kästchenansicht
+  module-book-info: Zuletzt in CourseFinder am {0} aktualisiert.
+
+    Auf der Website des Studiengangs findest du die aktuellsten und
+    verlässlichsten Informationen.
 </i18n>

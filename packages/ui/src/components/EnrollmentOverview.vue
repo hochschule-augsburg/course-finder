@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { EnrollPhase } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { phaseStates } from '@/helper/enums/phaseStates'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSheet } from 'vuetify/components'
+
+import { phaseStates } from '@/helper/enums/phaseStates'
 
 const props = defineProps<{ phase: EnrollPhase | null | undefined }>()
 const { locale } = useI18n()

@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import type { EnrolledCourse } from '@/stores/EnrollmentStore'
-
-import { useAppConfStore } from '@/stores/AppConfStore'
-import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
-import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 import {
   mdiAlphaFCircle,
   mdiAlphaPCircle,
@@ -28,6 +23,12 @@ import {
   VTextField,
   VTooltip,
 } from 'vuetify/components'
+
+import type { EnrolledCourse } from '@/stores/EnrollmentStore'
+
+import { useAppConfStore } from '@/stores/AppConfStore'
+import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { MAX_POINTS, useEnrollmentStore } from '@/stores/EnrollmentStore'
 
 const { locale, t } = useI18n()
 const { mobile } = useDisplay()

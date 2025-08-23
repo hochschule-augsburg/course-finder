@@ -1,8 +1,9 @@
 import type { AppConf } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { trpc } from '@/trpc'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
+
+import { trpc } from '@/trpc'
 
 import { useUserStore } from './UserStore'
 
@@ -14,9 +15,7 @@ export const useAppConfStore = defineStore('app-conf', () => {
     () => userStore.user,
     async () => {
       try {
-        if (userStore.user) {
-          await fetch()
-        }
+        await fetch()
       } catch {
         // do nothing
       }

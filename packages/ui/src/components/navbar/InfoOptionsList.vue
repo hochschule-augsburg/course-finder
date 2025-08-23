@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useCoursesStore } from '@/stores/CoursesStore'
-import { homeTour, useTourStore } from '@/stores/TourStore'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { VDivider, VList, VListItem } from 'vuetify/components'
+
+import { useCoursesStore } from '@/stores/CoursesStore'
+import { homeTour, useTourStore } from '@/stores/TourStore'
 
 const route = useRoute()
 const { t } = useI18n()

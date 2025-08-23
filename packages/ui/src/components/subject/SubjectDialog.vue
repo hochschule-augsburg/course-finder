@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Subject } from '@/stores/CoursesStore'
-
 import { mdiLink } from '@mdi/js'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -16,6 +14,8 @@ import {
   VSpacer,
   VTooltip,
 } from 'vuetify/components'
+
+import type { Subject } from '@/stores/CoursesStore'
 
 defineProps<{
   subject?: Subject

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { RangeFilter } from '@/stores/FiltersStore'
-
-import { useFiltersStore } from '@/stores/FiltersStore'
 import { mdiFilter, mdiMagnify } from '@mdi/js'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VChip, VChipGroup, VIcon, VTextField } from 'vuetify/components'
+
+import type { RangeFilter } from '@/stores/FiltersStore'
+
+import { useFiltersStore } from '@/stores/FiltersStore'
 
 const { t } = useI18n()
 const { search } = storeToRefs(useFiltersStore())

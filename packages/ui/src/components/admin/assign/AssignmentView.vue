@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
-import { trpc } from '@/trpc'
 import { mdiDownload } from '@mdi/js'
 import { saveAs } from 'file-saver'
 import { computed, nextTick, onBeforeMount, ref } from 'vue'
@@ -18,6 +14,11 @@ import {
   VTabsWindowItem,
   VTooltip,
 } from 'vuetify/components'
+
+import { useAdminAssignStore } from '@/stores/admin/AdminAssignStore'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
+import { trpc } from '@/trpc'
 
 const props = defineProps<{ phaseId: number }>()
 const { locale } = useI18n()
@@ -50,14 +51,16 @@ onBeforeMount(async () => {
 })
 
 async function download() {
-  const yaml = await trpc.admin.assign.yaml.query({
+  const xlsx = await trpc.admin.assign.export.query({
     phaseId: props.phaseId,
     tryNo: tryNo.value,
   })
   const phase = coursesStore.phases[props.phaseId]
   saveAs(
-    new Blob([yaml], { type: 'text/yaml' }),
-    `results-${phase.title.de}-${tryNo.value}.yml`,
+    new Blob([xlsx], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    }),
+    `results-${phase.title.de}-${tryNo.value}.xlsx`,
   )
 }
 

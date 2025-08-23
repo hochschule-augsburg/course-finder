@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { AppConf } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { useAppConfStore } from '@/stores/AppConfStore'
 import { debounce } from 'lodash-es'
 import { ref } from 'vue'
 import { watch } from 'vue'
+
+import { useAppConfStore } from '@/stores/AppConfStore'
 
 const appConfigStore = useAppConfStore()
 

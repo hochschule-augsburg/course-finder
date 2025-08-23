@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import type { Phase } from '@/stores/admin/AdminCoursesStore'
+import type { OfferedCourseData } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { getLocalISOString } from '@/helper/LocaleDateFormat'
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { trpc } from '@/trpc'
 import { isWithinInterval } from 'date-fns'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref } from 'vue'
@@ -13,14 +10,21 @@ import {
   VBtn,
   VCol,
   VContainer,
+  VFileInput,
   VForm,
   VRow,
   VSelect,
+  VSpacer,
   VTextarea,
   VTextField,
 } from 'vuetify/components'
 
-import type { OfferedCourseData } from './types'
+import type { Phase } from '@/stores/admin/AdminCoursesStore'
+
+import { fetchFastify } from '@/fastify'
+import { getLocalISOString } from '@/helper/LocaleDateFormat'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 
 const props = defineProps<{ phaseId?: number }>()
 
@@ -227,6 +231,30 @@ function validate(): boolean {
 const requiredFieldRule = [
   (i: string | undefined) => !!i || t('validation.field-required'),
 ]
+const excelFile = ref<File>()
+const isUploading = ref(false)
+
+async function uploadExcel() {
+  if (!excelFile.value) {
+    return
+  }
+  const fetchData = new FormData()
+  fetchData.append('file', excelFile.value)
+  isUploading.value = true
+  try {
+    const res = await fetchFastify('/admin/enroll/offeredCourses', fetchData)
+    if (res.errors) {
+      showErrorDialog.value = true
+      errorDialogMessage.value = res.errors.join('\n--\n\n')
+    }
+    sharedObject.value = res.offeredCourses
+  } catch (e) {
+    showErrorDialog.value = true
+    errorDialogMessage.value = 'Unbekannter Fehler' + String(e)
+  } finally {
+    isUploading.value = false
+  }
+}
 </script>
 
 <template>
@@ -350,6 +378,24 @@ const requiredFieldRule = [
         </VCol>
       </VRow>
       <VRow>
+        <VCol sm="8">
+          <VFileInput
+            v-model="excelFile"
+            accept=".xls,.xlsx,.ods"
+            label="WPF Excel auswählen"
+            placeholder="Datei auswählen"
+            outlined
+          />
+        </VCol>
+        <VCol sm="4">
+          <VBtn
+            :loading="isUploading"
+            text="Daten übernehmen"
+            @click="uploadExcel"
+          />
+        </VCol>
+      </VRow>
+      <VRow>
         <VCol cols="12">
           <OfferedCourses
             v-if="adminCoursesStore.isInit"
@@ -374,7 +420,6 @@ const requiredFieldRule = [
       @close="
         () => {
           showErrorDialog = false
-          router.back()
         }
       "
     />

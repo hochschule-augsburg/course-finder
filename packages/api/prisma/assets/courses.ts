@@ -11,6 +11,7 @@ export const data: Course[] = [
     lecturers: ['Prof. Dr. Stefan Bensch'],
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ABAPGL6.WP',
     pdf: null,
     published: true,
@@ -25,10 +26,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dr.-Ing. Matthias Niedermaier'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'AST4.WP',
     pdf: null,
     published: true,
@@ -46,10 +48,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Matthias Regner, M.Eng.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'AEKDS4.WP',
     pdf: null,
 
@@ -68,10 +71,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl.-Inf. (FH) Gregor Liebermann, M.Sc.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SCRUM4.WP',
     pdf: null,
 
@@ -90,10 +94,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PYTHON4.WP',
     pdf: null,
 
@@ -112,10 +117,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Stefan Bensch'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'BEINF4.WP',
     pdf: null,
 
@@ -134,10 +140,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Björn Steven Häckel'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'CHRIMG2.WP',
     pdf: null,
 
@@ -156,10 +163,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jürgen Scholz'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'COM4.WP',
     pdf: null,
 
@@ -175,10 +183,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jürgen Scholz'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'COMDR.WP',
     pdf: null,
 
@@ -194,10 +203,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Philip McClenaghan'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'CGDEV4.WP',
     pdf: null,
 
@@ -213,10 +223,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Christoph Buck'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'CES4.WP',
     pdf: null,
 
@@ -235,10 +246,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DB3.WP',
     pdf: null,
 
@@ -254,10 +266,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Rolf Winter'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DAKO4.WP',
     pdf: null,
 
@@ -276,10 +289,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DAKOFZ4.WP',
     pdf: null,
 
@@ -298,10 +312,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DBANW3.WP',
     pdf: null,
 
@@ -317,10 +332,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Christoph Buck'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DIGINN4.WP',
     pdf: null,
 
@@ -336,10 +352,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Norbert Gerth'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DIBUS.WP',
     pdf: null,
 
@@ -358,10 +375,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jens Lauterbach'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DTO4.WP',
     pdf: null,
     published: true,
@@ -376,10 +394,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Norbert Gerth'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ECOMM6.WP',
     pdf: null,
 
@@ -395,10 +414,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Peter Schulik, M.Sc.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ITFORE6.WP',
     pdf: null,
 
@@ -417,10 +437,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dr. Phil. Alessandra Zarcone'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'EMSV4.WP',
     pdf: null,
 
@@ -439,10 +460,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Michael Strohmeier'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'EROB4.WP',
     pdf: null,
 
@@ -461,10 +483,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Hubert Högl'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'LINUX6.WP',
     pdf: null,
 
@@ -480,10 +503,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jürgen Scholz'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'EDPS2.WP',
     pdf: null,
 
@@ -502,10 +526,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Norbert Gerth'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'EXGD4.WP',
     pdf: null,
 
@@ -521,10 +546,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PROG.2',
     pdf: null,
 
@@ -543,10 +569,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Gundolf Kiefer'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'FSD4.WP',
     pdf: null,
 
@@ -565,10 +592,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['M.A. Katharina Heimrath'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'FGMG4.WP',
     pdf: null,
 
@@ -584,10 +612,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'FSWD6.WP',
     pdf: null,
 
@@ -606,10 +635,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DEVOPS4.WP',
     pdf: null,
 
@@ -625,10 +655,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Volodymyr Brovkov'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'HARSO.WP',
     pdf: null,
 
@@ -647,10 +678,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'HIP.WP',
     pdf: null,
 
@@ -669,10 +701,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Peter Rösch'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'INDBV4.WP',
     pdf: null,
 
@@ -691,10 +724,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'INDIV4.WP',
     pdf: null,
 
@@ -713,10 +747,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jürgen Scholz'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'INUM4.WP',
     pdf: null,
 
@@ -735,10 +770,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl.-Ing. Harald Röser'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SAPERP4.WP',
     pdf: null,
 
@@ -757,10 +793,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Michael Kipp'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'INTENG4.WP',
     pdf: null,
 
@@ -776,10 +813,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Peter Rösch'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'IACOGR6.WP',
     pdf: null,
 
@@ -798,10 +836,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Stephan Zimmermann'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ITC4.WP',
     pdf: null,
 
@@ -817,10 +856,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Lothar Braun'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ITSICH6.WP',
     pdf: null,
 
@@ -836,10 +876,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Arne Mayer'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ITSCT4.WP',
     pdf: null,
 
@@ -855,10 +896,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Johannes Ewald, M.Sc.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'JAVSCR2.WP',
     pdf: null,
 
@@ -874,10 +916,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Wolfgang Kowarschick'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'KLPRO.WP',
     pdf: null,
 
@@ -896,10 +939,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Harry Schäfle'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ITSN2.WP',
     pdf: null,
 
@@ -918,10 +962,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Michael Predeschly'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'KDBT4.WP',
     pdf: null,
 
@@ -940,10 +985,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Stephan Zimmermann'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'LEANIT4.WP',
     pdf: null,
 
@@ -959,10 +1005,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dieter Thalmayr'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'LINLPI2.WP',
     pdf: null,
 
@@ -978,10 +1025,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dieter Thalmayr'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'LPICAD2.WP',
     pdf: null,
 
@@ -997,10 +1045,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Thomas Rist'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'KI6.WP',
     pdf: null,
 
@@ -1016,10 +1065,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Oliver Seitz M.Sc.,'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'MCODK4.WP',
     pdf: null,
 
@@ -1038,10 +1088,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Ing. Alexandra Teynor'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'MKML4.WP',
     pdf: null,
 
@@ -1060,10 +1111,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dr. Lothar Braun'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'NETP.WP',
     pdf: null,
 
@@ -1082,10 +1134,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Michael Kipp'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'NNDL4.WP',
     pdf: null,
 
@@ -1104,10 +1157,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Michael Predeschly'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'NoSQL4.WP',
     pdf: null,
 
@@ -1123,10 +1177,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Ing. Thomas Kirchmeier'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'OPPYTH4.WP',
     pdf: null,
 
@@ -1145,10 +1200,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Hubert Högl'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'OSSWE4.WP',
     pdf: null,
 
@@ -1167,10 +1223,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dipl.-Ing. Georg Stark'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PRRO.WP',
     pdf: null,
 
@@ -1189,10 +1246,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Wolfgang Kratsch'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PRCINT4.WP',
     pdf: null,
 
@@ -1208,10 +1266,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Matthias Kolonko, Ph.D. (ONPU)'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DBP4.WP',
     pdf: null,
 
@@ -1230,10 +1289,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Peter Rösch'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PROGPY6.WP',
     pdf: null,
 
@@ -1252,10 +1312,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Anja Metzner'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PWA4.WP',
     pdf: null,
 
@@ -1274,10 +1335,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Nik Klever'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'PRJU4.WP',
     pdf: null,
 
@@ -1293,10 +1355,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'FUT.WP',
     pdf: null,
 
@@ -1315,10 +1378,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Volodymyr Brovkov'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'RFID3.WP',
     pdf: null,
 
@@ -1334,10 +1398,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Kai de Wals'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SEENG.WP',
     pdf: null,
 
@@ -1356,10 +1421,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SLP.WP',
     pdf: null,
 
@@ -1378,10 +1444,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dr. Marc Zeller (Siemens AG, München)'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SRASYS2.WP',
     pdf: null,
 
@@ -1400,10 +1467,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Phillip Heidegger'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'TYPSCR4.WP',
     pdf: null,
 
@@ -1422,10 +1490,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Phillip Heidegger'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SECloud.WP',
     pdf: null,
 
@@ -1444,10 +1513,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl.-Wirt.-Inf. (FH) Andrea Obermeyer, MBA'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SWPJMG.WP',
     pdf: null,
 
@@ -1466,10 +1536,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Christoph Buck'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'START4.WP',
     pdf: null,
 
@@ -1488,10 +1559,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Christoph Baur, B.Sc.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SUCHMA.WP',
     pdf: null,
 
@@ -1510,10 +1582,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Hubert Högl'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SNP5.WP',
     pdf: null,
 
@@ -1529,10 +1602,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Stefan Kaindl'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'UGES2.WP',
     pdf: null,
 
@@ -1551,10 +1625,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Philip McClenaghan'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'VISTH.WP',
     pdf: null,
 
@@ -1570,10 +1645,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Markus Degen'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'IFPP4.WP',
     pdf: null,
 
@@ -1592,10 +1668,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Michael Jaser, M. Sc.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'NODEJS4.WP',
     pdf: null,
 
@@ -1616,10 +1693,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Thomas Rist'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'AWKI.WP',
     pdf: null,
     published: true,
@@ -1637,10 +1715,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'BPAP3.WP',
     pdf: null,
     published: true,
@@ -1658,10 +1737,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Matùš Mala'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'BPM3.WP',
     pdf: null,
     published: true,
@@ -1679,10 +1759,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Ing. Honorary Doctor of ONPU Thorsten Schöler'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DASC4.WP',
     pdf: null,
     published: true,
@@ -1700,10 +1781,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Wolfgang Kowarschick', 'Prof. Michael Stoll'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DATVIZ2.WP',
     pdf: null,
     published: true,
@@ -1721,10 +1803,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Christoph Buck'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'DSDT2.WP',
     pdf: null,
     published: true,
@@ -1742,10 +1825,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Gundolf Kiefer'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'EFRE.WP',
     pdf: null,
     published: true,
@@ -1763,10 +1847,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Arne Mayer'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'ELHS4.WP',
     pdf: null,
     published: true,
@@ -1784,10 +1869,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Ing. Dominik Merli'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'EMBSEC.WP',
     pdf: null,
     published: true,
@@ -1805,10 +1891,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'F2FKOM4.WP',
     pdf: null,
     published: true,
@@ -1826,10 +1913,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Johannes Ewald, M.Sc.'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'JAVASCR.WP',
     pdf: null,
     published: true,
@@ -1847,10 +1935,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Peter Rösch'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'MEDIBI.WP',
     pdf: null,
     published: true,
@@ -1868,10 +1957,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl.-Inf. (FH) Dipl.-Designer (FH) Erich Seifert, MA'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'OOSD.WP',
     pdf: null,
     published: true,
@@ -1889,10 +1979,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Alexander von Bodisco'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SKUP.WP',
     pdf: null,
     published: true,
@@ -1910,10 +2001,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jana Görmer-Redding'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SGP2.WP',
     pdf: null,
     published: true,
@@ -1934,6 +2026,7 @@ export const data: Course[] = [
     lecturers: ['Prof. Dr. Christoph Buck'],
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'SDMDT4.WP',
     pdf: null,
     published: true,
@@ -1951,10 +2044,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Björn Häckel'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'S3G2.WP',
     pdf: null,
     published: true,
@@ -1972,10 +2066,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr. Jürgen Scholz'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'VERINF.WP',
     pdf: null,
     published: true,
@@ -1993,10 +2088,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Dipl. Designer (FH) Fabian Ziegler'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'WEBTEC4.WP', // TODO WEBTECH.WP
     pdf: null,
     published: true,
@@ -2014,10 +2110,11 @@ export const data: Course[] = [
     extraInfo: null,
     faculty: 'Informatik',
     infoUrl: null,
-
     lecturers: ['Prof. Dr.-Phil. Alessandra Zarcone'],
+
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode: 'WSH2.WP',
     pdf: null,
     published: true,

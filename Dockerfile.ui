@@ -1,4 +1,4 @@
-FROM node:23-alpine AS base
+FROM node:24-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ARG VITE_API_URL
@@ -9,13 +9,14 @@ FROM base AS build
 COPY . /build
 WORKDIR /build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run --filter=ui bundle
+RUN pnpm run --filter=ui build
 
 FROM nginx:stable-alpine AS ui
 COPY --from=build /build/packages/ui/dist /prod/ui
 WORKDIR /prod/ui
 
 RUN rm -rf /etc/nginx/conf.d/*
+COPY ./packages/ui/nginx.conf /etc/nginx/conf.d/nginx-course-finder.conf
 
 EXPOSE 80
 EXPOSE 443

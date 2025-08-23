@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/UserStore'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -12,6 +11,8 @@ import {
   VSpacer,
   VTextField,
 } from 'vuetify/components'
+
+import { useUserStore } from '@/stores/UserStore'
 
 const emit = defineEmits<{
   success: []

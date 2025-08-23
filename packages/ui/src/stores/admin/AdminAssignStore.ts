@@ -1,7 +1,8 @@
-import { trpc } from '@/trpc'
 import { differenceBy } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+
+import { trpc } from '@/trpc'
 
 import { useAdminCoursesStore } from './AdminCoursesStore'
 import { useAdminStatsStore } from './AdminStatsStore'

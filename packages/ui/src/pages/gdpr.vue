@@ -188,10 +188,3 @@ const { locale } = useI18n()
     </template>
   </div>
 </template>
-
-<style lang="scss" scoped>
-ul,
-ol {
-  padding: revert;
-}
-</style>

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { fetchFastify } from '@/fastify'
 import { refThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -12,15 +11,58 @@ import {
   VSnackbar,
 } from 'vuetify/components'
 
+import { fetchFastify } from '@/fastify'
+import { trpc } from '@/trpc'
+
 const { t } = useI18n()
-const pending = ref(false)
+const pendingMB = ref(false)
 const status = refThrottled(ref<'error' | 'success'>())
 const statusMsg = ref('')
 const baFile = ref<File>()
 const maFile = ref<File>()
 
-async function uploadFile() {
-  pending.value = true
+const pendingMin = ref(false)
+const minFocusPdf = ref<File>()
+
+async function deleteMinFocus() {
+  try {
+    await trpc.admin.courses.deleteMinFocus.mutate()
+    statusMsg.value = 'MIN Schwerpunkte erfolgreich gelöscht'
+    status.value = 'success'
+  } catch (e) {
+    console.error(e)
+    statusMsg.value = t('global.unknown-error')
+    status.value = 'error'
+  }
+}
+
+async function uploadMinFocusPdf() {
+  pendingMin.value = true
+  try {
+    const formData = new FormData()
+    if (!minFocusPdf.value) {
+      throw new Error('No file selected')
+    }
+    formData.append('file', minFocusPdf.value)
+
+    await fetchFastify('/admin/courses/update-min-focus', formData)
+    statusMsg.value = `Dateien ${[baFile.value, maFile.value]
+      .filter((f) => f)
+      .map((e) => e?.name)
+      .join(', ')} erfolgreich hochgeladen`
+    minFocusPdf.value = undefined
+    status.value = 'success'
+  } catch (e) {
+    console.error(e)
+    statusMsg.value = t('global.unknown-error')
+    status.value = 'error'
+  } finally {
+    pendingMin.value = false
+  }
+}
+
+async function uploadModuleBooks() {
+  pendingMB.value = true
   try {
     const formData = new FormData()
     if (baFile.value) {
@@ -43,7 +85,7 @@ async function uploadFile() {
     statusMsg.value = t('global.unknown-error')
     status.value = 'error'
   } finally {
-    pending.value = false
+    pendingMB.value = false
   }
 }
 </script>
@@ -69,9 +111,34 @@ async function uploadFile() {
         <VRow class="pr-3" justify="end">
           <VBtn
             :disabled="!baFile || !maFile"
-            :loading="pending"
+            :loading="pendingMB"
             text="Upload"
-            @click="uploadFile"
+            @click="uploadModuleBooks"
+          />
+        </VRow>
+      </VCol>
+    </VContainer>
+    <VContainer>
+      <VCol justify="space-between">
+        <VFileInput
+          v-model="minFocusPdf"
+          accept=".pdf"
+          label="MIN Schwerpunkt PDF auswählen"
+          placeholder="Datei auswählen"
+          outlined
+        />
+        <VRow class="pr-3" justify="end">
+          <VBtn
+            color="error"
+            text="MIN Schwerpunkte löschen"
+            @click="deleteMinFocus"
+          />
+          <VBtn
+            class="ml-2"
+            :disabled="!minFocusPdf"
+            :loading="pendingMin"
+            text="MIN Schwerpunkte aktualisieren"
+            @click="uploadMinFocusPdf"
           />
         </VRow>
       </VCol>

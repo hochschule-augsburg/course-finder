@@ -27,8 +27,10 @@ enum Singleton {
 }
 
 model AppConf {
-  id         Singleton @id @default(Instance)
-  maxCredits Int       @default(30)
+  id                    Singleton @id @default(Instance)
+  maxCredits            Int       @default(30)
+  moduleBookLastUpdated DateTime? @default(now())
+  hasMinFocuses         Boolean   @default(false)
 }
 
 model User {
@@ -82,6 +84,7 @@ model Course {
   /// addition information about course could be relevant if there is not infoUrl
   extraInfo      String?
   offeredCourse  OfferedCourse[]
+  minFocus       Json?
   // Separate Master data
   maExam         String?
   maPdf          Bytes?

@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
-import { useCourseEnroll } from '@/stores/EnrollmentStore'
-import { useUserStore } from '@/stores/UserStore'
 import {
   mdiAlphaEBox,
   mdiCheckboxBlankOutline,
@@ -10,6 +7,10 @@ import {
 } from '@mdi/js'
 import { useI18n } from 'vue-i18n'
 import { VBadge, VIcon, VTooltip } from 'vuetify/components'
+
+import { type Subject, useCoursesStore } from '@/stores/CoursesStore'
+import { useCourseEnroll } from '@/stores/EnrollmentStore'
+import { useUserStore } from '@/stores/UserStore'
 
 import { dialogService } from '../DialogService'
 

@@ -55,6 +55,19 @@ export type OfferedCourse = Omit<POfferedCourse, 'appointments' | 'phaseId'> & {
   appointments: CourseAppointmentsJson<Date>
 }
 
+export type OfferedCourseData = {
+  appointments: CourseAppointmentsJson<Date>
+  Course: { lecturers: string[]; title: I18nJson }
+  externalRegistration: boolean
+  extraInfo: null | string
+  for: string[]
+  hideMinParticipants: boolean
+  maxParticipants: null | number
+  minParticipants: number
+  moduleCode: string
+  moodleCourse: null | string
+}
+
 type TimeInterval<T> = { from: T; to: T }
 
 declare global {

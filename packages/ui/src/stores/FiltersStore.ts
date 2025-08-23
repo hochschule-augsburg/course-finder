@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import { useAppConfStore } from './AppConfStore'
 import { type Subject, useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'
 
@@ -33,9 +34,16 @@ export const useFiltersStore = defineStore('filters', () => {
   const { locale } = useI18n()
   const userStore = useUserStore()
   const coursesStore = useCoursesStore()
+  const appConfStore = useAppConfStore()
+
   const search = ref<string>('')
   const hideNonStudentFilters = computed(
     () => userStore.user?.type !== 'Student',
+  )
+  const hideMinFocus = computed(
+    () =>
+      userStore.user?.Student?.fieldOfStudy !== 'Informatik (Master)' ||
+      appConfStore.conf?.hasMinFocuses === false,
   )
   const optionsFilters: OptionsFilter[] = reactive([
     {
@@ -162,6 +170,36 @@ export const useFiltersStore = defineStore('filters', () => {
         { option: 'filter.thursday', selected: false },
         { option: 'filter.friday', selected: false },
         { option: 'filter.saturday', selected: false },
+      ],
+    },
+    {
+      filterFn: (subjects, options) => {
+        const selectedOptions = options
+          .filter((e) => e.selected)
+          .map((e) => e.option)
+        return subjects.filter((subject) => {
+          if (!subject.minFocus) {
+            return false
+          }
+
+          const options = Object.entries(subject.minFocus).flatMap(
+            ([key, value]: [string, string[]]) => {
+              return value.map((v) => `${key}#${v}`)
+            },
+          )
+          return options.some((e) => selectedOptions.includes(e))
+        })
+      },
+      hidden: hideMinFocus,
+      name: 'filter.min-focus',
+      options: [
+        { option: 'Medieninformatik#A', selected: false },
+        { option: 'SW-Engineering#A', selected: false },
+        { option: 'SW-Engineering#B', selected: false },
+        { option: 'IT-Sicherheit#A', selected: false },
+        { option: 'Technische Informatik#A', selected: false },
+        { option: 'Technische Informatik#B', selected: false },
+        { option: 'Technische Informatik#C', selected: false },
       ],
     },
   ])

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { type Subject } from '@/stores/CoursesStore'
 import { useI18n } from 'vue-i18n'
 import {
   VCol,
@@ -8,6 +7,8 @@ import {
   VExpansionPanelTitle,
   VRow,
 } from 'vuetify/components'
+
+import { type Subject } from '@/stores/CoursesStore'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
 defineProps<{ subject: Subject }>()

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { StepEntity } from 'v-onboarding'
 
-import { useTourStore } from '@/stores/TourStore'
 import { mdiClose } from '@mdi/js'
 import { VOnboardingStep, VOnboardingWrapper } from 'v-onboarding'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import { useTourStore } from '@/stores/TourStore'
 
 const props = defineProps<{
   name: symbol

@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import type { Course } from '@/stores/admin/AdminCoursesStore'
+import type { OfferedCourseData } from '@workspace/api/src/prisma/PrismaTypes'
 import type { Ref } from 'vue'
 
-import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { trpc } from '@/trpc'
 import { mdiInvoiceTextPlus, mdiMagnify, mdiPencil } from '@mdi/js'
 import { assign } from 'lodash-es'
 import { ref, watch } from 'vue'
@@ -22,7 +19,11 @@ import {
   VTextField,
 } from 'vuetify/components'
 
-import type { OfferedCourseData } from './types'
+import type { Course } from '@/stores/admin/AdminCoursesStore'
+
+import { fieldsOfStudyAbbrMap } from '@/helper/enums/fieldsOfStudy'
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { trpc } from '@/trpc'
 const adminStore = useAdminCoursesStore()
 const offeredCoursesArray = defineModel<OfferedCourseData[]>({ required: true })
 
@@ -171,6 +172,7 @@ function openNewDialog() {
     infoUrl: null,
     lecturers: [],
     maExam: null,
+    minFocus: null,
     moduleCode: '',
     published: false,
     semesterHours: 0,

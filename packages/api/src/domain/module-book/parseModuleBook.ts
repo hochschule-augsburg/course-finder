@@ -45,6 +45,7 @@ function extractData(
     lecturers,
     maExam: null,
     maPdf: null,
+    minFocus: null,
     moduleCode,
     pdf: data.buffer,
     published: true,

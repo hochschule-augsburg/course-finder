@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
-import { useFiltersStore } from '@/stores/FiltersStore'
 import { mdiFilter } from '@mdi/js'
 import { startOfWeek } from 'date-fns'
 import { range } from 'lodash-es'
@@ -19,6 +17,9 @@ import {
   VRangeSlider,
   VSpacer,
 } from 'vuetify/components'
+
+import { getDateFnsLocale } from '@/helper/LocaleDateFormat'
+import { useFiltersStore } from '@/stores/FiltersStore'
 
 const showFilterDialog = defineModel<boolean>()
 const filtersStore = useFiltersStore()

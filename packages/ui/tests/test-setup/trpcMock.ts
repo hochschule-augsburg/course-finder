@@ -1,7 +1,8 @@
-import type { trpc as trpcType } from '@/trpc'
 import type { DeepMockProxy } from 'vitest-mock-extended'
 
 import { mockDeep, mockReset } from 'vitest-mock-extended'
+
+import type { trpc as trpcType } from '@/trpc'
 
 vi.doMock('@/trpc', () => ({
   __esModule: true,

@@ -33,6 +33,7 @@ filter:
   irregular: Irregulär
   exam-type: Prüfung
   exam-type-stud: Prüfung für deinen Studiengang
+  min-focus: Master Informatik Schwerpunkt
   ex:
     written-exam: Klausur
     project-work: Projektarbeit
@@ -67,8 +68,7 @@ tour:
     enroll-button: Einschreibung
     nav-bar: Optionen
   desc:
-    enrollment-overview:
-      Hier ist eine Übersicht über die aktuelle Einschreibephase.
+    enrollment-overview: Hier ist eine Übersicht über die aktuelle Einschreibephase.
     filter-section: Hier kannst du die Kurse filtern.
     subject-element:
       Jedes Element repräsentiert einen Kurs. Klicke, um weitere Details zu
@@ -93,8 +93,8 @@ pages:
       upload: Hochladen
     phases:
       index: Phasen
-      '[phaseId]':
-        index: '{phaseId}'
+      ":phaseId":
+        index: "{phaseId}"
         edit: Bearbeiten
   gdpr: Datenschutz
   imprint: Impressum

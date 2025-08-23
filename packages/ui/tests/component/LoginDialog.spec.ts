@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import LoginDialog from '@/components/LoginDialog.vue'
-import { useUserStore } from '@/stores/UserStore'
 import { createTestingPinia } from '@pinia/testing'
 import { flushPromises, mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import { VBtn, VTextField } from 'vuetify/components'
+
+import LoginDialog from '@/components/LoginDialog.vue'
+import { useUserStore } from '@/stores/UserStore'
 
 import { i18nForTests } from '../test-utils/i18nForTests'
 

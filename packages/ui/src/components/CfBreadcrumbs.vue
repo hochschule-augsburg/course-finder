@@ -14,37 +14,38 @@ const routeItems = computed<any>(() => {
   if (route.path === '/') {
     return []
   }
-  const pathArray = route.path.split('/').slice(0, -1)
-  const breadcrumbItems = pathArray.map((path, index) => {
-    const fullPath = '/' + pathArray.slice(0, index + 1).join('/')
-    const routeMatch = router.resolve(fullPath)
 
-    return {
+  const breadcrumbItems: {
+    disabled: boolean
+    href: string
+    noBreadcrumbs: boolean
+    params: Record<string, string>
+    text: string
+  }[] = [
+    {
       disabled: false,
-      href: fullPath,
-      noBreadcrumbs: routeMatch.meta.noBreadcrumbs,
-      params: routeMatch.params,
-      text: routeMatch.name?.toString(),
-    }
-  })
+      href: '/',
+      noBreadcrumbs: false,
+      params: {},
+      text: '.index',
+    },
+  ]
 
-  breadcrumbItems.push({
-    disabled: true,
-    href: route.fullPath,
-    noBreadcrumbs: route.meta.noBreadcrumbs,
-    params: route.params,
-    text: route.name?.toString(),
-  })
+  for (const [i, match] of route.matched.slice(0, -1).entries()) {
+    if (match.meta.noBreadcrumbs) {
+      continue
+    }
+    const text = match.path.split('/').join('.')
+    breadcrumbItems.push({
+      disabled: i === route.matched.length - 2, // disable last
+      href: match.path,
+      noBreadcrumbs: match.meta.noBreadcrumbs,
+      params: route.params,
+      text: match.children.length ? `${text}.index` : text,
+    })
+  }
 
   return breadcrumbItems
-    .filter((item) => !item.noBreadcrumbs)
-    .map((item) => ({
-      ...item,
-      text: item.text
-        ?.replace(/\/$/, '.index')
-        .replace(/\[|\]/g, '')
-        .replace(/\//g, '.'),
-    }))
 })
 </script>
 

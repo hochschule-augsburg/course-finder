@@ -24,6 +24,7 @@ export const sharedRules = [
     },
     rules: {
       ...banTransformations,
+      'no-undef': 'off', // covered by typescript
       ...{
         '@typescript-eslint/no-unused-vars': 'off',
         'unused-imports/no-unused-imports': 'error',
@@ -62,7 +63,7 @@ export const sharedRules = [
       curly: 'error',
 
       ...{
-        'perfectionist/sort-intersection-types': 'off'
+        'perfectionist/sort-intersection-types': 'off',
       },
 
       'no-restricted-properties': [

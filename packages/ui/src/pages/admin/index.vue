@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
-import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 import {
   mdiAccountMultiple,
   mdiBookMultiple,
@@ -17,6 +15,9 @@ import {
   VIcon,
   VRow,
 } from 'vuetify/components'
+
+import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { useAdminStatsStore } from '@/stores/admin/AdminStatsStore'
 
 defineOptions({
   name: 'AdminDashboard',

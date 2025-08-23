@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { type Subject } from '@/stores/CoursesStore'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VCard, VCardText } from 'vuetify/components'
+
+import { type Subject } from '@/stores/CoursesStore'
 
 import EnrollCheckbox from './EnrollCheckbox.vue'
 

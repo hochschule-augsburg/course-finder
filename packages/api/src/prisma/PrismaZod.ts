@@ -35,9 +35,9 @@ export const offeredCourseSpec = z.object({
   moodleCourse: nullString,
 })
 
-export function zodEnumFromObjKeys<K extends string>(
-  obj: Record<K, unknown>,
-): z.ZodEnum<[K, ...K[]]> {
-  const [firstKey, ...otherKeys] = Object.keys(obj) as K[]
-  return z.enum([firstKey, ...otherKeys])
+export function zodEnumFromObjKeys<T extends Record<string, unknown>>(obj: T) {
+  const keys = Object.keys(obj) as Extract<keyof T, string>[]
+  return z.enum(
+    keys as [Extract<keyof T, string>, ...Extract<keyof T, string>[]],
+  )
 }

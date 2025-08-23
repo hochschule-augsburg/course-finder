@@ -5,11 +5,12 @@ import type {
   OfferedCourse,
 } from '@workspace/api/src/prisma/PrismaTypes'
 
-import { phaseStates } from '@/helper/enums/phaseStates'
-import { trpc } from '@/trpc'
 import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+
+import { phaseStates } from '@/helper/enums/phaseStates'
+import { trpc } from '@/trpc'
 
 export type AdminOfferedCourse = OfferedCourse & {
   Course: { lecturers: string[]; title: I18nJson }
