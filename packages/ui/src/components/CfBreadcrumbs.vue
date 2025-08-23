@@ -16,11 +16,11 @@ const routeItems = computed<any>(() => {
   }
 
   const breadcrumbItems: {
-    disabled: boolean;
-    href: string;
-    noBreadcrumbs: boolean;
-    params: Record<string, string>;
-    text: string;
+    disabled: boolean
+    href: string
+    noBreadcrumbs: boolean
+    params: Record<string, string>
+    text: string
   }[] = [
     {
       disabled: false,
