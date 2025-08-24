@@ -1,4 +1,4 @@
-FROM node:24-alpine AS base
+FROM node:24-alpine3.22 AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ARG VITE_API_URL
@@ -11,7 +11,7 @@ WORKDIR /build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run --filter=ui build
 
-FROM nginx:stable-alpine AS ui
+FROM nginx:stable-alpine3.21-slim AS ui
 COPY --from=build /build/packages/ui/dist /prod/ui
 WORKDIR /prod/ui
 
