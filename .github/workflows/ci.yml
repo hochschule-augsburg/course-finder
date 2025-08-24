@@ -12,6 +12,9 @@ on:
     - cron: "0 8 15 2,9 *"
     - cron: "0 8 1 * *"
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

@@ -1,8 +1,8 @@
+import XLSX from '@e965/xlsx'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { parse } from 'date-fns'
 import { de } from 'date-fns/locale'
 import { chunk, template, uniqBy } from 'lodash-es'
-import XLSX from 'xlsx'
 import { z, ZodError } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
 

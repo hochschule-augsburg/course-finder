@@ -2,12 +2,11 @@
 import { mdiChevronRight } from '@mdi/js'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { VBreadcrumbs, VBreadcrumbsItem, VIcon } from 'vuetify/components'
 
 const { t } = useI18n()
 const route = useRoute()
-const router = useRouter()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const routeItems = computed<any>(() => {
