@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import { fieldsOfStudy } from '@/helper/enums/fieldsOfStudy'
+
 import { useAppConfStore } from './AppConfStore'
 import { type Subject, useCoursesStore } from './CoursesStore'
 import { useUserStore } from './UserStore'
@@ -13,6 +15,7 @@ export type Option = {
 }
 
 export type OptionsFilter = {
+  exclusive?: boolean
   filterFn: (subjects: Subject[], options: Option[]) => Subject[]
   hidden?: boolean
   name: string
@@ -37,10 +40,8 @@ export const useFiltersStore = defineStore('filters', () => {
   const appConfStore = useAppConfStore()
 
   const search = ref<string>('')
-  const hideNonStudentFilters = computed(
-    () => userStore.user?.type !== 'Student',
-  )
-  const hideMinFocus = computed(
+  const hideNoPhaseFilters = computed(() => !coursesStore.currentPhase)
+  const hideMinFocusFilter = computed(
     () =>
       userStore.user?.Student?.fieldOfStudy !== 'Informatik (Master)' ||
       appConfStore.conf?.hasMinFocuses === false,
@@ -64,7 +65,7 @@ export const useFiltersStore = defineStore('filters', () => {
           }
           return false
         }),
-      hidden: hideNonStudentFilters,
+      hidden: hideNoPhaseFilters,
       name: 'filter.type-of-event',
       options: [
         { option: 'filter.weekly', selected: false },
@@ -160,7 +161,7 @@ export const useFiltersStore = defineStore('filters', () => {
           }
           return false
         }),
-      hidden: hideNonStudentFilters,
+      hidden: hideNoPhaseFilters,
       name: 'filter.weekday',
       options: [
         { option: 'filter.sunday', selected: false },
@@ -171,6 +172,23 @@ export const useFiltersStore = defineStore('filters', () => {
         { option: 'filter.friday', selected: false },
         { option: 'filter.saturday', selected: false },
       ],
+    },
+    {
+      filterFn: (subjects, options) => {
+        const selectedOption = options.find((e) => e.selected)?.option
+        if (!selectedOption) {
+          return subjects
+        }
+        return subjects.filter((e) =>
+          e.offeredCourse?.for.includes(selectedOption),
+        )
+      },
+      hidden: hideNoPhaseFilters,
+      name: 'filter.field-of-study',
+      options: Object.keys(fieldsOfStudy).map((fieldOfStudy) => ({
+        option: `${fieldOfStudy}`,
+        selected: false,
+      })),
     },
     {
       filterFn: (subjects, options) => {
@@ -190,7 +208,7 @@ export const useFiltersStore = defineStore('filters', () => {
           return options.some((e) => selectedOptions.includes(e))
         })
       },
-      hidden: hideMinFocus,
+      hidden: hideMinFocusFilter,
       name: 'filter.min-focus',
       options: [
         { option: 'Medieninformatik#A', selected: false },
@@ -234,7 +252,7 @@ export const useFiltersStore = defineStore('filters', () => {
             (subject.offeredCourse?.minParticipants ?? 0) >= range[0] &&
             (subject.offeredCourse?.maxParticipants ?? 100) <= range[1],
         ),
-      hidden: hideNonStudentFilters,
+      hidden: hideNoPhaseFilters,
       max: 100,
       min: 0,
       name: 'filter.participants',

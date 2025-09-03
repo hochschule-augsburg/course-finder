@@ -85,15 +85,31 @@ function resetFilters() {
                 </VChip>
               </template>
 
-              <VChip
-                v-for="option in optionsFilter.options"
-                v-else
-                :key="option.option"
-                :class="option.selected ? 'text-primary' : ''"
-                @click="option.selected = !option.selected"
-              >
-                {{ t(option.option) }}
-              </VChip>
+              <template v-else-if="optionsFilter.exclusive">
+                <VChip
+                  v-for="option in optionsFilter.options"
+                  :key="option.option"
+                  :class="option.selected ? 'text-primary' : ''"
+                  @click="()=>{
+                    optionsFilter.options.forEach((o) => (o.selected = false))
+                    option.selected = true
+                  }
+                  "
+                >
+                  {{ t(option.option) }}
+                </VChip>
+              </template>
+
+              <template v-else>
+                <VChip
+                  v-for="option in optionsFilter.options"
+                  :key="option.option"
+                  :class="option.selected ? 'text-primary' : ''"
+                  @click="option.selected = !option.selected"
+                >
+                  {{ t(option.option) }}
+                </VChip>
+              </template> 
             </VChipGroup>
           </template>
         </template>

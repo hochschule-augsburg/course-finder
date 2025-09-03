@@ -5,7 +5,7 @@ import { z } from 'zod'
 import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes.ts'
 
 import { prisma } from '../../prisma/prisma.ts'
-import { publicProcedure, router, studentOnlyProcedure } from '../trpc.ts'
+import { publicProcedure, router, studentProcedure } from '../trpc.ts'
 import { processCourse } from './CourseUtils.ts'
 
 export type CourseExtended = Omit<Course, 'pdf'> & {
@@ -25,14 +25,14 @@ export const courseRouter = router({
     })
     return courses.map((e) => processCourse(e, ctx.user?.Student))
   }),
-  getCurrentPhase: studentOnlyProcedure.query(() => {
+  getCurrentPhase: studentProcedure.query(() => {
     return prisma.enrollphase.findFirst({
       where: {
         state: { in: ['OPEN', 'CLOSED', 'DRAWING'] },
       },
     })
   }),
-  getOfferedCourses: studentOnlyProcedure
+  getOfferedCourses: studentProcedure
     .input(
       z.object({
         phaseId: z.number(),
@@ -54,7 +54,6 @@ export const courseRouter = router({
         where: {
           offeredCourse: {
             some: {
-              for: { has: ctx.user.Student.fieldOfStudy },
               phaseId: { equals: input.phaseId },
             },
           },
@@ -62,7 +61,7 @@ export const courseRouter = router({
       })
 
       const processedCourses = courses.map((e) =>
-        processCourse(e, ctx.user.Student),
+        processCourse(e, ctx.user?.Student),
       )
 
       const parsedCourses = processedCourses.map((e) => {

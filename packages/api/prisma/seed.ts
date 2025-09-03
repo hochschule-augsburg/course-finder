@@ -6,6 +6,7 @@ import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
 import * as crypto from 'node:crypto'
 import { parseArgs } from 'node:util'
 
+import { fieldsOfStudy } from '../src/domain/enroll/enrollUtils.ts'
 import { parseCourses } from '../src/domain/module-book/parseModuleBook.ts'
 import { hashPassword } from '../src/domain/user/local/password-auth.ts'
 import { data as coursesData } from './assets/courses.ts'
@@ -173,6 +174,7 @@ async function main() {
     },
   })
 
+  const testCourseNames = ['allDegrees', 'bachelor', 'highMinPart']
   await Promise.all(
     [
       {
@@ -192,12 +194,12 @@ async function main() {
           editor: { connect: { username: 'prof' } },
           faculty: 'Informatik',
           lecturers: ['Prof. Dr. Quack McDuck'],
-          moduleCode: `test${i}`,
+          moduleCode: testCourseNames[i],
           published: true,
           semesterHours: 4,
           title: {
-            de: `Test Kurs ${i}`,
-            en: `Test Course ${i}`,
+            de: `Test Kurs ${testCourseNames[i]}`,
+            en: `Test Course ${testCourseNames[i]}`,
           },
         },
       })
@@ -328,4 +330,126 @@ async function main() {
       }),
     )
   }
+
+  const offeredCourses = await Promise.all(
+    Object.entries(fieldsOfStudy).map(async ([fieldOfStudy, { abbr }]) => {
+      await prisma.course.create({
+        data: {
+          creditPoints: 6,
+          faculty: 'Informatik',
+          lecturers: ['Prof. Dr. Quack McDuck'],
+          moduleCode: `test-${abbr}`,
+          published: true,
+          semesterHours: 4,
+          title: {
+            de: `Test Kurs ${fieldOfStudy}`,
+            en: `Test Course ${fieldOfStudy}`,
+          },
+        },
+      })
+      return {
+        for: [fieldOfStudy],
+        maxParticipants: 10,
+        minParticipants: 2,
+        moduleCode: `test-${abbr}`,
+      }
+    }),
+  )
+
+  offeredCourses.push({
+    for: Object.keys(fieldsOfStudy),
+    maxParticipants: 20,
+    minParticipants: 5,
+    // from above
+    moduleCode: testCourseNames[0],
+  })
+
+  offeredCourses.push({
+    for: Object.entries(fieldsOfStudy)
+      .filter((e) => e[1].degree === 'Bachelor')
+      .map((e) => e[0]),
+    maxParticipants: 15,
+    minParticipants: 5,
+    // from above
+    moduleCode: testCourseNames[1],
+  })
+
+  offeredCourses.push({
+    for: Object.keys(fieldsOfStudy),
+    maxParticipants: 200,
+    minParticipants: 100,
+    moduleCode: testCourseNames[2],
+  })
+
+  const testPhase = await prisma.enrollphase.create({
+    data: {
+      description: {
+        de: 'Testphase',
+        en: 'Test Phase',
+      },
+      emailNotificationAt: getHalfTime(new Date(), addMonths(new Date(), 2)),
+      end: addMonths(new Date(), 2),
+      id: 999,
+      offeredCourses: {
+        create: offeredCourses.map((course) => ({
+          appointments: {
+            dates: [
+              {
+                from: '2024-04-01T12:00:00Z',
+                to: '2024-04-01T10:00:00Z',
+              },
+            ],
+            type: 'block',
+          },
+          Course: {
+            connect: {
+              moduleCode: course.moduleCode,
+            },
+          },
+          for: { set: course.for },
+          maxParticipants: course.maxParticipants,
+          minParticipants: course.minParticipants,
+        })),
+      },
+      start: new Date(),
+      state: 'OPEN',
+      title: {
+        de: 'Testphase',
+        en: 'Test Phase',
+      },
+    },
+  })
+
+  // enroll a few students
+
+  const students = await prisma.student.findMany()
+  const choices = students.flatMap((student) => {
+    const choices = sampleSize(offeredCourses, random(0, 6)).map((course) => ({
+      moduleCode: course.moduleCode,
+      points: Math.random(),
+    }))
+    const scale = 100 / sumBy(choices, 'points')
+    return choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      points: Math.round(choice.points * scale),
+      username: student.username,
+    }))
+  })
+
+  await prisma.studentPhase.createMany({
+    data: students.map((student) => ({
+      creditsNeeded: random(1, 10),
+      phaseId: testPhase.id,
+      username: student.username,
+    })),
+  })
+
+  await prisma.studentChoice.createMany({
+    data: choices.map((choice) => ({
+      moduleCode: choice.moduleCode,
+      phaseId: testPhase.id,
+      points: choice.points,
+      username: choice.username,
+    })),
+  })
 }
