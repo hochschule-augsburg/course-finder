@@ -20,7 +20,7 @@ export const fieldsOfStudy: Record<
     abbr: 'BIS',
     degree: 'Master',
   },
-  'Interaktive Mediensysteme (Master)': { abbr: 'IMS', degree: 'Master' },
+  'Interaktive Mediensysteme (Master)': { abbr: 'IMS', degree: 'Master' }, // TODO remove
   'Industrielle Sicherheit': { abbr: 'INS', degree: 'Master' },
 }
 

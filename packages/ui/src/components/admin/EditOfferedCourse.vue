@@ -283,6 +283,7 @@ function forMaStudy() {
   formData.value.for = Object.entries(fieldsOfStudy)
     .filter((e) => e[1].degree === 'Master')
     .map((e) => e[1].abbr)
+    .filter((e) => e !== 'IMS')
 }
 </script>
 
@@ -316,7 +317,7 @@ function forMaStudy() {
               v-model.number="formData.maxParticipants"
               label="Maximale Teilnehmer"
               type="number"
-              requried
+              required
             />
           </VCol>
           <VCol cols="12" sm="6">
