@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { OfferedCourseData } from '@workspace/api/src/prisma/PrismaTypes'
 
+import { mdiDelete } from '@mdi/js'
 import { isWithinInterval } from 'date-fns'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref } from 'vue'
@@ -124,19 +125,26 @@ async function createEnrollment() {
   sharedObject.value = []
 }
 
+const NO_DATE = '1970-01-01T'
+
 async function initFormData() {
   if (props.phaseId) {
     await adminCoursesStore.fetchOfferedCourses(props.phaseId)
     const phase = adminCoursesStore.phases[props.phaseId]
     if (!phase) {
+      console.error("Phase with given ID doesn't exist")
       return
     }
     sharedObject.value = cloneDeep(
       adminCoursesStore.phaseOfferedCourses[props.phaseId],
     )
+    let emailNotificationAt = getLocalISOString(phase.emailNotificationAt)
+    if (emailNotificationAt.startsWith(NO_DATE)) {
+      emailNotificationAt = ''
+    }
     formData.value = {
       ...cloneDeep(phase),
-      emailNotificationAt: getLocalISOString(phase.emailNotificationAt),
+      emailNotificationAt,
       end: getLocalISOString(phase.end),
       start: getLocalISOString(phase.start),
     }
@@ -172,7 +180,7 @@ async function updateEnrollment() {
       },
       emailNotificationAt: formData.value.emailNotificationAt
         ? new Date(formData.value.emailNotificationAt)
-        : undefined,
+        : new Date(0),
       end: new Date(formData.value.end),
       id: props.phaseId,
       offeredCourses: sharedObject.value,
@@ -297,17 +305,26 @@ async function uploadExcel() {
           />
         </VCol>
         <VCol cols="12" md="4">
-          <VTextField
-            v-model="formData.emailNotificationAt"
-            :label="t('sent-email-notification-at')"
-            type="datetime-local"
-            hide-details
-          />
+          <div class="d-flex align-center ga-2">
+            <VTextField
+              v-model="formData.emailNotificationAt"
+              :label="t('sent-email-notification-at')"
+              type="datetime-local"
+              hide-details
+            />
+            <VBtn
+              :icon="mdiDelete"
+              size="small"
+              @click="formData.emailNotificationAt = ''"
+            />
+          </div>
           <small
             v-if="
-              new Date(formData.start) >
+              (new Date(formData.start) >
                 new Date(formData.emailNotificationAt) ||
-              new Date(formData.end) < new Date(formData.emailNotificationAt)
+                new Date(formData.end) <
+                  new Date(formData.emailNotificationAt)) &&
+              formData.emailNotificationAt
             "
             class="text-caption"
             style="color: rgb(var(--v-theme-primary))"
