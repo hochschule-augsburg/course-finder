@@ -14,6 +14,7 @@ const courseSpec = z.object({
   faculty: z.string(),
   infoUrl: nullString,
   lecturers: z.array(z.string()).optional(),
+  minFocus: z.unknown().nullable(),
   moduleCode: z.string(),
   published: z.boolean().optional(),
   semesterHours: z.number().int(),

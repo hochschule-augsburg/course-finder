@@ -200,6 +200,7 @@ export const useFiltersStore = defineStore('filters', () => {
         { option: 'Technische Informatik#A', selected: false },
         { option: 'Technische Informatik#B', selected: false },
         { option: 'Technische Informatik#C', selected: false },
+        { option: 'Data Science#A', selected: false },
       ],
     },
   ])
