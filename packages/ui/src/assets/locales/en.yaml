@@ -19,7 +19,6 @@ filter:
   type-of-event: Type of event
   weekly: weekly
   block-event: block event
-  weekday: weekday
   monday: Monday
   tuesday: Tuesday
   wednesday: Wednesday
@@ -27,13 +26,14 @@ filter:
   friday: Friday
   saturday: Saturday
   sunday: Sunday
-  semester-hours: semester hours
-  credit-points: credit points
-  participants: participants
+  semester-hours: Semester Hours
+  credit-points: Credit Points
+  participants: Participants
+  weekday: Weekday
   irregular: irregular
   exam-type: Examination
   exam-type-stud: Examination for your degree
-  min-focus: Master Computer Science focus
+  min-focus: Focus Group for "Master Computer Science"
   ex:
     written-exam: Written exam
     project-work: Project work

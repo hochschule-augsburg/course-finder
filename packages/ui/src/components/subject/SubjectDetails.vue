@@ -6,6 +6,7 @@ import {
   mdiCalendar,
   mdiFullscreen,
   mdiFullscreenExit,
+  mdiInformation,
   mdiLectern,
   mdiTypewriter,
 } from '@mdi/js'
@@ -116,16 +117,25 @@ const minFocusFiltered = computed(() => {
             <CfMarkdown :source="exam" class="markdown" />
           </section>
 
-          <section
-            v-if="
-              userStore.user?.Student?.fieldOfStudy === 'Informatik (Master)' &&
-              appConfStore.conf?.hasMinFocuses &&
-              subject.minFocus
-            "
-          >
+          <section v-if="appConfStore.conf?.hasMinFocuses && subject.minFocus">
             <div class="icon-heading">
               <VIcon :icon="mdiBullseyeArrow" size="32" />
-              <h4>{{ t('min-focus') }}</h4>
+              <h4>
+                {{ t('min-focus') }}
+                <VTooltip location="top" offset="2" max-width="300rem">
+                  <span class="text-pre-wrap">
+                    {{ t('min-focus-hint') }}
+                  </span>
+                  <template #activator="{ props: toolProps }">
+                    <VIcon
+                      v-bind="toolProps"
+                      size="1.5rem"
+                      class="ml-2"
+                      :icon="mdiInformation"
+                    />
+                  </template>
+                </VTooltip>
+              </h4>
             </div>
             <ul>
               <li v-for="[field, focus] in minFocusFiltered" :key="field">
@@ -382,7 +392,10 @@ en:
   course-note: Note about course
   semester-note: Note about Semester
   exam: Exam
-  min-focus: Master Computer Science Focus
+  min-focus: Focus Group for "Master Computer Science"
+  min-focus-hint:
+    For the most up-to-date and reliable information, please visit your study's
+    website.
 de:
   lecturers: Dozenten
   workload: Arbeitsaufwand
@@ -393,5 +406,8 @@ de:
   course-note: Kurshinweis
   semester-note: Semesterhinweis
   exam: Prüfung
-  min-focus: Master Informatik Schwerpunkt
+  min-focus: Schwerpunkt für "Master Informatik"
+  min-focus-hint:
+    Auf der Website des Studiengangs findest du die aktuellsten und
+    verlässlichsten Informationen.
 </i18n>

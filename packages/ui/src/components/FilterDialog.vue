@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiFilter } from '@mdi/js'
+import { mdiFilter, mdiInformation } from '@mdi/js'
 import { startOfWeek } from 'date-fns'
 import { range } from 'lodash-es'
 import { storeToRefs } from 'pinia'
@@ -66,6 +66,21 @@ function resetFilters() {
           <template v-if="!optionsFilter.hidden">
             <h2 class="text-h6 mb-2">
               {{ t(optionsFilter.name) }}
+              <template v-if="optionsFilter.name === 'filter.min-focus'">
+                <VTooltip location="top" offset="2" max-width="300rem">
+                  <span class="text-pre-wrap">
+                    {{ t('min-focus-hint') }}
+                  </span>
+                  <template #activator="{ props }">
+                    <VIcon
+                      v-bind="props"
+                      size="1.5rem"
+                      class="ml-2"
+                      :icon="mdiInformation"
+                    />
+                  </template>
+                </VTooltip>
+              </template>
             </h2>
 
             <VChipGroup class="mb-4" column multiple>
@@ -85,15 +100,16 @@ function resetFilters() {
                 </VChip>
               </template>
 
-              <VChip
-                v-for="option in optionsFilter.options"
-                v-else
-                :key="option.option"
-                :class="option.selected ? 'text-primary' : ''"
-                @click="option.selected = !option.selected"
-              >
-                {{ t(option.option) }}
-              </VChip>
+              <template v-else>
+                <VChip
+                  v-for="option in optionsFilter.options"
+                  :key="option.option"
+                  :class="option.selected ? 'text-primary' : ''"
+                  @click="option.selected = !option.selected"
+                >
+                  {{ t(option.option) }}
+                </VChip>
+              </template>
             </VChipGroup>
           </template>
         </template>
@@ -113,3 +129,14 @@ function resetFilters() {
     </VCard>
   </VDialog>
 </template>
+
+<i18n lang="yaml">
+en:
+  min-focus-hint:
+    For the most up-to-date and reliable information, please visit your study's
+    website.
+de:
+  min-focus-hint:
+    Auf der Website des Studiengangs findest du die aktuellsten und
+    verlässlichsten Informationen.
+</i18n>
