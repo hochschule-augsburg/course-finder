@@ -33,7 +33,7 @@ filter:
   irregular: Irregulär
   exam-type: Prüfung
   exam-type-stud: Prüfung für deinen Studiengang
-  min-focus: Master Informatik Schwerpunkt
+  min-focus: Schwerpunkt für "Master Informatik"
   ex:
     written-exam: Klausur
     project-work: Projektarbeit
