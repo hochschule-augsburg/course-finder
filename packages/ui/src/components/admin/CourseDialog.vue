@@ -28,6 +28,7 @@ const emit = defineEmits<{ cancel: []; submit: [Course | undefined] }>()
 const formData = ref<
   Omit<Course, 'lecturers' | 'varyingCP'> & {
     lecturers: string
+    minFocus: string
     varyingCP: string
   }
 >()
@@ -37,6 +38,7 @@ watchEffect(() => {
     formData.value = {
       ...structuredClone(toRaw(props.selectedSubject)),
       lecturers: props.selectedSubject.lecturers.join(', '),
+      minFocus: JSON.stringify(props.selectedSubject.minFocus),
       varyingCP: varyingCPToString(props.selectedSubject.varyingCP),
     }
   }
@@ -76,6 +78,7 @@ function submit() {
       .split(',')
       .map((item) => item.trim())
       .filter((item) => item !== ''),
+    minFocus: JSON.parse(formData.value.minFocus || 'null'),
     semesterHours: Number(formData.value.semesterHours),
     varyingCP: parseVaryingCP(formData.value.varyingCP),
   })
@@ -145,13 +148,7 @@ const moduleCodeRequiredRule = [(i: string) => !!i || 'Feld erforderlich']
               required
             />
           </VCol>
-          <VCol cols="12" md="4" sm="6">
-            <VTextField
-              v-model="formData.editorUsername"
-              label="Nutzername des Bearbeiters"
-              required
-            />
-          </VCol>
+          <VCol cols="12" md="4" sm="6"> </VCol>
           <VCol cols="12" md="4" sm="6">
             <VTextField
               v-model="formData.semesterHours"
@@ -172,9 +169,8 @@ const moduleCodeRequiredRule = [(i: string) => !!i || 'Feld erforderlich']
           </VCol>
           <VCol cols="12" md="4" sm="6">
             <VTextField
-              v-model="formData.varyingCP"
-              label="Variierende CP"
-              required
+              v-model="formData.minFocus"
+              label="Master Schwerpunkt (json)"
             />
           </VCol>
           <VCol cols="12">
@@ -195,6 +191,11 @@ const moduleCodeRequiredRule = [(i: string) => !!i || 'Feld erforderlich']
         </VRow>
         <small class="text-caption text-medium-emphasis">
           Dozentenliste mit Kommas getrennt
+        </small>
+        <br />
+        <small class="text-caption text-medium-emphasis">
+          Keys für Schwerpunkt: Medieninformatik, SW-Engineering, IT-Sicherheit,
+          Technische Informatik, Data Science
         </small>
         <br />
         <small
