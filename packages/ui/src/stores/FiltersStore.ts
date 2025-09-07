@@ -41,9 +41,7 @@ export const useFiltersStore = defineStore('filters', () => {
     () => userStore.user?.type !== 'Student',
   )
   const hideMinFocus = computed(
-    () =>
-      userStore.user?.Student?.fieldOfStudy !== 'Informatik (Master)' ||
-      appConfStore.conf?.hasMinFocuses === false,
+    () => appConfStore.conf?.hasMinFocuses === false,
   )
   const optionsFilters: OptionsFilter[] = reactive([
     {
