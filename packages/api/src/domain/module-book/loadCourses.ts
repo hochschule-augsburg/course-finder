@@ -5,6 +5,10 @@ import { isEqual } from 'lodash-es'
 import { prisma } from '../../prisma/prisma.ts'
 import { parseCourses } from './parseModuleBook.ts'
 
+/**
+ * Loads courses from provided PDFs and updates the database accordingly.
+ * No longer existing courses/otherwise created are marked as unpublished.
+ */
 export async function loadCourses(pdfs: { baPdf?: Buffer; maPdf?: Buffer }) {
   const messages: string[] = []
 
@@ -53,7 +57,10 @@ export async function loadCourses(pdfs: { baPdf?: Buffer; maPdf?: Buffer }) {
       })
       return promise
     }),
-    prisma.course.deleteMany({
+    prisma.course.updateMany({
+      data: {
+        published: false,
+      },
       where: {
         moduleCode: { in: notFoundCourses.map((e) => e.moduleCode) },
       },
