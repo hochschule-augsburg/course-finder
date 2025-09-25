@@ -9,7 +9,7 @@ const commonData = z.object({
 const studentData = commonData.extend({
   carLicense: z.string(),
   dfnEduPersonFieldOfStudyString: z.string(),
-  dfnEduPersonFinalDegree: z.coerce.number(),
+  dfnEduPersonFinalDegree: z.optional(z.coerce.number()),
   dfnEduPersonTermsOfStudy: z.string(),
   employeeType: z.literal('Studenten'),
   ou: z.string(),
@@ -42,8 +42,17 @@ export const resultSpec = z
       username: data.uid,
     }
     if (data.employeeType === 'Studenten') {
-      const finalDegree =
-        data.dfnEduPersonFinalDegree === 84 ? 'Bachelor' : 'Master'
+      let finalDegree: 'Bachelor' | 'Master' = 'Bachelor'
+      if (data.dfnEduPersonFinalDegree === undefined) {
+        if (data.dfnEduPersonFieldOfStudyString.includes('Master')) {
+          finalDegree = 'Master'
+        } else {
+          finalDegree = 'Bachelor'
+        }
+      } else {
+        finalDegree =
+          data.dfnEduPersonFinalDegree === 84 ? 'Bachelor' : 'Master'
+      }
       return {
         ...common,
         faculty: data.ou,
