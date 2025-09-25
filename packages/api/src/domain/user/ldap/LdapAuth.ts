@@ -36,12 +36,18 @@ export async function pwdAuth(
     const searchEntries = (await client.search(`uid=${username},${baseDn}`))
       .searchEntries
     if (!searchEntries.length) {
+      if (env.LOG_LEVEL === 'debug') {
+        console.log('no entries')
+      }
       return { cause: 'invalid-credentials', success: false }
     }
     result = userDataSpec.parse(searchEntries[0])
     // ldap can change the username here. Only use result.username
   } catch (e) {
     if (e instanceof InvalidCredentialsError || e instanceof ZodError) {
+      if (env.LOG_LEVEL === 'debug') {
+        console.log(e)
+      }
       return { cause: 'invalid-credentials', success: false }
     }
     return { cause: 'service-not-available', success: false }
