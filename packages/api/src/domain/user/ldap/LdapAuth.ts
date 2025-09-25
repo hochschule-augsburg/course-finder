@@ -35,6 +35,9 @@ export async function pwdAuth(
     await client.bind(`uid=${username},${baseDn}`, password)
     const searchEntries = (await client.search(`uid=${username},${baseDn}`))
       .searchEntries
+    if (env.LOG_LEVEL === 'debug') {
+      console.log(searchEntries)
+    }
     if (!searchEntries.length) {
       if (env.LOG_LEVEL === 'debug') {
         console.log('no entries')
