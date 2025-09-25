@@ -10,7 +10,7 @@ const studentData = commonData.extend({
   carLicense: z.string(),
   dfnEduPersonFieldOfStudyString: z.string(),
   dfnEduPersonFinalDegree: z.optional(z.coerce.number()),
-  dfnEduPersonTermsOfStudy: z.string(),
+  dfnEduPersonTermsOfStudy: z.optional(z.string()),
   employeeType: z.literal('Studenten'),
   ou: z.string(),
   schacDateOfBirth: z.string(),
@@ -53,6 +53,10 @@ export const resultSpec = z
         finalDegree =
           data.dfnEduPersonFinalDegree === 84 ? 'Bachelor' : 'Master'
       }
+      let term: number = 1
+      if (data.dfnEduPersonTermsOfStudy !== undefined) {
+        term = Number(data.dfnEduPersonTermsOfStudy.split('$')[1])
+      }
       return {
         ...common,
         faculty: data.ou,
@@ -60,7 +64,7 @@ export const resultSpec = z
         finalDegree: finalDegree,
         name: data.cn,
         regNumber: data.carLicense,
-        term: Number(data.dfnEduPersonTermsOfStudy.split('$')[1]),
+        term: term,
         type: 'Student',
       } as const
     }
