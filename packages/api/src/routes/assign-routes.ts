@@ -42,7 +42,7 @@ export const assignRouter = router({
     })
 
     return studentPhase
-      .filter((e) => e.Phase.publishedTry)
+      .filter((e) => e.Phase.publishedTry !== null)
       .map((phase) => {
         const assignments = phase.PhaseAssignments.filter(
           (e) => e.tryNo === phase.Phase.publishedTry,
