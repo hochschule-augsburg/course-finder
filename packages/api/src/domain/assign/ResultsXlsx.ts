@@ -161,7 +161,61 @@ export async function buildExcelResults(
       ...studentsData,
     ]
   })
-  console.log(StudentSheet)
+
+  const studentCountSheet = sortedAssignments.flatMap(
+    ([module, assignedStuds]) => {
+      // Filter out entries with no assigned students
+      if (!assignedStuds) {
+        return []
+      }
+
+      // Find the course title for the current module
+      const offeredCourse = offeredCourses.find((c) => c.moduleCode === module)
+      const title = offeredCourse?.Course.title.de ?? 'Unbekannt'
+
+      // Group students by their fieldOfStudy
+      const countsByFieldOfStudy = assignedStuds.reduce(
+        (acc, stud): { [key: string]: number } => {
+          // Find the full student data
+          const user = students.find((e) => e.username === stud.username)
+
+          // Handle case where user is not found (matching the logic in the original snippet)
+          if (!user?.Student) {
+            throw new Error(`User not found for username: ${stud.username}`)
+          }
+
+          // Ensure the user is a student and has a fieldOfStudy
+          const fieldOfStudy = user.Student.fieldOfStudy
+
+          // Increment the count for the fieldOfStudy
+          acc[fieldOfStudy] = (acc[fieldOfStudy] || 0) + 1
+          return acc
+        },
+        {},
+      )
+
+      // Transform the counts map into the desired sheet format
+      const subjectCounts = Object.entries(countsByFieldOfStudy).map(
+        ([fieldOfStudy, count]) => ({
+          Kürzel: module,
+          Titel: title,
+          Studiengang: fieldOfStudy,
+          Anzahl: count,
+        }),
+      )
+
+      // Add a total row for the subject
+      const totalStudents = assignedStuds.length
+      const totalRow = {
+        Kürzel: module,
+        Titel: title,
+        Studiengang: 'Gesamt',
+        Anzahl: totalStudents,
+      }
+
+      return [totalRow, ...subjectCounts]
+    },
+  )
 
   // Generate Excel workbook
   const workbook = XLSX.utils.book_new()
@@ -232,6 +286,15 @@ export async function buildExcelResults(
     { wch: 15 }, // Matrikelnummer
     { wch: 14 }, // Benutzername
   ]
+  const studentCountSheetWs = XLSX.utils.json_to_sheet(studentCountSheet, {
+    header: ['Kürzel', 'Titel', 'Studiengang', 'Anzahl'],
+  })
+  studentCountSheetWs['!cols'] = [
+    { wch: 13 }, // Kürzel
+    { wch: 30 }, // Titel
+    { wch: 25 }, // Studiengang
+    { wch: 10 }, // Anzahl
+  ]
 
   XLSX.utils.book_append_sheet(
     workbook,
@@ -244,6 +307,11 @@ export async function buildExcelResults(
     `Nicht Genug Anmeldungen`,
   )
   XLSX.utils.book_append_sheet(workbook, studentSheetWs, `Studenten in Modulen`)
+  XLSX.utils.book_append_sheet(
+    workbook,
+    studentCountSheetWs,
+    `Studenten pro Studiengang`,
+  )
 
   const buffer = new Uint8Array(
     XLSX.write(workbook, {
