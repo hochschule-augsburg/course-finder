@@ -25,7 +25,7 @@
     "core-js": "^3.45.1",
     "date-fns": "^4.1.0",
     "file-saver": "^2.0.5",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "pinia": "^3.0.3",
     "superjson": "^2.2.2",
     "v-onboarding": "^2.9.0",
