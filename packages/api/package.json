@@ -29,7 +29,7 @@
     "@prisma/client": "^6.14.0",
     "@trpc/server": "^11.5.0",
     "date-fns": "^4.1.0",
-    "fastify": "^5.5.0",
+    "fastify": "^5.7.3",
     "ldapts": "^8.0.9",
     "lodash-es": "^4.17.21",
     "node-pdftk": "^2.1.3",
