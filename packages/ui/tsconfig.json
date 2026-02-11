@@ -1,26 +1,34 @@
 {
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "src",
     //types from api have to be in ui because unbuild monorepo
     "../api/src",
     "tests",
-    "./typed-router.d.ts",
-    "./components.d.ts"
+    "./components.d.ts",
+    "./route-map.d.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
   "compilerOptions": {
     "types": [
       "vite/client",
       "vue-router/auto",
-      "unplugin-vue-router/client",
       "vitest/globals",
       "@intlify/unplugin-vue-i18n/messages"
     ],
     "target": "es2022",
     "jsx": "preserve",
     "jsxImportSource": "vue",
-    "lib": ["DOM", "ESNext"],
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strictNullChecks": true,
@@ -38,9 +46,21 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@workspace/api/*": ["../api/*"],
-      "@tests/*": ["tests/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@workspace/api/*": [
+        "../api/*"
+      ],
+      "@tests/*": [
+        "tests/*"
+      ]
     }
-  }
+  },
+  "vueCompilerOptions": {
+    "plugins": [
+      "vue-router/volar/sfc-typed-router",
+      "vue-router/volar/sfc-route-blocks",
+    ],
+  },
 }

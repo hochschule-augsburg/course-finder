@@ -1,5 +1,7 @@
 .not-tracked/
 
+generated/
+
 ### Node ###
 # Logs
 logs
