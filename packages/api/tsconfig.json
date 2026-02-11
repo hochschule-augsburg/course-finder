@@ -1,11 +1,21 @@
 {
-  "exclude": ["node_modules"],
-  "include": ["src", "tests", "vitest.config.ts", "prisma"],
+  "exclude": [
+    "node_modules",
+  ],
+  "include": [
+    "src",
+    "tests",
+    "vitest.config.ts",
+    "prisma"
+  ],
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -19,6 +29,10 @@
     "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
     "allowImportingTsExtensions": true,
-    "types": ["node", "vitest/globals", "vitest/importMeta"]
+    "types": [
+      "node",
+      "vitest/globals",
+      "vitest/importMeta"
+    ]
   }
 }

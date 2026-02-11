@@ -95,7 +95,7 @@ async function updateSubject(subject: Course) {
 
 <template>
   <VContainer>
-    <VTable height="1000px" fixed-header hover>
+    <VTable fixed-header hover>
       <thead>
         <tr>
           <th class="text-left">
