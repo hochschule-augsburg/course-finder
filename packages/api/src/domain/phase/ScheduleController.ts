@@ -1,8 +1,8 @@
 import type { Job } from 'node-schedule'
 
-import { type Enrollphase, PhaseState } from '@prisma/client'
 import { scheduleJob } from 'node-schedule'
 
+import { type Enrollphase, PhaseState } from '../../generated/prisma/client.js'
 import { prisma } from '../../prisma/prisma.ts'
 import { PhaseService } from './PhaseService.ts'
 

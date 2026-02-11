@@ -1,8 +1,7 @@
-import type { Student } from '@prisma/client'
-
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 
+import type { Student } from '../generated/prisma/client.js'
 import type { ClientUser } from '../prisma/PrismaTypes.ts'
 import type { Context } from '../server/context.ts'
 

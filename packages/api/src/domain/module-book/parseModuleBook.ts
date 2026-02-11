@@ -1,4 +1,4 @@
-import type { Course } from '@prisma/client'
+import type { Course } from '../../generated/prisma/client.js'
 
 import { splitModuleBook } from './splitBook.ts'
 
@@ -47,7 +47,7 @@ function extractData(
     maPdf: null,
     minFocus: null,
     moduleCode,
-    pdf: data.buffer,
+    pdf: Uint8Array.from(data.buffer),
     published: true,
     semesterHours,
     title: {

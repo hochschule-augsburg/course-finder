@@ -1,7 +1,7 @@
-import type { Course } from '@prisma/client'
-
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+
+import type { Course } from '../../../generated/prisma/client.js'
 
 import { prisma } from '../../../prisma/prisma.ts'
 import { i18nInput, nullString } from '../../../prisma/PrismaZod.ts'

@@ -1,6 +1,9 @@
-import type { StudentChoice, StudentPhase } from '@prisma/client'
-
 import { sumBy } from 'lodash-es'
+
+import type {
+  StudentChoice,
+  StudentPhase,
+} from '../../generated/prisma/client.js'
 
 export class AssignmentStudentController {
   public readonly choices: StudentChoice[]

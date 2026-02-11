@@ -1,5 +1,7 @@
-import type { Course, OfferedCourse } from '@prisma/client'
-
+import type {
+  Course,
+  OfferedCourse,
+} from '../../../src/generated/prisma/client.js'
 import type { EnrollPhase } from '../../../src/prisma/PrismaTypes'
 
 import { assign } from '../../../src/domain/assign/AssignmentAlgorithm'

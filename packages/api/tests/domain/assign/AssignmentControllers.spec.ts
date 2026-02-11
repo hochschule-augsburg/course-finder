@@ -1,4 +1,7 @@
-import type { StudentChoice, StudentPhase } from '@prisma/client'
+import type {
+  StudentChoice,
+  StudentPhase,
+} from '../../../src/generated/prisma/client.js'
 
 import { AssignmentStudentController } from '../../../src/domain/assign/AssignmentControllers'
 

@@ -1,7 +1,7 @@
-import type { Enrollphase } from '@prisma/client'
-
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+
+import type { Enrollphase } from '../../generated/prisma/client.js'
 
 import { mayEnroll } from '../../domain/enroll/enrollUtils.ts'
 import { prisma } from '../../prisma/prisma.ts'

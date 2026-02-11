@@ -3,10 +3,10 @@
  *  process.
  * It manages the scheduling of the phases and provides methods for manipulation.
  */
-import { type Enrollphase, PhaseState } from '@prisma/client'
 import { groupBy } from 'lodash-es'
 import { z } from 'zod'
 
+import { type Enrollphase, PhaseState } from '../../generated/prisma/client.js'
 import { prisma } from '../../prisma/prisma.ts'
 import {
   i18nInput,

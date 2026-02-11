@@ -1,5 +1,4 @@
-/* cSpell:disable */
-import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 import { addMonths } from 'date-fns'
 import { readFileSync } from 'fs'
 import { random, range, sampleSize, sumBy, uniqBy } from 'lodash-es'
@@ -8,11 +7,16 @@ import { parseArgs } from 'node:util'
 
 import { parseCourses } from '../src/domain/module-book/parseModuleBook.ts'
 import { hashPassword } from '../src/domain/user/local/password-auth.ts'
+/* cSpell:disable */
+import { PrismaClient } from '../src/generated/prisma/client.js'
 import { data as coursesData } from './assets/courses.ts'
 import { data as offeredCoursesSS24Data } from './assets/oldOfferedCoursesSS24.ts'
 import { data as offeredCoursesWS2324Data } from './assets/oldOfferedCoursesWS23_24.ts'
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+})
+const prisma = new PrismaClient({ adapter })
 
 const stubPdf = readFileSync('./prisma/assets/compiler.pdf')
 
