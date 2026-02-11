@@ -20,6 +20,7 @@
   "version": "0.0.0",
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
       "@prisma/client",
       "@prisma/engines",
       "core-js",

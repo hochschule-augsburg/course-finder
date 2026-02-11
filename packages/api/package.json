@@ -7,7 +7,7 @@
     "prisma/"
   ],
   "scripts": {
-    "dev": "node --experimental-transform-types --watch src/main.ts | pino-pretty",
+    "dev": "node --env-file=.env --experimental-transform-types --watch src/main.ts | pino-pretty",
     "typecheck": "tsc --noEmit",
     "build": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
     "start": "env NODE_ENV=production TZ=Europe/Berlin node dist/main.js",
@@ -29,6 +29,7 @@
     "@google/generative-ai": "^0.24.1",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "@prisma/client-runtime-utils": "^7.3.0",
     "@trpc/server": "^11.10.0",
     "date-fns": "^4.1.0",
     "fastify": "^5.7.4",
@@ -43,8 +44,7 @@
     "prisma-json-types-generator": "^4.1.1",
     "superjson": "^2.2.6",
     "totp-generator": "^2.0.1",
-    "zod": "^4.3.6",
-    "zod-to-json-schema": "^3.25.1"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

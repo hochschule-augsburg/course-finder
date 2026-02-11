@@ -1,11 +1,13 @@
-import js from '@eslint/js'
-import ts from 'typescript-eslint'
+import eslintjs from '@eslint/js'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import { sharedRules } from '../eslint-shared.js'
+import tseslint from 'typescript-eslint'
 
-export default ts.config(
-  js.configs.recommended,
-  ...ts.configs.recommendedTypeChecked,
+export default defineConfig(
+  globalIgnores(['src/generated/**/*']),
+  eslintjs.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {

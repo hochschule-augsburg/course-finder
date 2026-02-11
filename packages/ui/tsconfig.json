@@ -16,9 +16,9 @@
     }
   ],
   "compilerOptions": {
+    "rootDir": "../",
     "types": [
       "vite/client",
-      "vue-router/auto",
       "vitest/globals",
       "@intlify/unplugin-vue-i18n/messages"
     ],

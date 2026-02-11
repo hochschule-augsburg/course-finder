@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useRoute } from 'vue-router/auto'
+import { useRoute } from 'vue-router'
 import { VBtn, VCol, VContainer, VRow } from 'vuetify/components'
 
 import { dialogService } from '@/components/DialogService'

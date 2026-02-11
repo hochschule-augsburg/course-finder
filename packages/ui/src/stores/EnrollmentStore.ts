@@ -126,16 +126,18 @@ export const useEnrollmentStore = defineStore('enrollment', () => {
     })
 
     return Promise.all(
-      enrolledSubjects.value.map(
-        (s) =>
-          coursesStore.currentPhase?.id &&
-          trpc.enroll.upsert.mutate({
-            creditsNeeded: undefined,
-            moduleCode: s.moduleCode,
-            phaseId: coursesStore.currentPhase.id,
-            points: s.points,
-          }),
-      ),
+      enrolledSubjects.value
+        .map(
+          (s) =>
+            coursesStore.currentPhase?.id &&
+            trpc.enroll.upsert.mutate({
+              creditsNeeded: undefined,
+              moduleCode: s.moduleCode,
+              phaseId: coursesStore.currentPhase.id,
+              points: s.points,
+            }),
+        )
+        .filter((e) => !!e),
     )
   }
 

@@ -2,7 +2,7 @@ import XLSX from '@e965/xlsx'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { parse } from 'date-fns'
 import { de } from 'date-fns/locale'
-import { chunk, template, uniqBy } from 'lodash-es'
+import { chunk, uniqBy } from 'lodash-es'
 import { z, ZodError } from 'zod'
 
 import type { I18nJson, OfferedCourseData } from '../../prisma/PrismaTypes.ts'
@@ -188,15 +188,15 @@ function parseDate(dateStr: string): Date {
   return parsed
 }
 
-const promptTemplate: (data: { courses: string; data: string }) => string =
-  template(`\
+function promptTemplate(data: { courses: string; data: string }): string {
+  return `\
 Transformiere die Daten "data" von einer Excel-Tabelle für angebotene Kurse in
  ein Array von JSON-Objekten, die dem JSON-Schema entsprechen. Es gibt auch
  Zeilen die Zusatzinformationen enthalten, die in "extraInfo" gespeichert werden
  können. Daher muss nicht jede Zeile aus ein Json-Objekt erzeugen.
 JSON-Schema:
 """
-${JSON.stringify(z.toJSONSchema(offeredCourseSpec))}
+${JSON.stringify(z.toJSONSchema(offeredCourseSpec, { unrepresentable: 'any' }))}
 """
 "externalRegistration" ist für Kurse bei denen man sich nicht über die Plattform
  anmelden kann, sondern z.B. direkt bei den Professoren.
@@ -210,15 +210,16 @@ Wenn keine minimale Teilnehmerzahl angegeben ist wähle "16" und setze "hideMinP
  auf "true".
 data:
 """
-<%= data %>
+${data.data}
 """
 Kurse:
 """
-<%= courses %>
+${data.courses}
 """
 Studiengänge:
 """
 ${JSON.stringify(fieldsOfStudy)}
 """
 SE ist "Systems Engineering (Bachelor)" II ist "International Information Systems (Bachelor)"
-`)
+`
+}
