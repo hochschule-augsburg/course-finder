@@ -1,4 +1,3 @@
-import { PhaseState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { sumBy } from 'lodash-es'
 import { z } from 'zod'
@@ -8,6 +7,7 @@ import {
   PhaseService,
   phaseSpec,
 } from '../../../domain/phase/PhaseService.ts'
+import { PhaseState } from '../../../generated/prisma/client.js'
 import { prisma } from '../../../prisma/prisma.ts'
 import {
   offeredCourseSpec,

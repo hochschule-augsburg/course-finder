@@ -1,7 +1,6 @@
-import type { Course, OfferedCourse } from '@prisma/client'
-
 import { z } from 'zod'
 
+import type { Course, OfferedCourse } from '../../generated/prisma/client.js'
 import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes.ts'
 
 import { prisma } from '../../prisma/prisma.ts'

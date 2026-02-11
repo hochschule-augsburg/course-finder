@@ -6,7 +6,7 @@ import type {
   Student as PStudent,
   StudentChoice as PStudentChoice,
   User as PUser,
-} from '@prisma/client'
+} from '../generated/prisma/client.js'
 
 export type AppConf = Omit<PAppConf, 'id'>
 

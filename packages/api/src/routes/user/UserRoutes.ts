@@ -53,7 +53,7 @@ export const authRouter = router({
         }
 
         if (result.twoFA) {
-          const otp = TOTP.generate(generateBase32Key(), {
+          const otp = await TOTP.generate(generateBase32Key(), {
             period: 120,
           })
           await Promise.all([

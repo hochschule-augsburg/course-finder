@@ -1,7 +1,9 @@
-import type { StudentChoice, StudentPhase } from '@prisma/client'
-
 import { range, shuffle, sumBy } from 'lodash-es'
 
+import type {
+  StudentChoice,
+  StudentPhase,
+} from '../../generated/prisma/client.js'
 import type { AssignmentStudentController } from './AssignmentControllers.ts'
 
 export function normalizeChoices(

@@ -1,4 +1,4 @@
-import type { OfferedCourse } from '@prisma/client'
+import type { OfferedCourse } from '../../generated/prisma/client.js'
 
 import { prisma } from '../../prisma/prisma.ts'
 import { AssignmentStudentController } from './AssignmentControllers.ts'

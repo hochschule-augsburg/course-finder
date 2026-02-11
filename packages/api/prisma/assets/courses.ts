@@ -1,4 +1,4 @@
-import type { Course } from '@prisma/client'
+import type { Course } from '../../src/generated/prisma/client.js'
 
 export const data: Course[] = [
   {

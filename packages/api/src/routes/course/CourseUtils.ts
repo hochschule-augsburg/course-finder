@@ -1,4 +1,4 @@
-import type { Student } from '@prisma/client'
+import type { Student } from '../../generated/prisma/client.js'
 
 // https://gitlab.informatik.tha.de/phe/fki-modulhandbuecher/-/blob/master/SharedSources/modules.sty
 const examTypesData = [

@@ -1,5 +1,4 @@
-import type { Student } from '@prisma/client'
-
+import type { Student } from '../../generated/prisma/client.js'
 import type { ClientUser } from '../../prisma/PrismaTypes.ts'
 
 // keep in sync with packages/ui/src/helper/enums/fieldsOfStudy.ts

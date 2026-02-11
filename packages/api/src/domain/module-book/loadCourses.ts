@@ -1,6 +1,6 @@
-import type { Course } from '@prisma/client'
-
 import { isEqual } from 'lodash-es'
+
+import type { Course } from '../../generated/prisma/client.js'
 
 import { prisma } from '../../prisma/prisma.ts'
 import { parseCourses } from './parseModuleBook.ts'

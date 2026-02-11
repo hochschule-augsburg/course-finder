@@ -4,7 +4,6 @@ import { parse } from 'date-fns'
 import { de } from 'date-fns/locale'
 import { chunk, template, uniqBy } from 'lodash-es'
 import { z, ZodError } from 'zod'
-import zodToJsonSchema from 'zod-to-json-schema'
 
 import type { I18nJson, OfferedCourseData } from '../../prisma/PrismaTypes.ts'
 
@@ -197,7 +196,7 @@ Transformiere die Daten "data" von einer Excel-Tabelle für angebotene Kurse in
  können. Daher muss nicht jede Zeile aus ein Json-Objekt erzeugen.
 JSON-Schema:
 """
-${JSON.stringify(zodToJsonSchema(offeredCourseSpec))}
+${JSON.stringify(z.toJSONSchema(offeredCourseSpec))}
 """
 "externalRegistration" ist für Kurse bei denen man sich nicht über die Plattform
  anmelden kann, sondern z.B. direkt bei den Professoren.
