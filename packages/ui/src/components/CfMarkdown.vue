@@ -4,7 +4,7 @@ import type { Options, PluginSimple } from 'markdown-it'
 import VueMarkdown from 'vue-markdown-render'
 
 const props = defineProps<{
-  source?: string
+  source: string
 }>()
 const newTabLinkPlugin: PluginSimple = (md) => {
   const defaultRender =

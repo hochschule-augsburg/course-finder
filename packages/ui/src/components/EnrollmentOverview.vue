@@ -31,7 +31,10 @@ const stateText = computed(
         `${phase.start.toLocaleDateString(locale)} - ${phase.end.toLocaleDateString(locale)}`
       }}
     </p>
-    <CfMarkdown :source="phase.description[locale]" />
+    <CfMarkdown
+      v-if="phase.description[locale]"
+      :source="phase.description[locale] ?? ''"
+    />
     <p>
       {{ $t(`phase-states.long.${stateText}`) }}
     </p>

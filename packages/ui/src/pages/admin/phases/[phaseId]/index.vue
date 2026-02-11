@@ -7,7 +7,6 @@ import { usePhaseState } from '@/stores/admin/AdminCoursesStore'
 import { trpc } from '@/trpc'
 
 const route = useRoute()
-//@ts-expect-error auto type not working
 const phaseId = Number(route.params.phaseId)
 
 const phaseState = usePhaseState(phaseId)

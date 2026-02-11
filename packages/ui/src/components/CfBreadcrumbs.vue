@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { RouteParamsGeneric } from 'vue-router'
+
 import { mdiChevronRight } from '@mdi/js'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -18,7 +20,7 @@ const routeItems = computed<any>(() => {
     disabled: boolean
     href: string
     noBreadcrumbs: boolean
-    params: Record<string, string>
+    params: RouteParamsGeneric
     text: string
   }[] = [
     {
