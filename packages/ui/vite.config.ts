@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path'
 import { URL, fileURLToPath } from 'node:url'
 // Plugins
 import Components from 'unplugin-vue-components/vite'
-import VueRouter from 'unplugin-vue-router/vite'
+import VueRouter from 'vue-router/vite'
 // Utilities
 import { defineConfig } from 'vite'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'

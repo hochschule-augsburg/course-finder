@@ -6,12 +6,12 @@
     "@types/node": "^24.3.0",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-perfectionist": "^4.15.0",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-unused-imports": "^4.2.0",
-    "prettier": "^3.6.2",
-    "typescript-eslint": "^8.40.0",
-    "vitest": "^3.2.4"
+    "eslint-plugin-perfectionist": "^5.5.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.55.0",
+    "vitest": "^4.0.18"
   },
   "keywords": [],
   "license": "MIT",
@@ -28,7 +28,7 @@
       "vue-demi"
     ]
   },
-  "packageManager": "pnpm@10.2.0",
+  "packageManager": "pnpm@10.28.2",
   "engines": {
     "node": ">=23"
   }
