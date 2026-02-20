@@ -72,6 +72,7 @@ export default defineConfig({
                 items: [
                   { text: 'Backend', link: '/en/backend' },
                   { text: 'Frontend', link: '/en/frontend' },
+                  { text: 'Deployment', link: '/en/deployment' },
                 ],
               },
             ],
@@ -89,6 +90,7 @@ export default defineConfig({
                 items: [
                   { text: 'Backend', link: '/en/backend' },
                   { text: 'Frontend', link: '/en/frontend' },
+                  { text: 'Deployment', link: '/en/deployment' },
                 ],
               },
             ],
