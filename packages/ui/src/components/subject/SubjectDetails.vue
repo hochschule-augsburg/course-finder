@@ -163,6 +163,19 @@ const minFocusFiltered = computed(() => {
               <div class="icon-heading">
                 <VIcon :icon="mdiCalendar" size="32" />
                 <h4>{{ t('appointments') }}</h4>
+                <VTooltip location="top" offset="2" max-width="300rem">
+                  <span class="text-pre-wrap">
+                    {{ t('appointments-hint') }}
+                  </span>
+                  <template #activator="{ props: toolProps }">
+                    <VIcon
+                      v-bind="toolProps"
+                      size="1.5rem"
+                      class="ml-2"
+                      :icon="mdiInformation"
+                    />
+                  </template>
+                </VTooltip>
               </div>
               <template
                 v-if="subject.offeredCourse.appointments.type === 'weekly'"
@@ -396,6 +409,11 @@ en:
   min-focus-hint:
     For the most up-to-date and reliable information, please visit your study's
     website.
+  # In WiSe 25/26, we had the problem that appointments were inconsistent in
+  # WebUntis and CourseFinder. So we add a hint here.
+  appointments-hint:
+    For the most up-to-date information on appointments, please check WebUnits,
+    as they can change at short notice.
 de:
   lecturers: Dozenten
   workload: Arbeitsaufwand
@@ -410,4 +428,7 @@ de:
   min-focus-hint:
     Auf der Website des Studiengangs findest du die aktuellsten und
     verlässlichsten Informationen.
+  appointments-hint:
+    Auf WebUnits findest du die aktuellsten Informationen zu Terminen, da diese
+    sich kurzfristig ändern können.
 </i18n>
