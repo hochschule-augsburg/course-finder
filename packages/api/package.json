@@ -9,8 +9,7 @@
   "scripts": {
     "dev": "node --env-file=.env --experimental-transform-types --watch src/main.ts | pino-pretty",
     "typecheck": "tsc --noEmit",
-    "build": "esbuild src/main.ts --bundle --packages=external --format=esm --platform=node --outdir=dist",
-    "start": "env NODE_ENV=production TZ=Europe/Berlin node dist/main.js",
+    "start": "env NODE_ENV=production TZ=Europe/Berlin node --experimental-transform-types src/main.ts",
     "lint": "eslint --max-warnings 0 src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
     "test": "vitest run",
     "db:generate": "prisma generate --no-hints",
