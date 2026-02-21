@@ -1,10 +1,8 @@
 import 'dotenv/config'
 import { defineConfig, env } from 'prisma/config'
 
-let DATABASE_URL = process.env.DATABASE_URL
-if (!process.env.CI && !DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is not set')
-}
+// Datasource only required for migration
+let DATABASE_URL: string | undefined = process.env.DATABASE_URL
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
@@ -13,6 +11,6 @@ export default defineConfig({
     seed: 'node prisma/seed.ts',
   },
   datasource: {
-    url: process.env.DATABASE_URL,
+    url: DATABASE_URL,
   },
 })
