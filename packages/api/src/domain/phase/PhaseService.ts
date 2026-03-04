@@ -120,6 +120,7 @@ export class PhaseService {
         prisma.offeredCourse.create({
           data: {
             appointments: course.appointments,
+            externalRegistration: course.externalRegistration,
             extraInfo: course.extraInfo,
             for: { set: course.for },
             hideMinParticipants: course.hideMinParticipants,
