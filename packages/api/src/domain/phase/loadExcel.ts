@@ -15,10 +15,6 @@ import {
 } from '../../prisma/PrismaZod.ts'
 import { fieldsOfStudy } from '../enroll/enrollUtils.ts'
 
-const genAi = new GoogleGenerativeAI(env.AI_API_KEY)
-
-const model = genAi.getGenerativeModel({ model: 'gemini-2.0-flash' })
-
 class DateError extends Error {
   constructor(str: string) {
     super(`Invalid date format: ${str}`)
@@ -99,6 +95,15 @@ async function parseCourses(
   courses: { lecturers: string[]; moduleCode: string; title: I18nJson }[],
   coursesMin: { lecturers: string; moduleCode: string; title: string }[],
 ) {
+  if (!env.AI_API_KEY) {
+    return {
+      errors: ['AI_API_KEY not set, cannot parse courses from Excel'],
+      offeredCourses: [],
+    }
+  }
+  const genAi = new GoogleGenerativeAI(env.AI_API_KEY)
+  const model = genAi.getGenerativeModel({ model: 'gemini-2.0-flash' })
+
   const prompt = promptTemplate({
     courses: JSON.stringify(coursesMin),
     data: JSON.stringify(data),
