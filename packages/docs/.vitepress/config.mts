@@ -1,5 +1,11 @@
 import { defineConfig } from 'vitepress'
 
+const devItems = [
+  { text: 'Backend', link: '/en/backend' },
+  { text: 'Frontend', link: '/en/frontend' },
+  { text: 'Deployment', link: '/en/deployment' },
+]
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'CourseFinder',
@@ -29,10 +35,7 @@ export default defineConfig({
               { text: 'Admin', link: '/admin' },
               {
                 text: 'Dev',
-                items: [
-                  { text: 'Backend', link: '/backend' },
-                  { text: 'Frontend', link: '/frontend' },
-                ],
+                items: devItems,
               },
             ],
           },
@@ -46,10 +49,7 @@ export default defineConfig({
               { text: 'Admin', link: '/admin' },
               {
                 text: 'Dev',
-                items: [
-                  { text: 'Backend', link: '/backend' },
-                  { text: 'Frontend', link: '/frontend' },
-                ],
+                items: devItems,
               },
             ],
           },
@@ -66,14 +66,10 @@ export default defineConfig({
             text: 'Documentation',
             items: [
               { text: 'Student', link: '/en/student' },
-              { text: 'Admin', link: '/en/admin' },
+              { text: 'Admin', link: '/admin' },
               {
                 text: 'Dev',
-                items: [
-                  { text: 'Backend', link: '/en/backend' },
-                  { text: 'Frontend', link: '/en/frontend' },
-                  { text: 'Deployment', link: '/en/deployment' },
-                ],
+                items: devItems,
               },
             ],
           },
@@ -84,14 +80,10 @@ export default defineConfig({
             text: 'Documentation',
             items: [
               { text: 'Student', link: '/en/student' },
-              { text: 'Admin', link: '/en/admin' },
+              { text: 'Admin', link: '/admin' },
               {
                 text: 'Dev',
-                items: [
-                  { text: 'Backend', link: '/en/backend' },
-                  { text: 'Frontend', link: '/en/frontend' },
-                  { text: 'Deployment', link: '/en/deployment' },
-                ],
+                items: devItems,
               },
             ],
           },

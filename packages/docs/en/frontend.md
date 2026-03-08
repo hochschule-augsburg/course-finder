@@ -47,7 +47,7 @@ modularized by functionality.
 - **admin-stats**: Manages statistics (visible only to admins).
 - **admin-assign**: Manages enrollment phases (visible only to admins).
 
-![pinia](../assets/pinia.png)
+![pinia](/assets/pinia.png)
 
 ### Page Components
 
@@ -55,7 +55,7 @@ Page components correspond to specific routes and are located in the `views/`
 directory. These components use reusable components to create the page. The
 files in the `views/` directory represent the routes (file-based routing).
 
-![file-based routing](../assets/router.png)
+![file-based routing](/assets/router.png)
 
 ### Reusable Components
 
@@ -66,4 +66,4 @@ typically consists of:
 - **Script**: Contains the logic of the component, written in TypeScript.
 - **Style**: Contains scoped SCSS, specific to the component.
 
-![components graph](../assets/components.png)
+![components graph](/assets/components.png)

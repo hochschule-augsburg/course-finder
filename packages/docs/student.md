@@ -9,7 +9,7 @@ Ganz oben auf der Webseite befindet sich die Navigationsleiste, die aus mehreren
 Buttons besteht. Diese Buttons bieten verschiedene Einstellungen und Hilfsmittel
 für die Benutzerfreundlichkeit und Funktionalität der Webseite.
 
-![Navigationsleiste](assets/navigationsleiste.png)
+![Navigationsleiste](/assets/navigationsleiste.png)
 
 ### 1.1 Theme wählen
 
@@ -22,7 +22,7 @@ für die Benutzerfreundlichkeit und Funktionalität der Webseite.
   - **Automode:** Übernimmt die bevorzugte Darstellung des Browsers des
     Studenten (hell oder dunkel).
 
-![Theme wählen](assets/theme.png)
+![Theme wählen](/assets/theme.png)
 
 ### 1.2 Sprache wählen
 
@@ -34,7 +34,7 @@ für die Benutzerfreundlichkeit und Funktionalität der Webseite.
   - **Deutsch:** Stellt die Webseite auf die deutsche Sprache um.
   - **Englisch:** Stellt die Webseite auf die englische Sprache um.
 
-![Sprache wählen](assets/sprache.png)
+![Sprache wählen](/assets/sprache.png)
 
 ### 1.3 Hilfe
 
@@ -43,7 +43,7 @@ für die Benutzerfreundlichkeit und Funktionalität der Webseite.
   Wahl der Wahlpflichtfächer) entscheiden oder man entscheidet sich für die
   Dokumentation (detaillierte Beschreibung der Webseite).
 
-![Hilfe Button](assets/hilfe.png)
+![Hilfe Button](/assets/hilfe.png)
 
 ### 1.4 Login
 
@@ -54,7 +54,7 @@ für die Benutzerfreundlichkeit und Funktionalität der Webseite.
   werden Sie angemeldet und haben Zugriff auf Ihre persönlichen Daten und
   Funktionen.
 
-![Login](assets/login.png)
+![Login](/assets/login.png)
 
 ### 1.5 Logout
 
@@ -63,7 +63,7 @@ für die Benutzerfreundlichkeit und Funktionalität der Webseite.
   Login-Button wird ein Logout-Button, diesen kann der Student bei Bedarf
   nutzen.
 
-![Logout](assets/logout.png)
+![Logout](/assets/logout.png)
 
 Diese Navigationsleiste ist ein zentraler Bestandteil der Webseite und bietet
 schnellen Zugriff auf wichtige Funktionen, die das Nutzererlebnis verbessern.
@@ -75,7 +75,7 @@ schnellen Zugriff auf wichtige Funktionen, die das Nutzererlebnis verbessern.
 Studenten können mithilfe einer Suchleiste, die eine Lupe enthält, nach
 Wahlpflichtfächern suchen, wenn sie den Namen des Wahlpflichtfachs kennen.
 
-![Suchfunktion](assets/suchfunktion.png)
+![Suchfunktion](/assets/suchfunktion.png)
 
 ### 2.2 Filterfunktion
 
@@ -92,7 +92,7 @@ Studenten entsprechenden Werte in den Filteroptionen aus und bestätigen ihre
 Auswahl. Die Liste der Wahlpflichtfächer wird automatisch **aktualisiert** und
 zeigt nur noch die **relevanten Ergebnisse** an.
 
-![Filterfunktion](assets/filterfunktion.png)
+![Filterfunktion](/assets/filterfunktion.png)
 
 ### 2.3 Anpassung der Darstellung
 
@@ -101,12 +101,12 @@ Wahlpflichtfächer ändern kann. Wenn er auf den Button mit den drei horizontale
 Strichen **(Menu-Button)** klickt, werden ihm die Wahlpflichtfächer zeilenweise
 untereinander angezeigt.
 
-![Menu-Button](assets/menubutton.png)
+![Menu-Button](/assets/menubutton.png)
 
 Klickt er jedoch auf den Button mit den 3x3 Punkten **(Dots-Grid-Button)**,
 werden ihm mehrere Wahlpflichtfächer in einer Zeile angezeigt.
 
-![Dots-Grid-Button](assets/dotsgridbutton.png)
+![Dots-Grid-Button](/assets/dotsgridbutton.png)
 
 ## 3 Wahlpflichtfächer: Informationen, Anmeldung und Änderungen
 
@@ -122,7 +122,7 @@ das folgende Informationen anzeigt:
 - **Hinweise:** Informationen wie Exkursionen zu bestimmten Daten oder
   Online-Vorlesungen an bestimmten Tagen
 
-![Informationen](assets/wpfinfos.png)
+![Informationen](/assets/wpfinfos.png)
 
 Möchte der Student genauere Informationen zu dem jeweiligen Wahlpflichtfach
 erhalten, muss er innerhalb des Pop-up-Fensters ganz unten auf einen Button
@@ -130,7 +130,7 @@ klicken, der die Kreisform hat. Dadurch wird ihm innerhalb desselben
 Pop-up-Fensters das Modulhandbuch angezeigt, jedoch nur ein Auszug des
 Modulhandbuchs, der nur Informationen zu dem jeweiligen Wahlpflichtfach enthält.
 
-![Modulhandbuch](assets/modulhandbuch.png)
+![Modulhandbuch](/assets/modulhandbuch.png)
 
 ### 3.2 Wahlpflichtfach Anmeldung
 
@@ -147,13 +147,13 @@ Wahlpflichtfächer.
   oberhalb der Checkbox, diese steht für die Priorisierung, was genau das ist
   wird im weiteren Verlauf erläutert.
 
-![Auswahl der Fächer](assets/wpfauswahl.png)
+![Auswahl der Fächer](/assets/wpfauswahl.png)
 
 - **Abwahl der Fächer:** Falls der Student ein Wahlpflichtfach doch nicht mehr
   belegen möchte, kann er erneut auf die Checkbox klicken, um die Auswahl
   aufzuheben.
 
-![Abwahl der Fächer](assets/wpfabwahl.png)
+![Abwahl der Fächer](/assets/wpfabwahl.png)
 
 ### Phase 2: Priorisierung der Wahlpflichtfächer
 
@@ -162,7 +162,7 @@ Wahlpflichtfächer.
   im rechten unteren Eck der Webseite ein Button angezeigt, der als Stift
   dargestellt wird.
 
-![Priorisierungs Vorasussetzung](assets/wpfvoraussetzung.png)
+![Priorisierungs Vorasussetzung](/assets/wpfvoraussetzung.png)
 
 - **Öffnen des Priorisierungs-Fensters:** Wenn der Student auf den Button
   klickt, wird ihm ein Pop-up-Fenster angezeigt. Dieses zeigt neben den
@@ -177,7 +177,7 @@ Wahlpflichtfächer.
   Priorisierung erscheint eine Fehlermeldung mit dem Hinweis "Insgesamt 100
   Punkte vergeben!".
 
-![Priorisierung](assets/wpfpriorisierung.png)
+![Priorisierung](/assets/wpfpriorisierung.png)
 
 ##### Opitonal: Automatische Punkteverteilung (Autofill)
 
@@ -189,7 +189,7 @@ Wahlpflichtfächer.
   indem man auf den Button mit dem "B" oder "P" neben dem jeweiligen
   Wahlpflichtfach klickt.
 
-![Prioritäts- und Fallback-Button](assets/priofallbackbutton.png)
+![Prioritäts- und Fallback-Button](/assets/priofallbackbutton.png)
 
 - **Prioritäts-Wahlpflichtfach:** Diese Fächer haben eine hohe Priorität und
   sollten bevorzugt belegt werden.
@@ -226,13 +226,13 @@ Wahlpflichtfächer.
   Fachs klicken. Es öffnet sich ein Pop-up-Fenster, das ihn darüber informiert,
   dass durch diese Aktion die vergebenen Punkte verloren gehen.
 
-![Änderung nach Priorisierung](assets/wpfänderung.png)
+![Änderung nach Priorisierung](/assets/wpfänderung.png)
 
 - **Bestätigen der Abwahl:** Wenn der Student seine Aktion bestätigt, werden die
   Punkte des abgewählten Wahlpflichtfachs gleichmäßig auf die restlichen
   ausgewählten Wahlpflichtfächer aufgeteilt.
 
-![Bestätigen der Abwahl](assets/wpfabwahlbestätigung.png)
+![Bestätigen der Abwahl](/assets/wpfabwahlbestätigung.png)
 
 ## 4 Ergebnis der Wahlpflichtfach-Auslosung einsehen
 
@@ -240,11 +240,11 @@ Falls ein Student nachsehen möchte, welche Wahlpflichtfächer er nach der
 Auslosung erhalten hat, muss er auf den Balken unterhalb der Navigationsleiste
 klicken.
 
-![Enrollmentbutton](assets/enrollmentbutton.png)
+![Enrollmentbutton](/assets/enrollmentbutton.png)
 
 Sobald der Balken angeklickt wurde, gelangt der Student zu einer Ansicht, die
 anzeigt, welche Wahlpflichtfächer ihm zugewiesen wurden. Falls neben einem
 Wahlpflichtfach ein Fragezeichen steht, bedeutet dies, dass die Auslosung noch
 nicht stattgefunden hat.
 
-![Ergebnis der Wahlpflichtfach-Auslosung](assets/enrollmentphase.png)
+![Ergebnis der Wahlpflichtfach-Auslosung](/assets/enrollmentphase.png)
