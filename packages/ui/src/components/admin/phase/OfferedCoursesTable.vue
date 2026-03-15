@@ -84,7 +84,7 @@ watch(
             <td colspan="2">Externe Anmeldung</td>
           </template>
           <td>{{ course.studentCount }}</td>
-          <td>{{ course.avgPoints }}</td>
+          <td>{{ course.avgPoints?.toFixed(2) }}</td>
         </tr>
       </tbody>
     </VTable>

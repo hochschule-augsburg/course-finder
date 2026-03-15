@@ -93,6 +93,11 @@ function sendReminderMail() {
             <OfferedCoursesTable :phase-id />
           </VCol>
         </VRow>
+        <VRow>
+          <VCol cols="12" md="6">
+            <EnrollmentByFieldOfStudyTable :phase-id />
+          </VCol>
+        </VRow>
       </VContainer>
     </template>
     <template v-else>

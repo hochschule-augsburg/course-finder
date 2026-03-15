@@ -12,8 +12,18 @@ export const useAdminStatsStore = defineStore('admin-stats', () => {
       | undefined
     >
   >({})
+  const byFieldOfStudy = ref<
+    Record<number, Record<string, undefined | { count: number }> | undefined>
+  >({})
 
-  return { course, fetchCourse, fetchPhase, phase }
+  return {
+    byFieldOfStudy,
+    course,
+    fetchByFieldOfStudy,
+    fetchCourse,
+    fetchPhase,
+    phase,
+  }
 
   async function fetchPhase(phaseId: number) {
     phase.value[phaseId] = await trpc.admin.enroll.statistics.phase.query({
@@ -24,6 +34,13 @@ export const useAdminStatsStore = defineStore('admin-stats', () => {
   async function fetchCourse(phaseId: number) {
     course.value[phaseId] =
       await trpc.admin.enroll.statistics.courseEnrollments.query({
+        phaseId,
+      })
+  }
+
+  async function fetchByFieldOfStudy(phaseId: number) {
+    byFieldOfStudy.value[phaseId] =
+      await trpc.admin.enroll.statistics.enrollmentsByFieldOfStudy.query({
         phaseId,
       })
   }

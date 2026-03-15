@@ -215,6 +215,40 @@ export const enrollRouter = router({
           arrayStats.map((course) => [course.moduleCode, course]),
         )
       }),
+    enrollmentsByFieldOfStudy: adminProcedure
+      .input(z.object({ phaseId: z.number() }))
+      .query(async ({ input }) => {
+        const studentsWithChoices = await prisma.studentChoice.findMany({
+          distinct: ['username'],
+          select: {
+            StudentPhase: {
+              select: {
+                Student: {
+                  select: {
+                    fieldOfStudy: true,
+                  },
+                },
+              },
+            },
+          },
+          where: { phaseId: input.phaseId },
+        })
+
+        const stats = studentsWithChoices.reduce(
+          (acc, item) => {
+            const fieldOfStudy = item.StudentPhase.Student.fieldOfStudy
+            acc[fieldOfStudy] = {
+              count: (acc[fieldOfStudy]?.count ?? 0) + 1,
+            }
+            return acc
+          },
+          {} as Record<string, { count: number }>,
+        )
+
+        return Object.fromEntries(
+          Object.entries(stats).toSorted((a, b) => b[1].count - a[1].count),
+        )
+      }),
     phase: adminProcedure
       .input(z.object({ phaseId: z.number() }))
       .query(async ({ input }) => {

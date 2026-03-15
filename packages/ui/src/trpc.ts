@@ -12,6 +12,9 @@ export const trpc = createTRPCClient<AppRouter>({
           credentials: 'include',
         })
       },
+      // Too long URLs caused 404 errors.
+      maxItems: 3,
+      maxURLLength: 400,
       transformer: superjson,
       url: import.meta.env.VITE_API_URL + 'api/trpc',
     }),
