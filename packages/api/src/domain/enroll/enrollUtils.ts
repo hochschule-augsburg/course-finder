@@ -35,5 +35,14 @@ export function mayEnroll(user: ClientUser & { Student: Student }) {
   ) {
     return true
   }
+  // allow enrollment for 2nd term bachelor students of Informatik and Wirtschaftsinformatik
+  if (
+    ['Informatik (Bachelor)', 'Wirtschaftsinformatik (Bachelor)'].includes(
+      user.Student.fieldOfStudy,
+    ) &&
+    (user.Student.term ?? 0) >= 2
+  ) {
+    return true
+  }
   return (user.Student.term ?? 0) > 2
 }

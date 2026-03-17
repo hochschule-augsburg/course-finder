@@ -21,6 +21,15 @@ export const useUserStore = defineStore('user', () => {
     ) {
       return true
     }
+    // allow enrollment for 2nd term bachelor students of Informatik and Wirtschaftsinformatik
+    if (
+      ['Informatik (Bachelor)', 'Wirtschaftsinformatik (Bachelor)'].includes(
+        user.value?.Student.fieldOfStudy,
+      ) &&
+      (user.value?.Student.term ?? 0) >= 2
+    ) {
+      return true
+    }
     return (user.value.Student.term ?? 0) > 2
   })
 
