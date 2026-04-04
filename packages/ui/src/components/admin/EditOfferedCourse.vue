@@ -340,7 +340,7 @@ function forMaStudy() {
               <template #item="{ props: itemProps, item }">
                 <VListItem
                   v-bind="itemProps"
-                  :subtitle="abbrFieldsOfStudyMap[item.title]"
+                  :subtitle="abbrFieldsOfStudyMap[item]"
                 />
               </template>
             </VSelect>

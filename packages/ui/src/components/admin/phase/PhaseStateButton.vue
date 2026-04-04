@@ -73,7 +73,7 @@ async function updateState(newValue: Phase['state']) {
       <template #item="{ props: itemProps, item }">
         <VListItem
           v-bind="itemProps"
-          :subtitle="t(`phase-states.long.${item.raw.text}`)"
+          :subtitle="t(`phase-states.long.${item.text}`)"
         />
       </template>
       <template #loader>

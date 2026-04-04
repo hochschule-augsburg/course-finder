@@ -44,16 +44,15 @@
     "allowImportingTsExtensions": true,
     "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "@workspace/api/*": [
         "../api/*"
       ],
       "@tests/*": [
-        "tests/*"
+        "./tests/*"
       ]
     }
   },

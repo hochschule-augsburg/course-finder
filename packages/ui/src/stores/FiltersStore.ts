@@ -325,7 +325,7 @@ export const useFiltersStore = defineStore('filters', () => {
   function resetFilter(name: string) {
     rangeFilters.forEach((filter) => {
       if (filter.name === name) {
-        filter = resetRange(filter)
+        resetRange(filter)
       }
     })
     optionsFilters.forEach((filter) => {

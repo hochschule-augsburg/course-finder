@@ -70,6 +70,13 @@ export default ts.config(
   },
   {
     files: ['*.vue', '**/*.vue'],
+    rules: {
+      // ESLint's no-useless-assignment doesn't see Vue template usage of <script setup> variables
+      'no-useless-assignment': 'off',
+    },
+  },
+  {
+    files: ['*.vue', '**/*.vue'],
     languageOptions: {
       parserOptions: {
         parser: {
