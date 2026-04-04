@@ -42,7 +42,7 @@ export const resultSpec = z
       username: data.uid,
     }
     if (data.employeeType === 'Studenten') {
-      let finalDegree: 'Bachelor' | 'Master' = 'Bachelor'
+      let finalDegree: 'Bachelor' | 'Master'
       if (data.dfnEduPersonFinalDegree === undefined) {
         if (data.dfnEduPersonFieldOfStudyString.includes('Master')) {
           finalDegree = 'Master'
