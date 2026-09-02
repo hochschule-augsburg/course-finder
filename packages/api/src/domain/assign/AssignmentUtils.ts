@@ -1,14 +1,11 @@
 import { range, shuffle, sumBy } from 'lodash-es'
 
 import type {
-  StudentChoice,
-  StudentPhase,
-} from '../../generated/prisma/client.js'
-import type { AssignmentStudentController } from './AssignmentControllers.ts'
+  AssignmentStudentController,
+  StudentPhaseWithChoices,
+} from './AssignmentControllers.ts'
 
-export function normalizeChoices(
-  phase: (StudentPhase & { StudentChoice: StudentChoice[] })[],
-) {
+export function normalizeChoices(phase: StudentPhaseWithChoices[]) {
   return phase.map((student) => {
     const totalPoints = sumBy(student.StudentChoice, (e) => e.points)
     const scale = 1000 / totalPoints

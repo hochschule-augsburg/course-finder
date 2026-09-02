@@ -1,27 +1,35 @@
 import { sumBy } from 'lodash-es'
 
-import type {
-  StudentChoice,
-  StudentPhase,
-} from '../../generated/prisma/client.js'
+import type { StudentChoice } from '../../generated/prisma/client.js'
+
+export type StudentPhaseWithChoices = {
+  creditsNeeded: number
+  StudentChoice: StudentChoice[]
+  username: string
+}
 
 export class AssignmentStudentController {
   public readonly choices: StudentChoice[]
+  public readonly creditsNeeded: number
   public readonly gained: StudentChoice[] = []
   public readonly lost: StudentChoice[] = []
-
-  get username() {
-    return this.phase.username
-  }
+  public readonly username: string
+  private readonly offeredCourses: {
+    Course: { creditPoints: number }
+    moduleCode: string
+  }[]
 
   constructor(
-    private readonly phase: StudentPhase & { StudentChoice: StudentChoice[] },
-    private readonly offeredCourses: {
+    student: StudentPhaseWithChoices,
+    offeredCourses: {
       Course: { creditPoints: number }
       moduleCode: string
     }[],
   ) {
-    this.choices = phase.StudentChoice.toSorted((a, b) => b.points - a.points)
+    this.username = student.username
+    this.creditsNeeded = student.creditsNeeded
+    this.offeredCourses = offeredCourses
+    this.choices = student.StudentChoice.toSorted((a, b) => b.points - a.points)
   }
 
   courseCanceled(moduleCode: string) {
@@ -60,7 +68,7 @@ export class AssignmentStudentController {
         (e) =>
           this.offeredCourses.find((j) => j.moduleCode === e.moduleCode)?.Course
             .creditPoints ?? 0,
-      ) >= this.phase.creditsNeeded
+      ) >= this.creditsNeeded
     )
   }
 

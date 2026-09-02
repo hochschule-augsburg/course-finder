@@ -1,13 +1,11 @@
-import type {
-  StudentChoice,
-  StudentPhase,
-} from '../../../src/generated/prisma/client.js'
-
-import { AssignmentStudentController } from '../../../src/domain/assign/AssignmentControllers'
+import {
+  AssignmentStudentController,
+  type StudentPhaseWithChoices,
+} from '../../../src/domain/assign/AssignmentControllers'
 
 describe('AssignmentStudentController', () => {
   let controller: AssignmentStudentController
-  let phase: StudentPhase & { StudentChoice: StudentChoice[] }
+  let phase: StudentPhaseWithChoices
   let offeredCourses: {
     Course: { creditPoints: number }
     moduleCode: string

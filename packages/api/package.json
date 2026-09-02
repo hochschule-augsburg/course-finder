@@ -7,9 +7,9 @@
     "prisma/"
   ],
   "scripts": {
-    "dev": "node --env-file=.env --experimental-transform-types --watch src/main.ts | pino-pretty",
+    "dev": "node --env-file=.env --watch src/main.ts | pino-pretty",
     "typecheck": "tsc --noEmit",
-    "start": "env NODE_ENV=production TZ=Europe/Berlin node --experimental-transform-types src/main.ts",
+    "start": "env NODE_ENV=production TZ=Europe/Berlin node src/main.ts",
     "lint": "eslint --max-warnings 0 src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
     "test": "vitest run",
     "db:generate": "prisma generate --no-hints",
