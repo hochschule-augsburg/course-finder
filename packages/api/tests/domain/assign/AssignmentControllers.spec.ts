@@ -13,9 +13,7 @@ describe('AssignmentStudentController', () => {
 
   beforeEach(() => {
     phase = {
-      createdAt: new Date(),
       creditsNeeded: 6,
-      phaseId: 0,
       StudentChoice: [
         {
           moduleCode: '1',
