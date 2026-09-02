@@ -23,9 +23,9 @@ export async function assign(phaseId: number) {
     include: {
       Course: { select: { creditPoints: true, title: true } },
     },
-    where: { phaseId },
+    where: { externalRegistration: false, phaseId },
   })
-  const assignCourses: AssignCourse[] = offeredCourses.map((e) => ({
+  let assignCourses: AssignCourse[] = offeredCourses.map((e) => ({
     ...e,
     studentCount: 0,
   }))
@@ -36,22 +36,40 @@ export async function assign(phaseId: number) {
       where: { phaseId },
     }),
   )
-  const allStudents = normalized.map(
-    (e) => new AssignmentStudentController(e, offeredCourses),
+  let allStudents = normalized.map(
+    (e) =>
+      new AssignmentStudentController(
+        structuredClone(e),
+        structuredClone(offeredCourses),
+      ),
   )
+  const canceledCourses: string[] = []
 
   while (true) {
     assignStudents(allStudents, assignCourses)
-    const canceled = assignCourses.findIndex(
+    const canceled = assignCourses.find(
       (e) => e.studentCount < e.minParticipants,
     )
-    if (canceled === -1) {
+    if (!canceled) {
       break
     }
-    allStudents.forEach((e) =>
-      e.courseCanceled(assignCourses[canceled].moduleCode),
+    canceledCourses.push(canceled.moduleCode)
+    allStudents = normalized.map(
+      (e) =>
+        new AssignmentStudentController(
+          structuredClone(e),
+          structuredClone(offeredCourses),
+        ),
     )
-    assignCourses.splice(canceled, 1)
+    canceledCourses.forEach((e) =>
+      allStudents.forEach((j) => j.courseCanceled(e)),
+    )
+    assignCourses = offeredCourses
+      .map((e) => ({
+        ...e,
+        studentCount: 0,
+      }))
+      .filter((e) => !canceledCourses.includes(e.moduleCode))
   }
 
   return Object.fromEntries(

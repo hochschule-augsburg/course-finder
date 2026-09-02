@@ -105,8 +105,8 @@ describe('AssignmentAlgorithm - Large Scale Real Dataset (Phase 3)', () => {
         course?.maxParticipants !== null &&
         course?.maxParticipants !== undefined
       ) {
-        // Due to multi-round course cancellation where finished students reactivate,
-        // counts can at most exceed maxParticipants by a small overshoot margin (e.g. +1).
+        // Multi-round cancellation where finished students reactivate can allow
+        // an edge-case overshoot margin of at most 1 student on full courses.
         expect(count).toBeLessThanOrEqual(course.maxParticipants + 1)
       }
 
@@ -116,7 +116,7 @@ describe('AssignmentAlgorithm - Large Scale Real Dataset (Phase 3)', () => {
       }
     }
 
-    // Total assignments should match the phase assignment total (~778)
+    // Total assignments should be around the benchmark (~778)
     expect(totalAssignments).toBeGreaterThanOrEqual(770)
     expect(totalAssignments).toBeLessThanOrEqual(785)
   })
@@ -146,5 +146,47 @@ describe('AssignmentAlgorithm - Large Scale Real Dataset (Phase 3)', () => {
     // match rate should be high (>90%) with the recorded tryNo=3 run
     const matchPercentage = (matchCount / totalAssignedExpected) * 100
     expect(matchPercentage).toBeGreaterThan(90)
+
+    // Rationale for student_0115 and student_0285 (100% expected WPF assignment):
+    // - student_0115 allocated 49 points to ITC4.WP (49 to ECOMM6.WP, 2 to SEO4.WP).
+    //   With 49 points on ITC4.WP, they are well within the top applicants for ITC4.WP (capacity 40).
+    // - student_0285 allocated 49 points to SEO4.WP, 49 to ECOMM6.WP, and 2 to ITC4.WP.
+    //   Because SEO4.WP fails to meet minParticipants (<20) and is canceled, its 49 points are
+    //   redistributed to their remaining choices, boosting ITC4.WP to ~51 points (normalized 510+),
+    //   guaranteeing student_0285 a seat in ITC4.WP over other applicants.
+    // Therefore, both students must 100% receive at least one WPF.
+    expect(result['student_0115']).toHaveLength(1)
+    expect(result['student_0285']).toHaveLength(1)
+
+    // Edge Case 1: Canceled Course Point Redistribution
+    // - student_0484: bid 90 pts on SEO4.WP (canceled) and 10 pts on START4.WP (needed 2 CP).
+    //   Canceled course strips SEO4.WP, normalizing START4.WP to 1000 pts (100% certainty).
+    // - student_0140: bid 98 pts on 3DDV6.WP (canceled), 1 on 3DDR4.WP, and 1 on INDBV4.WP.
+    //   INDBV4.WP is undersubscribed, guaranteeing student_0140 admission.
+    // - student_0113: double cancellation on top 2 choices (3DDV6.WP: 54, SEO4.WP: 40),
+    //   cascading down to NoSQL4.WP.
+    expect(result['student_0484']).toEqual(['START4.WP'])
+    expect(result['student_0140']).toContain('INDBV4.WP')
+    expect(result['student_0113']).toContain('NoSQL4.WP')
+
+    // Edge Case 2: All-In Single-Choice Determinism (1000 normalized points)
+    // Students who bid 100% on one non-canceled course are assigned in round 1 and exit immediately.
+    expect(result['student_0003']).toEqual(['BEINF4.WP'])
+    expect(result['student_0012']).toEqual(['NNLLM4.WP'])
+    expect(result['student_0013']).toEqual(['ECOMM6.WP'])
+    expect(result['student_0017']).toEqual(['START4.WP'])
+
+    // Edge Case 3: Tragic All-In (0% assignment)
+    // Students who put 100% of their points on a course that fails minParticipants (3DDV6.WP)
+    // with no backup choices receive 0 courses despite needing credits.
+    expect(result['student_0186']).toEqual([])
+    expect(result['student_0212']).toEqual([])
+    expect(result['student_0397']).toEqual([])
+
+    // Total unassigned students should not exceed expected range
+    const unassignedCount = Object.values(result).filter(
+      (c) => c.length === 0,
+    ).length
+    expect(unassignedCount).toBeLessThanOrEqual(30)
   })
 })
