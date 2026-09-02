@@ -117,7 +117,7 @@ async function publish() {
               <VIcon :icon="mdiDownload" />
             </VBtn>
           </template>
-          Download results.yml
+          Ergebnis als Excel herunterladen
         </VTooltip>
         <VTooltip :disabled="!drawingObstacle" location="top">
           <template #activator="{ props: tipProps }">
