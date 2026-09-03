@@ -14,15 +14,10 @@ import type {
   ParamValueZeroOrMore,
   ParamValueZeroOrOne,
 } from 'vue-router'
-import type {
-  _ExtractParamParserType,
-} from 'vue-router/experimental'
 
 declare module 'vue-router' {
   interface TypesConfig {
-    _ParamParsers: {}
-    RouteNamedMap: import('vue-router/auto-routes').RouteNamedMap
-    _RouteFileInfoMap: import('vue-router/auto-routes')._RouteFileInfoMap
+    ParamParsers: never
   }
 }
 
@@ -126,15 +121,11 @@ declare module 'vue-router/auto-routes' {
         | '/'
       views:
         | never
-      pathParamNames:
-        | never
     }
     'src/pages/admin/index.vue': {
       routes:
         | '/admin/'
       views:
-        | never
-      pathParamNames:
         | never
     }
     'src/pages/admin/courses/index.vue': {
@@ -142,15 +133,11 @@ declare module 'vue-router/auto-routes' {
         | '/admin/courses/'
       views:
         | never
-      pathParamNames:
-        | never
     }
     'src/pages/admin/courses/upload.vue': {
       routes:
         | '/admin/courses/upload'
       views:
-        | never
-      pathParamNames:
         | never
     }
     'src/pages/admin/phases/index.vue': {
@@ -158,15 +145,11 @@ declare module 'vue-router/auto-routes' {
         | '/admin/phases/'
       views:
         | never
-      pathParamNames:
-        | never
     }
     'src/pages/admin/phases/[phaseId]/index.vue': {
       routes:
         | '/admin/phases/[phaseId]/'
       views:
-        | never
-      pathParamNames:
         | never
     }
     'src/pages/admin/phases/[phaseId]/edit.vue': {
@@ -174,15 +157,11 @@ declare module 'vue-router/auto-routes' {
         | '/admin/phases/[phaseId]/edit'
       views:
         | never
-      pathParamNames:
-        | never
     }
     'src/pages/admin/settings.vue': {
       routes:
         | '/admin/settings'
       views:
-        | never
-      pathParamNames:
         | never
     }
     'src/pages/gdpr.vue': {
@@ -190,23 +169,17 @@ declare module 'vue-router/auto-routes' {
         | '/gdpr'
       views:
         | never
-      pathParamNames:
-        | never
     }
     'src/pages/imprint.vue': {
       routes:
         | '/imprint'
       views:
         | never
-      pathParamNames:
-        | never
     }
     'src/pages/results.vue': {
       routes:
         | '/results'
       views:
-        | never
-      pathParamNames:
         | never
     }
   }

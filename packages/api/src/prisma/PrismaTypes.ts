@@ -10,10 +10,14 @@ import type {
 
 export type AppConf = Omit<PAppConf, 'id'>
 
+export type ClientStudent = PStudent & {
+  mayEnroll?: boolean
+}
+
 export type ClientUser = Omit<PUser, 'auth'> & { auth: { twoFA?: boolean } }
 
 export type ClientUserExtended = ClientUser & {
-  Student?: null | PStudent
+  Student?: null | ClientStudent
 }
 export type Course = Omit<PCourse, 'pdf'>
 

@@ -1,5 +1,10 @@
 import type { Student } from '../../generated/prisma/client.js'
-import type { ClientUser } from '../../prisma/PrismaTypes.ts'
+import type {
+  ClientUser,
+  ClientUserExtended,
+} from '../../prisma/PrismaTypes.ts'
+
+import { prisma } from '../../prisma/prisma.ts'
 
 // keep in sync with packages/ui/src/helper/enums/fieldsOfStudy.ts
 export const fieldsOfStudy: Record<
@@ -25,9 +30,19 @@ export const fieldsOfStudy: Record<
   'Wirtschaftsinformatik (Bachelor)': { abbr: 'WI', degree: 'Bachelor' },
 }
 
-export function mayEnroll(user: ClientUser & { Student: Student }) {
+export function mayEnroll(
+  user: ClientUser & { Student: Student },
+  allowedEmails: string[] = [],
+) {
   if (!user.Student) {
     return false
+  }
+  if (
+    allowedEmails.some(
+      (email) => email.toLowerCase() === user.email.toLowerCase(),
+    )
+  ) {
+    return true
   }
   if (
     user.Student.finalDegree === 'Master' ||
@@ -45,4 +60,25 @@ export function mayEnroll(user: ClientUser & { Student: Student }) {
     return true
   }
   return (user.Student.term ?? 0) > 2
+}
+
+export async function enrichUserWithMayEnroll(
+  user: ClientUserExtended,
+): Promise<ClientUserExtended> {
+  if (!user.Student) {
+    return user
+  }
+  const conf = await prisma.appConf.findFirst({
+    select: { allowedEnrollmentEmails: true },
+  })
+  return {
+    ...user,
+    Student: {
+      ...user.Student,
+      mayEnroll: mayEnroll(
+        user as ClientUser & { Student: Student },
+        conf?.allowedEnrollmentEmails,
+      ),
+    },
+  }
 }

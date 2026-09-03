@@ -22,7 +22,10 @@ const enrollProcedure = studentOnlyProcedure
         message: 'phase not in database',
       })
     }
-    if (!mayEnroll(opts.ctx.user)) {
+    const conf = await prisma.appConf.findFirst({
+      select: { allowedEnrollmentEmails: true },
+    })
+    if (!mayEnroll(opts.ctx.user, conf?.allowedEnrollmentEmails)) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'student not eligible for enrollment',

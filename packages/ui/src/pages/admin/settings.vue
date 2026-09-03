@@ -17,6 +17,7 @@ watch(
     if (newVal) {
       formData.value = {
         ...newVal,
+        allowedEnrollmentEmails: newVal.allowedEnrollmentEmails ?? [],
         mailReceivers: newVal.mailReceivers ?? [],
       }
     }
@@ -34,6 +35,8 @@ const emailRules = [
 const update = debounce(async () => {
   if (!formData.value) return
   await appConfigStore.update({
+    allowedEnrollmentEmails:
+      formData.value.allowedEnrollmentEmails?.filter(Boolean),
     mailReceivers: formData.value.mailReceivers?.filter(Boolean),
     maxCredits: formData.value.maxCredits,
   })
@@ -65,6 +68,20 @@ const update = debounce(async () => {
             clearable
             hint="Empfänger für allgemeine Ankündigungen (z. B. Semesterverteiler)"
             label="E-Mail-Empfänger (Mailinglisten)"
+            multiple
+            persistent-hint
+            :rules="emailRules"
+            @update:model-value="update"
+          />
+        </VCol>
+        <VCol cols="12">
+          <VCombobox
+            v-model="formData.allowedEnrollmentEmails"
+            chips
+            closable-chips
+            clearable
+            hint="Studierende mit diesen E-Mail-Adressen dürfen sich unabhängig vom Fachsemester einschreiben"
+            label="E-Mail-Ausnahmen für Einschreibung"
             multiple
             persistent-hint
             :rules="emailRules"

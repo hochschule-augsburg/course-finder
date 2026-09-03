@@ -5,6 +5,7 @@ import { z } from 'zod'
 
 import type { ClientUserExtended } from '../../prisma/PrismaTypes.ts'
 
+import { enrichUserWithMayEnroll } from '../../domain/enroll/enrollUtils.ts'
 import { sendEmail } from '../../domain/mail/Mail.ts'
 import { authenticate } from '../../domain/user/UserService.ts'
 import { env } from '../../env.ts'
@@ -14,7 +15,7 @@ import { publicProcedure, router } from '../trpc.ts'
 const domain = new URL(env.FRONTEND_ORIGIN).hostname
 
 export const authRouter = router({
-  getUser: publicProcedure.query(({ ctx }) => {
+  getUser: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) {
       return undefined
     }
@@ -27,7 +28,7 @@ export const authRouter = router({
       })
     })()
 
-    return ctx.user
+    return await enrichUserWithMayEnroll(ctx.user)
   }),
   // rate limited by reverse proxy
   login: publicProcedure
@@ -74,7 +75,8 @@ export const authRouter = router({
           return 'two-fa-required'
         }
 
-        const token = await ctx.res.jwtSign(result.user)
+        const user = await enrichUserWithMayEnroll(result.user)
+        const token = await ctx.res.jwtSign(user)
         ctx.res.setCookie('cf-token', token, {
           domain,
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14), // 14 days
@@ -83,7 +85,7 @@ export const authRouter = router({
           sameSite: true,
           secure: !env.DEV,
         })
-        return result.user
+        return user
       },
     ),
   logout: publicProcedure.mutation(({ ctx }) => {
@@ -124,10 +126,10 @@ export const authRouter = router({
         if (input.otp !== user.otp.otp) {
           return 'code-invalid'
         }
-        const clientUser: ClientUserExtended = {
+        const clientUser: ClientUserExtended = await enrichUserWithMayEnroll({
           ...user,
           auth: { twoFA: user.auth.twoFA },
-        }
+        })
         const token = await ctx.res.jwtSign(clientUser)
         ctx.res.setCookie('cf-token', token, {
           domain: env.SERVER_HOSTNAME,

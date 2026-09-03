@@ -3,7 +3,7 @@ import type { Mock } from 'vitest'
 
 import { setupComposable } from '@tests/test-setup/composable'
 import { trpcMock } from '@tests/test-setup/trpcMock'
-import { storeToRefs } from 'pinia'
+import { createPinia, setActivePinia, storeToRefs } from 'pinia'
 import { mock } from 'vitest-mock-extended'
 import { useRouter } from 'vue-router'
 
@@ -93,5 +93,42 @@ describe.skip('UserStore', () => {
 
       expect(mockRouter.push).toHaveBeenCalledWith('/')
     })
+  })
+})
+
+describe('UserStore mayEnroll', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('returns true when Student.mayEnroll is true', () => {
+    const store = useUserStore()
+    store.user = mock<ClientUserExtended>({
+      Student: mock<NonNullable<ClientUserExtended['Student']>>({
+        mayEnroll: true,
+      }),
+    })
+
+    expect(store.mayEnroll).toBe(true)
+  })
+
+  it('returns false when Student.mayEnroll is false or not set', () => {
+    const store = useUserStore()
+    store.user = mock<ClientUserExtended>({
+      Student: mock<NonNullable<ClientUserExtended['Student']>>({
+        mayEnroll: false,
+      }),
+    })
+    expect(store.mayEnroll).toBe(false)
+
+    store.user = mock<ClientUserExtended>({
+      Student: mock<NonNullable<ClientUserExtended['Student']>>({
+        mayEnroll: undefined,
+      }),
+    })
+    expect(store.mayEnroll).toBe(false)
+
+    store.user = undefined
+    expect(store.mayEnroll).toBe(false)
   })
 })
