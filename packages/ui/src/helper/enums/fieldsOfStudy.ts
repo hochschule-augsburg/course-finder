@@ -1,5 +1,3 @@
-/* eslint-disable perfectionist/sort-objects */
-
 // keep in sync with packages/api/src/domain/enroll/enrollUtils.ts
 export const fieldsOfStudy: Record<
   string,

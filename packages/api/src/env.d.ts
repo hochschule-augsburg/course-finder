@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-interfaces */
 declare global {
   namespace NodeJS {
     interface ProcessEnv {

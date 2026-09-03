@@ -1,4 +1,3 @@
-import perfectionist from 'eslint-plugin-perfectionist'
 import unusedImports from 'eslint-plugin-unused-imports'
 
 const banTransformations = {
@@ -17,7 +16,6 @@ const banTransformations = {
 }
 
 export const sharedRules = [
-  perfectionist.configs['recommended-natural'],
   {
     plugins: {
       'unused-imports': unusedImports,
@@ -61,10 +59,6 @@ export const sharedRules = [
       'require-await': 'error',
       eqeqeq: 'error',
       curly: 'error',
-
-      ...{
-        'perfectionist/sort-intersection-types': 'off',
-      },
 
       'no-restricted-properties': [
         'error',

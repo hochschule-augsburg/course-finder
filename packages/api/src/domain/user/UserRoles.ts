@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-objects */
 export const UserRoles = Object.freeze({
   Logout: 0,
   User: 50,

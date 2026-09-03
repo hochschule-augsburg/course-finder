@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-objects */
 import XLSX from '@e965/xlsx'
 import { sortBy } from 'lodash-es'
 
