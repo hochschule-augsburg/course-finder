@@ -76,6 +76,7 @@ export default defineConfig({
   test: {
     // perhaps changes later to jsdom but happydom is faster
     environment: 'jsdom',
+    exclude: ['tests/browser/**', 'node_modules/**'],
     globalSetup: ['tests/test-setup/globalSetup.ts'],
     globals: true,
     server: {
