@@ -12,6 +12,7 @@
     "start": "env NODE_ENV=production TZ=Europe/Berlin node src/main.ts",
     "lint": "eslint --max-warnings 0 src/ prisma/ tests/ --ignore-pattern '**/*.d.ts'",
     "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "db:generate": "prisma generate --no-hints",
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset --skip-seed --force && prisma db seed",
