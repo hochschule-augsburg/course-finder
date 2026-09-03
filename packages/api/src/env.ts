@@ -11,12 +11,24 @@ const envSchema = z.object({
   LDAP_BASE_DN: z.string(),
   LDAP_URL: z.url(),
   LOG_LEVEL: z.string().default('warn'),
+  MAIL_FROM_ADDRESS: z
+    .string()
+    .default('no-reply@course-finder.informatik.tha.de'),
+  MAIL_FROM_NAME: z.string().default('CourseFinder'),
   MAIL_RECEIVERS: z
     .string()
     .transform((e) => e.split(',').map((e) => e.trim())),
   NODE_ENV: z.enum(['development', 'production']).default('development'),
   SERVER_HOSTNAME: z.string(),
   SERVER_PORT: z.coerce.number(),
+  SMTP_HOST: z.string().default('smtp.hs-augsburg.de'),
+  SMTP_PASSWORD: z.string().optional(),
+  SMTP_PORT: z.coerce.number().default(25),
+  SMTP_SECURE: z
+    .string()
+    .optional()
+    .transform((val) => val === 'true' || val === '1'),
+  SMTP_USER: z.string().optional(),
 })
 
 const envParsed = envSchema.parse(process.env)

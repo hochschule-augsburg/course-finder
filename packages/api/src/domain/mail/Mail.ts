@@ -13,9 +13,16 @@ export async function sendEmail(
   attachments?: { content: string; filename: string }[],
 ): Promise<SMTPTransport.SentMessageInfo> {
   const transporter = nodemailer.createTransport({
-    host: 'smtp.hs-augsburg.de',
-    port: 25,
-    secure: false, // will still use STARTTLS if the host supports it
+    auth:
+      env.SMTP_USER && env.SMTP_PASSWORD
+        ? {
+            pass: env.SMTP_PASSWORD,
+            user: env.SMTP_USER,
+          }
+        : undefined,
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_SECURE,
   })
 
   const html = template
@@ -27,8 +34,8 @@ export async function sendEmail(
     const info = await transporter.sendMail({
       attachments,
       from: {
-        address: 'no-reply@course-finder.informatik.tha.de',
-        name: 'CourseFinder',
+        address: env.MAIL_FROM_ADDRESS,
+        name: env.MAIL_FROM_NAME,
       },
       html,
       replyTo: env.CONTACT_EMAIL,
