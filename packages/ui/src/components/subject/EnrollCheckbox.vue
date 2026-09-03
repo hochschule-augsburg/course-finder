@@ -47,7 +47,12 @@ async function handleUpdateEnroll() {
     <div v-if="!userStore.user?.Student" />
     <VTooltip v-else-if="!userStore.mayEnroll" location="top">
       <template #activator="{ props: toolTipProps }">
-        <VIcon :icon="mdiLockAlert" size="large" v-bind="toolTipProps" />
+        <VIcon
+          :icon="mdiLockAlert"
+          data-testid="enroll-lock-ineligible"
+          size="large"
+          v-bind="toolTipProps"
+        />
       </template>
       {{ t('only-term-3-plus') }}
     </VTooltip>
@@ -56,6 +61,7 @@ async function handleUpdateEnroll() {
         v-if="coursesStore.currentPhase?.state === 'OPEN'"
         v-ripple
         class="pa-2 enroll-checkbox"
+        data-testid="enroll-checkbox"
         @click.stop="handleUpdateEnroll"
       >
         <VBadge v-if="enrolled" :content="enrolled.points">
@@ -66,6 +72,7 @@ async function handleUpdateEnroll() {
       <div
         v-else-if="coursesStore.currentPhase"
         class="pa-2 enroll-checkbox disabled"
+        data-testid="enroll-checkbox-disabled"
         click.stop
       >
         <VTooltip location="top">
@@ -84,7 +91,12 @@ async function handleUpdateEnroll() {
     </template>
     <VTooltip v-else location="top">
       <template #activator="{ props: toolTipProps }">
-        <VIcon :icon="mdiAlphaEBox" size="large" v-bind="toolTipProps" />
+        <VIcon
+          :icon="mdiAlphaEBox"
+          data-testid="enroll-external-badge"
+          size="large"
+          v-bind="toolTipProps"
+        />
       </template>
       {{ t('external-registration') }}
     </VTooltip>

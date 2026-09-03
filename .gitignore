@@ -1,4 +1,6 @@
-.not-tracked/
+.local
+__screenshots__
+.vitest-attachments
 
 generated/
 

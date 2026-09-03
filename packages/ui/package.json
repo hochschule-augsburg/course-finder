@@ -12,6 +12,8 @@
     "bundle": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test:browser:watch": "vitest --config vitest.browser.config.ts --browser.headless=false",
     "test:update": "vitest run -u",
     "lint": "eslint --max-warnings 0 src/ tests/"
   },
