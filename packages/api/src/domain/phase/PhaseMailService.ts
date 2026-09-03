@@ -21,28 +21,34 @@ export async function sendOpeningMail(phaseId: number) {
   if (phase.state !== 'OPEN') {
     throw new Error('Phase is not open')
   }
-  await sendEmail(
-    env.MAIL_RECEIVERS,
-    `${phase.title.de} geöffnet | ${phase.title.en} started`,
-    openingMail({
-      contactEmail: env.CONTACT_EMAIL,
-      dateDe: phase.end.toLocaleString('de-DE', {
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        month: 'numeric',
-        year: 'numeric',
+  const appConf = await prisma.appConf.findFirst({
+    select: { mailReceivers: true },
+  })
+  const mailReceivers = appConf?.mailReceivers ?? []
+  if (mailReceivers.length > 0) {
+    await sendEmail(
+      mailReceivers,
+      `${phase.title.de} geöffnet | ${phase.title.en} started`,
+      openingMail({
+        contactEmail: env.CONTACT_EMAIL,
+        dateDe: phase.end.toLocaleString('de-DE', {
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          month: 'numeric',
+          year: 'numeric',
+        }),
+        dateEn: phase.end.toLocaleString('en-GB', {
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          month: 'numeric',
+          year: 'numeric',
+        }),
+        url: env.FRONTEND_ORIGIN,
       }),
-      dateEn: phase.end.toLocaleString('en-GB', {
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        month: 'numeric',
-        year: 'numeric',
-      }),
-      url: env.FRONTEND_ORIGIN,
-    }),
-  )
+    )
+  }
 }
 
 export async function sendReminderMails(phaseId: number) {
@@ -63,11 +69,17 @@ export async function sendReminderMails(phaseId: number) {
 
   await sendEmailsToUnfinishedStudents(unfinishedStudents, phase)
 
-  await sendEmail(
-    env.MAIL_RECEIVERS,
-    `${phase.title.de} endet bald | ${phase.title.en} will be closing soon`,
-    getClosingEmailContent(phase),
-  )
+  const appConf = await prisma.appConf.findFirst({
+    select: { mailReceivers: true },
+  })
+  const mailReceivers = appConf?.mailReceivers ?? []
+  if (mailReceivers.length > 0) {
+    await sendEmail(
+      mailReceivers,
+      `${phase.title.de} endet bald | ${phase.title.en} will be closing soon`,
+      getClosingEmailContent(phase),
+    )
+  }
 }
 
 const studentSelectionData = {

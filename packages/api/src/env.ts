@@ -15,9 +15,6 @@ const envSchema = z.object({
     .string()
     .default('no-reply@course-finder.informatik.tha.de'),
   MAIL_FROM_NAME: z.string().default('CourseFinder'),
-  MAIL_RECEIVERS: z
-    .string()
-    .transform((e) => e.split(',').map((e) => e.trim())),
   NODE_ENV: z.enum(['development', 'production']).default('development'),
   SERVER_HOSTNAME: z.string(),
   SERVER_PORT: z.coerce.number(),

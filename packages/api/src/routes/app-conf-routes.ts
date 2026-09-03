@@ -8,6 +8,7 @@ export const appConfRoutes = router({
     return await prisma.appConf.findFirst({
       select: {
         hasMinFocuses: true,
+        mailReceivers: true,
         maxCredits: true,
         moduleBookLastUpdated: true,
       },
@@ -17,6 +18,7 @@ export const appConfRoutes = router({
     .input(
       z
         .object({
+          mailReceivers: z.array(z.string().email()),
           maxCredits: z.number().int().positive(),
         })
         .partial(),

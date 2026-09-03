@@ -20,7 +20,7 @@ if (env.DEV) {
   }
 }
 console.log(env.DEV ? 'Dev Mode' : 'Production mode')
-console.log('Mail Receivers:', env.MAIL_RECEIVERS, env.CONTACT_EMAIL)
+console.log('Contact Email:', env.CONTACT_EMAIL)
 
 process.title = 'CourseFinder API'
 

@@ -5,10 +5,15 @@ import { prisma } from '../../prisma/prisma.ts'
 import { sendEmail } from '../mail/Mail.ts'
 
 export async function emailToLists(phase: EnrollPhase) {
-  await sendEmail(
-    env.MAIL_RECEIVERS,
-    `${phase.title['de']} - Results/Ergebnisse`,
-    `
+  const appConf = await prisma.appConf.findFirst({
+    select: { mailReceivers: true },
+  })
+  const mailReceivers = appConf?.mailReceivers ?? []
+  if (mailReceivers.length > 0) {
+    await sendEmail(
+      mailReceivers,
+      `${phase.title['de']} - Results/Ergebnisse`,
+      `
 Die Ergebnisse der ${phase.title['de']} wurden veröffentlicht.<br>
 Sie können die Ergebnisse auf <a href="${env.FRONTEND_ORIGIN}results">der Website</a> einsehen.<br>
 ---<br>
@@ -16,7 +21,8 @@ Sie können die Ergebnisse auf <a href="${env.FRONTEND_ORIGIN}results">der Websi
 The results of the ${phase.title['en']} have been published.<br>
 You can view the results on <a href="${env.FRONTEND_ORIGIN}results">the website</a>.
     `,
-  )
+    )
+  }
 }
 
 export async function emailToStudents(

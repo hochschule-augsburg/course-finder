@@ -8,8 +8,7 @@ import { pwdAuth as localPwdAuth } from './local/LocalAuth.ts'
 
 export type AuthResult =
   | ({ success: false } & (
-      | { cause: 'invalid-credentials' }
-      | { cause: 'service-not-available' }
+      { cause: 'invalid-credentials' } | { cause: 'service-not-available' }
     ))
   | ({ success: true } & (
       | { twoFA: false; user: ClientUserExtended }
