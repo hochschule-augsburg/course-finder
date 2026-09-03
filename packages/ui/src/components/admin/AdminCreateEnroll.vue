@@ -8,7 +8,9 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import {
+  VAlert,
   VBtn,
+  VChip,
   VCol,
   VContainer,
   VFileInput,
@@ -25,12 +27,16 @@ import type { Phase } from '@/stores/admin/AdminCoursesStore'
 import { fetchFastify } from '@/fastify'
 import { getLocalISOString } from '@/helper/LocaleDateFormat'
 import { useAdminCoursesStore } from '@/stores/admin/AdminCoursesStore'
+import { useAppConfStore } from '@/stores/AppConfStore'
 import { trpc } from '@/trpc'
 
 const props = defineProps<{ phaseId?: number }>()
 
+// NOTE: Admin views are generally not translated and should be written in German directly.
+// The use of `t` here is legacy for phase creation/editing; do not add new `t` translations in admin views.
 const { locale, t } = useI18n()
 const adminCoursesStore = useAdminCoursesStore()
+const appConfStore = useAppConfStore()
 const router = useRouter()
 const showErrorDialog = ref(false)
 const errorDialogMessage = ref('')
@@ -242,6 +248,8 @@ const requiredFieldRule = [
 const excelFile = ref<File>()
 const isUploading = ref(false)
 
+const hasAiApiKey = computed(() => Boolean(appConfStore.conf?.hasAiApiKey))
+
 async function uploadExcel() {
   if (!excelFile.value) {
     return
@@ -394,19 +402,48 @@ async function uploadExcel() {
           <VBtn :text="t('clear')" @click="clearSelection" />
         </VCol>
       </VRow>
+      <VRow dense class="mt-2">
+        <VCol cols="12">
+          <div class="d-flex align-center ga-2 mb-2">
+            <span class="text-subtitle-1 font-weight-medium">
+              WPF-Excel-Import (KI-gestützt)
+            </span>
+            <VChip size="small" :color="hasAiApiKey ? 'success' : 'grey'">
+              {{
+                hasAiApiKey ? 'KI aktiv' : 'KI optional (nicht konfiguriert)'
+              }}
+            </VChip>
+          </div>
+          <VAlert
+            v-if="!hasAiApiKey"
+            type="info"
+            variant="tonal"
+            density="compact"
+            class="mb-3"
+          >
+            Der AI_API_KEY ist vollkommen optional und serverseitig nicht
+            konfiguriert. Der automatische Excel-Import ist daher nicht
+            verfügbar. Kurse können manuell oder aus vergangenen Phasen
+            übernommen werden.
+          </VAlert>
+        </VCol>
+      </VRow>
       <VRow>
         <VCol sm="8">
           <VFileInput
             v-model="excelFile"
+            :disabled="!hasAiApiKey"
             accept=".xls,.xlsx,.ods"
             label="WPF Excel auswählen"
             placeholder="Datei auswählen"
             outlined
+            hide-details="auto"
           />
         </VCol>
         <VCol sm="4">
           <VBtn
             :loading="isUploading"
+            :disabled="!hasAiApiKey || !excelFile"
             text="Daten übernehmen"
             @click="uploadExcel"
           />
@@ -443,6 +480,10 @@ async function uploadExcel() {
   </VForm>
 </template>
 
+<!--
+  NOTE: Admin views do not use translations and are written in German directly.
+  This <i18n> block is legacy for phase creation/editing. Do not add new admin translations here.
+-->
 <i18n lang="yaml">
 en:
   create-enrollment: Create enrollment

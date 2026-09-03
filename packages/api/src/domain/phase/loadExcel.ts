@@ -22,6 +22,13 @@ class DateError extends Error {
 }
 
 export async function loadExcel(file: Buffer) {
+  if (!env.AI_API_KEY) {
+    return {
+      errors: ['AI_API_KEY not set, cannot parse courses from Excel'],
+      offeredCourses: [],
+    }
+  }
+
   const courses = await prisma.course.findMany({
     select: { lecturers: true, moduleCode: true, title: true },
   })
@@ -95,13 +102,7 @@ async function parseCourses(
   courses: { lecturers: string[]; moduleCode: string; title: I18nJson }[],
   coursesMin: { lecturers: string; moduleCode: string; title: string }[],
 ) {
-  if (!env.AI_API_KEY) {
-    return {
-      errors: ['AI_API_KEY not set, cannot parse courses from Excel'],
-      offeredCourses: [],
-    }
-  }
-  const genAi = new GoogleGenerativeAI(env.AI_API_KEY)
+  const genAi = new GoogleGenerativeAI(env.AI_API_KEY!)
   const model = genAi.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
   const prompt = promptTemplate({

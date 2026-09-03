@@ -88,6 +88,39 @@ const update = debounce(async () => {
             @update:model-value="update"
           />
         </VCol>
+        <VCol cols="12" class="mt-2">
+          <VCard variant="outlined">
+            <VCardItem>
+              <template #title>
+                <div
+                  class="d-flex align-center justify-space-between flex-wrap ga-2"
+                >
+                  <span>Künstliche Intelligenz (Google Gemini)</span>
+                  <VChip
+                    size="small"
+                    :color="
+                      appConfigStore.conf?.hasAiApiKey ? 'success' : 'grey'
+                    "
+                  >
+                    {{
+                      appConfigStore.conf?.hasAiApiKey
+                        ? 'Konfiguriert (Server)'
+                        : 'Optional (Nicht konfiguriert)'
+                    }}
+                  </VChip>
+                </div>
+              </template>
+            </VCardItem>
+            <VCardText>
+              <p class="text-body-2 text-medium-emphasis">
+                Der <code>AI_API_KEY</code> ist vollkommen optional. Er wird
+                ausschließlich für das automatisierte Einlesen und Zuordnen von
+                angebotenen Kursen aus WPF-Excel-Dateien verwendet. Alle übrigen
+                Funktionen stehen uneingeschränkt zur Verfügung.
+              </p>
+            </VCardText>
+          </VCard>
+        </VCol>
       </VRow>
     </VForm>
   </VContainer>

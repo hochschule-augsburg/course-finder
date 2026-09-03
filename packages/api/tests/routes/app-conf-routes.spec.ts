@@ -68,6 +68,7 @@ describe('appConfRoutes', () => {
       'team@example.com',
     ])
     expect(result?.maxCredits).toBe(30)
+    expect(result?.hasAiApiKey).toBe(false)
 
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(prismaMock.appConf.findFirst).toHaveBeenCalledWith({

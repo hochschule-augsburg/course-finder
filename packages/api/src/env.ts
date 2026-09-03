@@ -3,7 +3,10 @@ import { z } from 'zod'
 const DEV = process.env.NODE_ENV !== 'production'
 
 const envSchema = z.object({
-  AI_API_KEY: z.optional(z.string()),
+  AI_API_KEY: z
+    .string()
+    .optional()
+    .transform((val) => (val?.trim() ? val.trim() : undefined)),
   CONTACT_EMAIL: z.email(),
   DATABASE_URL: z.url(),
   FRONTEND_ORIGIN: z.string(),

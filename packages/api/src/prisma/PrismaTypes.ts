@@ -8,7 +8,9 @@ import type {
   User as PUser,
 } from '../generated/prisma/client.js'
 
-export type AppConf = Omit<PAppConf, 'id'>
+export type AppConf = Omit<PAppConf, 'id'> & {
+  hasAiApiKey?: boolean
+}
 
 export type ClientStudent = PStudent & {
   mayEnroll?: boolean

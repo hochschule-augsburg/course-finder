@@ -67,3 +67,14 @@ typically consists of:
 - **Style**: Contains scoped SCSS, specific to the component.
 
 ![components graph](/assets/components.png)
+
+## Internationalization (i18n)
+
+The student-facing frontend supports multiple languages (German and English)
+using `vue-i18n` with the `t` function and locale translation files.
+
+### Admin Views Convention
+
+- **No translations in admin views**: Admin pages and admin components are
+  intended for university staff and are written directly in German without
+  using `t(...)`.
