@@ -219,6 +219,20 @@ Wahlpflichtfächer.
   hat, dass sie insgesamt 100 Punkte ergeben, kann die Anmeldung über den Button
   "Anmeldung" innerhalb des Pop-up-Fensters abgeschlossen werden.
 
+Bei der Vergabe werden zeitliche Überschneidungen innerhalb derselben
+Anmeldephase berücksichtigt. Sobald ein Fach zugeteilt wurde, werden andere
+gewählte Fächer mit überschneidenden Terminen nicht zusätzlich zugeteilt.
+Das gilt für Prioritäts- und Fallback-Fächer gleichermaßen. Die Punkte der
+dadurch ausgeschlossenen Fächer werden gleichmäßig auf die übrigen konfliktfreien
+Wünsche verteilt; ein Rundungsrest erhält der höchstbewertete dieser Wünsche.
+Die Punkte des bereits zugeteilten Fachs bleiben unverändert.
+
+Wird ein Fach wegen zu geringer Teilnehmerzahl gestrichen, wird die Vergabe neu
+berechnet. Alternativen werden dann wieder berücksichtigt, sofern sie nicht
+selbst gestrichen werden. Direkt aufeinanderfolgende Termine gelten nicht als
+Überschneidung; Blockveranstaltungen belegen die angegebenen Tage vollständig.
+Ohne hinterlegte Termine kann keine Überschneidung erkannt werden.
+
 ### 3.3 Änderungen und Abwahlen
 
 - **Änderungen:** Wenn der Student nachträglich Änderungen vornehmen möchte, wie

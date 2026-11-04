@@ -207,6 +207,20 @@ subjects.
   so that they total 100 points, registration can be completed via the
   "Register" (Anmeldung) button within the pop-up window.
 
+Time conflicts within the same registration phase are considered during
+assignment. Once a subject has been assigned, other selected subjects with
+overlapping appointments are not assigned to that student. This applies to
+priority and fallback subjects alike. Points from excluded conflicting choices
+are redistributed equally among the remaining conflict-free choices; any
+rounding remainder goes to the highest-scored remaining choice. Points assigned
+to the gained subject are unchanged.
+
+If a subject is cancelled because it did not meet its minimum enrollment, the
+assignment is recalculated. Alternatives are considered again unless they are
+also cancelled. Back-to-back appointments do not overlap; block courses occupy
+all specified days. Conflicts cannot be detected when appointment data is
+missing.
+
 ### 3.3 Changes and Withdrawals
 
 - **Changes:** If the student wants to make changes later, such as deselecting

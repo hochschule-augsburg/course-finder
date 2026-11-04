@@ -1,6 +1,9 @@
 import { sumBy } from 'lodash-es'
 
 import type { StudentChoice } from '../../generated/prisma/client.js'
+import type { CourseAppointmentsJson } from '../../prisma/PrismaTypes.ts'
+
+import { coursesConflict } from './CourseConflicts.ts'
 
 export type StudentPhaseWithChoices = {
   creditsNeeded: number
@@ -15,6 +18,7 @@ export class AssignmentStudentController {
   public readonly lost: StudentChoice[] = []
   public readonly username: string
   private readonly offeredCourses: {
+    appointments: CourseAppointmentsJson<string>
     Course: { creditPoints: number }
     moduleCode: string
   }[]
@@ -22,6 +26,7 @@ export class AssignmentStudentController {
   constructor(
     student: StudentPhaseWithChoices,
     offeredCourses: {
+      appointments: CourseAppointmentsJson<string>
       Course: { creditPoints: number }
       moduleCode: string
     }[],
@@ -57,7 +62,44 @@ export class AssignmentStudentController {
       const choice = this.choices[choiceIndex]
       this.choices.splice(choiceIndex, 1)
       this.gained.push(choice)
+      const conflictedChoices: StudentChoice[] = []
+      for (let i = this.choices.length - 1; i >= 0; i--) {
+        if (this.conflictsWithGained(this.choices[i].moduleCode)) {
+          conflictedChoices.push(...this.choices.splice(i, 1))
+        }
+      }
+      if (conflictedChoices.length) {
+        this.lost.push(...conflictedChoices)
+        this.redistributePoints(sumBy(conflictedChoices, (e) => e.points))
+      }
     }
+  }
+
+  private conflictsWithGained(moduleCode: string) {
+    const course = this.offeredCourses.find((e) => e.moduleCode === moduleCode)
+    if (!course) {
+      throw new Error(`Course ${moduleCode} not found in phase`)
+    }
+    return this.gained.some((choice) => {
+      const gainedCourse = this.offeredCourses.find(
+        (e) => e.moduleCode === choice.moduleCode,
+      )
+      if (!gainedCourse) {
+        throw new Error(`Course ${choice.moduleCode} not found in phase`)
+      }
+      return coursesConflict(course.appointments, gainedCourse.appointments)
+    })
+  }
+
+  private redistributePoints(points: number) {
+    if (!this.choices.length) {
+      return
+    }
+    this.choices.sort((a, b) => b.points - a.points)
+    const pointsPerChoice = Math.floor(points / this.choices.length)
+    this.choices.forEach((choice) => (choice.points += pointsPerChoice))
+    this.choices[0].points += points % this.choices.length
+    this.choices.sort((a, b) => b.points - a.points)
   }
 
   isFinished() {
@@ -80,14 +122,7 @@ export class AssignmentStudentController {
       const choice = this.choices[choiceIndex]
       this.choices.splice(choiceIndex, 1)
       this.lost.push(choice)
-      if (!this.choices.length) {
-        return
-      }
-      const compensation = choice.points / this.choices.length
-      const floorComp = Math.floor(compensation)
-      this.choices.sort((a, b) => b.points - a.points)
-      this.choices.forEach((e) => (e.points = e.points + floorComp))
-      this.choices[0].points += compensation === floorComp ? 0 : 1
+      this.redistributePoints(choice.points)
     }
   }
 }
