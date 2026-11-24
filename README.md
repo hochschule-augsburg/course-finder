@@ -1,5 +1,9 @@
 # course-finder
 
+> [!Warning]
+> This Project is no longer developed here on GitHub.
+> Ask around where to find the latest version of this project.
+
 ## Getting Started
 
 ### Prerequisites
